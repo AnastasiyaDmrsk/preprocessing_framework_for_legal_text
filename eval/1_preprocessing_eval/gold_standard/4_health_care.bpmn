@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="19.2.2" expressionLanguage="http://www.w3.org/TR/XPath" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <message id="sid-2bb54df8-51af-4200-9492-0f1d58c108ce" name=""/>
+   <collaboration id="sid-9f2943a9-6a1d-47e5-a125-5031d561ed77">
+      <extensionElements>
+         <signavio:signavioDiagramMetaData metaKey="revisionid" metaValue="4f1e5e8b248d4d01b90780b0479997d7"/>
+      </extensionElements>
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_TransferringMS" name="Transferring Member State (Health Professional)" processRef="Process_TransferringMS">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_Applicant" name="Applicant / Representative" processRef="Process_Applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_ResponsibleMS" name="Member State Responsible (Health Professional)" processRef="Process_ResponsibleMS">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <messageFlow id="MessageFlow_ConsentRequest" name="Consent Request" sourceRef="Task_RequestConsent" targetRef="StartEvent_Applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" ref="text_name" valign="top" x="273.28768587216985" y="624.9999971423259"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="MessageFlow_ConsentDecision" name="Consent Decision / Incapacity Info" sourceRef="Task_ProvideConsentDecision" targetRef="Task_ReceiveConsentDecision">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" distance="-7.166687" from="1" orientation="ul" ref="text_name" to="2" valign="top" x="436.0952380952381" y="661.0"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="sid-1344889F-0106-412F-973C-0F55FCC829C1" name="" sourceRef="Task_TransmitHealthInfo" targetRef="StartEvent_DataReceived">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+   <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-d7f3caec-05ee-4327-ab36-461bdc0a3e08">
+         <lane id="sid-60cfa0a9-a07b-4a05-928d-36556829ecbc">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>StartEvent_Commission</flowNodeRef>
+            <flowNodeRef>Task_DrawUpCertificate</flowNodeRef>
+            <flowNodeRef>Task_AdoptConditions</flowNodeRef>
+            <flowNodeRef>EndEvent_Commission</flowNodeRef>
+         </lane>
+      </laneSet>
+      <dataObject id="sid-43c4b429-d138-4f62-a713-0774c4b49ba8" isCollection="false" name="Uniform Conditions for Exchange"/>
+      <dataObject id="sid-3f4dff43-d767-4e33-9fca-c4acb7793b33" isCollection="false" name="Common Health Certificate Template"/>
+      <startEvent id="StartEvent_Commission" isInterrupting="true" name="Need for Standardized &#10;Health Data Exchange&#10; Framework">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="39.0" y="59.0"/>
+         </extensionElements>
+         <outgoing>SequenceFlow_Commission_1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="Task_DrawUpCertificate" isForCompensation="false" name="Draw up Common Health Certificate" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_Commission_1</incoming>
+         <outgoing>SequenceFlow_Commission_2</outgoing>
+         <ioSpecification id="Task_DrawUpCertificate_iospec">
+            <dataOutput id="sid-f27fe6a4-133c-473e-bac2-6180f9662cdf" isCollection="false"/>
+            <inputSet id="Task_DrawUpCertificate_inset" name="DefaultInputSet">
+               <outputSetRefs>Task_DrawUpCertificate_outset</outputSetRefs>
+            </inputSet>
+            <outputSet id="Task_DrawUpCertificate_outset" name="DefaultOutputSet">
+               <dataOutputRefs>sid-f27fe6a4-133c-473e-bac2-6180f9662cdf</dataOutputRefs>
+               <inputSetRefs>Task_DrawUpCertificate_inset</inputSetRefs>
+            </outputSet>
+         </ioSpecification>
+         <dataOutputAssociation id="DataOutputAssociation_CHC">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <sourceRef>sid-f27fe6a4-133c-473e-bac2-6180f9662cdf</sourceRef>
+            <targetRef>sid-7D481C2E-E679-46B3-BC7D-D48FC69A5BB0</targetRef>
+         </dataOutputAssociation>
+      </task>
+      <task completionQuantity="1" id="Task_AdoptConditions" isForCompensation="false" name="Adopt Uniform Conditions for Exchange" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_Commission_2</incoming>
+         <outgoing>SequenceFlow_Commission_3</outgoing>
+         <ioSpecification id="Task_AdoptConditions_iospec">
+            <dataOutput id="sid-0640d258-ce50-46c5-88df-11207fe43fe7" isCollection="false"/>
+            <inputSet id="Task_AdoptConditions_inset" name="DefaultInputSet">
+               <outputSetRefs>Task_AdoptConditions_outset</outputSetRefs>
+            </inputSet>
+            <outputSet id="Task_AdoptConditions_outset" name="DefaultOutputSet">
+               <dataOutputRefs>sid-0640d258-ce50-46c5-88df-11207fe43fe7</dataOutputRefs>
+               <inputSetRefs>Task_AdoptConditions_inset</inputSetRefs>
+            </outputSet>
+         </ioSpecification>
+         <dataOutputAssociation id="DataOutputAssociation_UC">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <sourceRef>sid-0640d258-ce50-46c5-88df-11207fe43fe7</sourceRef>
+            <targetRef>sid-0BA2AD6A-3402-4A1B-B2DE-ABE364E8B98C</targetRef>
+         </dataOutputAssociation>
+      </task>
+      <endEvent id="EndEvent_Commission" name="Framework Established">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" ref="text_name" x="-25.0" y="40.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_Commission_3</incoming>
+      </endEvent>
+      <sequenceFlow id="SequenceFlow_Commission_1" isImmediate="true" name="" sourceRef="StartEvent_Commission" targetRef="Task_DrawUpCertificate">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_Commission_2" isImmediate="true" name="" sourceRef="Task_DrawUpCertificate" targetRef="Task_AdoptConditions">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_Commission_3" isImmediate="true" name="" sourceRef="Task_AdoptConditions" targetRef="EndEvent_Commission">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <dataObjectReference dataObjectRef="sid-43c4b429-d138-4f62-a713-0774c4b49ba8" id="sid-0BA2AD6A-3402-4A1B-B2DE-ABE364E8B98C" name="Uniform Conditions for Exchange">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </dataObjectReference>
+      <dataObjectReference dataObjectRef="sid-3f4dff43-d767-4e33-9fca-c4acb7793b33" id="sid-7D481C2E-E679-46B3-BC7D-D48FC69A5BB0" name="Common Health Certificate Template">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </dataObjectReference>
+   </process>
+   <process id="Process_TransferringMS" isClosed="false" isExecutable="true" name="Transferring Member State (Health Professional)" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-651fb83a-6390-4132-b005-2694aeb1d99a">
+         <lane id="sid-9b38a0cf-86d8-423b-b75f-7b470f4b57a3">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>StartEvent_Transfer</flowNodeRef>
+            <flowNodeRef>Task_IdentifyNeeds</flowNodeRef>
+            <flowNodeRef>Task_RequestConsent</flowNodeRef>
+            <flowNodeRef>Task_ReceiveConsentDecision</flowNodeRef>
+            <flowNodeRef>Gateway_ConsentOutcome</flowNodeRef>
+            <flowNodeRef>Task_PrepareDocuments</flowNodeRef>
+            <flowNodeRef>Gateway_VitalInterest</flowNodeRef>
+            <flowNodeRef>Task_TransmitHealthInfo</flowNodeRef>
+            <flowNodeRef>EndEvent_DataTransmitted</flowNodeRef>
+            <flowNodeRef>EndEvent_DataNotTransmitted_Vital</flowNodeRef>
+            <flowNodeRef>EndEvent_DataNotTransmitted_Refused</flowNodeRef>
+            <flowNodeRef>sid-2494E8C5-7661-4561-BC97-A9C17B8E947B</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_Transfer" isInterrupting="true" name="Health Data Exchange &#10;Required for Transfer">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="28.0" y="66.0"/>
+         </extensionElements>
+         <outgoing>SequenceFlow_TMS_1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="Task_IdentifyNeeds" isForCompensation="false" name="Identify Special Needs Information" startQuantity="1">
+         <documentation id="sid-89682623-361b-4961-91db-3c3aeb071969">Information on any special needs of the person to be transferred, in so far as it is available to the competent authority in accordance with national law.</documentation>
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_1</incoming>
+         <outgoing>SequenceFlow_TMS_2</outgoing>
+      </task>
+      <task completionQuantity="1" id="Task_RequestConsent" isForCompensation="false" name="Request Explicit Consent" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_2</incoming>
+         <outgoing>SequenceFlow_TMS_3</outgoing>
+      </task>
+      <intermediateCatchEvent id="Task_ReceiveConsentDecision" name="Receive &#10;Consent &#10;Decision">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-9.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_3</incoming>
+         <outgoing>SequenceFlow_TMS_4</outgoing>
+         <messageEventDefinition id="sid-f57ad7cd-8866-4e73-8c72-bf2784f1caa0" messageRef="sid-2bb54df8-51af-4200-9492-0f1d58c108ce"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_ConsentOutcome" name="Consent &#10;for Data &#10;Transmission &#10;given ?&#10;">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_4</incoming>
+         <outgoing>SequenceFlow_ConsentGiven</outgoing>
+         <outgoing>SequenceFlow_ConsentRefused</outgoing>
+         <outgoing>SequenceFlow_ApplicantIncapable</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_PrepareDocuments" isForCompensation="false" name="Prepare Health Certificate &amp; Documents" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-A31629B9-1922-447D-A568-B65FC5536EE8</incoming>
+         <outgoing>SequenceFlow_TMS_Transmit</outgoing>
+         <ioSpecification id="Task_PrepareDocuments_iospec">
+            <dataInput id="sid-af27e93d-9dd3-4279-b2a2-05d9d1d0940b" isCollection="false"/>
+            <dataInput id="sid-2eccbb1c-1413-454e-b732-4435e33af9e7" isCollection="false"/>
+            <inputSet id="Task_PrepareDocuments_inset" name="DefaultInputSet">
+               <dataInputRefs>sid-af27e93d-9dd3-4279-b2a2-05d9d1d0940b</dataInputRefs>
+               <dataInputRefs>sid-2eccbb1c-1413-454e-b732-4435e33af9e7</dataInputRefs>
+               <outputSetRefs>Task_PrepareDocuments_outset</outputSetRefs>
+            </inputSet>
+            <outputSet id="Task_PrepareDocuments_outset" name="DefaultOutputSet">
+               <inputSetRefs>Task_PrepareDocuments_inset</inputSetRefs>
+            </outputSet>
+         </ioSpecification>
+         <dataInputAssociation id="DataInputAssociation_CHC_Use">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <sourceRef>sid-7D481C2E-E679-46B3-BC7D-D48FC69A5BB0</sourceRef>
+            <targetRef>sid-af27e93d-9dd3-4279-b2a2-05d9d1d0940b</targetRef>
+         </dataInputAssociation>
+         <dataInputAssociation id="DataInputAssociation_UC_Use">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <sourceRef>sid-0BA2AD6A-3402-4A1B-B2DE-ABE364E8B98C</sourceRef>
+            <targetRef>sid-2eccbb1c-1413-454e-b732-4435e33af9e7</targetRef>
+         </dataInputAssociation>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_VitalInterest" name="Transmission &#10;Necessary &#10;for Vital Interests?">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="68.0" y="51.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_ApplicantIncapable</incoming>
+         <outgoing>SequenceFlow_VitalInterestNo</outgoing>
+         <outgoing>SequenceFlow_VitalInterestYes</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_TransmitHealthInfo" isForCompensation="false" name="Transmit Health Information" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_Transmit</incoming>
+         <outgoing>SequenceFlow_TMS_EndTransmitted</outgoing>
+      </task>
+      <endEvent id="EndEvent_DataTransmitted" name="Health Data &#10;Transmitted">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="71.0" y="16.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_TMS_EndTransmitted</incoming>
+      </endEvent>
+      <endEvent id="EndEvent_DataNotTransmitted_Vital" name="Health Data &#10;Not Transmitted &#10;(Vital Interest &#10;Condition Not Met)">
+         <documentation id="sid-f1551f77-b10d-4a38-84c0-4fc45ffd4f37">Lack of consent (due to incapacity here) combined with no vital interest necessity prevents data transmission under this article. Transfer of person may still occur.</documentation>
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="100.0" y="12.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_VitalInterestNo</incoming>
+      </endEvent>
+      <endEvent id="EndEvent_DataNotTransmitted_Refused" name="Health Data &#10;Not Transmitted &#10;(Consent Refused)">
+         <documentation id="sid-34d96f07-ca7e-45ca-9a82-8b8ba3a61d94">Explicit refusal of consent prevents data transmission under this article. Transfer of person may still occur.</documentation>
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="86.0" y="15.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_ConsentRefused</incoming>
+      </endEvent>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B" name="">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>SequenceFlow_ConsentGiven</incoming>
+         <incoming>SequenceFlow_VitalInterestYes</incoming>
+         <outgoing>sid-A31629B9-1922-447D-A568-B65FC5536EE8</outgoing>
+      </exclusiveGateway>
+      <sequenceFlow id="SequenceFlow_TMS_1" isImmediate="true" name="" sourceRef="StartEvent_Transfer" targetRef="Task_IdentifyNeeds">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_TMS_2" isImmediate="true" name="" sourceRef="Task_IdentifyNeeds" targetRef="Task_RequestConsent">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_TMS_3" isImmediate="true" name="" sourceRef="Task_RequestConsent" targetRef="Task_ReceiveConsentDecision">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_TMS_4" isImmediate="true" name="" sourceRef="Task_ReceiveConsentDecision" targetRef="Gateway_ConsentOutcome">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_TMS_Transmit" isImmediate="true" name="" sourceRef="Task_PrepareDocuments" targetRef="Task_TransmitHealthInfo">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_TMS_EndTransmitted" isImmediate="true" name="" sourceRef="Task_TransmitHealthInfo" targetRef="EndEvent_DataTransmitted">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_ConsentGiven" isImmediate="true" name="Consent Explicitly Given" sourceRef="Gateway_ConsentOutcome" targetRef="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" distance="6.3333435" from="1" orientation="lr" ref="text_name" to="2" valign="bottom" x="693.9942478481095" y="390.0"/>
+         </extensionElements>
+         <conditionExpression id="sid-8a3633cc-aae1-4f6b-8db4-055e9d3cc62c" xsi:type="tFormalExpression">Applicant provided explicit consent.</conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_ConsentRefused" isImmediate="true" name="Consent Refused" sourceRef="Gateway_ConsentOutcome" targetRef="EndEvent_DataNotTransmitted_Refused">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="center" distance="-9.151516" from="1" orientation="ce" ref="text_name" to="2" valign="middle" x="691.2823389430511" y="608.5"/>
+         </extensionElements>
+         <conditionExpression id="sid-c21f8162-2d7e-410b-a2d1-5a586e4f7895" xsi:type="tFormalExpression">Applicant explicitly refused consent.</conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_VitalInterestNo" isImmediate="true" name="No" sourceRef="Gateway_VitalInterest" targetRef="EndEvent_DataNotTransmitted_Vital">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" distance="7.273493" from="0" orientation="lr" ref="text_name" to="1" valign="bottom" x="842.1789020667578" y="490.0"/>
+         </extensionElements>
+         <conditionExpression id="sid-e97d6368-203e-4534-8d93-f703987435d9" xsi:type="tFormalExpression">Transmission not necessary for vital interests.</conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_ApplicantIncapable" isImmediate="true" name="Applicant &#10;Incapable &#10;of Consent" sourceRef="Gateway_ConsentOutcome" targetRef="Gateway_VitalInterest">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" distance="6.0" from="0" orientation="ll" ref="text_name" to="1" valign="bottom" x="645.0" y="490.0"/>
+         </extensionElements>
+         <conditionExpression id="sid-a5202b2a-c2ca-4b3a-a305-7f3c16c2a9ae" xsi:type="tFormalExpression">Applicant physically or legally incapable of giving consent.</conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="sid-A31629B9-1922-447D-A568-B65FC5536EE8" isImmediate="true" name="" sourceRef="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B" targetRef="Task_PrepareDocuments">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="SequenceFlow_VitalInterestYes" isImmediate="true" name="Yes" sourceRef="Gateway_VitalInterest" targetRef="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" distance="-8.0" from="0" orientation="ll" ref="text_name" to="1" valign="top" x="747.0" y="451.0"/>
+         </extensionElements>
+         <conditionExpression id="sid-9b9a33f0-398f-45ab-abb3-d6ebd00adcfa" xsi:type="tFormalExpression">Transmission is necessary to protect vital interests of applicant or another person.</conditionExpression>
+      </sequenceFlow>
+   </process>
+   <process id="Process_Applicant" isClosed="false" isExecutable="false" name="Applicant / Representative" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-e18c6f2b-5d3a-455c-bc44-f3d7d870269d">
+         <lane id="sid-f6b6c6db-cd58-42ba-9480-d596225dbd16">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>StartEvent_Applicant</flowNodeRef>
+            <flowNodeRef>Task_ProvideConsentDecision</flowNodeRef>
+            <flowNodeRef>EndEvent_Applicant</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_Applicant" isInterrupting="true" name="Consent Request Received">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" ref="text_name" x="-30.0" y="40.0"/>
+         </extensionElements>
+         <outgoing>sid-EE665D2D-3E3A-4428-B9E6-4CF8E79F7D6E</outgoing>
+         <messageEventDefinition id="sid-61336bb0-37ae-40c9-9e23-b14be5cccd22"/>
+      </startEvent>
+      <task completionQuantity="1" id="Task_ProvideConsentDecision" isForCompensation="false" name="Provide Consent Decision / Incapacity Info" startQuantity="1">
+         <documentation id="sid-d69575da-d178-441a-9123-78a58a3e7b44">Applicant provides explicit consent, refusal, or information about incapacity is noted.</documentation>
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-EE665D2D-3E3A-4428-B9E6-4CF8E79F7D6E</incoming>
+         <outgoing>SequenceFlow_App_3</outgoing>
+      </task>
+      <endEvent id="EndEvent_Applicant" name="Consent Decision Sent">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel align="left" ref="text_name" x="-30.0" y="40.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_App_3</incoming>
+      </endEvent>
+      <sequenceFlow id="SequenceFlow_App_3" isImmediate="true" name="" sourceRef="Task_ProvideConsentDecision" targetRef="EndEvent_Applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="sid-EE665D2D-3E3A-4428-B9E6-4CF8E79F7D6E" isImmediate="true" name="" sourceRef="StartEvent_Applicant" targetRef="Task_ProvideConsentDecision">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+   </process>
+   <process id="Process_ResponsibleMS" isClosed="false" isExecutable="true" name="Member State Responsible (Health Professional)" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-f2b6e23d-adf9-4648-9060-f8e21959c894">
+         <lane id="sid-9b846ccf-e94c-47d3-971d-d1f4699b0466">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>StartEvent_DataReceived</flowNodeRef>
+            <flowNodeRef>Task_EnsureNeedsAddressed</flowNodeRef>
+            <flowNodeRef>EndEvent_NeedsAddressed</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_DataReceived" isInterrupting="true" name="Health Information Received">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <outgoing>sid-1B8A2526-8F86-4159-9F3A-AE0D641A68B0</outgoing>
+         <messageEventDefinition id="sid-d2d771fd-33b0-422c-a2a4-592756062b84" messageRef="sid-2bb54df8-51af-4200-9492-0f1d58c108ce"/>
+      </startEvent>
+      <task completionQuantity="1" id="Task_EnsureNeedsAddressed" isForCompensation="false" name="Ensure Special Needs Adequately Addressed" startQuantity="1">
+         <documentation id="sid-df3cf9cb-c595-4759-8000-85c29bc54512">Including any essential medical care that may be required.</documentation>
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-1B8A2526-8F86-4159-9F3A-AE0D641A68B0</incoming>
+         <outgoing>SequenceFlow_RMS_3</outgoing>
+      </task>
+      <endEvent id="EndEvent_NeedsAddressed" name="Special Needs Addressed">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel ref="text_name" valign="middle" x="24.0" y="40.0"/>
+         </extensionElements>
+         <incoming>SequenceFlow_RMS_3</incoming>
+      </endEvent>
+      <sequenceFlow id="SequenceFlow_RMS_3" isImmediate="true" name="" sourceRef="Task_EnsureNeedsAddressed" targetRef="EndEvent_NeedsAddressed">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="sid-1B8A2526-8F86-4159-9F3A-AE0D641A68B0" isImmediate="true" name="" sourceRef="StartEvent_DataReceived" targetRef="Task_EnsureNeedsAddressed">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+   </process>
+   <bpmndi:BPMNDiagram id="sid-91188925-70d7-4a0c-8c89-e546a1ef542f">
+      <bpmndi:BPMNPlane bpmnElement="sid-9f2943a9-6a1d-47e5-a125-5031d561ed77" id="sid-157d3cd2-2386-46b8-a27d-e444d07a38de">
+         <bpmndi:BPMNShape bpmnElement="Participant_Commission" id="Participant_Commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1046.0" x="160.0" y="80.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="65.57142639160156" width="12.0" x="165.0" y="147.21428680419922"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_TransferringMS" id="Participant_TransferringMS_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1046.0" x="160.0" y="300.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="261.5142822265625" width="12.000000000000057" x="164.99999999999997" y="369.24285888671875"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Applicant" id="Participant_Applicant_gui" isHorizontal="true">
+            <omgdc:Bounds height="170.0" width="1046.0" x="160.0" y="720.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="142.7142791748047" width="12.000000000000028" x="165.0" y="733.6428604125977"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_ResponsibleMS" id="Participant_ResponsibleMS_gui" isHorizontal="true">
+            <omgdc:Bounds height="170.0" width="1046.0" x="160.0" y="910.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="144.25714111328125" width="24.00000000000003" x="159.0" y="922.8714294433594"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-60cfa0a9-a07b-4a05-928d-36556829ecbc" id="sid-60cfa0a9-a07b-4a05-928d-36556829ecbc_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1016.0" x="190.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Commission" id="StartEvent_Commission_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="223.0" y="115.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="33.0" width="111.72857666015625" x="206.13571166992188" y="156.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DrawUpCertificate" id="Task_DrawUpCertificate_gui">
+            <omgdc:Bounds height="60.0" width="130.0" x="360.0" y="100.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="24.0" width="97.971435546875" x="376.0142822265625" y="116.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AdoptConditions" id="Task_AdoptConditions_gui">
+            <omgdc:Bounds height="60.0" width="130.0" x="590.0" y="100.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="36.0" width="79.4571533203125" x="615.2714233398438" y="110.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Commission" id="EndEvent_Commission_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="819.0" y="117.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="11.0" width="114.55714416503906" x="794.0" y="157.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-0BA2AD6A-3402-4A1B-B2DE-ABE364E8B98C" id="sid-0BA2AD6A-3402-4A1B-B2DE-ABE364E8B98C_gui">
+            <omgdc:Bounds height="80.0" width="73.0" x="620.0" y="178.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="48.0" width="57.857147216796875" x="627.5714263916016" y="192.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-7D481C2E-E679-46B3-BC7D-D48FC69A5BB0" id="sid-7D481C2E-E679-46B3-BC7D-D48FC69A5BB0_gui">
+            <omgdc:Bounds height="80.0" width="73.0" x="388.0" y="178.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="48.0" width="54.0" x="397.5" y="192.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-9b38a0cf-86d8-423b-b75f-7b470f4b57a3" id="sid-9b38a0cf-86d8-423b-b75f-7b470f4b57a3_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1016.0" x="190.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Transfer" id="StartEvent_Transfer_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="223.0" y="475.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="22.0" width="109.60714721679688" x="196.19642639160156" y="528.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_IdentifyNeeds" id="Task_IdentifyNeeds_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="280.0" y="460.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="36.0" width="81.77142333984375" x="289.1142883300781" y="470.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_RequestConsent" id="Task_RequestConsent_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="409.0" y="460.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="24.0" width="86.39999389648438" x="415.8000030517578" y="476.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_ReceiveConsentDecision" id="Task_ReceiveConsentDecision_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="543.0" y="475.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="33.0" width="41.72142791748047" x="537.1392860412598" y="433.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_ConsentOutcome" id="Gateway_ConsentOutcome_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="604.0" y="470.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="48.0" width="71.74285888671875" x="634.5" y="500.5"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_PrepareDocuments" id="Task_PrepareDocuments_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="776.0" y="360.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="36.0" width="78.68571472167969" x="786.6571426391602" y="370.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_VitalInterest" id="Gateway_VitalInterest_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="727.0" y="470.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="36.0" width="101.82858276367188" x="744.0857086181641" y="501.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TransmitHealthInfo" id="Task_TransmitHealthInfo_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="906.0" y="360.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="24.0" width="85.62857055664062" x="913.1857147216797" y="376.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_DataTransmitted" id="EndEvent_DataTransmitted_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="1035.0" y="377.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="22.0" width="60.107147216796875" x="1075.9464263916016" y="380.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_DataNotTransmitted_Vital" id="EndEvent_DataNotTransmitted_Vital_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="909.0" y="477.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="44.0" width="94.05000305175781" x="961.9749984741211" y="465.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_DataNotTransmitted_Refused" id="EndEvent_DataNotTransmitted_Refused_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="783.0" y="595.5"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="33.0" width="94.05000305175781" x="821.9749984741211" y="592.5"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B" id="sid-2494E8C5-7661-4561-BC97-A9C17B8E947B_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="707.0" y="370.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-f6b6c6db-cd58-42ba-9480-d596225dbd16" id="sid-f6b6c6db-cd58-42ba-9480-d596225dbd16_gui" isHorizontal="true">
+            <omgdc:Bounds height="170.0" width="1016.0" x="190.0" y="720.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Applicant" id="StartEvent_Applicant_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="223.0" y="785.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="11.0" width="132.94285583496094" x="193.0" y="825.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_ProvideConsentDecision" id="Task_ProvideConsentDecision_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="380.0" y="770.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="36.0" width="88.71429443359375" x="385.6428527832031" y="780.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Applicant" id="EndEvent_Applicant_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="579.0" y="785.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="11.0" width="113.14286041259766" x="549.0" y="825.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-9b846ccf-e94c-47d3-971d-d1f4699b0466" id="sid-9b846ccf-e94c-47d3-971d-d1f4699b0466_gui" isHorizontal="true">
+            <omgdc:Bounds height="170.0" width="1016.0" x="190.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_DataReceived" id="StartEvent_DataReceived_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="743.0" y="975.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="11.0" width="139.30714416503906" x="688.3464279174805" y="1007.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_EnsureNeedsAddressed" id="Task_EnsureNeedsAddressed_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="860.0" y="960.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+               <omgdc:Bounds height="48.0" width="78.68571472167969" x="870.6571426391602" y="964.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_NeedsAddressed" id="EndEvent_NeedsAddressed_gui">
+            <omgdc:Bounds height="26.0" width="26.0" x="1039.0" y="977.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="11.0" width="124.4571533203125" x="1000.7714233398438" y="1010.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_Commission_1" id="SequenceFlow_Commission_1_gui">
+            <omgdi:waypoint x="253.0" y="130.0"/>
+            <omgdi:waypoint x="360.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_Commission_2" id="SequenceFlow_Commission_2_gui">
+            <omgdi:waypoint x="490.0" y="130.0"/>
+            <omgdi:waypoint x="590.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_Commission_3" id="SequenceFlow_Commission_3_gui">
+            <omgdi:waypoint x="720.0" y="130.0"/>
+            <omgdi:waypoint x="819.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="DataOutputAssociation_CHC" id="DataOutputAssociation_CHC_gui">
+            <omgdi:waypoint x="424.94736842105266" y="160.0"/>
+            <omgdi:waypoint x="424.5" y="178.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="DataOutputAssociation_UC" id="DataOutputAssociation_UC_gui">
+            <omgdi:waypoint x="655.0" y="160.0"/>
+            <omgdi:waypoint x="656.5" y="178.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_1" id="SequenceFlow_TMS_1_gui">
+            <omgdi:waypoint x="253.0" y="490.0"/>
+            <omgdi:waypoint x="280.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_2" id="SequenceFlow_TMS_2_gui">
+            <omgdi:waypoint x="380.0" y="490.0"/>
+            <omgdi:waypoint x="409.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_3" id="SequenceFlow_TMS_3_gui">
+            <omgdi:waypoint x="509.0" y="490.0"/>
+            <omgdi:waypoint x="543.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_4" id="SequenceFlow_TMS_4_gui">
+            <omgdi:waypoint x="573.0" y="490.0"/>
+            <omgdi:waypoint x="604.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_Transmit" id="SequenceFlow_TMS_Transmit_gui">
+            <omgdi:waypoint x="876.0" y="390.0"/>
+            <omgdi:waypoint x="906.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_TMS_EndTransmitted" id="SequenceFlow_TMS_EndTransmitted_gui">
+            <omgdi:waypoint x="1006.0" y="390.0"/>
+            <omgdi:waypoint x="1035.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_App_3" id="SequenceFlow_App_3_gui">
+            <omgdi:waypoint x="480.0" y="800.0"/>
+            <omgdi:waypoint x="579.0" y="798.2321428571429"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_RMS_3" id="SequenceFlow_RMS_3_gui">
+            <omgdi:waypoint x="960.0" y="990.0"/>
+            <omgdi:waypoint x="1039.0" y="990.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_ConsentRequest" id="MessageFlow_ConsentRequest_gui">
+            <omgdi:waypoint x="459.0" y="520.0"/>
+            <omgdi:waypoint x="459.0" y="620.0"/>
+            <omgdi:waypoint x="238.0" y="620.0"/>
+            <omgdi:waypoint x="238.0" y="785.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="94.11428833007812" x="273.2879943847656" y="625.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-EE665D2D-3E3A-4428-B9E6-4CF8E79F7D6E" id="sid-EE665D2D-3E3A-4428-B9E6-4CF8E79F7D6E_gui">
+            <omgdi:waypoint x="253.0" y="800.0"/>
+            <omgdi:waypoint x="380.0" y="800.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_ConsentDecision" id="MessageFlow_ConsentDecision_gui">
+            <omgdi:waypoint x="430.0" y="770.0"/>
+            <omgdi:waypoint x="430.0" y="661.0"/>
+            <omgdi:waypoint x="558.0" y="661.0"/>
+            <omgdi:waypoint x="558.0" y="505.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="185.91427612304688" x="436.0950012207031" y="668.1669921875"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="DataInputAssociation_CHC_Use" id="DataInputAssociation_CHC_Use_gui">
+            <omgdi:waypoint x="429.0" y="258.0"/>
+            <omgdi:waypoint x="429.0" y="335.0"/>
+            <omgdi:waypoint x="826.0" y="335.0"/>
+            <omgdi:waypoint x="826.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="DataInputAssociation_UC_Use" id="DataInputAssociation_UC_Use_gui">
+            <omgdi:waypoint x="656.5" y="258.0"/>
+            <omgdi:waypoint x="656.5" y="335.0"/>
+            <omgdi:waypoint x="826.0" y="335.0"/>
+            <omgdi:waypoint x="826.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_ConsentGiven" id="SequenceFlow_ConsentGiven_gui">
+            <omgdi:waypoint x="624.0" y="470.0"/>
+            <omgdi:waypoint x="624.0" y="390.0"/>
+            <omgdi:waypoint x="707.0" y="390.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="129.60003662109375" x="564.3939819335938" y="371.6669921875"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_ConsentRefused" id="SequenceFlow_ConsentRefused_gui">
+            <omgdi:waypoint x="624.0" y="510.0"/>
+            <omgdi:waypoint x="624.0" y="608.5"/>
+            <omgdi:waypoint x="783.0" y="608.5"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="93.34283447265625" x="644.6105651855469" y="609.6519775390625"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_VitalInterestNo" id="SequenceFlow_VitalInterestNo_gui">
+            <omgdi:waypoint x="767.0" y="490.0"/>
+            <omgdi:waypoint x="909.0" y="490.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="14.65716552734375" x="827.52197265625" y="470.72698974609375"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-1B8A2526-8F86-4159-9F3A-AE0D641A68B0" id="sid-1B8A2526-8F86-4159-9F3A-AE0D641A68B0_gui">
+            <omgdi:waypoint x="773.0" y="990.0"/>
+            <omgdi:waypoint x="860.0" y="990.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-1344889F-0106-412F-973C-0F55FCC829C1" id="sid-1344889F-0106-412F-973C-0F55FCC829C1_gui">
+            <omgdi:waypoint x="956.0" y="420.0"/>
+            <omgdi:waypoint x="956.0" y="674.0"/>
+            <omgdi:waypoint x="758.0" y="674.0"/>
+            <omgdi:waypoint x="758.0" y="975.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_ApplicantIncapable" id="SequenceFlow_ApplicantIncapable_gui">
+            <omgdi:waypoint x="644.0" y="490.0"/>
+            <omgdi:waypoint x="727.0" y="490.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="36.0" width="60.17144775390625" x="645.0" y="448.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-A31629B9-1922-447D-A568-B65FC5536EE8" id="sid-A31629B9-1922-447D-A568-B65FC5536EE8_gui">
+            <omgdi:waypoint x="747.0" y="390.0"/>
+            <omgdi:waypoint x="776.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SequenceFlow_VitalInterestYes" id="SequenceFlow_VitalInterestYes_gui">
+            <omgdi:waypoint x="747.0" y="470.0"/>
+            <omgdi:waypoint x="747.0" y="445.0"/>
+            <omgdi:waypoint x="727.0" y="445.0"/>
+            <omgdi:waypoint x="727.0" y="410.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+               <omgdc:Bounds height="12.0" width="19.28570556640625" x="755.0" y="437.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+      <bpmndi:BPMNLabelStyle id="sid-cac1733b-aa23-45af-8136-d147dc5a7f2e">
+         <omgdc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="11.0"/>
+      </bpmndi:BPMNLabelStyle>
+      <bpmndi:BPMNLabelStyle id="sid-c068345a-8812-4a00-aad7-1e47effc6746">
+         <omgdc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="12.0"/>
+      </bpmndi:BPMNLabelStyle>
+   </bpmndi:BPMNDiagram>
+</definitions>
