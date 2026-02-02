@@ -1,9 +1,9 @@
 <organisation xmlns="http://cpee.org/ns/organisation/1.0">
   <units>
-    <unit id="Transferring Member State (Health Professional)">
+    <unit id="Transferring Member State">
       <permissions/>
     </unit>
-    <unit id="Member State Responsible (Health Professional)">
+    <unit id="Member State Responsible">
       <permissions/>
     </unit>
     <unit id="Commission">
@@ -14,13 +14,10 @@
     </unit>
   </units>
   <roles>
-    <role id="Health professional">
+    <role id="Health Professional">
       <permissions/>
     </role>
-    <role id="Applicant">
-      <permissions/>
-    </role>
-    <role id="Representative">
+    <role id="Applicant / Representative">
       <permissions/>
     </role>
     <role id="Commission">
@@ -28,5 +25,17 @@
     </role>
   </roles>
   <subjects>
+    <subject id="transferring_hp_name transferring_hp_surname" uid="thp">
+      <relation unit="Transferring Member State" role="Health Professional"/>
+    </subject>
+    <subject id="responsible_hp_name responsible_hp_surname" uid="rhp">
+      <relation unit="Member State Responsible" role="Health Professional"/>
+    </subject>
+    <subject id="applicant_name applicant_surname" uid="anas">
+      <relation unit="Applicant / Representative" role="Applicant / Representative"/>
+    </subject>
+    <subject id="commission_name commission_surname" uid="anas">
+      <relation unit="Commission" role="Commission"/>
+    </subject>
   </subjects>
 </organisation>

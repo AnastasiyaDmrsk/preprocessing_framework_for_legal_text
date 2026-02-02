@@ -18,11 +18,11 @@
     <unit id="Entity">
       <permissions/>
     </unit>
-    <unit id="Essential / Important Entity">
-      <parent>Entity</parent>
+    <unit id="Law Enforcement Authority">
       <permissions/>
     </unit>
-    <unit id="Trust Service Provider">
+    <unit id="Essential and Important Entity">
+      <parent>Entity</parent>
       <permissions/>
     </unit>
     <unit id="Critical Entity">
@@ -40,7 +40,13 @@
     <role id="CSIRT">
       <permissions/>
     </role>
-    <role id="Essential / Important Entity">
+    <role id="Reporting Entity">
+      <permissions/>
+    </role>
+    <role id="Trust Service Provider">
+      <permissions/>
+    </role>
+    <role id="Law Enforcement Authority">
       <permissions/>
     </role>
     <role id="Cooperation Group">
@@ -53,5 +59,33 @@
       <permissions/>
     </role>
   </roles>
-  <subjects/>
+  <subjects>
+    <subject id="reporting_entity_name reporting_entity_surname" uid="rens">
+      <relation unit="Essential and Important Entity" role="Reporting Entity"/>
+    </subject>
+    <subject id="trust_provider_name trust_provider_surname" uid="tpns">
+      <relation unit="Essential and Important Entity" role="Trust Service Provider"/>
+    </subject>
+    <subject id="csirt_rep_name csirt_rep_surname" uid="crns">
+      <relation unit="Member State" role="CSIRT"/>
+    </subject>
+    <subject id="auth_rep_name auth_rep_surname" uid="arns">
+      <relation unit="Member State" role="Competent Authority"/>
+    </subject>
+    <subject id="spoc_officer_name spoc_officer_surname" uid="sons">
+      <relation unit="Member State" role="Single Point of Contact (SPOC)"/>
+    </subject>
+    <subject id="law_officer_name law_officer_surname" uid="lons">
+      <relation unit="Law Enforcement Authority" role="Law Enforcement Authority"/>
+    </subject>
+    <subject id="enisa_rep_name enisa_rep_surname" uid="erns">
+      <relation unit="ENISA" role="ENISA"/>
+    </subject>
+    <subject id="coop_member_name coop_member_surname" uid="cmns">
+      <relation unit="Cooperation Group" role="Cooperation Group"/>
+    </subject>
+    <subject id="commission_rep_name commission_rep_surname" uid="crns2">
+      <relation unit="Commission" role="Commission"/>
+    </subject>
+  </subjects>
 </organisation>

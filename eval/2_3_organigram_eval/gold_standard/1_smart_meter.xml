@@ -1,20 +1,14 @@
 <organisation xmlns="http://cpee.org/ns/organisation/1.0">
   <units>
-    <unit id="Central System (CS)">
-      <permissions/>
-    </unit>
     <unit id="Customer">
       <permissions/>
     </unit>
-    <unit id="Meter">
-      <permissions/>
-    </unit>
-    <unit id="Network Operator">
+    <unit id="Smart Meter Organization">
       <permissions/>
     </unit>
   </units>
   <roles>
-    <role id="Central System (CS)">
+    <role id="Central System">
       <permissions/>
     </role>
     <role id="Customer">
@@ -28,5 +22,17 @@
     </role>
   </roles>
   <subjects>
+    <subject id="customer_name customer_surname" uid="cncs">
+      <relation unit="Customer" role="Customer"/>
+    </subject>
+    <subject id="network_operator_name network_operator_surname" uid="nonnos">
+      <relation unit="Smart Meter Organization" role="Network Operator"/>
+    </subject>
+    <subject id="central_system_staff_name central_system_staff_surname" uid="cssncsss">
+      <relation unit="Smart Meter Organization" role="Central System"/>
+    </subject>
+    <subject id="meter_name" uid="mn">
+      <relation unit="Smart Meter Organization" role="Meter"/>
+    </subject>
   </subjects>
 </organisation>

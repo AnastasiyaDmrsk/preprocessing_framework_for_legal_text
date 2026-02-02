@@ -3,13 +3,7 @@
     <unit id="Prospective Donor">
       <permissions/>
     </unit>
-    <unit id="Physician">
-      <permissions/>
-    </unit>
-    <unit id="Qualified Healthcare Professional">
-      <permissions/>
-    </unit>
-    <unit id="Reception/ Admin Staff">
+    <unit id="Hospital">
       <permissions/>
     </unit>
   </units>
@@ -23,9 +17,22 @@
     <role id="Qualified Healthcare Professional">
       <permissions/>
     </role>
-    <role id="Reception/ Admin Staff">
+    <role id="Reception / Admin Staff">
       <permissions/>
     </role>
   </roles>
-  <subjects/>
+  <subjects>
+    <subject id="donor_name donor_surname" uid="dnds">
+      <relation unit="Prospective Donor" role="Prospective Donor"/>
+    </subject>
+    <subject id="physician_name physician_surname" uid="pnps">
+      <relation unit="Hospital" role="Physician"/>
+    </subject>
+    <subject id="qualified_healthcare_professional_name qualified_healthcare_professional_surname" uid="qhp">
+      <relation unit="Hospital" role="Qualified Healthcare Professional"/>
+    </subject>
+    <subject id="admin_name admin_surname" uid="anas">
+      <relation unit="Hospital" role="Reception / Admin Staff"/>
+    </subject>
+  </subjects>
 </organisation>

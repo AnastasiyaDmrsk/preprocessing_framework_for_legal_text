@@ -1,11 +1,5 @@
 <organisation xmlns="http://cpee.org/ns/organisation/1.0">
   <units>
-    <unit id="Manufacturer">
-      <permissions/>
-    </unit>
-    <unit id="Commission">
-      <permissions/>
-    </unit>
     <unit id="Member State">
       <permissions/>
     </unit>
@@ -13,19 +7,15 @@
       <parent>Member State</parent>
       <permissions/>
     </unit>
-    <unit id="Notified Body">
-      <permissions/>
-    </unit>
-    <unit id="Authorised Representative">
-      <permissions/>
-    </unit>
-    <unit id="Importer">
-      <permissions/>
-    </unit>
-    <unit id="Device Distributor">
-      <permissions/>
-    </unit>
     <unit id="Natural / Legal Person">
+      <permissions/>
+    </unit>
+    <unit id="Manufacturer">
+      <parent>Natural / Legal Person</parent>
+      <permissions/>
+    </unit>
+    <unit id="Patient / User Department">
+      <parent>Natural / Legal Person</parent>
       <permissions/>
     </unit>
   </units>
@@ -33,20 +23,13 @@
     <role id="Manufacturer">
       <permissions/>
     </role>
-    <role id="Quality Management System">
-      <parent>Manufacturer</parent>
-      <permissions/>
-    </role>
-    <role id="Commission">
-      <permissions/>
-    </role>
     <role id="Competent Authority">
       <permissions/>
     </role>
-    <role id="Notified Body">
+    <role id="Authorised Representative">
       <permissions/>
     </role>
-    <role id="Authorised Representative">
+    <role id="External Worker">
       <permissions/>
     </role>
     <role id="Importer">
@@ -55,10 +38,43 @@
     <role id="Device Distributor">
       <permissions/>
     </role>
-    <role id="Natural / Legal Person">
+    <role id="Patient / User">
+      <permissions/>
+    </role>
+    <role id="Successor">
+      <permissions/>
+    </role>
+    <role id="Health Insurance Company">
       <permissions/>
     </role>
   </roles>
   <subjects>
+    <subject id="manufacturer_name manufacturer_surname" uid="mnms">
+      <relation unit="Manufacturer" role="Manufacturer"/>
+    </subject>
+    <subject id="worker_name worker_surname" uid="ewnews">
+      <relation unit="Natural / Legal Person" role="External Worker"/>
+    </subject>
+    <subject id="representative_name representative_surname" uid="rnrs">
+      <relation unit="Natural / Legal Person" role="Authorised Representative"/>
+    </subject>
+    <subject id="importer_name importer_surname" uid="inis">
+      <relation unit="Natural / Legal Person" role="Importer"/>
+    </subject>
+    <subject id="distributor_name distributor_surname" uid="ddndds">
+      <relation unit="Natural / Legal Person" role="Device Distributor"/>
+    </subject>
+    <subject id="patient_name patient_surname" uid="pnps">
+      <relation unit="Patient / User Department" role="Patient / User"/>
+    </subject>
+    <subject id="successor_name successor_surname" uid="snss">
+      <relation unit="Patient / User Department" role="Successor"/>
+    </subject>
+    <subject id="insurance_name insurance_surname" uid="insn">
+      <relation unit="Patient / User Department" role="Health Insurance Company"/>
+    </subject>
+    <subject id="competent_authority_name competent_authority_surname" uid="cancas">
+      <relation unit="Competent Authority" role="Competent Authority"/>
+    </subject>
   </subjects>
 </organisation>
