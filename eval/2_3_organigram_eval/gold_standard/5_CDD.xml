@@ -3,11 +3,14 @@
     <unit id="Member State">
       <permissions/>
     </unit>
-    <unit id="Financial Intelligence Unit">
+    <unit id="FIU">
       <parent>Member State</parent>
       <permissions/>
     </unit>
     <unit id="Obliged Entity">
+      <permissions/>
+    </unit>
+    <unit id="Customer">
       <permissions/>
     </unit>
   </units>
@@ -33,16 +36,16 @@
     <role id="Tax Advisor">
       <permissions/>
     </role>
-    <role id="Financial Intelligence Unit">
+    <role id="FIU">
       <permissions/>
     </role>
   </roles>
   <subjects>
     <subject id="customer_name customer_surname" uid="cncs">
-      <relation unit="Obliged Entity" role="Customer"/>
+      <relation unit="Customer" role="Customer"/>
     </subject>
     <subject id="beneficial_owner_name beneficial_owner_surname" uid="bobs">
-      <relation unit="Obliged Entity" role="Beneficial Owner"/>
+      <relation unit="Customer" role="Beneficial Owner"/>
     </subject>
     <subject id="notary_name notary_surname" uid="nnns">
       <relation unit="Obliged Entity" role="Notary"/>
@@ -59,8 +62,8 @@
     <subject id="tax_advisor_name tax_advisor_surname" uid="tatas">
       <relation unit="Obliged Entity" role="Tax Advisor"/>
     </subject>
-    <subject id="FIU_staff_name FIU_staff_surname" uid="fiu">
-      <relation unit="Financial Intelligence Unit" role="Financial Intelligence Unit"/>
+    <subject id="FIU_staff_name FIU_staff_surname" uid="fius">
+      <relation unit="FIU" role="FIU"/>
     </subject>
   </subjects>
 </organisation>

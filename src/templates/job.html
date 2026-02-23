@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Processing Result</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      margin: 32px;
+      background: #fafafa;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .stats {
+      max-width: 600px;
+      margin: 0 auto 32px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .stat-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 15px;
+    }
+
+    .stat-item:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .stat-value {
+      float: right;
+      font-weight: 700;
+      color: #0066cc;
+    }
+
+    .pipeline {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      width: 420px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .content {
+      flex: 1;
+      min-height: 600px;
+      max-height: 600px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      background: #fcfcfc;
+      word-wrap: break-word;
+    }
+
+    .arrow {
+      font-size: 36px;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy-btn {
+      align-self: flex-end;
+      margin-bottom: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #0066cc;
+      border: none;
+      background: none;
+    }
+
+    .copy-btn:hover {
+      text-decoration: underline;
+    }
+
+    .downloads {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .download {
+      text-decoration: none;
+      color: #222;
+      border: 1px solid #ddd;
+      padding: 10px 16px;
+      border-radius: 8px;
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .download:hover {
+      background: #f0f0f0;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .back-link a {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    function copyText(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => {
+          btn.innerText = originalText;
+        }, 1500);
+      });
+    }
+  </script>
+</head>
+
+<body>
+
+<h1>Processing Pipeline Result</h1>
+
+<div class="stats">
+  <div class="stat-item">
+    <span class="stat-label">Number of articles processed:</span>
+    <span class="stat-value">{{ num_articles }}</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Number of references found:</span>
+    <span class="stat-value">{{ num_references }}</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Number of tokens in input text:</span>
+    <span class="stat-value">{{ input_tokens }}</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Number of tokens in output text:</span>
+    <span class="stat-value">{{ output_tokens }}</span>
+  </div>
+</div>
+
+<div class="pipeline">
+
+  <div class="card">
+    <h3>Input Text</h3>
+    <button class="copy-btn" onclick="copyText('input')">Copy</button>
+    <div class="content" id="input">{{ input_text }}</div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="card">
+    <h3>Preprocessed Text</h3>
+    <button class="copy-btn" onclick="copyText('preprocessed')">Copy</button>
+    <div class="content" id="preprocessed">{{ preprocessed_text }}</div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="card">
+    <h3>Process Description</h3>
+    <button class="copy-btn" onclick="copyText('process')">Copy</button>
+    <div class="content" id="process">{{ process_preview }}</div>
+  </div>
+
+</div>
+
+<div class="downloads">
+  <a class="download" href="/jobs/{{ job_id }}/download/process.txt">📄 Process</a>
+  <a class="download" href="/jobs/{{ job_id }}/download/organigram.xml">🏢 Organigram</a>
+  <a class="download" href="/jobs/{{ job_id }}/download/role_task_mapping.xml">🔗 Role–Task</a>
+  <a class="download" href="/jobs/{{ job_id }}/download/references.csv">📚 References</a>
+</div>
+
+<p class="back-link">
+  <a href="/">← New Run</a>
+</p>
+
+</body>
+</html>

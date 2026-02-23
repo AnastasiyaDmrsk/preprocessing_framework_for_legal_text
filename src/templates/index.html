@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Legal Text UI</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 24px; }
+      textarea { width: 100%; height: 220px; }
+      .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; max-width: 980px; }
+    </style>
+  </head>
+  <body>
+    <h1>From Regulatory Text into Organigram and Process Description</h1>
+    <div class="card">
+      <form action="/submit" method="post" enctype="multipart/form-data">
+        <p>Enter regulatory text directly</p>
+        <label>Text:</label><br />
+        <textarea name="text" placeholder="Regulatory text"></textarea>
+        <p>or attach a .txt file instead:<input type="file" name="file" accept=".txt,text/plain" /></p>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
