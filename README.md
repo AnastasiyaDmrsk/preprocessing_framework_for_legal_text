@@ -4,9 +4,32 @@
 
 ### Preprocessing
 
+---
+
 ### Organizational Information Extraction and Organigram Generation
 
+This step implements an **organizational actor extraction** task that turns **preprocessed legal text** into a **CPEE-compatible `organigram.xml`**. The design supports two modes:
+
+- **Pure LLM extraction**: the LLM extracts actors and their hierarchies directly.
+- **Hybrid extraction (default & recommended)**: NLP heuristics extract candidate actors first, then the LLM validates/corrects them and infers hierarchies.
+
+The goal is to extract:
+
+- **Actors** as either **UNIT** (institutions/bodies) and/or **ROLE** (functions/positions)
+- **Hierarchies**: UNIT-UNIT, ROLE-ROLE, and ROLE-UNIT relations
+
+**Input**: `preprocessed_text` created in the previous step.
+
+**Output**: a structured XML output (`organigram.xml`) suitable for downstream BPMN/CPEE tooling.
+
+For more details on the design and implementation, see the [Organizational Information Extraction & Organigram Generation documentation](src/pipeline/organization/doc/organizational_information.md).
+
+---
+
+
 ### Role-Task Mapping
+
+---
 
 ### Process Description Generation
 

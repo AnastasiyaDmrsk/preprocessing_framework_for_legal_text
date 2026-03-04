@@ -1,7 +1,9 @@
 from collections import Counter
+from typing import Any
 from typing import List, Tuple, Set
 
 import spacy
+from gliner import GLiNER
 from spacy.matcher import PhraseMatcher
 
 from .const import (
@@ -47,9 +49,9 @@ class NLPActorCandidateExtractor:
 
         self.use_gliner = use_gliner
         self.gliner_threshold = gliner_threshold
+        self.gliner = None
         if use_gliner:
-            from gliner import GLiNER
-            self.gliner = GLiNER.from_pretrained(gliner_model)
+            self.gliner: Any = GLiNER.from_pretrained(gliner_model)
 
     def _build_unit_phrase_matcher(self, bodies: list[str]) -> None:
         self.unit_matcher = PhraseMatcher(self.nlp.vocab, attr="LOWER")
@@ -223,6 +225,8 @@ class NLPActorCandidateExtractor:
                 (roles if t == "ROLE" else units).add(original)
 
     def _apply_gliner(self, text: str, units: Set[str], roles: Set[str]) -> None:
+        if self.gliner is None:
+            return
         for ent in self.gliner.predict_entities(
             text, GLINER_LABELS, threshold=self.gliner_threshold
         ):

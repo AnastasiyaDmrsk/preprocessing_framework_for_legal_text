@@ -1,5 +1,4 @@
 import re
-from pathlib import Path
 from typing import Set
 
 # Core EU institutional vocabulary
@@ -18,10 +17,10 @@ EU_INSTITUTIONS: list[str] = [
     "Member State", "Member States",
 ]
 
-# ── Dependency labels that signal a syntactic actor ──────────────────────────
+# Dependency labels that signal a syntactic actor
 ACTOR_DEPS: Set[str] = {"nsubj", "nsubjpass", "csubj", "csubjpass", "agent"}
 
-# ── Process-action verbs: nsubj/agent of these → strong ROLE signal ──────────
+# Process-action verbs: nsubj/agent of these aka ROLE
 PROCESS_ACTION_VERBS: Set[str] = {
     "notify", "report", "submit", "inform", "forward",
     "provide", "ensure", "adopt", "request", "assess",
@@ -30,7 +29,7 @@ PROCESS_ACTION_VERBS: Set[str] = {
     "receive", "review", "examine", "verify", "monitor",
 }
 
-# ── Suffix heuristics for UNIT vs ROLE classification ───────────────────────
+# Suffix heuristics for UNIT vs ROLE classification
 UNIT_SUFFIXES: tuple[str, ...] = (
     "authority", "agency", "commission", "council", "parliament",
     "board", "committee", "body", "office", "bureau", "directorate",
@@ -43,7 +42,7 @@ ROLE_SUFFIXES: tuple[str, ...] = (
     "representative", "holder", "user", "administrator", "assessor",
 )
 
-# ── Data-object / abstract concept blacklist ─────────────────────────────────
+# Data-object / abstract concept blacklist
 BLACKLIST_RE = re.compile(
     r"^(application|report|decision|guideline|notice|process|procedure|"
     r"scheme|data|information|document|request|notification|measure|"
@@ -56,7 +55,7 @@ BLACKLIST_RE = re.compile(
     r"these|this|relevant|mere|initial|final|significant|cross-border)",
     re.IGNORECASE,
 )
-# ── GLiNER labels for zero-shot NER ─────────────────────────────────────────
+# GLiNER labels for zero-shot NER
 GLINER_LABELS: list[str] = [
     "regulatory authority",
     "institutional body",
@@ -210,27 +209,21 @@ within another unit (e.g. "CSIRT", "Competent Authority", "Single Point of Conta
 are organs of Member States: they are ROLE only, not standalone pools).
 - BOTH UNIT and ROLE only if the actor is simultaneously an autonomous institution
 AND directly performs process tasks (e.g. "Commission", "ENISA").
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+___
 Task 1: VALIDATE NLP CANDIDATES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 For each candidate listed above:
 1. REMOVE if it is a data object, abstract concept, pure activity, or pronoun reference.
 2. CORRECT the TYPE (UNIT / ROLE / both) if misclassified.
 3. KEEP if it is a genuine actor with responsibilities or obligations in the process.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+___
 Task 2: FIND MISSING ACTORS FROM TEXT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Independently scan the INPUT TEXT for actors NOT already in the candidate list BUT who participate in the process. Focus on:
 1. Named functional roles ACTIVELY performing tasks/actions (e.g. "Trust Service Provider").
 2. Actors mentioned only once or in subordinate clauses that NLP may have missed.
 3. Actors referenced as recipients of obligations or guidance (PASSIVE participation).
 4. Actors mentioned only by pronoun or short reference earlier resolved in context.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+___
 NAMING CONVENTIONS (apply to ALL outputs):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 a. Title case; strip leading articles ("the", "a", "an"). No invented names.
 b. Singular generic noun for compound phrases ("Provider" not "providers of online platforms").
 c. Named subtypes of same concept (e.g., online provider, offline provider): Abstract Parent UNIT (e.g., Provider) + each subtype as ROLE (Online Provider, Offline Provider).
