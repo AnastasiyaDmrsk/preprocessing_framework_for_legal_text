@@ -35,6 +35,13 @@ For more details on the design and implementation, see the [Organizational Infor
 
 ## Evaluation
 
+The evaluation dataset is located in `eval/dataset`.
+
+All gold standards can be found as follows:
+- **BPMN gold standards**: `eval/1_preprocessing_eval/gold_standard`
+- **Organigram gold standards**: `eval/2_3_organigram_eval/gold_standard`
+- **Role-task mapping gold standards**: `eval/2_3_organigram_eval/gold_standard_mapping`
+
 ### Preprocessed Text Evaluation
 
 
