@@ -3,10 +3,6 @@
     <unit id="Member State">
       <permissions/>
     </unit>
-    <unit id="FIU">
-      <parent>Member State</parent>
-      <permissions/>
-    </unit>
     <unit id="Obliged Entity">
       <permissions/>
     </unit>
@@ -15,6 +11,12 @@
     </unit>
   </units>
   <roles>
+    <role id="Member State">
+      <permissions/>
+    </role>
+     <role id="Obligation Entity">
+      <permissions/>
+    </role>
     <role id="Customer">
       <permissions/>
     </role>
@@ -22,30 +24,38 @@
       <permissions/>
     </role>
     <role id="Notary">
+      <parent>Obligation Entity</parent>
       <permissions/>
     </role>
     <role id="Independent Legal Professional">
+      <parent>Obligation Entity</parent>
       <permissions/>
     </role>
     <role id="Auditor">
+      <parent>Obligation Entity</parent>
       <permissions/>
     </role>
     <role id="External Accountant">
+      <parent>Obligation Entity</parent>
       <permissions/>
     </role>
     <role id="Tax Advisor">
-      <permissions/>
-    </role>
-    <role id="FIU">
+      <parent>Obligation Entity</parent>
       <permissions/>
     </role>
   </roles>
   <subjects>
+    <subject id="ms_name ms_surname" uid="msnmss">
+      <relation unit="Member State" role="Member State"/>
+    </subject>
     <subject id="customer_name customer_surname" uid="cncs">
       <relation unit="Customer" role="Customer"/>
     </subject>
     <subject id="beneficial_owner_name beneficial_owner_surname" uid="bobs">
       <relation unit="Customer" role="Beneficial Owner"/>
+    </subject>
+    <subject id="oe_name oe_surname" uid="oenoes">
+      <relation unit="Obliged Entity" role="Obliged Entity"/>
     </subject>
     <subject id="notary_name notary_surname" uid="nnns">
       <relation unit="Obliged Entity" role="Notary"/>
@@ -61,9 +71,6 @@
     </subject>
     <subject id="tax_advisor_name tax_advisor_surname" uid="tatas">
       <relation unit="Obliged Entity" role="Tax Advisor"/>
-    </subject>
-    <subject id="FIU_staff_name FIU_staff_surname" uid="fius">
-      <relation unit="FIU" role="FIU"/>
     </subject>
   </subjects>
 </organisation>
