@@ -4,6 +4,17 @@
 
 ### Preprocessing
 
+This step prepares regulatory/legal text for downstream extraction. The current implementation is tailored to EU-style regulatory documents and focuses on producing a clean, structure-aware representation of *obligation clauses*.
+
+In short, the pipeline:
+- detects document structure (e.g., `Article` / `Art.` / numbered sections) and splits text into article/paragraph units,
+- handles common legal enumerations (e.g., `(a) ... (b) ...`) and emits gateway markers for parallel list items,
+- removes boilerplate/filler phrases and optionally reduces removable subordinate clauses (Benepar if available; regex fallback),
+- extracts internal/external references into a separate `references.csv` for traceability,
+- applies lightweight linguistic normalization (actor/pronoun/passive heuristics) and filters to sentences containing deontic modals (e.g., *shall*, *must*).
+
+For implementation details and outputs, see the preprocessing documentation: [Preprocessing](src/pipeline/preprocess/doc/README.md).
+
 ---
 
 ### Organizational Information Extraction and Organigram Generation
