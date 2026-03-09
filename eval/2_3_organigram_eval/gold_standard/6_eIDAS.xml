@@ -9,22 +9,6 @@
     <unit id="Member State">
       <permissions/>
     </unit>
-    <unit id="Supervisory Body">
-      <parent>Member State</parent>
-      <permissions/>
-    </unit>
-    <unit id="Data Protection Authority">
-      <parent>Member State</parent>
-      <permissions/>
-    </unit>
-    <unit id="Competent National Body for Information Security">
-      <parent>Member State</parent>
-      <permissions/>
-    </unit>
-    <unit id="Body Responsible for the National Trusted List">
-      <parent>Member State</parent>
-      <permissions/>
-    </unit>
     <unit id="Conformity Assessment Body">
       <permissions/>
     </unit>
@@ -33,10 +17,16 @@
     </unit>
   </units>
   <roles>
+    <role id="Member State">
+      <permissions/>
+    </role>
     <role id="Commission">
       <permissions/>
     </role>
     <role id="Supervisory Body">
+      <permissions/>
+    </role>
+    <role id="Another Supervisory Body">
       <permissions/>
     </role>
     <role id="Qualified Trust Service Provider">
@@ -46,15 +36,6 @@
       <permissions/>
     </role>
     <role id="Conformity Assessment Body">
-      <permissions/>
-    </role>
-    <role id="Data Protection Authority">
-      <permissions/>
-    </role>
-    <role id="Body Responsible for the National Trusted List">
-      <permissions/>
-    </role>
-    <role id="Competent National Body for Information Security">
       <permissions/>
     </role>
     <role id="ENISA">
@@ -69,16 +50,13 @@
       <relation unit="ENISA" role="ENISA"/>
     </subject>
     <subject id="supervisory_staff_name supervisory_staff_surname" uid="ssns">
-      <relation unit="Supervisory Body" role="Supervisory Body"/>
+      <relation unit="Member State" role="Supervisory Body"/>
     </subject>
-    <subject id="data_protection_official_name data_protection_official_surname" uid="dpon">
-      <relation unit="Data Protection Authority" role="Data Protection Authority"/>
+    <subject id="asupervisory_staff_name asupervisory_staff_surname" uid="asasns">
+      <relation unit="Member State" role="Another Supervisory Body"/>
     </subject>
-    <subject id="trusted_list_name trusted_list_surname" uid="tlmn">
-      <relation unit="Body Responsible for the National Trusted List" role="Body Responsible for the National Trusted List"/>
-    </subject>
-    <subject id="information_security_official_name information_security_official_surname" uid="ison">
-      <relation unit="Competent National Body for Information Security" role="Competent National Body for Information Security"/>
+    <subject id="cab_name cab_surname" uid="cabscabs">
+      <relation unit="Conformity Assessment Body" role="Conformity Assessment Body"/>
     </subject>
     <subject id="trust_service_provider_name trust_service_provider_surname" uid="tspn">
       <relation unit="Trust Service Provider" role="Qualified Trust Service Provider"/>
