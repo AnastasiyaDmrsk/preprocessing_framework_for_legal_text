@@ -46,7 +46,17 @@ For more details on the design and implementation, see the [Organizational Infor
 
 ## Evaluation
 
-The evaluation dataset is located in `eval/dataset`.
+The evaluation dataset is located in `eval/dataset`. The dataset includes following regulatory documents:
+1. [AI Act Regulation](http://data.europa.eu/eli/reg/2024/1689/oj)
+2. [GDPR Regulation](http://data.europa.eu/eli/reg/2016/679/oj)
+3. [Driving Licences Directive](http://data.europa.eu/eli/dir/2025/2205/oj)
+4. [Health Data Regulation](http://data.europa.eu/eli/reg/2013/604/oj)
+5. [CDD Regulation](http://data.europa.eu/eli/dir/2015/849/oj)
+6. [eIDAS Regulation](http://data.europa.eu/eli/reg/2014/910/oj)
+7. [NIS2 Directive](http://data.europa.eu/eli/dir/2022/2555/oj)
+8. [Medical Device Regulation](http://data.europa.eu/eli/reg/2017/745/oj)
+9. [Digital Services Act (DSA) Regulation](http://data.europa.eu/eli/reg/2022/2065/oj)
+10. [Cybersecurity Act Regulation](http://data.europa.eu/eli/reg/2019/881/oj)
 
 All gold standards can be found as follows:
 - **BPMN gold standards**: `eval/1_preprocessing_eval/gold_standard`
