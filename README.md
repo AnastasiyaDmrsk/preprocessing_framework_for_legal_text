@@ -33,7 +33,7 @@ The goal is to extract:
 
 **Output**: a structured XML output (`organigram.xml`) suitable for downstream BPMN/CPEE tooling.
 
-For more details on the design and implementation, see the [Organizational Information Extraction & Organigram Generation documentation](src/pipeline/organization/doc/organizational_information.md).
+For more details on the design and implementation, see the [Organizational Information Extraction & Organigram Generation documentation](src/pipeline/organigram/doc/README.md).
 
 ---
 

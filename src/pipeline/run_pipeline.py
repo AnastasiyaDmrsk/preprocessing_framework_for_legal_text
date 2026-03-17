@@ -6,8 +6,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from .organization.api import build_organigram_xml
-from .organization.role_task_mapper import build_role_task_mapping
+from .organigram.api import build_organigram_xml
 from src.pipeline.preprocess.api import preprocess_legal_text
 
 logger = logging.getLogger("pipeline")
@@ -49,7 +48,7 @@ def run_pipeline(text: str, out_dir: Path) -> None:
         #     model=model,
         # )
 
-        (out_dir / "process.txt").write_text(
+        (out_dir / "process_description.txt").write_text(
             "Controller notifies supervisory authority within 72 hours\n"
             "Processor notifies controller without undue delay\n",
             encoding="utf-8",

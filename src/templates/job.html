@@ -2,222 +2,465 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Processing Result</title>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      margin: 32px;
-      background: #fafafa;
+      margin: 0;
+      padding: 40px 28px 60px;
+      background: #f4f6fb;
       color: #222;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 16px;
+      color: #0065BD;
+      font-size: clamp(22px, 3vw, 32px);
+      margin-bottom: 36px;
     }
 
-    .stats {
-      max-width: 600px;
-      margin: 0 auto 32px auto;
-      background: white;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    h2 {
+      text-align: center;
+      color: #0065BD;
+      font-size: clamp(22px, 3vw, 32px);
+      margin-bottom: 30px;
     }
 
-    .stat-item {
-      padding: 10px 0;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 15px;
-    }
-
-    .stat-item:last-child {
-      border-bottom: none;
-    }
-
-    .stat-label {
-      font-weight: 600;
-      color: #555;
-    }
-
-    .stat-value {
-      float: right;
-      font-weight: 700;
-      color: #0066cc;
-    }
-
-    .pipeline {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 16px;
-      width: 420px;
+    .tabs-container {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      gap: 10px;
     }
 
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
+    .tab {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
     }
+    .tab.open { box-shadow: 0 4px 20px rgba(0,101,189,0.14); }
 
-    .content {
-      flex: 1;
-      min-height: 600px;
-      max-height: 600px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 13px;
-      white-space: pre-wrap;
-      background: #fcfcfc;
-      word-wrap: break-word;
-    }
-
-    .arrow {
-      font-size: 36px;
-      color: #666;
+    .tab-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-    }
-
-    .copy-btn {
-      align-self: flex-end;
-      margin-bottom: 6px;
+      padding: 18px 24px;
       cursor: pointer;
-      font-size: 12px;
-      color: #0066cc;
-      border: none;
-      background: none;
+      user-select: none;
+      transition: background 0.18s;
+    }
+    .tab-header:hover { background: #f0f7ff; }
+
+    .tab-title {
+      font-size: clamp(17px, 2.2vw, 24px);
+      font-weight: 700;
+      color: #0065BD;
+      letter-spacing: 0.01em;
     }
 
-    .copy-btn:hover {
-      text-decoration: underline;
+    .tab-arrow {
+      font-size: clamp(18px, 2vw, 22px);
+      color: #0065BD;
+      transition: transform 0.3s ease;
+      line-height: 1;
+    }
+    .tab.open .tab-arrow { transform: rotate(180deg); }
+
+    .tab-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.38s ease;
+    }
+    .tab.open .tab-body { max-height: 1100px; }
+
+    .tab-body-inner {
+      padding: 0 24px 24px;
+      border-top: 1px solid #e4edf8;
     }
 
-    .downloads {
+    .tab-actions {
       display: flex;
       justify-content: center;
-      gap: 24px;
-      margin-top: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px 0 14px;
     }
 
-    .download {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 22px;
+      border-radius: 7px;
+      font-size: clamp(13px, 1.4vw, 15px);
+      font-weight: 600;
+      cursor: pointer;
       text-decoration: none;
-      color: #222;
-      border: 1px solid #ddd;
-      padding: 10px 16px;
-      border-radius: 8px;
-      background: white;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .btn-download {
+      background: #0065BD;
+      color: #fff;
+      border: 2px solid #0065BD;
+    }
+    .btn-download:hover { background: #004f9a; border-color: #004f9a; }
+
+    .btn-copy {
+      background: #fff;
+      color: #0065BD;
+      border: 2px solid #0065BD;
+    }
+    .btn-copy:hover { background: #e8f2ff; }
+
+    .btn-graph {
+      background: #fff;
+      color: #1a7a4a;
+      border: 2px solid #1a7a4a;
+    }
+    .btn-graph:hover { background: #e8f7ee; }
+
+    .tab-content {
+      font-size: clamp(14px, 1.7vw, 18px);
+      color: #111;
+      background: #fafbfd;
+      border: 1px solid #dde6f0;
+      border-radius: 7px;
+      padding: 16px 20px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 520px;
+      overflow-y: auto;
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 0 auto;
+    }
+    .stat-card {
+      background: #f0f7ff;
+      border-radius: 9px;
+      padding: 20px 14px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: clamp(12px, 1.3vw, 14px);
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      color: #0065BD;
+    }
+
+    #organigram-graph {
+      width: 100%;
+      height: clamp(400px, 55vh, 620px);
+      border: 1px solid #dde6f0;
+      border-radius: 7px;
+      background: #fafbfd;
+    }
+    .org-placeholder {
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+      font-size: 15px;
+      font-style: italic;
     }
 
-    .download:hover {
-      background: #f0f0f0;
+    .ref-table-wrap {
+      overflow-x: auto;
+      border-radius: 7px;
+      border: 1px solid #dde6f0;
+    }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: clamp(13px, 1.5vw, 16px);
+      color: #111;
+    }
+    .ref-table th {
+      background: #0065BD;
+      color: #fff;
+      padding: clamp(8px,1vw,12px) clamp(10px,1.2vw,16px);
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .ref-table td {
+      padding: clamp(7px,0.9vw,11px) clamp(10px,1.2vw,16px);
+      border-bottom: 1px solid #e8eef7;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    .ref-table tbody tr:nth-child(even) { background: #f0f7ff; }
+    .ref-table tbody tr:hover            { background: #dceefb; }
+    .ref-empty {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 20px;
     }
 
     .back-link {
       text-align: center;
-      margin-top: 32px;
+      margin-top: 36px;
     }
-
     .back-link a {
-      color: #0066cc;
+      color: #0065BD;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
+      font-size: clamp(14px, 1.5vw, 16px);
     }
-
-    .back-link a:hover {
-      text-decoration: underline;
-    }
+    .back-link a:hover { text-decoration: underline; }
   </style>
 
   <script>
-    function copyText(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "Copied!";
-        setTimeout(() => {
-          btn.innerText = originalText;
-        }, 1500);
+    var _orgInit = false;
+
+    function toggleTab(header) {
+      var tab = header.parentElement;
+      tab.classList.toggle('open');
+      if (!_orgInit && tab.dataset.tabId === 'organigram' && tab.classList.contains('open')) {
+        _orgInit = true;
+        setTimeout(initOrgGraph, 360);   // wait for CSS transition
+      }
+    }
+
+    function copyContent(contentId, btn) {
+      var el   = document.getElementById(contentId);
+      var text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(function () {
+        var orig = btn.innerHTML;
+        btn.innerHTML = '&#10003; Copied!';
+        setTimeout(function () { btn.innerHTML = orig; }, 1600);
       });
+    }
+
+    function initOrgGraph() {
+      var container = document.getElementById('organigram-graph');
+      var raw       = {{ organigram_graph | tojson }};
+
+      if (!raw.nodes || !raw.nodes.length) {
+        container.innerHTML = '<div class="org-placeholder">No organigram data available.</div>';
+        return;
+      }
+
+      var options = {
+        layout: {
+          hierarchical: {
+            enabled:         true,
+            direction:       'UD',
+            sortMethod:      'directed',
+            levelSeparation: 120,
+            nodeSpacing:     180,
+            treeSpacing:     220,
+            blockShifting:   true,
+            edgeMinimization: true,
+          }
+        },
+        physics: { enabled: false },
+        edges: {
+          smooth: { type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.4 }
+        },
+        interaction: {
+          hover:             true,
+          tooltipDelay:      250,
+          navigationButtons: true,
+          keyboard:          true,
+          zoomView:          true,
+        },
+        nodes: { borderWidth: 2 }
+      };
+
+      window._orgNet = new vis.Network(container, raw, options);
+    }
+
+    function downloadOrgGraph() {
+      var canvas = document.querySelector('#organigram-graph canvas');
+      if (!canvas) { alert('Graph not loaded yet — please open the tab first.'); return; }
+      var a = document.createElement('a');
+      a.href     = canvas.toDataURL('image/png');
+      a.download = 'organigram.png';
+      a.click();
     }
   </script>
 </head>
 
 <body>
 
-<h1>Processing Pipeline Result</h1>
+<h1>Organizational Information and Process Description Generation</h1>
+<h2>Results</h2>
 
-<div class="stats">
-  <div class="stat-item">
-    <span class="stat-label">Number of articles processed:</span>
-    <span class="stat-value">{{ num_articles }}</span>
+<div class="tabs-container">
+
+  <!-- 1. STATISTICS-->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">Statistics</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/statistics.txt">&#11015; Download</a>
+          <button class="btn btn-copy" onclick="copyContent('stats-copy', this)">&#128203; Copy</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Articles processed</div>
+            <div class="stat-value">{{ num_articles }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">References found</div>
+            <div class="stat-value">{{ num_references }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Input tokens</div>
+            <div class="stat-value">{{ input_tokens }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Output tokens</div>
+            <div class="stat-value">{{ output_tokens }}</div>
+          </div>
+        </div>
+        <div id="stats-copy" style="display:none;">{{ stats_text }}</div>
+      </div>
+    </div>
   </div>
-  <div class="stat-item">
-    <span class="stat-label">Number of references found:</span>
-    <span class="stat-value">{{ num_references }}</span>
+
+  <!-- 2. PREPROCESSED TEXT-->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">Preprocessed Text</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/preprocess.txt">&#11015; Download</a>
+          <button class="btn btn-copy" onclick="copyContent('preprocessed-content', this)">&#128203; Copy</button>
+        </div>
+        <div class="tab-content" id="preprocessed-content">{{ preprocessed_text }}</div>
+      </div>
+    </div>
   </div>
-  <div class="stat-item">
-    <span class="stat-label">Number of tokens in input text:</span>
-    <span class="stat-value">{{ input_tokens }}</span>
+
+  <!--3. ORGANIGRAM -->
+  <div class="tab" data-tab-id="organigram">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">Organigram</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/organigram.xml">&#11015; Download XML</a>
+          <button class="btn btn-copy" onclick="copyContent('organigram-xml-copy', this)">&#128203; Copy XML</button>
+          <button class="btn btn-graph"  onclick="downloadOrgGraph()">&#128444; Download Graph</button>
+        </div>
+        <div id="organigram-graph">
+          <div class="org-placeholder">Click the tab to load the graph&hellip;</div>
+        </div>
+        <div id="organigram-xml-copy" style="display:none;">{{ organigram_content }}</div>
+      </div>
+    </div>
   </div>
-  <div class="stat-item">
-    <span class="stat-label">Number of tokens in output text:</span>
-    <span class="stat-value">{{ output_tokens }}</span>
+
+  <!-- 4. ROLE TASK MAPPING-->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">Role Task Mapping</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/role_task_mapping.xml">&#11015; Download</a>
+          <button class="btn btn-copy" onclick="copyContent('role-task-content', this)">&#128203; Copy</button>
+        </div>
+        <div class="tab-content" id="role-task-content">{{ role_task_content }}</div>
+      </div>
+    </div>
   </div>
+
+  <!--5. PROCESS DESCRIPTION-->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">Process Description</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/process_description.txt">&#11015; Download</a>
+          <button class="btn btn-copy" onclick="copyContent('process-content', this)">&#128203; Copy</button>
+        </div>
+        <div class="tab-content" id="process-content">{{ process_description }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. REFERENCES -->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">References</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/references.csv">&#11015; Download</a>
+          <button class="btn btn-copy" onclick="copyContent('references-copy', this)">&#128203; Copy</button>
+        </div>
+        {% if ref_headers %}
+        <div class="ref-table-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                {% for col in ref_headers %}
+                <th>{{ col }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in ref_rows %}
+              <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+              </tr>
+              {% else %}
+              <tr><td class="ref-empty" colspan="{{ ref_headers|length }}">No data rows found.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="ref-empty">No references file available.</p>
+        {% endif %}
+        <div id="references-copy" style="display:none;">{{ references_raw }}</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div class="pipeline">
-
-  <div class="card">
-    <h3>Input Text</h3>
-    <button class="copy-btn" onclick="copyText('input')">Copy</button>
-    <div class="content" id="input">{{ input_text }}</div>
-  </div>
-
-  <div class="arrow">→</div>
-
-  <div class="card">
-    <h3>Preprocessed Text</h3>
-    <button class="copy-btn" onclick="copyText('preprocessed')">Copy</button>
-    <div class="content" id="preprocessed">{{ preprocessed_text }}</div>
-  </div>
-
-  <div class="arrow">→</div>
-
-  <div class="card">
-    <h3>Process Description</h3>
-    <button class="copy-btn" onclick="copyText('process')">Copy</button>
-    <div class="content" id="process">{{ process_preview }}</div>
-  </div>
-
-</div>
-
-<div class="downloads">
-  <a class="download" href="/jobs/{{ job_id }}/download/process.txt">📄 Process</a>
-  <a class="download" href="/jobs/{{ job_id }}/download/organigram.xml">🏢 Organigram</a>
-  <a class="download" href="/jobs/{{ job_id }}/download/role_task_mapping.xml">🔗 Role–Task</a>
-  <a class="download" href="/jobs/{{ job_id }}/download/references.csv">📚 References</a>
-</div>
-
-<p class="back-link">
-  <a href="/">← New Run</a>
-</p>
+<p class="back-link"><a href="/">&#8592; New Run</a></p>
 
 </body>
 </html>
