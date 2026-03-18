@@ -61,14 +61,12 @@
       font-size: clamp(17px, 2.2vw, 24px);
       font-weight: 700;
       color: #0065BD;
-      letter-spacing: 0.01em;
     }
 
     .tab-arrow {
       font-size: clamp(18px, 2vw, 22px);
       color: #0065BD;
       transition: transform 0.3s ease;
-      line-height: 1;
     }
     .tab.open .tab-arrow { transform: rotate(180deg); }
 
@@ -77,7 +75,7 @@
       overflow: hidden;
       transition: max-height 0.38s ease;
     }
-    .tab.open .tab-body { max-height: 1100px; }
+    .tab.open .tab-body { max-height: 2400px; }
 
     .tab-body-inner {
       padding: 0 24px 24px;
@@ -106,25 +104,11 @@
       line-height: 1;
       white-space: nowrap;
     }
-    .btn-download {
-      background: #0065BD;
-      color: #fff;
-      border: 2px solid #0065BD;
-    }
+    .btn-download { background: #0065BD; color: #fff; border: 2px solid #0065BD; }
     .btn-download:hover { background: #004f9a; border-color: #004f9a; }
-
-    .btn-copy {
-      background: #fff;
-      color: #0065BD;
-      border: 2px solid #0065BD;
-    }
-    .btn-copy:hover { background: #e8f2ff; }
-
-    .btn-graph {
-      background: #fff;
-      color: #1a7a4a;
-      border: 2px solid #1a7a4a;
-    }
+    .btn-copy  { background: #fff; color: #0065BD; border: 2px solid #0065BD; }
+    .btn-copy:hover  { background: #e8f2ff; }
+    .btn-graph { background: #fff; color: #1a7a4a; border: 2px solid #1a7a4a; }
     .btn-graph:hover { background: #e8f7ee; }
 
     .tab-content {
@@ -146,24 +130,10 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
-      margin: 0 auto;
     }
-    .stat-card {
-      background: #f0f7ff;
-      border-radius: 9px;
-      padding: 20px 14px;
-      text-align: center;
-    }
-    .stat-label {
-      font-size: clamp(12px, 1.3vw, 14px);
-      color: #555;
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 700;
-      color: #0065BD;
-    }
+    .stat-card { background: #f0f7ff; border-radius: 9px; padding: 20px 14px; text-align: center; }
+    .stat-label { font-size: clamp(12px, 1.3vw, 14px); color: #555; margin-bottom: 8px; }
+    .stat-value { font-size: clamp(28px, 4vw, 40px); font-weight: 700; color: #0065BD; }
 
     #organigram-graph {
       width: 100%;
@@ -173,27 +143,33 @@
       background: #fafbfd;
     }
     .org-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: #999;
-      font-size: 15px;
-      font-style: italic;
+      display: flex; align-items: center; justify-content: center;
+      height: 100%; color: #999; font-size: 15px; font-style: italic;
     }
 
-    .ref-table-wrap {
-      overflow-x: auto;
-      border-radius: 7px;
-      border: 1px solid #dde6f0;
+    .ref-table-wrap { overflow-x: auto; border-radius: 7px; border: 1px solid #dde6f0; }
+    .ref-table { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.5vw, 16px); color: #111; }
+    .ref-table th {
+      background: #0065BD; color: #fff;
+      padding: clamp(8px,1vw,12px) clamp(10px,1.2vw,16px);
+      text-align: left; font-weight: 600; white-space: nowrap;
     }
-    .ref-table {
+    .ref-table td {
+      padding: clamp(7px,0.9vw,11px) clamp(10px,1.2vw,16px);
+      border-bottom: 1px solid #e8eef7; vertical-align: top; word-break: break-word;
+    }
+    .ref-table tbody tr:nth-child(even) { background: #f0f7ff; }
+    .ref-table tbody tr:hover           { background: #dceefb; }
+    .ref-empty { text-align: center; color: #999; font-style: italic; padding: 20px; }
+
+    .rtm-wrap { overflow-x: auto; border-radius: 7px; border: 1px solid #dde6f0; }
+    .rtm-table {
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(13px, 1.5vw, 16px);
       color: #111;
     }
-    .ref-table th {
+    .rtm-table th {
       background: #0065BD;
       color: #fff;
       padding: clamp(8px,1vw,12px) clamp(10px,1.2vw,16px);
@@ -201,31 +177,43 @@
       font-weight: 600;
       white-space: nowrap;
     }
-    .ref-table td {
-      padding: clamp(7px,0.9vw,11px) clamp(10px,1.2vw,16px);
-      border-bottom: 1px solid #e8eef7;
+    .rtm-table td {
+      padding: clamp(8px,1vw,13px) clamp(10px,1.2vw,16px);
       vertical-align: top;
       word-break: break-word;
+      line-height: 1.55;
     }
-    .ref-table tbody tr:nth-child(even) { background: #f0f7ff; }
-    .ref-table tbody tr:hover            { background: #dceefb; }
-    .ref-empty {
-      text-align: center;
-      color: #999;
-      font-style: italic;
-      padding: 20px;
-    }
+    .rtm-table tbody tr { border-bottom: 2px solid #c8d9ee; }
+    .rtm-table tbody tr:last-child { border-bottom: none; }
+    .rtm-table tbody tr:nth-child(even) { background: #f5f9ff; }
+    .rtm-table tbody tr:hover           { background: #e4f0fc; }
 
-    .back-link {
-      text-align: center;
-      margin-top: 36px;
-    }
-    .back-link a {
-      color: #0065BD;
-      text-decoration: none;
+    /* ── Deontic label formatting ─────────────────── */
+    .deontic-obligation     { font-weight: bold; }
+    .deontic-permission     { font-style: italic; }
+    .deontic-prohibition    { text-decoration: line-through; }
+    .deontic-recommendation { /* normal — intentionally unstyled */ }
+
+    /* ── Deontic badge pill ───────────────────────── */
+    .deontic-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+      vertical-align: middle;
       font-weight: 600;
-      font-size: clamp(14px, 1.5vw, 16px);
+      font-style: normal;
+      text-decoration: none;
+      white-space: nowrap;
     }
+    .badge-obligation     { background: #d4e8ff; color: #004fa3; }
+    .badge-permission     { background: #d4f7e8; color: #1a7a4a; }
+    .badge-prohibition    { background: #fde8e8; color: #c0392b; }
+    .badge-recommendation { background: #fff3d4; color: #876000; }
+
+    .back-link { text-align: center; margin-top: 36px; }
+    .back-link a { color: #0065BD; text-decoration: none; font-weight: 600; font-size: clamp(14px,1.5vw,16px); }
     .back-link a:hover { text-decoration: underline; }
   </style>
 
@@ -237,7 +225,7 @@
       tab.classList.toggle('open');
       if (!_orgInit && tab.dataset.tabId === 'organigram' && tab.classList.contains('open')) {
         _orgInit = true;
-        setTimeout(initOrgGraph, 360);   // wait for CSS transition
+        setTimeout(initOrgGraph, 360);
       }
     }
 
@@ -254,47 +242,31 @@
     function initOrgGraph() {
       var container = document.getElementById('organigram-graph');
       var raw       = {{ organigram_graph | tojson }};
-
       if (!raw.nodes || !raw.nodes.length) {
         container.innerHTML = '<div class="org-placeholder">No organigram data available.</div>';
         return;
       }
-
       var options = {
         layout: {
           hierarchical: {
-            enabled:         true,
-            direction:       'UD',
-            sortMethod:      'directed',
-            levelSeparation: 120,
-            nodeSpacing:     180,
-            treeSpacing:     220,
-            blockShifting:   true,
-            edgeMinimization: true,
+            enabled: true, direction: 'UD', sortMethod: 'directed',
+            levelSeparation: 120, nodeSpacing: 180, treeSpacing: 220,
+            blockShifting: true, edgeMinimization: true,
           }
         },
         physics: { enabled: false },
-        edges: {
-          smooth: { type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.4 }
-        },
-        interaction: {
-          hover:             true,
-          tooltipDelay:      250,
-          navigationButtons: true,
-          keyboard:          true,
-          zoomView:          true,
-        },
+        edges: { smooth: { type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.4 } },
+        interaction: { hover: true, tooltipDelay: 250, navigationButtons: true, keyboard: true },
         nodes: { borderWidth: 2 }
       };
-
       window._orgNet = new vis.Network(container, raw, options);
     }
 
     function downloadOrgGraph() {
       var canvas = document.querySelector('#organigram-graph canvas');
-      if (!canvas) { alert('Graph not loaded yet — please open the tab first.'); return; }
+      if (!canvas) { alert('Open the Organigram tab first to load the graph.'); return; }
       var a = document.createElement('a');
-      a.href     = canvas.toDataURL('image/png');
+      a.href = canvas.toDataURL('image/png');
       a.download = 'organigram.png';
       a.click();
     }
@@ -370,11 +342,11 @@
       <div class="tab-body-inner">
         <div class="tab-actions">
           <a class="btn btn-download" href="/jobs/{{ job_id }}/download/organigram.xml">&#11015; Download XML</a>
-          <button class="btn btn-copy" onclick="copyContent('organigram-xml-copy', this)">&#128203; Copy XML</button>
-          <button class="btn btn-graph"  onclick="downloadOrgGraph()">&#128444; Download Graph</button>
+          <button class="btn btn-copy"  onclick="copyContent('organigram-xml-copy', this)">&#128203; Copy XML</button>
+          <button class="btn btn-graph" onclick="downloadOrgGraph()">&#128444; Download Graph</button>
         </div>
         <div id="organigram-graph">
-          <div class="org-placeholder">Click the tab to load the graph&hellip;</div>
+          <div class="org-placeholder">Open the tab to load the graph&hellip;</div>
         </div>
         <div id="organigram-xml-copy" style="display:none;">{{ organigram_content }}</div>
       </div>
@@ -391,9 +363,58 @@
       <div class="tab-body-inner">
         <div class="tab-actions">
           <a class="btn btn-download" href="/jobs/{{ job_id }}/download/role_task_mapping.xml">&#11015; Download</a>
-          <button class="btn btn-copy" onclick="copyContent('role-task-content', this)">&#128203; Copy</button>
+          <button class="btn btn-copy" onclick="copyContent('role-task-copy', this)">&#128203; Copy</button>
         </div>
-        <div class="tab-content" id="role-task-content">{{ role_task_content }}</div>
+        {% if role_task_rows %}
+        <div class="rtm-wrap">
+          <table class="rtm-table">
+            <thead>
+              <tr>
+                <th style="width: 12%;">Actor</th>
+                <th style="width: 30%;">Task</th>
+                <th style="width: 28%;">Condition</th>
+                <th style="width: 20%;">Exception</th>
+                <th style="width: 10%;">Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in role_task_rows %}
+              <tr>
+                <td>
+                  {% for actor in task.actors %}
+                    {{ actor }}{% if not loop.last %}<br>{% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  <span class="{{ task.deontic_css }}">{{ task.label }}</span>
+                  {% if task.deontic_badge %}
+                  <span class="deontic-badge badge-{{ task.deontic_type }}">{{ task.deontic_badge }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% for cond in task.conditions %}
+                    {{ cond }}{% if not loop.last %}<br>{% endif %}
+                  {% else %}
+                    <span style="color:#bbb;">—</span>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for exc in task.exceptions %}
+                    {{ exc }}{% if not loop.last %}<br>{% endif %}
+                  {% else %}
+                    <span style="color:#bbb;">—</span>
+                  {% endfor %}
+                </td>
+                <td>{{ task.source }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="ref-empty">No role-task mapping data available.</p>
+        {% endif %}
+        <div id="role-task-copy" style="display:none;">{{ role_task_content }}</div>
       </div>
     </div>
   </div>
@@ -415,7 +436,7 @@
     </div>
   </div>
 
-  <!-- 6. REFERENCES -->
+  <!-- ══════════════ 6. REFERENCES ══════════════ -->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">References</span>
@@ -431,21 +452,13 @@
         <div class="ref-table-wrap">
           <table class="ref-table">
             <thead>
-              <tr>
-                {% for col in ref_headers %}
-                <th>{{ col }}</th>
-                {% endfor %}
-              </tr>
+              <tr>{% for col in ref_headers %}<th>{{ col }}</th>{% endfor %}</tr>
             </thead>
             <tbody>
               {% for row in ref_rows %}
-              <tr>
-                {% for cell in row %}
-                <td>{{ cell }}</td>
-                {% endfor %}
-              </tr>
+              <tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
               {% else %}
-              <tr><td class="ref-empty" colspan="{{ ref_headers|length }}">No data rows found.</td></tr>
+              <tr><td class="ref-empty" colspan="{{ ref_headers|length }}">No data rows.</td></tr>
               {% endfor %}
             </tbody>
           </table>

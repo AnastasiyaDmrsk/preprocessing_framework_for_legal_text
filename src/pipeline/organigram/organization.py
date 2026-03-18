@@ -59,5 +59,4 @@ class HybridOrganizationalExtractor(LLMOrganizationalExtractor):
         )
         prompt = _build_pre_extracted_actors_hierarchy_prompt(candidate_lines, text)
         response_text = self.generate_content(prompt, 4096)
-        print(response_text)
         return self._parse_actor_response(response_text)

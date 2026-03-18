@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from .organigram.api import build_organigram_xml
 from src.pipeline.preprocess.api import preprocess_legal_text
+from .role_task_mapping.api import build_role_task_mapping
 
 logger = logging.getLogger("pipeline")
 logger.setLevel(logging.DEBUG)
@@ -40,13 +41,13 @@ def run_pipeline(text: str, out_dir: Path) -> None:
             model=model,
         )
 
-        # build_role_task_mapping(
-        #     preprocessed_text=preprocessed_text,
-        #     organigram = organigram,
-        #     api_key=api_key,
-        #     output_dir=out_dir,
-        #     model=model,
-        # )
+        build_role_task_mapping(
+            preprocessed_text=preprocessed_text,
+            organigram = organigram,
+            api_key=api_key,
+            output_dir=out_dir,
+            model=model,
+        )
 
         (out_dir / "process_description.txt").write_text(
             "Controller notifies supervisory authority within 72 hours\n"

@@ -10,6 +10,7 @@ from flask import Flask, abort, redirect, render_template, request, send_file, u
 
 from pipeline.run_pipeline import run_pipeline
 from src.pipeline.organigram.organigram_parser import parse_organigram
+from src.pipeline.role_task_mapping.role_task_parser import parse_role_task_mapping
 
 APP_ROOT = Path(__file__).resolve().parent
 RUNS_DIR  = (APP_ROOT / "runs").resolve()
@@ -75,7 +76,6 @@ def submit():
     job_dir.mkdir(parents=True, exist_ok=True)
 
     (job_dir / "input.txt").write_text(text, encoding="utf-8")
-
     run_pipeline(text=text, out_dir=job_dir)
 
     return redirect(url_for("job", job_id=job_id), code=303)
@@ -94,9 +94,9 @@ def job(job_id: str):
     input_text        = read_optional("input.txt")
     preprocessed_text = read_optional("preprocess.txt")
     organigram_xml    = read_optional("organigram.xml")
+    role_task_xml     = read_optional("role_task_mapping.xml")
     references_raw    = read_optional("references.csv")
 
-    # ── statistics ────────────────────────────────────────────────────────────
     num_articles = sum(
         1 for _ in re.finditer(
             r'^(?:Article|Art\.)\s+\d+', input_text, re.MULTILINE | re.IGNORECASE
@@ -120,26 +120,24 @@ def job(job_id: str):
     )
     (job_dir / "statistics.txt").write_text(stats_text, encoding="utf-8")
 
-    # ── derived data ──────────────────────────────────────────────────────────
     ref_headers, ref_rows = parse_csv_table(references_raw)
     organigram_graph      = parse_organigram(organigram_xml)
+    role_task_rows        = parse_role_task_mapping(role_task_xml)
 
     return render_template(
         "job.html",
         job_id=job_id,
-        # statistics
         num_articles=num_articles,
         num_references=num_references,
         input_tokens=input_tokens,
         output_tokens=output_tokens,
         stats_text=stats_text,
-        # tab contents
         preprocessed_text=preprocessed_text,
         organigram_content=organigram_xml,
         organigram_graph=organigram_graph,
-        role_task_content=read_optional("role_task_mapping.xml"),
+        role_task_content=role_task_xml,
+        role_task_rows=role_task_rows,
         process_description=read_optional("process_description.txt"),
-        # references as structured table
         references_raw=references_raw,
         ref_headers=ref_headers,
         ref_rows=ref_rows,
@@ -150,14 +148,12 @@ def job(job_id: str):
 def download(job_id: str, name: str):
     if name not in ALLOWED_ARTIFACTS:
         abort(400)
-
     job_dir   = safe_job_dir(job_id)
     file_path = (job_dir / name).resolve()
     if not file_path.exists():
         abort(404)
     if not str(file_path).startswith(str(job_dir)):
         abort(400)
-
     return send_file(file_path, as_attachment=True, download_name=name)
 
 

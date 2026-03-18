@@ -40,6 +40,18 @@ For more details on the design and implementation, see the [Organizational Infor
 
 ### Role-Task Mapping
 
+This step maps **who does what** by extracting a structured task list from the **preprocessed legal text** and assigning **performers** based on the generated **organigram**.
+
+The implementation supports two modes:
+- **Pure LLM extraction**: the LLM extracts tasks directly from the text and assigns performers using the list of allowed unit/role pairs from the organigram.
+- **Hybrid extraction (default)**: an NLP pipeline first proposes task candidates (deontic detection, verb-phrase extraction, conditions), then the LLM validates/corrects candidates and adds missing tasks (with fallback to pure LLM if too few candidates are found).
+
+**Inputs**: `preprocessed_text` (from preprocessing) + `organigram.xml` (from the organigram step)
+
+**Output**: `role_task_mapping.xml` (tasks with performers, deontic type/modality, conditions/exceptions, and article/paragraph source references)
+
+For implementation details, configuration options, and the XML schema, see: [Role-Task Mapping](src/pipeline/role_task_mapping/doc/README.md).
+
 ---
 
 ### Process Description Generation

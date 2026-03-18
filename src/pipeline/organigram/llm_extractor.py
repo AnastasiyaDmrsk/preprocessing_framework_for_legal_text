@@ -172,7 +172,6 @@ class LLMOrganizationalExtractor:
 
         prompt = _build_hierarchy_extraction_prompt(actor_lines, text)
         response_text = self.generate_content(prompt, 4092)
-        print("HIERARCHIES: " + response_text.strip())
 
         unit_hierarchies: Dict[str, List[str]] = {}
         role_hierarchies: Dict[str, List[str]] = {}
@@ -354,10 +353,8 @@ class LLMOrganizationalExtractor:
 
         seen: set = set()
         unique: List[Tuple[str, str]] = []
-        print(actors)
         for name, t in actors:
             if (name.lower(), t) not in seen:
                 seen.add((name.lower(), t))
                 unique.append((name, t))
-        print(unique)
         return unique

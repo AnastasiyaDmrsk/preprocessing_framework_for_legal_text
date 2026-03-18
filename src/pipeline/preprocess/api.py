@@ -29,42 +29,24 @@ def preprocess_legal_text(reg_text: str, path: Path) -> Tuple[str, List[str]]:
     return preprocessed_text, references
 
 if __name__ == "__main__":
-    input_text = """
-    Article 23
+    input_text = """Article 11
 
-Reporting obligations
+Compliance with the minimum standards of physical and mental fitness
 
-1.   Each Member State shall ensure that essential and important entities notify, without undue delay, its CSIRT or, where applicable, its competent authority in accordance with paragraph 4 of any incident that has a significant impact on the provision of their services as referred to in paragraph 3 (significant incident). Where appropriate, entities concerned shall notify, without undue delay, the recipients of their services of significant incidents that are likely to adversely affect the provision of those services. Each Member State shall ensure that those entities report, inter alia, any information enabling the CSIRT or, where applicable, the competent authority to determine any cross-border impact of the incident. The mere act of notification shall not subject the notifying entity to increased liability.
-Where the entities concerned notify the competent authority of a significant incident under the first subparagraph, the Member State shall ensure that that competent authority forwards the notification to the CSIRT upon receipt.
-In the case of a cross-border or cross-sectoral significant incident, Member States shall ensure that their single points of contact are provided in due time with relevant information notified in accordance with paragraph 4.
-2.   Where applicable, Member States shall ensure that essential and important entities communicate, without undue delay, to the recipients of their services that are potentially affected by a significant cyber threat any measures or remedies that those recipients are able to take in response to that threat. Where appropriate, the entities shall also inform those recipients of the significant cyber threat itself.
-3.   An incident shall be considered to be significant if:
+1.   Member States shall, before a driving licence is issued for the first time, ensure that applicants undergo a medical examination in which the minimum standards of physical and mental fitness covering all the medical conditions set out in Annex III are applied. That applies to the issuance of driving licences in category AM only if so required by the Member State in question in accordance with Article 10(1), point (b). A medical examination shall, however, be required in respect of applications for driving licences of categories C, CE, C1, C1E, D, D1, DE or D1E, regardless of whether a medical examination was undertaken for another category.
+2.   Before a driving licence is renewed, applicants for the renewal shall undergo a medical examination covering the medical conditions set out in Annex III. This shall apply to the renewal of driving licences in category AM only if so required by the Member State in question in accordance with Article 10(1), point (b).
+3.   Notwithstanding paragraphs 1 and 2, and to the extent not otherwise provided for by Annex III, such as in the case of the appropriate assessment of eyesight for applicants for driving licences in accordance with Annex III, point 3, Member States may, for categories AM, A, A1, A2, B, B1 and BE, instead of requiring a medical examination, apply one or both of the following alternative measures:
 (a)
-it has caused or is capable of causing severe operational disruption of the services or financial loss for the entity concerned;
+require the applicant or holder of the driving licence to fill in a self-assessment form covering the medical conditions set out in Annex III when applying for the issuance or renewal of a driving licence; or
 (b)
-it has affected or is capable of affecting other natural or legal persons by causing considerable material or non-material damage.
-4.   Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:
-(a)
-without undue delay and in any event within 24 hours of becoming aware of the significant incident, an early warning, which, where applicable, shall indicate whether the significant incident is suspected of being caused by unlawful or malicious acts or could have a cross-border impact;
-(b)
-without undue delay and in any event within 72 hours of becoming aware of the significant incident, an incident notification, which, where applicable, shall update the information referred to in point (a) and indicate an initial assessment of the significant incident, including its severity and impact, as well as, where available, the indicators of compromise;
-(c)
-upon the request of a CSIRT or, where applicable, the competent authority, an intermediate report on relevant status updates;
-(d)
-a final report not later than one month after the submission of the incident notification under point (b), including the following:
-(i)
-a detailed description of the incident, including its severity and impact;
-(ii)
-the type of threat or root cause that is likely to have triggered the incident;
-(iii)
-applied and ongoing mitigation measures;
-(iv)
-where applicable, the cross-border impact of the incident;
-(e)
-in the event of an ongoing incident at the time of the submission of the final report referred to in point (d), Member States shall ensure that entities concerned provide a progress report at that time and a final report within one month of their handling of the incident.
-By way of derogation from the first subparagraph, point (b), a trust service provider shall, with regard to significant incidents that have an impact on the provision of its trust services, notify the CSIRT or, where applicable, the competent authority, without undue delay and in any event within 24 hours of becoming aware of the significant incident.
-5.   The CSIRT or the competent authority shall provide, without undue delay and where possible within 24 hours of receiving the early warning referred to in paragraph 4, point (a), a response to the notifying entity, including initial feedback on the significant incident and, upon request of the entity, guidance or operational advice on the implementation of possible mitigation measures. Where the CSIRT is not the initial recipient of the notification referred to in paragraph 1, the guidance shall be provided by the competent authority in cooperation with the CSIRT. The CSIRT shall provide additional technical support if the entity concerned so requests. Where the significant incident is suspected to be of criminal nature, the CSIRT or the competent authority shall also provide guidance on reporting the significant incident to law enforcement authorities.
-    """
+establish a national system of assessment of fitness to drive to ensure that significant changes in physical or mental fitness are reacted to in order to comply with the minimum standards of physical and mental fitness set out in Annex III, after the driving licence has been issued to the applicant following a medical examination or self-assessment.
+4.   Member States may provide for appropriate measures to address non-compliance with the requirement to fill in a self-assessment form or for knowingly providing information in the self-assessment form that is incorrect or incomplete, or for failing to meet any requirement established in accordance with paragraph 3, point (b).
+5.   Member States may apply the alternative measure under paragraph 3, point (b), in such a way that it allows the monitoring of fitness to drive during periods of administrative validity.
+6.   If, on the basis of information acquired pursuant to the various alternative measures set out in paragraph 3, it becomes apparent that the applicant or holder of a driving licence is likely to have one or more of the medical conditions listed in Annex III, Member States shall ensure that the applicant or holder of the driving licence undergoes a medical examination prior to the Member States issuing or renewing the driving licence.
+7.   This Article shall not prevent Member States from taking measures to raise awareness and improve the knowledge of the health sector and of driving licence holders about the minimum standards of physical and mental fitness for driving set out in Annex III.
+If Member States adopt guidelines for medical practitioners to help identify driving licence holders who no longer meet the minimum standards of physical and mental fitness to drive, they shall inform the Commission thereof. The Commission shall make the guidelines available to the other Member States.
+If Member States develop public awareness campaigns to inform citizens about mental or physical health conditions that may impair fitness to drive, they shall inform the Commission thereof. The Commission shall make the information available to the other Member States.
+8.   The standards set by Member States for the issuance or any subsequent renewal of driving licences may be stricter than those set out in Annex III."""
     preprocessor = RegulatoryTextPreprocessor()
     preprocessed, refs = preprocessor.preprocess(input_text)
     print(preprocessed)
