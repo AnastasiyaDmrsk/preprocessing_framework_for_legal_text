@@ -1,0 +1,14 @@
+The process includes the following actors: Commission, Transferring Member State (lane: Health Professional), Applicant / Representative, and Member State Responsible (lane: Health Professional).
+
+The process starts with two parallel subprocesses: the Commission identifies the need for a standardized health data exchange framework, and the Transferring Member State determines that a health data exchange is required for a transfer.
+
+The Commission shall draw up a Common Health Certificate template and shall adopt uniform conditions for exchange. Both activities occur in parallel and shall be completed before the framework is considered established. The process for the Commission ends with the Framework Established end event.
+
+The Transferring Member State shall identify special needs information prior to initiating any data transmission. Following identification, the Transferring Member State shall request explicit consent from the Applicant / Representative. The Applicant / Representative shall provide a consent decision or incapacity information upon receiving the consent request, except where no decision is required. The consent decision is transmitted back to the Transferring Member State via a message flow.
+
+The Transferring Member State shall proceed based on the consent outcome as follows:
+If consent is explicitly given, the Transferring Member State shall prepare the health certificate and supporting documents and shall transmit the health information to the Member State Responsible.
+If the applicant is incapable of providing consent, the Transferring Member State shall assess whether the transmission is necessary for vital interests. If transmission is necessary for vital interests, the Transferring Member State shall prepare the health certificate and documents and then Transferring  Member State shall transmit the health information. If transmission is not necessary for vital interests, the Transferring Member State shall not transmit the data, and the process ends with Health Data Not Transmitted end event.
+If consent is refused, the Transferring Member State shall not transmit the health data, and the process ends with Health Data Not Transmitted end event.
+
+Upon receiving the transmitted health information, the Member State Responsible shall ensure that the special needs are adequately addressed. The process for the Member State Responsible ends with Special Needs Addressed end event.
