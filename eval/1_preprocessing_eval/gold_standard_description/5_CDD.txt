@@ -1,0 +1,15 @@
+The process contains the following actors: Customer, Obliged Entity, and Financial Intelligence Unit (FIU).
+
+The process starts with the Customer initiating a new account request. The Customer shall submit an account request to the Obliged Entity. The Customer shall provide required identity information, including information on the beneficial owner, as well as any relevant circumstance changes throughout the relationship.
+
+The Obliged Entity shall receive the customer request and then shall assess the risk and context associated with the customer and the intended business relationship. Following, the Obliged Entity shall decide between three paths:
+-	Standard path: If verification before account opening is required, the Obliged Entity shall perform CDD for the customer and beneficial owner before finalising the relationship.
+-	Derogation - restricted account: If there is a derogation with appropriate safeguards, the Obliged Entity shall open the account with restricted transactions and shall subsequently perform CDD for the customer and beneficial owner.
+-	Derogation - little risk: If the risk of money laundering or terrorist financing is low, the Obliged Entity shall establish a provisional relationship and shall subsequently perform CDD for the customer and beneficial owner.
+All three paths converge before CDD is performed.
+
+After performing CDD, Obliged Entity shall assess whether CDD requirements have been met. If CDD requirements are met, the Obliged Entity shall finalise the relationship or carry out the transaction, and shall review the customer at appropriate times thereafter. The process ends with CDD Completed Successfully end event.
+
+If CDD requirements are not met, the Obliged Entity shall assess whether an exemption applies under Paragraph 4, sub. If the exemption applies, the process ends with CDD Concluded end event. If the exemption does not apply, the Obliged Entity shall terminate the relationship. Following termination of the relationship, the Obliged Entity shall consider whether a Suspicious Transaction Report should be submitted to the FIU. If the Obliged Entity decides to make a STR, Obliged Entity shall prepare the report and shall submit it to the FIU, except where no suspicion arises. The process ends for the Obliged Entity with CDD Concluded, STR Submitted end event. If the Obliged Entity decides not to make a STR, the process ends with CDD Concluded, No STR Submitted end event.
+
+The FIU shall process the Suspicious Transaction Report upon receipt from the Obliged Entity, except where no report has been submitted. The process for the FIU ends with STR Processing Complete end event.
