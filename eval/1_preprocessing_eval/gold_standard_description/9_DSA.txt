@@ -1,0 +1,20 @@
+The process contains the following actors: the Entity (lane: Trusted Flagger), the Digital Service Coordinator, the Provider (lane: Online Platform Provider), the Commission, and the Board.
+
+The process starts with the Entity.The Entity shall request trusted flagger status from the Digital Service Coordinator and receive the status decision. At least once a year, the Entity shall publish easily comprehensible and detailed reports on notices and shall then carry out the following two activities in parallel:
+-	The Entity shall send reports to the Digital Service Coordinator.
+-	The Entity shall make the reports publicly available.
+The Entity shall then submit notices to Provider. The Entity may receive status updates throughout the lifecycle of the trusted flagger status from Digital Service Coordinator.
+Upon receiving a status update indicating that an investigation has been opened, the Entity receives an opportunity to react and the Entity shall react to the investigation findings. The process for the Entity ends with Status Updated end event.
+
+After receiving status request from the Entity, the Digital Service Coordinator shall assess whether the conditions for trusted flagger status are met. If the conditions are not met, the process ends with Decline Status end event. If the conditions are met, the Digital Service Coordinator shall award the status. Then, the Digital Service Coordinator shall share the names, addresses, and emails of the awarded entity with Commission and Board. The Digital Service Coordinator shall receive the annual report from the Entity. Then, the Digital Service Coordinator may receive any further information relevant to compliance from the Provider. If an investigation is required, the Digital Service Coordinator shall suspend the status and shall then carry out the investigation. The Digital Service Coordinator shall afford the Entity an opportunity to react to the investigation findings. If the entity no longer meets the conditions, the Digital Service Coordinator shall revoke the trusted flagger status, except where the entity is found still to meet the conditions. The process for the Digital Service Coordinator ends with Finalize Trusted Flagger Check end event.
+
+Upon receiving a notice, the Provider shall take the necessary measures for notices and shall then give priority to notices submitted by trusted flaggers. The Provider shall process the notices and shall then decide upon them. If the notices are insufficiently precise, inaccurate, or inadequately substantiated, the Provider shall communicate the relevant information to the Digital Service Coordinator, except where the notices are adequate, in which case the process ends with No Information to Share end event. The process for the Provider ends with Information Shared end event.
+
+Upon receiving information from Digital Service Coordinator, the Commission shall carry out the following two activities in parallel:
+-	The Commission shall keep the trusted flagger database up to date.
+-	The Commission shall publish the relevant information.
+After completing both activities, the Commission shall consult the Board and shall receive the Board's consultation response. The Commission shall issue guidelines for providers. The process for the Commission ends with Finish Guidelines end event.
+
+The Board shall receive the information from the Digital Service Coordinator and shall consult upon receiving the consultation request from Commission. The process for the Board ends with Finish Consultation end event.
+
+Finally, the process ends with the Entity having its status confirmed or revoked, the Provider completing notice processing, the Commission issuing guidelines, and the Board concluding its consultation.
