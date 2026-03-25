@@ -56,6 +56,14 @@ For implementation details, configuration options, and the XML schema, see: [Rol
 
 ### Process Description Generation
 
+This step converts **(1) preprocessed regulatory text** and **(2) the generated `role_task_mapping.xml`** into a **structured natural-language process description** that mirrors a BPMN collaboration narrative.
+
+- **Input**: `preprocessed_text` + `role_task_mapping.xml`
+- **Core idea**: the role-task mapping defines **who does what** (actors, modalities, conditions/exceptions), while the preprocessed text is used as the authoritative source for **ordering** and **gateway cues** (e.g., enumerations → parallel duties; “if/unless/provided that” → XOR branches).
+- **Output**: `process_description.txt` (plain text, actor-structured, one task per sentence, with implicit BPMN constructs such as start/end events, XOR/AND gateways, and message flows).
+
+Implementation details: [Process Description Generation](src/pipeline/process_description/doc/README.md).
+
 ## Evaluation
 
 The evaluation dataset is located in `eval/dataset`. The dataset includes following regulatory documents:
@@ -105,3 +113,4 @@ python evaluate_organigrams.py \
 ### Role-Task Mapping Evaluation
 
 ### Process Description Evaluation
+
