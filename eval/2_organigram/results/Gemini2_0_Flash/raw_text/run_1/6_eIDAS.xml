@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<organisation xmlns="http://cpee.org/ns/organisation/1.0">
+  <units>
+    <unit id="Member State">
+      <permissions/>
+    </unit>
+    <unit id="Data protection authority">
+      <permissions/>
+    </unit>
+    <unit id="Competent national body for information security">
+      <permissions/>
+    </unit>
+    <unit id="Body responsible for the national trusted list">
+      <permissions/>
+    </unit>
+    <unit id="Supervisory body">
+      <permissions/>
+    </unit>
+    <unit id="External">
+      <permissions/>
+    </unit>
+    <unit id="Public">
+      <permissions/>
+    </unit>
+    <unit id="Commission">
+      <permissions/>
+    </unit>
+  </units>
+  <roles>
+    <role id="Commission">
+      <permissions/>
+    </role>
+    <role id="Supervisory body">
+      <permissions/>
+    </role>
+    <role id="Trust service provider">
+      <permissions/>
+    </role>
+    <role id="Notified supervisory body">
+      <parent>Supervisory body</parent>
+      <permissions/>
+    </role>
+    <role id="Qualified trust service provider">
+      <parent>Trust service provider</parent>
+      <permissions/>
+    </role>
+    <role id="Non-qualified trust service provider">
+      <parent>Trust service provider</parent>
+      <permissions/>
+    </role>
+    <role id="Public">
+      <permissions/>
+    </role>
+    <role id="Conformity assessment body">
+      <permissions/>
+    </role>
+  </roles>
+  <subjects>
+    <subject id="commission_name commission_surname" uid="cos">
+      <relation unit="Commission" role="Commission"/>
+    </subject>
+    <subject id="supervisory_name body_surname" uid="subos">
+      <relation unit="Member State" role="Supervisory body"/>
+    </subject>
+    <subject id="supervisory_name body_surname" uid="subo2">
+      <relation unit="Commission" role="Supervisory body"/>
+    </subject>
+    <subject id="supervisory_name body_surname" uid="subo3">
+      <relation unit="Body responsible for the national trusted list" role="Supervisory body"/>
+    </subject>
+    <subject id="trust_name provider_surname" uid="trses">
+      <relation unit="Supervisory body" role="Trust service provider"/>
+    </subject>
+    <subject id="trust_name provider_surname" uid="trse2">
+      <relation unit="Competent national body for information security" role="Trust service provider"/>
+    </subject>
+    <subject id="trust_name provider_surname" uid="trse3">
+      <relation unit="Public" role="Trust service provider"/>
+    </subject>
+    <subject id="trust_name provider_surname" uid="trse4">
+      <relation unit="External" role="Trust service provider"/>
+    </subject>
+    <subject id="notified_name body_surname" uid="nosus">
+      <relation unit="Member State" role="Notified supervisory body"/>
+    </subject>
+    <subject id="qualified_name provider_surname" uid="qutrs">
+      <relation unit="Supervisory body" role="Qualified trust service provider"/>
+    </subject>
+    <subject id="non_name provider_surname" uid="noqus">
+      <relation unit="Supervisory body" role="Non-qualified trust service provider"/>
+    </subject>
+    <subject id="public_name public_surname" uid="pus">
+      <relation unit="Public" role="Public"/>
+    </subject>
+    <subject id="conformity_name body_surname" uid="coass">
+      <relation unit="Supervisory body" role="Conformity assessment body"/>
+    </subject>
+  </subjects>
+</organisation>
