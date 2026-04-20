@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from .const import DEFAULT_MODEL, DEFAULT_SPACY_MODEL, DEFAULT_VALIDATOR_MODEL
-from .llm_extractor import LLMOrganizationalExtractor
-from .organization import HybridOrganizationalExtractor
+from src.pipeline.organigram.const import DEFAULT_MODEL, DEFAULT_SPACY_MODEL, DEFAULT_VALIDATOR_MODEL
+from src.pipeline.organigram.llm_extractor import LLMOrganizationalExtractor
+from src.pipeline.organigram.organization import HybridOrganizationalExtractor
 
 
 def build_organigram_xml(
@@ -13,7 +13,7 @@ def build_organigram_xml(
         use_hybrid: bool = True,
         spacy_model: str = DEFAULT_SPACY_MODEL,
         use_gliner: bool = False,
-        use_validator: bool = False, # TODO: change later (?)
+        use_validator: bool = True,
         validator_model: str = DEFAULT_VALIDATOR_MODEL,
 ) -> str:
     extractor = (

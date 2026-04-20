@@ -120,10 +120,10 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
     where TYPE is either UNIT, ROLE or BOTH.
 
     DEFINITIONS:
-    - UNIT: Any organization or organizational unit that can act as a pool (e.g. "Commission", "ENISA").
+    - UNIT: Any organization or organizational unit that can act as a pool in BPMN (e.g. "Commission", "ENISA", "Customer").
     - ROLE: Any role, function, or position that can be assigned to a subject or group of subjects within a unit and 
     can act as a lane which actively participates in the process (e.g. "Commission", "Management Board", "Assistant").
-    - BOTH (UNIT and ROLE at the same time): autonomous institution that also directly performs active tasks in the process (e.g. "Commission", "ENISA").
+    - BOTH (UNIT and ROLE at the same time): autonomous institution that also directly performs active tasks in the process (e.g. "Commission", "ENISA", "Customer").
 
     IMPORTANT:
     - Hierarchies can exist:
@@ -154,7 +154,9 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
        - that D is a broader role that encompasses C (for example "Doctor" is a parent of "Surgeon"), or 
        - if multiple roles have identical obligations and the text does not indicate any hierarchy, 
        assume they are all children of a generic parent role (which might be both unit and role),
-       for example "Provider" is a parent of "Online Platform Provider" and "Mobile Phone Provider".
+       for example "Provider" is a parent of "Online Platform Provider" and "Mobile Phone Provider" if "Provider" 
+       alone also has at least one active task in the process. Otherwise, it is ROLE-UNIT hierarchy with "Provider" as a unit 
+       and the specific providers as roles under it.
 
     3. ROLE–UNIT hierarchy (the most common and important):
        A unit E is the parent of role F if:
@@ -162,8 +164,8 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
        the role/child "Supervisory Authority".
        - If unit and the role have the same name, assume the unit is a parent of the role.
        - Each ROLE must have at least one parent UNIT. If the text clearly indicates that a ROLE is performed within a UNIT, assign that UNIT as its parent.
-       However, if the text does not clearly indicate the parent UNIT, 
-       do NOT assign an existing unit and instead assign it to a generic unit, for example "External", "Entity" or "Natural / Legal Person" or other suitable naming.
+       However, if the text does not clearly indicate the parent UNIT and there is no UNIT with the same name, then
+       do NOT assign any existing unit and instead assign it to a generic unit, for example "External", "Entity" or "Natural / Legal Person" or other suitable naming.
 
     CONSTRAINTS:
     1. Only consider names that appear in ACTORS IDENTIFIED with the corresponding TYPE.
@@ -198,27 +200,31 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
 
 PRE_EXTRACTED_ACTORS_IDENTIFIED = """
 DEFINITIONS:
-- UNIT: independent institution with its own legal identity or autonomous resources which can be seen as a pool in BPMN (e.g. "Member State"). Every UNIT must have a ROLE which performs the active tasks in the process as its organ. If it is not the case, then such UNIT is BOTH UNIT and ROLE.
-- ROLE: functional position or organ which takes ACTIVE part in the process and can be seen as lane(s) in BPMN 
-(e.g. "CSIRT" if directly defined its connection to a specific unit, e.g., Member State. Otherwise CSIRT and Member State can be both UNIT and ROLE, unless defined otherwise). 
-If no lanes exist, only pool/unit, then all active actors are BOTH UNIT and ROLE.
-- BOTH (UNIT and ROLE at the same time): autonomous institution that also directly performs active tasks in the process (e.g. "Commission", "ENISA").
+- UNIT: independent institution or group with its own legal identity or autonomous resources which can be seen as a pool in BPMN (e.g. "Member State"). 
+Every UNIT must have at least one ROLE which performs the active tasks in the process as its organ. If it is not the case, see BOTH.
+- ROLE: functional position/role assigned by the UNIT or organ under a specific UNIT which takes ACTIVE part in the process and can be seen as a lane in BPMN.
+The ROLE outside of the UNIT is meaningless. Otherwise, see BOTH.
+- BOTH (UNIT and ROLE at the same time): autonomous and independent institution that directly performs active tasks in the process and cannot be placed under any other department/unit/more general term.
 
 ACTIVE PARTICIPATION: include if the actor:
-(a) Carries an obligation: "shall / must / is required to [verb]".
+(a) Carries an explicit or implicit obligation: "shall / must / is required to [verb] / may / should".
 (b) Performs an action in the process both explicitly and implicitly, e.g, "X notifies Y" makes X ACTIVE OR in passive voice "Y is notified by X" makes X ACTIVE.
 (c) Is the SOURCE or TARGET of a delegated obligation: "X shall ensure/require/oblige/
     order/direct that Y [verb]" indicates that X and Y are ACTIVE (Y performs the action which is required by X). 
     The same case implies X shall do something upon Y's request, so X and Y are active actors.
+(d) Exercises a decision or power affecting the process, so that the process cannot continue without this actor in it, 
+e.g., "X shall adjust rules after the feedback of Y" means that Y may provide feedback and only then X shall adjust rules.
+In this case, both actors are active.    
 
-PASSIVE-ONLY: exclude if the actor only receives a notification, report, or information with no further active participation in the process, e.g.,
- "X notifies/informs/forwards to Y" then exclude Y unless Y also has an active task with this information).
+An actor is PASSIVE-ONLY and should be EXCLUDED if its sole role is receiving and has no influence on the process 
+(the process can continue without this actor contributing), e.g.,
+ "X notifies/informs/forwards to Y" then exclude Y unless Y also has an active task with this information or is required for the process to continue).
 
 NAMING CONVENTIONS:
 a. Title case; strip leading articles. No invented names.
 b. Singular generic noun for compound phrases ("Provider" not "providers of online platforms").
 c. Named subtypes with DIFFERENT obligations: Abstract Parent UNIT + each subtype as ROLE.
-d. "and/or" actors with identical tasks: slash notation ("Applicant / Representative").
+d. Use slash notation (ACTOR1 / ACTOR2) with "or" actors if used throughout the whole process, e.g., "ACTOR1 or ACTOR2 shall submit the report" and both actors do not have any tasks to complete individually. Never use with "and" actors, which should be treated as separate actors, e.g., "ACTOR1 and ACTOR2 shall submit the report" means that both ACTOR1 and ACTOR2 should be in the actor list.
 e. Same base name, different responsibilities: two separate UNITs (e.g., ("Sending Provider" and "Receiving Provider")).
 ___
 Task 1 — VALIDATE NLP CANDIDATES:
@@ -229,14 +235,14 @@ ___
 Task 2 — FIND MISSING ACTIVE ACTORS FROM TEXT:
 Scan the INPUT TEXT independently for ACTIVE actors not in the candidate list:
 1. Functional roles carrying obligations or responding to requests/delegated obligations.
-2. Actors mentioned once or in subordinate clauses with an ACTIVE task. Watch out for passive voice constructions which might define a role that is active.
+2. Actors mentioned once or in subordinate clauses with an ACTIVE implicit/explicit task. Watch out for passive voice constructions which might define a role that is active.
 3. Do NOT add PASSIVE-ONLY actors.
 4. When dealing with requests or delegated obligations, both SOURCE and TARGET of the request/delegation are active actors, even if they are mentioned only once or in a passive construction.
 5. ALL DIRECT ACTIVE ACTORS SHOULD BE ROLES, but if the text clearly indicates that an autonomous institution is performing active tasks directly 
-(not through its organs, e.g., Member State does specific tasks directly and not though other organs referred to it), then classify it as BOTH UNIT and ROLE.
+(not through its organs, e.g., Member State does specific tasks directly and not though other organs referred to it), then classify it as BOTH.
 6. If multiple actors share the same name but have different obligations, classify them as separate UNITs (e.g., "Sending Member State" and "Receiving Member State") 
 or ROLEs if they are under the same UNIT (e.g., "Competent Authority" and "Other Competent Authority" both under the same "Member State" UNIT). 
-7. Define the TYPE (UNIT / ROLE / both) of any newly found actors. A unit should always have a role which performs the action as its organ. If it is not the case, then it is BOTH UNIT and ROLE.
+7. Define the TYPE (UNIT / ROLE / BOTH) of any newly found actors. A unit should always have a role which performs the action as its organ. If it is not the case, then it is BOTH UNIT and ROLE.
 
 At least one actor must be a ROLE and a UNIT!
 ___
@@ -261,35 +267,37 @@ VALIDATOR_MAX_TOKENS = 4096
 ACTOR_VALIDATION_PROMPT = """You are a strict auditor of organizational actor extraction for EU regulatory documents and BPMN process modeling.
 
 You will receive:
-1. The INPUT TEXT of a regulatory article.
+1. The regulatory INPUT TEXT.
 2. A PROPOSED ACTOR LIST extracted by another model.
 
 Your task is to validate the proposed list against the text and output a CORRECTED final list.
 
 ACTIVE PARTICIPATION RULES:
 An actor is ACTIVE and should be INCLUDED if it:
-(a) Carries an explicit obligation: "shall / must / is required to [verb]".
-(b) Initiates an action: notifies, submits, adopts, forwards, provides, assesses,
-    cooperates, consults, establishes, designates, approves, publishes, ensures.
-(c) Is the TARGET of a delegated obligation: "X shall ensure/require/oblige/mandate/
-    order/direct/compel that Y [verb]" → Y is ACTIVE.
-(d) Responds to a request: "X requests Y to [verb]" → Y is ACTIVE.
-(e) Exercises a decision or power affecting the process.
+(a) Carries an explicit or implicit obligation or task in the process: "shall / must / may / should".
+(b) Initiates an action: notifies, submits, adopts, cooperates, consults, establishes, publishes, etc.
+(c) Is the TARGET or SOURCE of a delegated obligation: "X shall ensure/require/etc that Y [verb]" indicates that X and Y are active.
+(d) Responds to a request: "X requests Y to [verb]", X and Y are ACTIVE.
+(e) Affects the process, so that the process cannot continue without this actor, 
+e.g., "X shall adjust rules based on the feedback of Y" means that Y may provide feedback and then X shall adjust rules, 
+even if no task is explicitly mentioned. In this case, both X and Y are ACTIVE, where Y has an implicit task "provide feedback".    
 
-An actor is PASSIVE-ONLY and should be EXCLUDED if its sole role is receiving a
-notification, report, or forwarded document with no reciprocal obligation.
+An actor is PASSIVE-ONLY and should be EXCLUDED if its sole role is receiving and has no tasks and any influence on the process and its result.
 
 CHECKS TO PERFORM (reason through each explicitly before outputting):
-1. HALLUCINATION: Is the actor name actually present in the INPUT TEXT? If not → remove it.
-2. ACTIVE PARTICIPATION: Does the actor have at least one active task per the rules above?
-   If only passive recipient → remove it.
+1. HALLUCINATION: Is the actor name present in the INPUT TEXT? If not, remove it.
+2. ACTIVE PARTICIPATION: Does the actor have at least one active task per the rules above, even if implicitly hidden?
+   If only passive recipient throughout the whole process, remove it.
 3. TYPE CORRECTNESS:
-   - UNIT ONLY: independent institution with legal identity (Commission, ENISA, Member State).
-   - ROLE ONLY: functional organ within another unit (CSIRT, Competent Authority, Single Point of Contact).
-   - BOTH: autonomous institution that also directly performs active tasks.
+   - UNIT ONLY: independent institution/department/general term (Commission, ENISA, Member State) serving as a BPMN pool for ROLE(s) in the process executing the tasks.
+   - ROLE ONLY: functional organ within a specific unit (CSIRT, Competent Authority, Single Point of Contact), which executes the tasks in the process (BPMN lanes).
+   - BOTH: autonomous/independent institution that directly performs active tasks, does not share tasks with any other role and has no corresponding UNIT or ROLE (both pool and lane at the same time). 
+   In case multiple roles perform the same task(s), they should be united under the same UNIT.
+Especially, check if the actor was assigned to ROLE and UNIT (BOTH or in two lines) that there is no other unit or role which the actor might refer to, 
+e.g, "Customer and its representative" should identify representative as a ROLE under "Customer" UNIT since representative alone without customer would not make any sense and is normally assigned by the customer.
 4. MISSING ACTORS: Is there any actor in the text satisfying the active participation
-   rules that is NOT in the proposed list? If yes → add it.
-5. NAMING: Are names in title case, singular, without leading articles? If not → correct them.
+   rules that is NOT in the proposed list? If yes, add it.
+5. NAMING: Are names in title case, singular, without leading articles, separated with "/" if "ACTOR1 or ACTOR2" is used in the whole process? If not, correct them.
 
 IMPORTANT: Reason step by step for each actor before producing the final list.
 End your response with the tag <FINAL_LIST> followed by the corrected actor list.
@@ -299,7 +307,7 @@ ACTOR_NAME | TYPE   (TYPE ∈ {UNIT, ROLE})
 </FINAL_LIST>
 """
 
-HIERARCHY_VALIDATION_PROMPT = """You are a strict auditor of organizational hierarchy extraction for EU regulatory documents and CPEE/BPMN process modeling.
+HIERARCHY_VALIDATION_PROMPT = """You are a strict auditor of organizational hierarchy extraction for EU regulatory documents and BPMN process modeling.
 
 You will receive:
 1. The INPUT TEXT of a regulatory article.
@@ -310,9 +318,9 @@ HIERARCHY TYPES:
 - UNIT-UNIT  : "CHILD_UNIT | PARENT_UNIT | UNIT"
   A is parent of B if B is an internal body/department of A, or a specialization of A.
 - ROLE-ROLE  : "CHILD_ROLE | PARENT_ROLE | ROLE"
-  A is parent of B if A is a broader role encompassing B (e.g. "Provider" → "Online Platform Provider").
+  A is parent of B if A is a broader role encompassing B (e.g. "Provider" is a parent of "Online Platform Provider").
 - ROLE-UNIT  : "CHILD_ROLE | PARENT_UNIT | ROLE-UNIT"
-  A unit is parent of a role if the role is performed within that unit.
+  A unit is parent of a role if the role is performed within that unit or assigned by this unit.
   If a UNIT and ROLE share the same name, the UNIT is always parent of the ROLE.
   Every ROLE must have at least one parent UNIT.
 
@@ -321,16 +329,16 @@ CHECKS TO PERFORM (reason through each explicitly before outputting):
    with the correct TYPE?
    - UNIT-UNIT: both actors must be TYPE=UNIT.
    - ROLE-ROLE: both actors must be TYPE=ROLE.
-   - ROLE-UNIT: exactly one UNIT and one ROLE.
-   If not → remove that relation.
+   - ROLE-UNIT: exactly one UNIT and one ROLE. If UNIT is not in the ACTOR LIST but appears to be a general term for multiple roles with no better option for UNIT, leave it.
+   If not, remove that relation.
 2. MISSING ROLE-UNIT LINKS: Does every ROLE actor have at least one ROLE-UNIT relation?
-   If not → infer the most appropriate parent UNIT from the text.
-   If no parent can be inferred → assign parent unit "External".
+   If not, infer the most appropriate parent UNIT from the text.
+   If no parent can be inferred and no general term appears to be suitable for this ROLE, assign parent unit "External".
 3. CORRECTNESS: Is each relation supported by the text?
-   If a relation contradicts the text → remove it.
+   If a relation contradicts the text, remove it and correct it.
 4. MISSING RELATIONS: Is there any parent-child relationship clearly indicated by
-   the text that is absent? If yes → add it.
-5. GENERIC UNITS: If "External" is used but a more specific unit can be inferred → replace it.
+   the text that is absent? If yes, add it.
+5. GENERIC UNITS: If "External" is used but a more specific unit can be inferred, replace it.
 
 IMPORTANT: Reason step by step for each relation before producing the final list.
 End your response with the tag <FINAL_HIERARCHIES> followed by the corrected relations.
