@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_Extracted">
+      <participant id="Participant_MS" name="Member States" processRef="Process_MS" />
+      <participant id="Participant_SB" name="Supervisory Body" processRef="Process_SB" />
+      <participant id="Participant_COM" name="Commission" processRef="Process_COM" />
+      <participant id="Participant_TSP" name="Trust Service Providers" processRef="Process_TSP" />
+   </collaboration>
+
+   <process id="Process_MS" isExecutable="false">
+      <startEvent id="Start_MS" name="Start" />
+      <task id="Task_MS_1" name="designate supervisory body" />
+      <task id="Task_MS_2" name="notify designated supervisory bodies to Commission" />
+      <task id="Task_MS_3" name="require supervisory body to establish trust infrastructure" />
+      <task id="Task_MS_4" name="authorise supervisory bodies to carry out joint investigations" />
+      <endEvent id="End_MS" name="End" />
+      <sequenceFlow id="Flow_MS_0" sourceRef="Start_MS" targetRef="Task_MS_1" />
+      <sequenceFlow id="Flow_MS_1" sourceRef="Task_MS_1" targetRef="Task_MS_2" />
+      <sequenceFlow id="Flow_MS_2" sourceRef="Task_MS_2" targetRef="Task_MS_3" />
+      <sequenceFlow id="Flow_MS_3" sourceRef="Task_MS_3" targetRef="Task_MS_4" />
+      <sequenceFlow id="Flow_MS_4" sourceRef="Task_MS_4" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_SB" isExecutable="false">
+      <startEvent id="Start_SB" name="Start" />
+      <task id="Task_SB_1" name="supervise qualified trust service providers" />
+      <task id="Task_SB_2" name="take action in relation to non-qualified trust service providers" />
+      <task id="Task_SB_3" name="cooperate with other supervisory bodies" />
+      <task id="Task_SB_4" name="provide assistance" />
+      <task id="Task_SB_5" name="analyse conformity assessment reports" />
+      <task id="Task_SB_6" name="inform about breaches" />
+      <task id="Task_SB_7" name="report to Commission about main activities" />
+      <task id="Task_SB_8" name="carry out audits" />
+      <task id="Task_SB_9" name="request conformity assessment" />
+      <task id="Task_SB_10" name="cooperate with data protection authorities" />
+      <task id="Task_SB_11" name="grant qualified status" />
+      <task id="Task_SB_12" name="withdraw qualified status" />
+      <task id="Task_SB_13" name="inform body responsible for trusted list" />
+      <task id="Task_SB_14" name="verify provisions on termination plans" />
+      <task id="Task_SB_15" name="require remedy of failure" />
+      <task id="Task_SB_16" name="submit report to Commission" />
+      <task id="Task_SB_17" name="refuse request for assistance" />
+      <task id="Task_SB_18" name="provide ENISA with summary of notifications" />
+      <endEvent id="End_SB" name="End" />
+
+      <sequenceFlow id="Flow_SB_0" sourceRef="Start_SB" targetRef="Task_SB_1" />
+      <sequenceFlow id="Flow_SB_1" sourceRef="Task_SB_1" targetRef="Task_SB_2" />
+      <sequenceFlow id="Flow_SB_2" sourceRef="Task_SB_2" targetRef="Task_SB_3" />
+      <sequenceFlow id="Flow_SB_3" sourceRef="Task_SB_3" targetRef="Task_SB_4" />
+      <sequenceFlow id="Flow_SB_4" sourceRef="Task_SB_4" targetRef="Task_SB_5" />
+      <sequenceFlow id="Flow_SB_5" sourceRef="Task_SB_5" targetRef="Task_SB_6" />
+      <sequenceFlow id="Flow_SB_6" sourceRef="Task_SB_6" targetRef="Task_SB_7" />
+      <sequenceFlow id="Flow_SB_7" sourceRef="Task_SB_7" targetRef="Task_SB_8" />
+      <sequenceFlow id="Flow_SB_8" sourceRef="Task_SB_8" targetRef="Task_SB_9" />
+      <sequenceFlow id="Flow_SB_9" sourceRef="Task_SB_9" targetRef="Task_SB_10" />
+      <sequenceFlow id="Flow_SB_10" sourceRef="Task_SB_10" targetRef="Task_SB_11" />
+      <sequenceFlow id="Flow_SB_11" sourceRef="Task_SB_11" targetRef="Task_SB_12" />
+      <sequenceFlow id="Flow_SB_12" sourceRef="Task_SB_12" targetRef="Task_SB_13" />
+      <sequenceFlow id="Flow_SB_13" sourceRef="Task_SB_13" targetRef="Task_SB_14" />
+      <sequenceFlow id="Flow_SB_14" sourceRef="Task_SB_14" targetRef="Task_SB_15" />
+      <sequenceFlow id="Flow_SB_15" sourceRef="Task_SB_15" targetRef="Task_SB_16" />
+      <sequenceFlow id="Flow_SB_16" sourceRef="Task_SB_16" targetRef="Task_SB_17" />
+      <sequenceFlow id="Flow_SB_17" sourceRef="Task_SB_17" targetRef="Task_SB_18" />
+      <sequenceFlow id="Flow_SB_18" sourceRef="Task_SB_18" targetRef="End_SB" />
+   </process>
+
+   <process id="Process_COM" isExecutable="false">
+      <startEvent id="Start_COM" name="Start" />
+      <task id="Task_COM_1" name="make annual report available" />
+      <task id="Task_COM_2" name="define formats and procedures for report" />
+      <task id="Task_COM_3" name="specify measures" />
+      <endEvent id="End_COM" name="End" />
+      <sequenceFlow id="Flow_COM_0" sourceRef="Start_COM" targetRef="Task_COM_1" />
+      <sequenceFlow id="Flow_COM_1" sourceRef="Task_COM_1" targetRef="Task_COM_2" />
+      <sequenceFlow id="Flow_COM_2" sourceRef="Task_COM_2" targetRef="Task_COM_3" />
+      <sequenceFlow id="Flow_COM_3" sourceRef="Task_COM_3" targetRef="End_COM" />
+   </process>
+
+   <process id="Process_TSP" isExecutable="false">
+      <startEvent id="Start_TSP" name="Start" />
+      <task id="Task_TSP_1" name="take technical and organisational measures" />
+      <task id="Task_TSP_2" name="notify supervisory body of breach" />
+      <task id="Task_TSP_3" name="notify natural or legal person of breach" />
+      <endEvent id="End_TSP" name="End" />
+      <sequenceFlow id="Flow_TSP_0" sourceRef="Start_TSP" targetRef="Task_TSP_1" />
+      <sequenceFlow id="Flow_TSP_1" sourceRef="Task_TSP_1" targetRef="Task_TSP_2" />
+      <sequenceFlow id="Flow_TSP_2" sourceRef="Task_TSP_2" targetRef="Task_TSP_3" />
+      <sequenceFlow id="Flow_TSP_3" sourceRef="Task_TSP_3" targetRef="End_TSP" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_Extracted" id="BPMNPlane_1">
+
+         <bpmndi:BPMNShape bpmnElement="Participant_MS" id="Shape_Participant_MS" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1000.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Shape_Start_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1" id="Shape_Task_MS_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="85.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_2" id="Shape_Task_MS_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="85.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_3" id="Shape_Task_MS_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="85.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_4" id="Shape_Task_MS_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="85.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="Shape_End_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="780.0" y="110.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_SB" id="Shape_Participant_SB" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="2800.0" x="50.0" y="220.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_SB" id="Shape_Start_SB">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="280.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_1" id="Shape_Task_SB_1"><omgdc:Bounds height="80.0" width="100.0" x="180.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_2" id="Shape_Task_SB_2"><omgdc:Bounds height="80.0" width="100.0" x="310.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_3" id="Shape_Task_SB_3"><omgdc:Bounds height="80.0" width="100.0" x="440.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4" id="Shape_Task_SB_4"><omgdc:Bounds height="80.0" width="100.0" x="570.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_5" id="Shape_Task_SB_5"><omgdc:Bounds height="80.0" width="100.0" x="700.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_6" id="Shape_Task_SB_6"><omgdc:Bounds height="80.0" width="100.0" x="830.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_7" id="Shape_Task_SB_7"><omgdc:Bounds height="80.0" width="100.0" x="960.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_8" id="Shape_Task_SB_8"><omgdc:Bounds height="80.0" width="100.0" x="1090.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_9" id="Shape_Task_SB_9"><omgdc:Bounds height="80.0" width="100.0" x="1220.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_10" id="Shape_Task_SB_10"><omgdc:Bounds height="80.0" width="100.0" x="1350.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_11" id="Shape_Task_SB_11"><omgdc:Bounds height="80.0" width="100.0" x="1480.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_12" id="Shape_Task_SB_12"><omgdc:Bounds height="80.0" width="100.0" x="1610.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_13" id="Shape_Task_SB_13"><omgdc:Bounds height="80.0" width="100.0" x="1740.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_14" id="Shape_Task_SB_14"><omgdc:Bounds height="80.0" width="100.0" x="1870.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_15" id="Shape_Task_SB_15"><omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_16" id="Shape_Task_SB_16"><omgdc:Bounds height="80.0" width="100.0" x="2130.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_17" id="Shape_Task_SB_17"><omgdc:Bounds height="80.0" width="100.0" x="2260.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_18" id="Shape_Task_SB_18"><omgdc:Bounds height="80.0" width="100.0" x="2390.0" y="255.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_SB" id="Shape_End_SB"><omgdc:Bounds height="30.0" width="30.0" x="2540.0" y="280.0" /></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_COM" id="Shape_Participant_COM" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1000.0" x="50.0" y="640.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_COM" id="Shape_Start_COM">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_1" id="Shape_Task_COM_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="675.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_2" id="Shape_Task_COM_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="675.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_3" id="Shape_Task_COM_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="675.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_COM" id="Shape_End_COM">
+            <omgdc:Bounds height="30.0" width="30.0" x="630.0" y="700.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_TSP" id="Shape_Participant_TSP" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1000.0" x="50.0" y="810.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_TSP" id="Shape_Start_TSP">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="870.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TSP_1" id="Shape_Task_TSP_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="845.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TSP_2" id="Shape_Task_TSP_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="845.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TSP_3" id="Shape_Task_TSP_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="845.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_TSP" id="Shape_End_TSP">
+            <omgdc:Bounds height="30.0" width="30.0" x="630.0" y="870.0" />
+         </bpmndi:BPMNShape>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

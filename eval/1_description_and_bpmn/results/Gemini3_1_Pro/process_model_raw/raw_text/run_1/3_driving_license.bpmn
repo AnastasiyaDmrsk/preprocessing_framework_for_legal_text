@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-main-definition"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Applicant" name="Applicant / Holder" processRef="Process_Applicant" />
+      <participant id="Participant_MS" name="Member States" processRef="Process_MS" />
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+      <messageFlow id="Flow_msg1" sourceRef="Task_Apply" targetRef="Start_MS" />
+      <messageFlow id="Flow_msg2" sourceRef="Task_Inform" targetRef="Start_Comm" />
+   </collaboration>
+
+   <process id="Process_Applicant" isClosed="false" isExecutable="false" name="Applicant / Holder" processType="None">
+      <startEvent id="Start_App" name="Start">
+         <outgoing>Flow_App_1</outgoing>
+      </startEvent>
+      <task id="Task_Apply" name="apply for issuance or renewal">
+         <incoming>Flow_App_1</incoming>
+         <outgoing>Flow_App_2</outgoing>
+      </task>
+      <task id="Task_Undergo" name="undergo medical examination">
+         <incoming>Flow_App_2</incoming>
+         <outgoing>Flow_App_3</outgoing>
+      </task>
+      <task id="Task_Fill" name="fill in self-assessment form">
+         <incoming>Flow_App_3</incoming>
+         <outgoing>Flow_App_4</outgoing>
+      </task>
+      <endEvent id="End_App" name="End">
+         <incoming>Flow_App_4</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_App_1" sourceRef="Start_App" targetRef="Task_Apply" />
+      <sequenceFlow id="Flow_App_2" sourceRef="Task_Apply" targetRef="Task_Undergo" />
+      <sequenceFlow id="Flow_App_3" sourceRef="Task_Undergo" targetRef="Task_Fill" />
+      <sequenceFlow id="Flow_App_4" sourceRef="Task_Fill" targetRef="End_App" />
+   </process>
+
+   <process id="Process_MS" isClosed="false" isExecutable="false" name="Member States" processType="None">
+      <startEvent id="Start_MS" name="Receive application">
+         <outgoing>Flow_MS_1</outgoing>
+         <messageEventDefinition id="MessageEvent_MS" />
+      </startEvent>
+      <exclusiveGateway id="Gateway_1" name="Alternative measure?">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_2</outgoing>
+         <outgoing>Flow_MS_3</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Ensure" name="ensure medical examination">
+         <incoming>Flow_MS_2</incoming>
+         <outgoing>Flow_MS_4</outgoing>
+      </task>
+      <task id="Task_Require" name="require self-assessment form">
+         <incoming>Flow_MS_3</incoming>
+         <outgoing>Flow_MS_5</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_2" name="Merge">
+         <incoming>Flow_MS_4</incoming>
+         <incoming>Flow_MS_5</incoming>
+         <outgoing>Flow_MS_6</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Issue" name="issue or renew driving licence">
+         <incoming>Flow_MS_6</incoming>
+         <outgoing>Flow_MS_7</outgoing>
+      </task>
+      <task id="Task_Adopt" name="adopt guidelines / awareness campaigns">
+         <incoming>Flow_MS_7</incoming>
+         <outgoing>Flow_MS_8</outgoing>
+      </task>
+      <task id="Task_Inform" name="inform the Commission">
+         <incoming>Flow_MS_8</incoming>
+         <outgoing>Flow_MS_9</outgoing>
+      </task>
+      <endEvent id="End_MS" name="End">
+         <incoming>Flow_MS_9</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_MS_1" sourceRef="Start_MS" targetRef="Gateway_1" />
+      <sequenceFlow id="Flow_MS_2" sourceRef="Gateway_1" targetRef="Task_Ensure" />
+      <sequenceFlow id="Flow_MS_3" sourceRef="Gateway_1" targetRef="Task_Require" />
+      <sequenceFlow id="Flow_MS_4" sourceRef="Task_Ensure" targetRef="Gateway_2" />
+      <sequenceFlow id="Flow_MS_5" sourceRef="Task_Require" targetRef="Gateway_2" />
+      <sequenceFlow id="Flow_MS_6" sourceRef="Gateway_2" targetRef="Task_Issue" />
+      <sequenceFlow id="Flow_MS_7" sourceRef="Task_Issue" targetRef="Task_Adopt" />
+      <sequenceFlow id="Flow_MS_8" sourceRef="Task_Adopt" targetRef="Task_Inform" />
+      <sequenceFlow id="Flow_MS_9" sourceRef="Task_Inform" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="Start_Comm" name="Receive info">
+         <outgoing>Flow_Comm_1</outgoing>
+         <messageEventDefinition id="MessageEvent_Comm" />
+      </startEvent>
+      <task id="Task_Make" name="make guidelines available">
+         <incoming>Flow_Comm_1</incoming>
+         <outgoing>Flow_Comm_2</outgoing>
+      </task>
+      <endEvent id="End_Comm" name="End">
+         <incoming>Flow_Comm_2</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_Comm_1" sourceRef="Start_Comm" targetRef="Task_Make" />
+      <sequenceFlow id="Flow_Comm_2" sourceRef="Task_Make" targetRef="End_Comm" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+
+         <bpmndi:BPMNShape id="Participant_Applicant_gui" bpmnElement="Participant_Applicant" isHorizontal="true">
+            <omgdc:Bounds x="100" y="50" width="1150" height="150" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Participant_MS_gui" bpmnElement="Participant_MS" isHorizontal="true">
+            <omgdc:Bounds x="100" y="250" width="1150" height="250" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Participant_Commission_gui" bpmnElement="Participant_Commission" isHorizontal="true">
+            <omgdc:Bounds x="100" y="550" width="1150" height="150" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Start_App_gui" bpmnElement="Start_App">
+            <omgdc:Bounds x="150" y="110" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Apply_gui" bpmnElement="Task_Apply">
+            <omgdc:Bounds x="230" y="85" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Undergo_gui" bpmnElement="Task_Undergo">
+            <omgdc:Bounds x="380" y="85" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Fill_gui" bpmnElement="Task_Fill">
+            <omgdc:Bounds x="530" y="85" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_App_gui" bpmnElement="End_App">
+            <omgdc:Bounds x="680" y="110" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Start_MS_gui" bpmnElement="Start_MS">
+            <omgdc:Bounds x="265" y="345" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_1_gui" bpmnElement="Gateway_1" isMarkerVisible="true">
+            <omgdc:Bounds x="345" y="340" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Ensure_gui" bpmnElement="Task_Ensure">
+            <omgdc:Bounds x="430" y="270" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Require_gui" bpmnElement="Task_Require">
+            <omgdc:Bounds x="430" y="380" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_2_gui" bpmnElement="Gateway_2" isMarkerVisible="true">
+            <omgdc:Bounds x="580" y="340" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Issue_gui" bpmnElement="Task_Issue">
+            <omgdc:Bounds x="660" y="320" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Adopt_gui" bpmnElement="Task_Adopt">
+            <omgdc:Bounds x="800" y="320" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Inform_gui" bpmnElement="Task_Inform">
+            <omgdc:Bounds x="940" y="320" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_MS_gui" bpmnElement="End_MS">
+            <omgdc:Bounds x="1080" y="345" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Start_Comm_gui" bpmnElement="Start_Comm">
+            <omgdc:Bounds x="975" y="610" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Make_gui" bpmnElement="Task_Make">
+            <omgdc:Bounds x="1040" y="585" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_Comm_gui" bpmnElement="End_Comm">
+            <omgdc:Bounds x="1180" y="610" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_App_1_gui" bpmnElement="Flow_App_1">
+            <omgdi:waypoint x="180" y="125" />
+            <omgdi:waypoint x="230" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_App_2_gui" bpmnElement="Flow_App_2">
+            <omgdi:waypoint x="330" y="125" />
+            <omgdi:waypoint x="380" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_App_3_gui" bpmnElement="Flow_App_3">
+            <omgdi:waypoint x="480" y="125" />
+            <omgdi:waypoint x="530" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_App_4_gui" bpmnElement="Flow_App_4">
+            <omgdi:waypoint x="630" y="125" />
+            <omgdi:waypoint x="680" y="125" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_MS_1_gui" bpmnElement="Flow_MS_1">
+            <omgdi:waypoint x="295" y="360" />
+            <omgdi:waypoint x="345" y="360" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_2_gui" bpmnElement="Flow_MS_2">
+            <omgdi:waypoint x="365" y="340" />
+            <omgdi:waypoint x="365" y="310" />
+            <omgdi:waypoint x="430" y="310" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_3_gui" bpmnElement="Flow_MS_3">
+            <omgdi:waypoint x="365" y="380" />
+            <omgdi:waypoint x="365" y="420" />
+            <omgdi:waypoint x="430" y="420" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_4_gui" bpmnElement="Flow_MS_4">
+            <omgdi:waypoint x="530" y="310" />
+            <omgdi:waypoint x="600" y="310" />
+            <omgdi:waypoint x="600" y="340" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_5_gui" bpmnElement="Flow_MS_5">
+            <omgdi:waypoint x="530" y="420" />
+            <omgdi:waypoint x="600" y="420" />
+            <omgdi:waypoint x="600" y="380" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_6_gui" bpmnElement="Flow_MS_6">
+            <omgdi:waypoint x="620" y="360" />
+            <omgdi:waypoint x="660" y="360" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_7_gui" bpmnElement="Flow_MS_7">
+            <omgdi:waypoint x="760" y="360" />
+            <omgdi:waypoint x="800" y="360" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_8_gui" bpmnElement="Flow_MS_8">
+            <omgdi:waypoint x="900" y="360" />
+            <omgdi:waypoint x="940" y="360" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_9_gui" bpmnElement="Flow_MS_9">
+            <omgdi:waypoint x="1040" y="360" />
+            <omgdi:waypoint x="1080" y="360" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_Comm_1_gui" bpmnElement="Flow_Comm_1">
+            <omgdi:waypoint x="1005" y="625" />
+            <omgdi:waypoint x="1040" y="625" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_2_gui" bpmnElement="Flow_Comm_2">
+            <omgdi:waypoint x="1140" y="625" />
+            <omgdi:waypoint x="1180" y="625" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_msg1_gui" bpmnElement="Flow_msg1">
+            <omgdi:waypoint x="280" y="165" />
+            <omgdi:waypoint x="280" y="345" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_msg2_gui" bpmnElement="Flow_msg2">
+            <omgdi:waypoint x="990" y="400" />
+            <omgdi:waypoint x="990" y="610" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

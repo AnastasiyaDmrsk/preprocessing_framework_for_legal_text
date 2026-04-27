@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://www.signavio.com" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <collaboration id="collaboration_1">
+    <participant id="participant_commission" name="Commission" processRef="process_commission" />
+    <participant id="participant_enisa" name="ENISA" processRef="process_enisa" />
+    <messageFlow id="flow_request" name="Request Scheme" sourceRef="task_request_scheme" targetRef="start_receive_request" />
+    <messageFlow id="flow_transmit" name="Transmit Candidate Scheme" sourceRef="task_transmit_scheme" targetRef="task_adopt_acts" />
+  </collaboration>
+
+  <process id="process_commission" isExecutable="false">
+    <startEvent id="start_comm" name="Start Process">
+      <outgoing>flow1</outgoing>
+    </startEvent>
+    <task id="task_request_scheme" name="Request preparation of scheme">
+      <incoming>flow1</incoming>
+      <outgoing>flow2</outgoing>
+    </task>
+    <task id="task_adopt_acts" name="Adopt implementing acts">
+      <incoming>flow2</incoming>
+      <outgoing>end_comm</outgoing>
+    </task>
+    <endEvent id="end_comm" name="Scheme Adopted">
+      <incoming>flow_adopt_acts</incoming>
+    </endEvent>
+    <sequenceFlow id="flow1" sourceRef="start_comm" targetRef="task_request_scheme" />
+    <sequenceFlow id="flow2" sourceRef="task_request_scheme" targetRef="task_adopt_acts" />
+  </process>
+
+  <process id="process_enisa" isExecutable="false">
+    <laneSet id="laneSet_enisa">
+      <lane id="lane_enisa_ops" name="ENISA Operations">
+        <flowNodeRef>start_receive_request</flowNodeRef>
+        <flowNodeRef>task_prepare_scheme</flowNodeRef>
+        <flowNodeRef>task_consult_stakeholders</flowNodeRef>
+        <flowNodeRef>task_establish_group</flowNodeRef>
+        <flowNodeRef>task_transmit_scheme</flowNodeRef>
+        <flowNodeRef>end_enisa</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_receive_request" name="Receive Request">
+      <outgoing>flow3</outgoing>
+      <messageEventDefinition id="msg_def_1" />
+    </startEvent>
+    <task id="task_prepare_scheme" name="Prepare candidate scheme">
+      <incoming>flow3</incoming>
+      <outgoing>flow4</outgoing>
+    </task>
+    <parallelGateway id="gateway_prep" name="Preparation Steps">
+      <incoming>flow4</incoming>
+      <outgoing>flow5</outgoing>
+      <outgoing>flow6</outgoing>
+    </parallelGateway>
+    <task id="task_consult_stakeholders" name="Consult stakeholders">
+      <incoming>flow5</incoming>
+      <outgoing>flow7</outgoing>
+    </task>
+    <task id="task_establish_group" name="Establish ad hoc working group">
+      <incoming>flow6</incoming>
+      <outgoing>flow8</outgoing>
+    </task>
+    <task id="task_transmit_scheme" name="Transmit candidate scheme to Commission">
+      <incoming>flow7</incoming>
+      <incoming>flow8</incoming>
+      <outgoing>end_enisa</outgoing>
+    </task>
+    <endEvent id="end_enisa" name="Scheme Transmitted">
+      <incoming>task_transmit_scheme</incoming>
+    </endEvent>
+    <sequenceFlow id="flow3" sourceRef="start_receive_request" targetRef="task_prepare_scheme" />
+    <sequenceFlow id="flow4" sourceRef="task_prepare_scheme" targetRef="gateway_prep" />
+    <sequenceFlow id="flow5" sourceRef="gateway_prep" targetRef="task_consult_stakeholders" />
+    <sequenceFlow id="flow6" sourceRef="gateway_prep" targetRef="task_establish_group" />
+    <sequenceFlow id="flow7" sourceRef="task_consult_stakeholders" targetRef="task_transmit_scheme" />
+    <sequenceFlow id="flow8" sourceRef="task_establish_group" targetRef="task_transmit_scheme" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Commission" bpmnElement="participant_commission" isHorizontal="true">
+        <omgdc:Bounds x="100" y="50" width="800" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_ENISA" bpmnElement="participant_enisa" isHorizontal="true">
+        <omgdc:Bounds x="100" y="250" width="800" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Request" bpmnElement="task_request_scheme">
+        <omgdc:Bounds x="200" y="80" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Start_Enisa" bpmnElement="start_receive_request">
+        <omgdc:Bounds x="240" y="350" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Prepare" bpmnElement="task_prepare_scheme">
+        <omgdc:Bounds x="320" y="338" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Transmit" bpmnElement="task_transmit_scheme">
+        <omgdc:Bounds x="650" y="338" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Adopt" bpmnElement="task_adopt_acts">
+        <omgdc:Bounds x="650" y="80" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Msg_1" bpmnElement="flow_request">
+        <omgdi:waypoint x="260" y="140" />
+        <omgdi:waypoint x="260" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Msg_2" bpmnElement="flow_transmit">
+        <omgdi:waypoint x="710" y="338" />
+        <omgdi:waypoint x="710" y="140" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

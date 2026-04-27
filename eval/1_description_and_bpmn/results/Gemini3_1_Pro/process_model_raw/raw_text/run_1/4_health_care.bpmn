@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             id="Definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn">
+  <collaboration id="Collaboration_1">
+    <participant id="Participant_Transferring" name="Transferring Member State" processRef="Process_Transferring" />
+    <participant id="Participant_Responsible" name="Member State Responsible" processRef="Process_Responsible" />
+    <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+    <participant id="Participant_HealthProf" name="Health Professional" processRef="Process_HealthProf" />
+    <messageFlow id="MsgFlow_1" sourceRef="Task_TransmitInfo" targetRef="Start_R" />
+  </collaboration>
+
+  <process id="Process_Transferring" isExecutable="false">
+    <startEvent id="Start_T" name="Start">
+      <outgoing>Seq_T1</outgoing>
+    </startEvent>
+    <task id="Task_ObtainConsent" name="obtain explicit consent">
+      <incoming>Seq_T1</incoming>
+      <outgoing>Seq_T2</outgoing>
+    </task>
+    <task id="Task_TransmitInfo" name="transmit information on special needs">
+      <incoming>Seq_T2</incoming>
+      <outgoing>Seq_T3</outgoing>
+    </task>
+    <endEvent id="End_T" name="End">
+      <incoming>Seq_T3</incoming>
+    </endEvent>
+    <sequenceFlow id="Seq_T1" sourceRef="Start_T" targetRef="Task_ObtainConsent" />
+    <sequenceFlow id="Seq_T2" sourceRef="Task_ObtainConsent" targetRef="Task_TransmitInfo" />
+    <sequenceFlow id="Seq_T3" sourceRef="Task_TransmitInfo" targetRef="End_T" />
+  </process>
+
+  <process id="Process_Responsible" isExecutable="false">
+    <startEvent id="Start_R" name="Receive information">
+      <outgoing>Seq_R1</outgoing>
+      <messageEventDefinition id="MessageEventDef_1" />
+    </startEvent>
+    <task id="Task_EnsureNeeds" name="ensure special needs are addressed">
+      <incoming>Seq_R1</incoming>
+      <outgoing>Seq_R2</outgoing>
+    </task>
+    <endEvent id="End_R" name="End">
+      <incoming>Seq_R2</incoming>
+    </endEvent>
+    <sequenceFlow id="Seq_R1" sourceRef="Start_R" targetRef="Task_EnsureNeeds" />
+    <sequenceFlow id="Seq_R2" sourceRef="Task_EnsureNeeds" targetRef="End_R" />
+  </process>
+
+  <process id="Process_Commission" isExecutable="false">
+    <startEvent id="Start_C" name="Start">
+      <outgoing>Seq_C1</outgoing>
+    </startEvent>
+    <task id="Task_DrawUp" name="draw up common health certificate">
+      <incoming>Seq_C1</incoming>
+      <outgoing>Seq_C2</outgoing>
+    </task>
+    <task id="Task_AdoptActs" name="adopt implementing acts">
+      <incoming>Seq_C2</incoming>
+      <outgoing>Seq_C3</outgoing>
+    </task>
+    <task id="Task_AdoptConditions" name="adopt uniform conditions and practical arrangements">
+      <incoming>Seq_C3</incoming>
+      <outgoing>Seq_C4</outgoing>
+    </task>
+    <endEvent id="End_C" name="End">
+      <incoming>Seq_C4</incoming>
+    </endEvent>
+    <sequenceFlow id="Seq_C1" sourceRef="Start_C" targetRef="Task_DrawUp" />
+    <sequenceFlow id="Seq_C2" sourceRef="Task_DrawUp" targetRef="Task_AdoptActs" />
+    <sequenceFlow id="Seq_C3" sourceRef="Task_AdoptActs" targetRef="Task_AdoptConditions" />
+    <sequenceFlow id="Seq_C4" sourceRef="Task_AdoptConditions" targetRef="End_C" />
+  </process>
+
+  <process id="Process_HealthProf" isExecutable="false">
+    <startEvent id="Start_H" name="Start">
+      <outgoing>Seq_H1</outgoing>
+    </startEvent>
+    <task id="Task_ProcessData" name="process personal health data">
+      <incoming>Seq_H1</incoming>
+      <outgoing>Seq_H2</outgoing>
+    </task>
+    <endEvent id="End_H" name="End">
+      <incoming>Seq_H2</incoming>
+    </endEvent>
+    <sequenceFlow id="Seq_H1" sourceRef="Start_H" targetRef="Task_ProcessData" />
+    <sequenceFlow id="Seq_H2" sourceRef="Task_ProcessData" targetRef="End_H" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_Transferring_di" bpmnElement="Participant_Transferring" isHorizontal="true">
+        <omgdc:Bounds x="100" y="100" width="700" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Responsible_di" bpmnElement="Participant_Responsible" isHorizontal="true">
+        <omgdc:Bounds x="100" y="300" width="700" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Commission_di" bpmnElement="Participant_Commission" isHorizontal="true">
+        <omgdc:Bounds x="100" y="500" width="750" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_HealthProf_di" bpmnElement="Participant_HealthProf" isHorizontal="true">
+        <omgdc:Bounds x="100" y="700" width="700" height="150" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_T_di" bpmnElement="Start_T">
+        <omgdc:Bounds x="150" y="160" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ObtainConsent_di" bpmnElement="Task_ObtainConsent">
+        <omgdc:Bounds x="250" y="135" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TransmitInfo_di" bpmnElement="Task_TransmitInfo">
+        <omgdc:Bounds x="400" y="135" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_T_di" bpmnElement="End_T">
+        <omgdc:Bounds x="550" y="160" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Seq_T1_di" bpmnElement="Seq_T1">
+        <omgdi:waypoint x="180" y="175" />
+        <omgdi:waypoint x="250" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_T2_di" bpmnElement="Seq_T2">
+        <omgdi:waypoint x="350" y="175" />
+        <omgdi:waypoint x="400" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_T3_di" bpmnElement="Seq_T3">
+        <omgdi:waypoint x="500" y="175" />
+        <omgdi:waypoint x="550" y="175" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Start_R_di" bpmnElement="Start_R">
+        <omgdc:Bounds x="435" y="360" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EnsureNeeds_di" bpmnElement="Task_EnsureNeeds">
+        <omgdc:Bounds x="520" y="335" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_R_di" bpmnElement="End_R">
+        <omgdc:Bounds x="670" y="360" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Seq_R1_di" bpmnElement="Seq_R1">
+        <omgdi:waypoint x="465" y="375" />
+        <omgdi:waypoint x="520" y="375" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_R2_di" bpmnElement="Seq_R2">
+        <omgdi:waypoint x="620" y="375" />
+        <omgdi:waypoint x="670" y="375" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Start_C_di" bpmnElement="Start_C">
+        <omgdc:Bounds x="150" y="560" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DrawUp_di" bpmnElement="Task_DrawUp">
+        <omgdc:Bounds x="250" y="535" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AdoptActs_di" bpmnElement="Task_AdoptActs">
+        <omgdc:Bounds x="400" y="535" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AdoptConditions_di" bpmnElement="Task_AdoptConditions">
+        <omgdc:Bounds x="550" y="535" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_C_di" bpmnElement="End_C">
+        <omgdc:Bounds x="700" y="560" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Seq_C1_di" bpmnElement="Seq_C1">
+        <omgdi:waypoint x="180" y="575" />
+        <omgdi:waypoint x="250" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_C2_di" bpmnElement="Seq_C2">
+        <omgdi:waypoint x="350" y="575" />
+        <omgdi:waypoint x="400" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_C3_di" bpmnElement="Seq_C3">
+        <omgdi:waypoint x="500" y="575" />
+        <omgdi:waypoint x="550" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_C4_di" bpmnElement="Seq_C4">
+        <omgdi:waypoint x="650" y="575" />
+        <omgdi:waypoint x="700" y="575" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Start_H_di" bpmnElement="Start_H">
+        <omgdc:Bounds x="150" y="760" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ProcessData_di" bpmnElement="Task_ProcessData">
+        <omgdc:Bounds x="250" y="735" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_H_di" bpmnElement="End_H">
+        <omgdc:Bounds x="400" y="760" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Seq_H1_di" bpmnElement="Seq_H1">
+        <omgdi:waypoint x="180" y="775" />
+        <omgdi:waypoint x="250" y="775" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_H2_di" bpmnElement="Seq_H2">
+        <omgdi:waypoint x="350" y="775" />
+        <omgdi:waypoint x="400" y="775" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">
+        <omgdi:waypoint x="450" y="215" />
+        <omgdi:waypoint x="450" y="360" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

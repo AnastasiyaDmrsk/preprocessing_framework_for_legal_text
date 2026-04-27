@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definitions_Article11"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="BPMN Modeler"
+             exporterVersion="1.0">
+
+  <collaboration id="Collaboration_Article11">
+    <participant id="Participant_Applicant" name="Applicant" processRef="Process_Applicant" />
+    <participant id="Participant_MemberState" name="Member State" processRef="Process_MemberState" />
+    <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+    <messageFlow id="MessageFlow_Info" sourceRef="Task_InformCommission" targetRef="Task_MakeInfoAvailable" />
+  </collaboration>
+
+  <process id="Process_Applicant" isExecutable="false">
+    <laneSet id="LaneSet_Applicant">
+      <lane id="Lane_Applicant">
+        <flowNodeRef>Start_Applicant</flowNodeRef>
+        <flowNodeRef>Task_UndergoMedicalExam</flowNodeRef>
+        <flowNodeRef>Task_FillSelfAssessment</flowNodeRef>
+        <flowNodeRef>End_Applicant</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Start_Applicant" name="Start">
+      <outgoing>Flow_App_1</outgoing>
+    </startEvent>
+    <task id="Task_UndergoMedicalExam" name="Undergo medical examination">
+      <incoming>Flow_App_1</incoming>
+      <outgoing>Flow_App_2</outgoing>
+    </task>
+    <task id="Task_FillSelfAssessment" name="Fill in self-assessment form">
+      <incoming>Flow_App_2</incoming>
+      <outgoing>Flow_App_3</outgoing>
+    </task>
+    <endEvent id="End_Applicant" name="End">
+      <incoming>Flow_App_3</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_App_1" sourceRef="Start_Applicant" targetRef="Task_UndergoMedicalExam" />
+    <sequenceFlow id="Flow_App_2" sourceRef="Task_UndergoMedicalExam" targetRef="Task_FillSelfAssessment" />
+    <sequenceFlow id="Flow_App_3" sourceRef="Task_FillSelfAssessment" targetRef="End_Applicant" />
+  </process>
+
+  <process id="Process_MemberState" isExecutable="false">
+    <laneSet id="LaneSet_MemberState">
+      <lane id="Lane_MemberState">
+        <flowNodeRef>Start_MemberState</flowNodeRef>
+        <flowNodeRef>Task_IssueRenewLicence</flowNodeRef>
+        <flowNodeRef>Task_AdoptGuidelines</flowNodeRef>
+        <flowNodeRef>Task_InformCommission</flowNodeRef>
+        <flowNodeRef>End_MemberState</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Start_MemberState" name="Start">
+      <outgoing>Flow_MS_1</outgoing>
+    </startEvent>
+    <task id="Task_IssueRenewLicence" name="Issue or renew driving licence">
+      <incoming>Flow_MS_1</incoming>
+      <outgoing>Flow_MS_2</outgoing>
+    </task>
+    <task id="Task_AdoptGuidelines" name="Adopt guidelines or campaigns">
+      <incoming>Flow_MS_2</incoming>
+      <outgoing>Flow_MS_3</outgoing>
+    </task>
+    <task id="Task_InformCommission" name="Inform the Commission">
+      <incoming>Flow_MS_3</incoming>
+      <outgoing>Flow_MS_4</outgoing>
+    </task>
+    <endEvent id="End_MemberState" name="End">
+      <incoming>Flow_MS_4</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_MS_1" sourceRef="Start_MemberState" targetRef="Task_IssueRenewLicence" />
+    <sequenceFlow id="Flow_MS_2" sourceRef="Task_IssueRenewLicence" targetRef="Task_AdoptGuidelines" />
+    <sequenceFlow id="Flow_MS_3" sourceRef="Task_AdoptGuidelines" targetRef="Task_InformCommission" />
+    <sequenceFlow id="Flow_MS_4" sourceRef="Task_InformCommission" targetRef="End_MemberState" />
+  </process>
+
+  <process id="Process_Commission" isExecutable="false">
+    <laneSet id="LaneSet_Commission">
+      <lane id="Lane_Commission">
+        <flowNodeRef>Start_Commission</flowNodeRef>
+        <flowNodeRef>Task_MakeInfoAvailable</flowNodeRef>
+        <flowNodeRef>End_Commission</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Start_Commission" name="Start">
+      <outgoing>Flow_Comm_1</outgoing>
+    </startEvent>
+    <task id="Task_MakeInfoAvailable" name="Make information available">
+      <incoming>Flow_Comm_1</incoming>
+      <outgoing>Flow_Comm_2</outgoing>
+    </task>
+    <endEvent id="End_Commission" name="End">
+      <incoming>Flow_Comm_2</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_Comm_1" sourceRef="Start_Commission" targetRef="Task_MakeInfoAvailable" />
+    <sequenceFlow id="Flow_Comm_2" sourceRef="Task_MakeInfoAvailable" targetRef="End_Commission" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_Article11">
+
+      <bpmndi:BPMNShape id="Participant_Applicant_di" bpmnElement="Participant_Applicant" isHorizontal="true">
+        <omgdc:Bounds x="100" y="80" width="800" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_MemberState_di" bpmnElement="Participant_MemberState" isHorizontal="true">
+        <omgdc:Bounds x="100" y="280" width="800" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Commission_di" bpmnElement="Participant_Commission" isHorizontal="true">
+        <omgdc:Bounds x="100" y="480" width="800" height="150" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Lane_Applicant_di" bpmnElement="Lane_Applicant" isHorizontal="true">
+        <omgdc:Bounds x="130" y="80" width="770" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_MemberState_di" bpmnElement="Lane_MemberState" isHorizontal="true">
+        <omgdc:Bounds x="130" y="280" width="770" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Commission_di" bpmnElement="Lane_Commission" isHorizontal="true">
+        <omgdc:Bounds x="130" y="480" width="770" height="150" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_Applicant_di" bpmnElement="Start_Applicant">
+        <omgdc:Bounds x="170" y="140" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_UndergoMedicalExam_di" bpmnElement="Task_UndergoMedicalExam">
+        <omgdc:Bounds x="250" y="115" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FillSelfAssessment_di" bpmnElement="Task_FillSelfAssessment">
+        <omgdc:Bounds x="400" y="115" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Applicant_di" bpmnElement="End_Applicant">
+        <omgdc:Bounds x="550" y="140" width="30" height="30" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_App_1_di" bpmnElement="Flow_App_1">
+        <omgdi:waypoint x="200" y="155" />
+        <omgdi:waypoint x="250" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_App_2_di" bpmnElement="Flow_App_2">
+        <omgdi:waypoint x="350" y="155" />
+        <omgdi:waypoint x="400" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_App_3_di" bpmnElement="Flow_App_3">
+        <omgdi:waypoint x="500" y="155" />
+        <omgdi:waypoint x="550" y="155" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Start_MemberState_di" bpmnElement="Start_MemberState">
+        <omgdc:Bounds x="170" y="340" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_IssueRenewLicence_di" bpmnElement="Task_IssueRenewLicence">
+        <omgdc:Bounds x="250" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AdoptGuidelines_di" bpmnElement="Task_AdoptGuidelines">
+        <omgdc:Bounds x="400" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_InformCommission_di" bpmnElement="Task_InformCommission">
+        <omgdc:Bounds x="550" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_MemberState_di" bpmnElement="End_MemberState">
+        <omgdc:Bounds x="700" y="340" width="30" height="30" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_MS_1_di" bpmnElement="Flow_MS_1">
+        <omgdi:waypoint x="200" y="355" />
+        <omgdi:waypoint x="250" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_2_di" bpmnElement="Flow_MS_2">
+        <omgdi:waypoint x="350" y="355" />
+        <omgdi:waypoint x="400" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_3_di" bpmnElement="Flow_MS_3">
+        <omgdi:waypoint x="500" y="355" />
+        <omgdi:waypoint x="550" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_4_di" bpmnElement="Flow_MS_4">
+        <omgdi:waypoint x="650" y="355" />
+        <omgdi:waypoint x="700" y="355" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Start_Commission_di" bpmnElement="Start_Commission">
+        <omgdc:Bounds x="450" y="540" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_MakeInfoAvailable_di" bpmnElement="Task_MakeInfoAvailable">
+        <omgdc:Bounds x="550" y="515" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Commission_di" bpmnElement="End_Commission">
+        <omgdc:Bounds x="700" y="540" width="30" height="30" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_Comm_1_di" bpmnElement="Flow_Comm_1">
+        <omgdi:waypoint x="480" y="555" />
+        <omgdi:waypoint x="550" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Comm_2_di" bpmnElement="Flow_Comm_2">
+        <omgdi:waypoint x="650" y="555" />
+        <omgdi:waypoint x="700" y="555" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="MessageFlow_Info_di" bpmnElement="MessageFlow_Info">
+        <omgdi:waypoint x="600" y="395" />
+        <omgdi:waypoint x="600" y="515" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

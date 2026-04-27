@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="BPMN Modeler"
+             exporterVersion="1.0"
+             id="sid-reporting-obligations"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_reporting">
+      <participant id="participant_entities" name="Essential and Important Entities" processRef="process_entities" />
+      <participant id="participant_csirt" name="CSIRT / Competent Authority" processRef="process_csirt" />
+      <messageFlow id="msg_early_warning" sourceRef="task_submit_warning" targetRef="task_provide_response" />
+      <messageFlow id="msg_response" sourceRef="task_provide_response" targetRef="task_submit_incident_notification" />
+   </collaboration>
+
+   <process id="process_entities" name="Entities Process" isExecutable="true">
+      <startEvent id="start_incident" name="Significant Incident Occurs">
+         <outgoing>sf_1</outgoing>
+      </startEvent>
+      <task id="task_submit_warning" name="Submit early warning">
+         <incoming>sf_1</incoming>
+         <outgoing>sf_2</outgoing>
+      </task>
+      <task id="task_submit_incident_notification" name="Submit incident notification">
+         <incoming>sf_2</incoming>
+         <outgoing>sf_3</outgoing>
+      </task>
+      <task id="task_submit_final_report" name="Submit final report">
+         <incoming>sf_3</incoming>
+         <outgoing>sf_4</outgoing>
+      </task>
+      <endEvent id="end_incident" name="Reporting Concluded">
+         <incoming>sf_4</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_1" sourceRef="start_incident" targetRef="task_submit_warning" />
+      <sequenceFlow id="sf_2" sourceRef="task_submit_warning" targetRef="task_submit_incident_notification" />
+      <sequenceFlow id="sf_3" sourceRef="task_submit_incident_notification" targetRef="task_submit_final_report" />
+      <sequenceFlow id="sf_4" sourceRef="task_submit_final_report" targetRef="end_incident" />
+   </process>
+
+   <process id="process_csirt" name="CSIRT Process" isExecutable="true">
+      <task id="task_provide_response" name="Provide response and guidance" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_reporting">
+      <bpmndi:BPMNPlane id="BPMNPlane_reporting" bpmnElement="collab_reporting">
+
+         <bpmndi:BPMNShape id="shape_participant_entities" bpmnElement="participant_entities" isHorizontal="true">
+            <omgdc:Bounds x="100" y="100" width="800" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_participant_csirt" bpmnElement="participant_csirt" isHorizontal="true">
+            <omgdc:Bounds x="100" y="350" width="800" height="200" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="shape_start_incident" bpmnElement="start_incident">
+            <omgdc:Bounds x="150" y="185" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_task_submit_warning" bpmnElement="task_submit_warning">
+            <omgdc:Bounds x="250" y="160" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_task_submit_incident_notification" bpmnElement="task_submit_incident_notification">
+            <omgdc:Bounds x="550" y="160" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_task_submit_final_report" bpmnElement="task_submit_final_report">
+            <omgdc:Bounds x="700" y="160" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_end_incident" bpmnElement="end_incident">
+            <omgdc:Bounds x="850" y="185" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="edge_sf_1" bpmnElement="sf_1">
+            <omgdi:waypoint x="180" y="200" />
+            <omgdi:waypoint x="250" y="200" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_2" bpmnElement="sf_2">
+            <omgdi:waypoint x="350" y="200" />
+            <omgdi:waypoint x="550" y="200" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_3" bpmnElement="sf_3">
+            <omgdi:waypoint x="650" y="200" />
+            <omgdi:waypoint x="700" y="200" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_4" bpmnElement="sf_4">
+            <omgdi:waypoint x="800" y="200" />
+            <omgdi:waypoint x="850" y="200" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape id="shape_task_provide_response" bpmnElement="task_provide_response">
+            <omgdc:Bounds x="400" y="410" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="edge_msg_early_warning" bpmnElement="msg_early_warning">
+            <omgdi:waypoint x="300" y="240" />
+            <omgdi:waypoint x="300" y="320" />
+            <omgdi:waypoint x="450" y="320" />
+            <omgdi:waypoint x="450" y="410" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_msg_response" bpmnElement="msg_response">
+            <omgdi:waypoint x="500" y="450" />
+            <omgdi:waypoint x="600" y="450" />
+            <omgdi:waypoint x="600" y="240" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

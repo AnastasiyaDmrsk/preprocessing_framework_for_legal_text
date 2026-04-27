@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             targetNamespace="http://www.signavio.com" 
+             id="sid-ai-act-art62" 
+             exporter="Manual BPMN Editor" 
+             exporterVersion="1.0">
+  
+  <collaboration id="Collaboration_Article62">
+    <participant id="Participant_MemberStates" name="Member States" processRef="Process_MemberStates" />
+    <participant id="Participant_AIOffice" name="AI Office" processRef="Process_AIOffice" />
+  </collaboration>
+
+  <process id="Process_MemberStates" name="Member States" isExecutable="true">
+    <startEvent id="StartEvent_MS" name="Start">
+      <outgoing>Flow_MS_1</outgoing>
+    </startEvent>
+    
+    <task id="Task_MS_1" name="Provide priority access to AI regulatory sandboxes">
+      <incoming>Flow_MS_1</incoming>
+      <outgoing>Flow_MS_2</outgoing>
+    </task>
+    
+    <task id="Task_MS_2" name="Organise specific awareness raising and training activities">
+      <incoming>Flow_MS_2</incoming>
+      <outgoing>Flow_MS_3</outgoing>
+    </task>
+    
+    <task id="Task_MS_3" name="Utilise existing and establish new communication channels">
+      <incoming>Flow_MS_3</incoming>
+      <outgoing>Flow_MS_4</outgoing>
+    </task>
+    
+    <task id="Task_MS_4" name="Facilitate participation in standardisation development process">
+      <incoming>Flow_MS_4</incoming>
+      <outgoing>Flow_MS_5</outgoing>
+    </task>
+    
+    <endEvent id="EndEvent_MS" name="End">
+      <incoming>Flow_MS_5</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_MS_1" sourceRef="StartEvent_MS" targetRef="Task_MS_1" />
+    <sequenceFlow id="Flow_MS_2" sourceRef="Task_MS_1" targetRef="Task_MS_2" />
+    <sequenceFlow id="Flow_MS_3" sourceRef="Task_MS_2" targetRef="Task_MS_3" />
+    <sequenceFlow id="Flow_MS_4" sourceRef="Task_MS_3" targetRef="Task_MS_4" />
+    <sequenceFlow id="Flow_MS_5" sourceRef="Task_MS_4" targetRef="EndEvent_MS" />
+  </process>
+
+  <process id="Process_AIOffice" name="AI Office" isExecutable="true">
+    <startEvent id="StartEvent_AI" name="Start">
+      <outgoing>Flow_AI_1</outgoing>
+    </startEvent>
+    
+    <task id="Task_AI_1" name="Provide standardised templates">
+      <incoming>Flow_AI_1</incoming>
+      <outgoing>Flow_AI_2</outgoing>
+    </task>
+    
+    <task id="Task_AI_2" name="Develop and maintain a single information platform">
+      <incoming>Flow_AI_2</incoming>
+      <outgoing>Flow_AI_3</outgoing>
+    </task>
+    
+    <task id="Task_AI_3" name="Organise appropriate communication campaigns">
+      <incoming>Flow_AI_3</incoming>
+      <outgoing>Flow_AI_4</outgoing>
+    </task>
+    
+    <task id="Task_AI_4" name="Evaluate and promote convergence of best practices">
+      <incoming>Flow_AI_4</incoming>
+      <outgoing>Flow_AI_5</outgoing>
+    </task>
+    
+    <endEvent id="EndEvent_AI" name="End">
+      <incoming>Flow_AI_5</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_AI_1" sourceRef="StartEvent_AI" targetRef="Task_AI_1" />
+    <sequenceFlow id="Flow_AI_2" sourceRef="Task_AI_1" targetRef="Task_AI_2" />
+    <sequenceFlow id="Flow_AI_3" sourceRef="Task_AI_2" targetRef="Task_AI_3" />
+    <sequenceFlow id="Flow_AI_4" sourceRef="Task_AI_3" targetRef="Task_AI_4" />
+    <sequenceFlow id="Flow_AI_5" sourceRef="Task_AI_4" targetRef="EndEvent_AI" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Article62">
+    <bpmndi:BPMNPlane id="BPMNPlane_Article62" bpmnElement="Collaboration_Article62">
+      
+      <bpmndi:BPMNShape id="Participant_MemberStates_di" bpmnElement="Participant_MemberStates" isHorizontal="true">
+        <omgdc:Bounds x="100" y="80" width="900" height="200" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="StartEvent_MS_di" bpmnElement="StartEvent_MS">
+        <omgdc:Bounds x="150" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="156" y="205" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_MS_1_di" bpmnElement="Task_MS_1">
+        <omgdc:Bounds x="240" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_MS_2_di" bpmnElement="Task_MS_2">
+        <omgdc:Bounds x="400" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_MS_3_di" bpmnElement="Task_MS_3">
+        <omgdc:Bounds x="560" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_MS_4_di" bpmnElement="Task_MS_4">
+        <omgdc:Bounds x="720" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="EndEvent_MS_di" bpmnElement="EndEvent_MS">
+        <omgdc:Bounds x="880" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="888" y="205" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_MS_1_di" bpmnElement="Flow_MS_1">
+        <omgdi:waypoint x="186" y="180" />
+        <omgdi:waypoint x="240" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_2_di" bpmnElement="Flow_MS_2">
+        <omgdi:waypoint x="340" y="180" />
+        <omgdi:waypoint x="400" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_3_di" bpmnElement="Flow_MS_3">
+        <omgdi:waypoint x="500" y="180" />
+        <omgdi:waypoint x="560" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_4_di" bpmnElement="Flow_MS_4">
+        <omgdi:waypoint x="660" y="180" />
+        <omgdi:waypoint x="720" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MS_5_di" bpmnElement="Flow_MS_5">
+        <omgdi:waypoint x="820" y="180" />
+        <omgdi:waypoint x="880" y="180" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNShape id="Participant_AIOffice_di" bpmnElement="Participant_AIOffice" isHorizontal="true">
+        <omgdc:Bounds x="100" y="320" width="900" height="200" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="StartEvent_AI_di" bpmnElement="StartEvent_AI">
+        <omgdc:Bounds x="150" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="156" y="445" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_AI_1_di" bpmnElement="Task_AI_1">
+        <omgdc:Bounds x="240" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_AI_2_di" bpmnElement="Task_AI_2">
+        <omgdc:Bounds x="400" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_AI_3_di" bpmnElement="Task_AI_3">
+        <omgdc:Bounds x="560" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_AI_4_di" bpmnElement="Task_AI_4">
+        <omgdc:Bounds x="720" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="EndEvent_AI_di" bpmnElement="EndEvent_AI">
+        <omgdc:Bounds x="880" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="888" y="445" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_AI_1_di" bpmnElement="Flow_AI_1">
+        <omgdi:waypoint x="186" y="420" />
+        <omgdi:waypoint x="240" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AI_2_di" bpmnElement="Flow_AI_2">
+        <omgdi:waypoint x="340" y="420" />
+        <omgdi:waypoint x="400" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AI_3_di" bpmnElement="Flow_AI_3">
+        <omgdi:waypoint x="500" y="420" />
+        <omgdi:waypoint x="560" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AI_4_di" bpmnElement="Flow_AI_4">
+        <omgdi:waypoint x="660" y="420" />
+        <omgdi:waypoint x="720" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AI_5_di" bpmnElement="Flow_AI_5">
+        <omgdi:waypoint x="820" y="420" />
+        <omgdi:waypoint x="880" y="420" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

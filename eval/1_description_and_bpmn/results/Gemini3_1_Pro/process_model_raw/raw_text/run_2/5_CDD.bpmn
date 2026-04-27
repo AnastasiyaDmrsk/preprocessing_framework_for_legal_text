@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definitions_AML"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_1" name="AML Customer Due Diligence Process" processRef="Process_1"/>
+   </collaboration>
+   <process id="Process_1" isExecutable="true">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_MemberStates" name="Member States">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Task_RequireRules</flowNodeRef>
+         </lane>
+         <lane id="Lane_ObligedEntity" name="Obliged Entity">
+            <flowNodeRef>Task_Verify</flowNodeRef>
+            <flowNodeRef>Gateway_Comply</flowNodeRef>
+            <flowNodeRef>Task_Terminate</flowNodeRef>
+            <flowNodeRef>Task_Report</flowNodeRef>
+            <flowNodeRef>Task_Establish</flowNodeRef>
+            <flowNodeRef>Task_ApplyCDD</flowNodeRef>
+            <flowNodeRef>EndEvent_Fail</flowNodeRef>
+            <flowNodeRef>EndEvent_Success</flowNodeRef>
+         </lane>
+         <lane id="Lane_Customer" name="Customer">
+            <flowNodeRef>Task_Transact</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_1" name="Start Process"/>
+      <task id="Task_RequireRules" name="Require Verification"/>
+      <task id="Task_Verify" name="Verify Identity"/>
+      <exclusiveGateway id="Gateway_Comply" name="Able to comply with CDD?"/>
+      <task id="Task_Terminate" name="Terminate Relationship"/>
+      <task id="Task_Report" name="Consider STR to FIU"/>
+      <task id="Task_Establish" name="Establish Relationship"/>
+      <task id="Task_ApplyCDD" name="Apply CDD to Existing Customers"/>
+      <task id="Task_Transact" name="Carry Out Transaction"/>
+      <endEvent id="EndEvent_Fail" name="End (Terminated)"/>
+      <endEvent id="EndEvent_Success" name="End (Success)"/>
+
+      <sequenceFlow id="Seq_1" sourceRef="StartEvent_1" targetRef="Task_RequireRules"/>
+      <sequenceFlow id="Seq_2" sourceRef="Task_RequireRules" targetRef="Task_Verify"/>
+      <sequenceFlow id="Seq_3" sourceRef="Task_Verify" targetRef="Gateway_Comply"/>
+      <sequenceFlow id="Seq_4" name="No" sourceRef="Gateway_Comply" targetRef="Task_Terminate"/>
+      <sequenceFlow id="Seq_5" sourceRef="Task_Terminate" targetRef="Task_Report"/>
+      <sequenceFlow id="Seq_6" sourceRef="Task_Report" targetRef="EndEvent_Fail"/>
+      <sequenceFlow id="Seq_7" name="Yes" sourceRef="Gateway_Comply" targetRef="Task_Establish"/>
+      <sequenceFlow id="Seq_8" sourceRef="Task_Establish" targetRef="Task_Transact"/>
+      <sequenceFlow id="Seq_9" sourceRef="Task_Transact" targetRef="Task_ApplyCDD"/>
+      <sequenceFlow id="Seq_10" sourceRef="Task_ApplyCDD" targetRef="EndEvent_Success"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+
+         <bpmndi:BPMNShape bpmnElement="Participant_1" id="Participant_1_di" isHorizontal="true">
+            <omgdc:Bounds x="100.0" y="100.0" width="1000.0" height="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MemberStates" id="Lane_MemberStates_di" isHorizontal="true">
+            <omgdc:Bounds x="130.0" y="100.0" width="970.0" height="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_ObligedEntity" id="Lane_ObligedEntity_di" isHorizontal="true">
+            <omgdc:Bounds x="130.0" y="300.0" width="970.0" height="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Customer" id="Lane_Customer_di" isHorizontal="true">
+            <omgdc:Bounds x="130.0" y="500.0" width="970.0" height="200.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_di">
+            <omgdc:Bounds x="180.0" y="180.0" width="30.0" height="30.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_RequireRules" id="Task_RequireRules_di">
+            <omgdc:Bounds x="250.0" y="155.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Verify" id="Task_Verify_di">
+            <omgdc:Bounds x="250.0" y="360.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Comply" id="Gateway_Comply_di">
+            <omgdc:Bounds x="400.0" y="380.0" width="40.0" height="40.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Terminate" id="Task_Terminate_di">
+            <omgdc:Bounds x="500.0" y="310.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Report" id="Task_Report_di">
+            <omgdc:Bounds x="650.0" y="310.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Fail" id="EndEvent_Fail_di">
+            <omgdc:Bounds x="800.0" y="335.0" width="30.0" height="30.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Establish" id="Task_Establish_di">
+            <omgdc:Bounds x="500.0" y="410.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Transact" id="Task_Transact_di">
+            <omgdc:Bounds x="650.0" y="560.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_ApplyCDD" id="Task_ApplyCDD_di">
+            <omgdc:Bounds x="800.0" y="410.0" width="100.0" height="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Success" id="EndEvent_Success_di">
+            <omgdc:Bounds x="950.0" y="435.0" width="30.0" height="30.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_1" id="Seq_1_di">
+            <omgdi:waypoint x="210.0" y="195.0"/>
+            <omgdi:waypoint x="250.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_2" id="Seq_2_di">
+            <omgdi:waypoint x="300.0" y="235.0"/>
+            <omgdi:waypoint x="300.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_3" id="Seq_3_di">
+            <omgdi:waypoint x="350.0" y="400.0"/>
+            <omgdi:waypoint x="400.0" y="400.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_4" id="Seq_4_di">
+            <omgdi:waypoint x="420.0" y="380.0"/>
+            <omgdi:waypoint x="420.0" y="350.0"/>
+            <omgdi:waypoint x="500.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_5" id="Seq_5_di">
+            <omgdi:waypoint x="600.0" y="350.0"/>
+            <omgdi:waypoint x="650.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_6" id="Seq_6_di">
+            <omgdi:waypoint x="750.0" y="350.0"/>
+            <omgdi:waypoint x="800.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_7" id="Seq_7_di">
+            <omgdi:waypoint x="420.0" y="420.0"/>
+            <omgdi:waypoint x="420.0" y="450.0"/>
+            <omgdi:waypoint x="500.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_8" id="Seq_8_di">
+            <omgdi:waypoint x="550.0" y="490.0"/>
+            <omgdi:waypoint x="550.0" y="600.0"/>
+            <omgdi:waypoint x="650.0" y="600.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_9" id="Seq_9_di">
+            <omgdi:waypoint x="750.0" y="600.0"/>
+            <omgdi:waypoint x="850.0" y="600.0"/>
+            <omgdi:waypoint x="850.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_10" id="Seq_10_di">
+            <omgdi:waypoint x="900.0" y="450.0"/>
+            <omgdi:waypoint x="950.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

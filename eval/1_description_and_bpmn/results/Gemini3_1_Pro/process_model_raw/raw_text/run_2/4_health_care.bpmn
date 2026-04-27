@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd"
+             id="HealthDataTransfer_Def">
+
+   <collaboration id="collab1">
+      <participant id="pool1" name="Health Data Transfer Process" processRef="proc1" />
+   </collaboration>
+
+   <process id="proc1" isExecutable="true" name="Health Data Transfer">
+      <laneSet id="ls1">
+         <lane id="lane1" name="Commission">
+            <flowNodeRef>start1</flowNodeRef>
+            <flowNodeRef>task1</flowNodeRef>
+            <flowNodeRef>task2</flowNodeRef>
+         </lane>
+         <lane id="lane2" name="Transferring Member State">
+            <flowNodeRef>task3</flowNodeRef>
+            <flowNodeRef>task5</flowNodeRef>
+         </lane>
+         <lane id="lane3" name="Health Professional">
+            <flowNodeRef>task4</flowNodeRef>
+         </lane>
+         <lane id="lane4" name="Member State responsible">
+            <flowNodeRef>task6</flowNodeRef>
+            <flowNodeRef>end1</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start1" name="Start">
+         <outgoing>seq1</outgoing>
+      </startEvent>
+
+      <task id="task1" name="draw up the common health certificate">
+         <incoming>seq1</incoming>
+         <outgoing>seq2</outgoing>
+      </task>
+
+      <task id="task2" name="adopt uniform conditions and practical arrangements">
+         <incoming>seq2</incoming>
+         <outgoing>seq3</outgoing>
+      </task>
+
+      <task id="task3" name="obtain explicit consent">
+         <incoming>seq3</incoming>
+         <outgoing>seq4</outgoing>
+      </task>
+
+      <task id="task4" name="process personal health data">
+         <incoming>seq4</incoming>
+         <outgoing>seq5</outgoing>
+      </task>
+
+      <task id="task5" name="transmit information on special needs">
+         <incoming>seq5</incoming>
+         <outgoing>seq6</outgoing>
+      </task>
+
+      <task id="task6" name="ensure special needs are adequately addressed">
+         <incoming>seq6</incoming>
+         <outgoing>seq7</outgoing>
+      </task>
+
+      <endEvent id="end1" name="End">
+         <incoming>seq7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq1" sourceRef="start1" targetRef="task1" />
+      <sequenceFlow id="seq2" sourceRef="task1" targetRef="task2" />
+      <sequenceFlow id="seq3" sourceRef="task2" targetRef="task3" />
+      <sequenceFlow id="seq4" sourceRef="task3" targetRef="task4" />
+      <sequenceFlow id="seq5" sourceRef="task4" targetRef="task5" />
+      <sequenceFlow id="seq6" sourceRef="task5" targetRef="task6" />
+      <sequenceFlow id="seq7" sourceRef="task6" targetRef="end1" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collab1">
+         <bpmndi:BPMNShape id="pool1_di" bpmnElement="pool1" isHorizontal="true">
+            <omgdc:Bounds x="30" y="30" width="1080" height="600" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="lane1_di" bpmnElement="lane1" isHorizontal="true">
+            <omgdc:Bounds x="60" y="30" width="1050" height="150" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane2_di" bpmnElement="lane2" isHorizontal="true">
+            <omgdc:Bounds x="60" y="180" width="1050" height="150" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane3_di" bpmnElement="lane3" isHorizontal="true">
+            <omgdc:Bounds x="60" y="330" width="1050" height="150" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane4_di" bpmnElement="lane4" isHorizontal="true">
+            <omgdc:Bounds x="60" y="480" width="1050" height="150" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="start1_di" bpmnElement="start1">
+            <omgdc:Bounds x="100" y="90" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task1_di" bpmnElement="task1">
+            <omgdc:Bounds x="180" y="65" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task2_di" bpmnElement="task2">
+            <omgdc:Bounds x="320" y="65" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task3_di" bpmnElement="task3">
+            <omgdc:Bounds x="460" y="215" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task4_di" bpmnElement="task4">
+            <omgdc:Bounds x="600" y="365" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task5_di" bpmnElement="task5">
+            <omgdc:Bounds x="740" y="215" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="task6_di" bpmnElement="task6">
+            <omgdc:Bounds x="880" y="515" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="end1_di" bpmnElement="end1">
+            <omgdc:Bounds x="1020" y="540" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="seq1_di" bpmnElement="seq1">
+            <omgdi:waypoint x="130" y="105" />
+            <omgdi:waypoint x="180" y="105" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq2_di" bpmnElement="seq2">
+            <omgdi:waypoint x="280" y="105" />
+            <omgdi:waypoint x="320" y="105" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq3_di" bpmnElement="seq3">
+            <omgdi:waypoint x="420" y="105" />
+            <omgdi:waypoint x="440" y="105" />
+            <omgdi:waypoint x="440" y="255" />
+            <omgdi:waypoint x="460" y="255" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq4_di" bpmnElement="seq4">
+            <omgdi:waypoint x="560" y="255" />
+            <omgdi:waypoint x="580" y="255" />
+            <omgdi:waypoint x="580" y="405" />
+            <omgdi:waypoint x="600" y="405" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq5_di" bpmnElement="seq5">
+            <omgdi:waypoint x="700" y="405" />
+            <omgdi:waypoint x="720" y="405" />
+            <omgdi:waypoint x="720" y="255" />
+            <omgdi:waypoint x="740" y="255" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq6_di" bpmnElement="seq6">
+            <omgdi:waypoint x="840" y="255" />
+            <omgdi:waypoint x="860" y="255" />
+            <omgdi:waypoint x="860" y="555" />
+            <omgdi:waypoint x="880" y="555" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="seq7_di" bpmnElement="seq7">
+            <omgdi:waypoint x="980" y="555" />
+            <omgdi:waypoint x="1020" y="555" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

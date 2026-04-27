@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="BPMN Generator" exporterVersion="1.0"
+             id="sid-main" targetNamespace="http://www.signavio.com">
+
+   <collaboration id="collaboration_1">
+      <participant id="Participant_MS" name="Member States" processRef="Process_MS" />
+      <participant id="Participant_CUST" name="Customer" processRef="Process_CUST" />
+      <participant id="Participant_OE" name="Obliged Entity" processRef="Process_OE" />
+      <participant id="Participant_LP" name="Legal Professionals" processRef="Process_LP" />
+   </collaboration>
+
+   <process id="Process_MS" isExecutable="true">
+      <startEvent id="Start_MS" name="Start" />
+      <task id="MS_T1" name="Require verification of the identity" />
+      <task id="MS_T2" name="Allow verification to be completed" />
+      <task id="MS_T3" name="Allow the opening of an account" />
+      <task id="MS_T4" name="Require compliance" />
+      <task id="MS_T5" name="Apply subparagraph" />
+      <task id="MS_T6" name="Require application of measures" />
+      <endEvent id="End_MS" name="End" />
+
+      <sequenceFlow id="Flow_MS_1" sourceRef="Start_MS" targetRef="MS_T1" />
+      <sequenceFlow id="Flow_MS_2" sourceRef="MS_T1" targetRef="MS_T2" />
+      <sequenceFlow id="Flow_MS_3" sourceRef="MS_T2" targetRef="MS_T3" />
+      <sequenceFlow id="Flow_MS_4" sourceRef="MS_T3" targetRef="MS_T4" />
+      <sequenceFlow id="Flow_MS_5" sourceRef="MS_T4" targetRef="MS_T5" />
+      <sequenceFlow id="Flow_MS_6" sourceRef="MS_T5" targetRef="MS_T6" />
+      <sequenceFlow id="Flow_MS_7" sourceRef="MS_T6" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_CUST" isExecutable="true">
+      <startEvent id="Start_CUST" name="Start" />
+      <task id="CUST_T1" name="Carry out transactions" />
+      <endEvent id="End_CUST" name="End" />
+
+      <sequenceFlow id="Flow_CUST_1" sourceRef="Start_CUST" targetRef="CUST_T1" />
+      <sequenceFlow id="Flow_CUST_2" sourceRef="CUST_T1" targetRef="End_CUST" />
+   </process>
+
+   <process id="Process_OE" isExecutable="true">
+      <startEvent id="Start_OE" name="Start" />
+      <task id="OE_T1" name="Comply with customer due diligence requirements" />
+      <task id="OE_T2" name="Carry out a transaction" />
+      <task id="OE_T3" name="Establish a business relationship" />
+      <task id="OE_T4" name="Terminate the business relationship" />
+      <task id="OE_T5" name="Consider making a suspicious transaction report" />
+      <task id="OE_T6" name="Apply customer due diligence measures" />
+      <endEvent id="End_OE" name="End" />
+
+      <sequenceFlow id="Flow_OE_1" sourceRef="Start_OE" targetRef="OE_T1" />
+      <sequenceFlow id="Flow_OE_2" sourceRef="OE_T1" targetRef="OE_T2" />
+      <sequenceFlow id="Flow_OE_3" sourceRef="OE_T2" targetRef="OE_T3" />
+      <sequenceFlow id="Flow_OE_4" sourceRef="OE_T3" targetRef="OE_T4" />
+      <sequenceFlow id="Flow_OE_5" sourceRef="OE_T4" targetRef="OE_T5" />
+      <sequenceFlow id="Flow_OE_6" sourceRef="OE_T5" targetRef="OE_T6" />
+      <sequenceFlow id="Flow_OE_7" sourceRef="OE_T6" targetRef="End_OE" />
+   </process>
+
+   <process id="Process_LP" isExecutable="true">
+      <startEvent id="Start_LP" name="Start" />
+      <task id="LP_T1" name="Ascertain legal position" />
+      <task id="LP_T2" name="Perform task of defending or representing" />
+      <endEvent id="End_LP" name="End" />
+
+      <sequenceFlow id="Flow_LP_1" sourceRef="Start_LP" targetRef="LP_T1" />
+      <sequenceFlow id="Flow_LP_2" sourceRef="LP_T1" targetRef="LP_T2" />
+      <sequenceFlow id="Flow_LP_3" sourceRef="LP_T2" targetRef="End_LP" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collaboration_1" id="BPMNPlane_1">
+
+         <bpmndi:BPMNShape bpmnElement="Participant_MS" id="Participant_MS_di" isHorizontal="true">
+            <omgdc:Bounds height="150" width="1100" x="50" y="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Start_MS_di">
+            <omgdc:Bounds height="30" width="30" x="100" y="110" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T1" id="MS_T1_di">
+            <omgdc:Bounds height="80" width="100" x="170" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T2" id="MS_T2_di">
+            <omgdc:Bounds height="80" width="100" x="310" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T3" id="MS_T3_di">
+            <omgdc:Bounds height="80" width="100" x="450" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T4" id="MS_T4_di">
+            <omgdc:Bounds height="80" width="100" x="590" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T5" id="MS_T5_di">
+            <omgdc:Bounds height="80" width="100" x="730" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="MS_T6" id="MS_T6_di">
+            <omgdc:Bounds height="80" width="100" x="870" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="End_MS_di">
+            <omgdc:Bounds height="30" width="30" x="1010" y="110" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1" id="Flow_MS_1_di">
+            <omgdi:waypoint x="130" y="125" />
+            <omgdi:waypoint x="170" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_2" id="Flow_MS_2_di">
+            <omgdi:waypoint x="270" y="125" />
+            <omgdi:waypoint x="310" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_3" id="Flow_MS_3_di">
+            <omgdi:waypoint x="410" y="125" />
+            <omgdi:waypoint x="450" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_4" id="Flow_MS_4_di">
+            <omgdi:waypoint x="550" y="125" />
+            <omgdi:waypoint x="590" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_5" id="Flow_MS_5_di">
+            <omgdi:waypoint x="690" y="125" />
+            <omgdi:waypoint x="730" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_6" id="Flow_MS_6_di">
+            <omgdi:waypoint x="830" y="125" />
+            <omgdi:waypoint x="870" y="125" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_7" id="Flow_MS_7_di">
+            <omgdi:waypoint x="970" y="125" />
+            <omgdi:waypoint x="1010" y="125" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_CUST" id="Participant_CUST_di" isHorizontal="true">
+            <omgdc:Bounds height="150" width="1100" x="50" y="250" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_CUST" id="Start_CUST_di">
+            <omgdc:Bounds height="30" width="30" x="100" y="310" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="CUST_T1" id="CUST_T1_di">
+            <omgdc:Bounds height="80" width="100" x="170" y="285" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_CUST" id="End_CUST_di">
+            <omgdc:Bounds height="30" width="30" x="310" y="310" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="Flow_CUST_1" id="Flow_CUST_1_di">
+            <omgdi:waypoint x="130" y="325" />
+            <omgdi:waypoint x="170" y="325" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_CUST_2" id="Flow_CUST_2_di">
+            <omgdi:waypoint x="270" y="325" />
+            <omgdi:waypoint x="310" y="325" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_OE" id="Participant_OE_di" isHorizontal="true">
+            <omgdc:Bounds height="150" width="1100" x="50" y="450" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_OE" id="Start_OE_di">
+            <omgdc:Bounds height="30" width="30" x="100" y="510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T1" id="OE_T1_di">
+            <omgdc:Bounds height="80" width="100" x="170" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T2" id="OE_T2_di">
+            <omgdc:Bounds height="80" width="100" x="310" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T3" id="OE_T3_di">
+            <omgdc:Bounds height="80" width="100" x="450" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T4" id="OE_T4_di">
+            <omgdc:Bounds height="80" width="100" x="590" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T5" id="OE_T5_di">
+            <omgdc:Bounds height="80" width="100" x="730" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="OE_T6" id="OE_T6_di">
+            <omgdc:Bounds height="80" width="100" x="870" y="485" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_OE" id="End_OE_di">
+            <omgdc:Bounds height="30" width="30" x="1010" y="510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_1" id="Flow_OE_1_di">
+            <omgdi:waypoint x="130" y="525" />
+            <omgdi:waypoint x="170" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_2" id="Flow_OE_2_di">
+            <omgdi:waypoint x="270" y="525" />
+            <omgdi:waypoint x="310" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_3" id="Flow_OE_3_di">
+            <omgdi:waypoint x="410" y="525" />
+            <omgdi:waypoint x="450" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_4" id="Flow_OE_4_di">
+            <omgdi:waypoint x="550" y="525" />
+            <omgdi:waypoint x="590" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_5" id="Flow_OE_5_di">
+            <omgdi:waypoint x="690" y="525" />
+            <omgdi:waypoint x="730" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_6" id="Flow_OE_6_di">
+            <omgdi:waypoint x="830" y="525" />
+            <omgdi:waypoint x="870" y="525" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_7" id="Flow_OE_7_di">
+            <omgdi:waypoint x="970" y="525" />
+            <omgdi:waypoint x="1010" y="525" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_LP" id="Participant_LP_di" isHorizontal="true">
+            <omgdc:Bounds height="150" width="1100" x="50" y="650" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_LP" id="Start_LP_di">
+            <omgdc:Bounds height="30" width="30" x="100" y="710" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="LP_T1" id="LP_T1_di">
+            <omgdc:Bounds height="80" width="100" x="170" y="685" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="LP_T2" id="LP_T2_di">
+            <omgdc:Bounds height="80" width="100" x="310" y="685" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_LP" id="End_LP_di">
+            <omgdc:Bounds height="30" width="30" x="450" y="710" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="Flow_LP_1" id="Flow_LP_1_di">
+            <omgdi:waypoint x="130" y="725" />
+            <omgdi:waypoint x="170" y="725" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_LP_2" id="Flow_LP_2_di">
+            <omgdi:waypoint x="270" y="725" />
+            <omgdi:waypoint x="310" y="725" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_LP_3" id="Flow_LP_3_di">
+            <omgdi:waypoint x="410" y="725" />
+            <omgdi:waypoint x="450" y="725" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

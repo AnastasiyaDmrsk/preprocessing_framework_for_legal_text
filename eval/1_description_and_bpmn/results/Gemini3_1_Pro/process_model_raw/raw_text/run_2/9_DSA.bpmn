@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-article-22-definitions"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="collab_article22">
+      <participant id="participant_process" name="Trusted Flagger Lifecycle (Article 22)" processRef="process_article22" />
+   </collaboration>
+   <process id="process_article22" isClosed="false" isExecutable="true" name="Article 22 Process" processType="None">
+      <laneSet id="laneset_1">
+         <lane id="lane_entity" name="Entity / Trusted Flagger">
+            <flowNodeRef>start_event</flowNodeRef>
+            <flowNodeRef>task_apply</flowNodeRef>
+            <flowNodeRef>task_submit</flowNodeRef>
+         </lane>
+         <lane id="lane_dsc" name="Digital Services Coordinator">
+            <flowNodeRef>task_award</flowNodeRef>
+            <flowNodeRef>task_suspend</flowNodeRef>
+            <flowNodeRef>task_revoke</flowNodeRef>
+            <flowNodeRef>end_event</flowNodeRef>
+         </lane>
+         <lane id="lane_provider" name="Provider of online platforms">
+            <flowNodeRef>task_process</flowNodeRef>
+            <flowNodeRef>task_communicate</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_event" name="Start">
+         <outgoing>seq_1</outgoing>
+      </startEvent>
+      <task id="task_apply" name="apply for status">
+         <incoming>seq_1</incoming>
+         <outgoing>seq_2</outgoing>
+      </task>
+      <task id="task_award" name="award status">
+         <incoming>seq_2</incoming>
+         <outgoing>seq_3</outgoing>
+      </task>
+      <task id="task_submit" name="submit notices">
+         <incoming>seq_3</incoming>
+         <outgoing>seq_4</outgoing>
+      </task>
+      <task id="task_process" name="process notices">
+         <incoming>seq_4</incoming>
+         <outgoing>seq_5</outgoing>
+      </task>
+      <task id="task_communicate" name="communicate information">
+         <incoming>seq_5</incoming>
+         <outgoing>seq_6</outgoing>
+      </task>
+      <task id="task_suspend" name="suspend status">
+         <incoming>seq_6</incoming>
+         <outgoing>seq_7</outgoing>
+      </task>
+      <task id="task_revoke" name="revoke status">
+         <incoming>seq_7</incoming>
+         <outgoing>seq_8</outgoing>
+      </task>
+      <endEvent id="end_event" name="End">
+         <incoming>seq_8</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_1" sourceRef="start_event" targetRef="task_apply" />
+      <sequenceFlow id="seq_2" sourceRef="task_apply" targetRef="task_award" />
+      <sequenceFlow id="seq_3" sourceRef="task_award" targetRef="task_submit" />
+      <sequenceFlow id="seq_4" sourceRef="task_submit" targetRef="task_process" />
+      <sequenceFlow id="seq_5" sourceRef="task_process" targetRef="task_communicate" />
+      <sequenceFlow id="seq_6" sourceRef="task_communicate" targetRef="task_suspend" />
+      <sequenceFlow id="seq_7" sourceRef="task_suspend" targetRef="task_revoke" />
+      <sequenceFlow id="seq_8" sourceRef="task_revoke" targetRef="end_event" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_article22" id="BPMNPlane_1">
+         <bpmndi:BPMNShape bpmnElement="participant_process" id="participant_process_gui" isHorizontal="true">
+            <omgdc:Bounds height="450.0" width="1300.0" x="100.0" y="100.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="lane_entity" id="lane_entity_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1270.0" x="130.0" y="100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_dsc" id="lane_dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1270.0" x="130.0" y="250.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_provider" id="lane_provider_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1270.0" x="130.0" y="400.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_event" id="start_event_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="160.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_apply" id="task_apply_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_award" id="task_award_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="285.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_submit" id="task_submit_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_process" id="task_process_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="435.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_communicate" id="task_communicate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="435.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_suspend" id="task_suspend_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="285.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_revoke" id="task_revoke_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1150.0" y="285.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_event" id="end_event_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1300.0" y="310.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_1" id="seq_1_gui">
+            <omgdi:waypoint x="180.0" y="175.0" />
+            <omgdi:waypoint x="250.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_2" id="seq_2_gui">
+            <omgdi:waypoint x="350.0" y="175.0" />
+            <omgdi:waypoint x="375.0" y="175.0" />
+            <omgdi:waypoint x="375.0" y="325.0" />
+            <omgdi:waypoint x="400.0" y="325.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_3" id="seq_3_gui">
+            <omgdi:waypoint x="500.0" y="325.0" />
+            <omgdi:waypoint x="525.0" y="325.0" />
+            <omgdi:waypoint x="525.0" y="175.0" />
+            <omgdi:waypoint x="550.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_4" id="seq_4_gui">
+            <omgdi:waypoint x="650.0" y="175.0" />
+            <omgdi:waypoint x="675.0" y="175.0" />
+            <omgdi:waypoint x="675.0" y="475.0" />
+            <omgdi:waypoint x="700.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_5" id="seq_5_gui">
+            <omgdi:waypoint x="800.0" y="475.0" />
+            <omgdi:waypoint x="850.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_6" id="seq_6_gui">
+            <omgdi:waypoint x="950.0" y="475.0" />
+            <omgdi:waypoint x="975.0" y="475.0" />
+            <omgdi:waypoint x="975.0" y="325.0" />
+            <omgdi:waypoint x="1000.0" y="325.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_7" id="seq_7_gui">
+            <omgdi:waypoint x="1100.0" y="325.0" />
+            <omgdi:waypoint x="1150.0" y="325.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_8" id="seq_8_gui">
+            <omgdi:waypoint x="1250.0" y="325.0" />
+            <omgdi:waypoint x="1300.0" y="325.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

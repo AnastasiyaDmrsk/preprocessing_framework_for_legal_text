@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="definitions_article22"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collaboration_1">
+      <participant id="participant_1" name="Article 22: Trusted Flaggers" processRef="process_1" />
+   </collaboration>
+
+   <process id="process_1" isClosed="false" isExecutable="false" name="Article 22 Process" processType="None">
+      <laneSet id="laneset_1">
+         <lane id="lane_flagger" name="Entity / Trusted Flagger">
+            <flowNodeRef>start_event</flowNodeRef>
+            <flowNodeRef>T1_apply</flowNodeRef>
+            <flowNodeRef>T5_submit_notices</flowNodeRef>
+            <flowNodeRef>T7_publish_reports</flowNodeRef>
+            <flowNodeRef>T8_send_reports</flowNodeRef>
+         </lane>
+         <lane id="lane_dsc" name="Digital Services Coordinator">
+            <flowNodeRef>T2_award</flowNodeRef>
+            <flowNodeRef>T3_comm_names</flowNodeRef>
+            <flowNodeRef>T10_suspend</flowNodeRef>
+            <flowNodeRef>T11_investigate</flowNodeRef>
+            <flowNodeRef>T12_afford_react</flowNodeRef>
+            <flowNodeRef>T13_revoke</flowNodeRef>
+         </lane>
+         <lane id="lane_provider" name="Provider of online platforms">
+            <flowNodeRef>T6_process_notices</flowNodeRef>
+            <flowNodeRef>T9_comm_inaccurate</flowNodeRef>
+         </lane>
+         <lane id="lane_commission" name="Commission">
+            <flowNodeRef>T4_publish_info</flowNodeRef>
+            <flowNodeRef>T14_issue_guidelines</flowNodeRef>
+            <flowNodeRef>end_event</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_event" name="Start Process">
+         <outgoing>S1</outgoing>
+      </startEvent>
+      <task id="T1_apply" name="apply for trusted flagger status">
+         <incoming>S1</incoming>
+         <outgoing>S2</outgoing>
+      </task>
+      <task id="T2_award" name="award trusted flagger status">
+         <incoming>S2</incoming>
+         <outgoing>S3</outgoing>
+      </task>
+      <task id="T3_comm_names" name="communicate names to Commission">
+         <incoming>S3</incoming>
+         <outgoing>S4</outgoing>
+      </task>
+      <task id="T4_publish_info" name="publish information in database">
+         <incoming>S4</incoming>
+         <outgoing>S5</outgoing>
+      </task>
+      <task id="T5_submit_notices" name="submit notices">
+         <incoming>S5</incoming>
+         <outgoing>S6</outgoing>
+      </task>
+      <task id="T6_process_notices" name="process and decide upon notices">
+         <incoming>S6</incoming>
+         <outgoing>S7</outgoing>
+      </task>
+      <task id="T7_publish_reports" name="publish reports on notices">
+         <incoming>S7</incoming>
+         <outgoing>S8</outgoing>
+      </task>
+      <task id="T8_send_reports" name="send reports to Coordinator">
+         <incoming>S8</incoming>
+         <outgoing>S9</outgoing>
+      </task>
+      <task id="T9_comm_inaccurate" name="communicate information indicating inaccurate notices">
+         <incoming>S9</incoming>
+         <outgoing>S10</outgoing>
+      </task>
+      <task id="T10_suspend" name="suspend trusted flagger status">
+         <incoming>S10</incoming>
+         <outgoing>S11</outgoing>
+      </task>
+      <task id="T11_investigate" name="carry out investigation">
+         <incoming>S11</incoming>
+         <outgoing>S12</outgoing>
+      </task>
+      <task id="T12_afford_react" name="afford entity opportunity to react">
+         <incoming>S12</incoming>
+         <outgoing>S13</outgoing>
+      </task>
+      <task id="T13_revoke" name="revoke status">
+         <incoming>S13</incoming>
+         <outgoing>S14</outgoing>
+      </task>
+      <task id="T14_issue_guidelines" name="issue guidelines">
+         <incoming>S14</incoming>
+         <outgoing>S15</outgoing>
+      </task>
+      <endEvent id="end_event" name="End Process">
+         <incoming>S15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="S1" sourceRef="start_event" targetRef="T1_apply" />
+      <sequenceFlow id="S2" sourceRef="T1_apply" targetRef="T2_award" />
+      <sequenceFlow id="S3" sourceRef="T2_award" targetRef="T3_comm_names" />
+      <sequenceFlow id="S4" sourceRef="T3_comm_names" targetRef="T4_publish_info" />
+      <sequenceFlow id="S5" sourceRef="T4_publish_info" targetRef="T5_submit_notices" />
+      <sequenceFlow id="S6" sourceRef="T5_submit_notices" targetRef="T6_process_notices" />
+      <sequenceFlow id="S7" sourceRef="T6_process_notices" targetRef="T7_publish_reports" />
+      <sequenceFlow id="S8" sourceRef="T7_publish_reports" targetRef="T8_send_reports" />
+      <sequenceFlow id="S9" sourceRef="T8_send_reports" targetRef="T9_comm_inaccurate" />
+      <sequenceFlow id="S10" sourceRef="T9_comm_inaccurate" targetRef="T10_suspend" />
+      <sequenceFlow id="S11" sourceRef="T10_suspend" targetRef="T11_investigate" />
+      <sequenceFlow id="S12" sourceRef="T11_investigate" targetRef="T12_afford_react" />
+      <sequenceFlow id="S13" sourceRef="T12_afford_react" targetRef="T13_revoke" />
+      <sequenceFlow id="S14" sourceRef="T13_revoke" targetRef="T14_issue_guidelines" />
+      <sequenceFlow id="S15" sourceRef="T14_issue_guidelines" targetRef="end_event" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="collaboration_1">
+
+         <bpmndi:BPMNShape id="shape_participant_1" bpmnElement="participant_1" isHorizontal="true">
+            <omgdc:Bounds x="50.0" y="100.0" width="2400.0" height="800.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_flagger" bpmnElement="lane_flagger" isHorizontal="true">
+            <omgdc:Bounds x="80.0" y="100.0" width="2370.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_dsc" bpmnElement="lane_dsc" isHorizontal="true">
+            <omgdc:Bounds x="80.0" y="300.0" width="2370.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_provider" bpmnElement="lane_provider" isHorizontal="true">
+            <omgdc:Bounds x="80.0" y="500.0" width="2370.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_commission" bpmnElement="lane_commission" isHorizontal="true">
+            <omgdc:Bounds x="80.0" y="700.0" width="2370.0" height="200.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="shape_start_event" bpmnElement="start_event">
+            <omgdc:Bounds x="100.0" y="185.0" width="30.0" height="30.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T1_apply" bpmnElement="T1_apply">
+            <omgdc:Bounds x="200.0" y="160.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T2_award" bpmnElement="T2_award">
+            <omgdc:Bounds x="350.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T3_comm_names" bpmnElement="T3_comm_names">
+            <omgdc:Bounds x="500.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T4_publish_info" bpmnElement="T4_publish_info">
+            <omgdc:Bounds x="650.0" y="760.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T5_submit_notices" bpmnElement="T5_submit_notices">
+            <omgdc:Bounds x="800.0" y="160.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T6_process_notices" bpmnElement="T6_process_notices">
+            <omgdc:Bounds x="950.0" y="560.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T7_publish_reports" bpmnElement="T7_publish_reports">
+            <omgdc:Bounds x="1100.0" y="160.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T8_send_reports" bpmnElement="T8_send_reports">
+            <omgdc:Bounds x="1250.0" y="160.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T9_comm_inaccurate" bpmnElement="T9_comm_inaccurate">
+            <omgdc:Bounds x="1400.0" y="560.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T10_suspend" bpmnElement="T10_suspend">
+            <omgdc:Bounds x="1550.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T11_investigate" bpmnElement="T11_investigate">
+            <omgdc:Bounds x="1700.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T12_afford_react" bpmnElement="T12_afford_react">
+            <omgdc:Bounds x="1850.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T13_revoke" bpmnElement="T13_revoke">
+            <omgdc:Bounds x="2000.0" y="360.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_T14_issue_guidelines" bpmnElement="T14_issue_guidelines">
+            <omgdc:Bounds x="2150.0" y="760.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_end_event" bpmnElement="end_event">
+            <omgdc:Bounds x="2350.0" y="785.0" width="30.0" height="30.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="edge_S1" bpmnElement="S1">
+            <omgdi:waypoint x="130.0" y="200.0" />
+            <omgdi:waypoint x="200.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S2" bpmnElement="S2">
+            <omgdi:waypoint x="300.0" y="200.0" />
+            <omgdi:waypoint x="325.0" y="200.0" />
+            <omgdi:waypoint x="325.0" y="400.0" />
+            <omgdi:waypoint x="350.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S3" bpmnElement="S3">
+            <omgdi:waypoint x="450.0" y="400.0" />
+            <omgdi:waypoint x="500.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S4" bpmnElement="S4">
+            <omgdi:waypoint x="600.0" y="400.0" />
+            <omgdi:waypoint x="625.0" y="400.0" />
+            <omgdi:waypoint x="625.0" y="800.0" />
+            <omgdi:waypoint x="650.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S5" bpmnElement="S5">
+            <omgdi:waypoint x="750.0" y="800.0" />
+            <omgdi:waypoint x="775.0" y="800.0" />
+            <omgdi:waypoint x="775.0" y="200.0" />
+            <omgdi:waypoint x="800.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S6" bpmnElement="S6">
+            <omgdi:waypoint x="900.0" y="200.0" />
+            <omgdi:waypoint x="925.0" y="200.0" />
+            <omgdi:waypoint x="925.0" y="600.0" />
+            <omgdi:waypoint x="950.0" y="600.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S7" bpmnElement="S7">
+            <omgdi:waypoint x="1050.0" y="600.0" />
+            <omgdi:waypoint x="1075.0" y="600.0" />
+            <omgdi:waypoint x="1075.0" y="200.0" />
+            <omgdi:waypoint x="1100.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S8" bpmnElement="S8">
+            <omgdi:waypoint x="1200.0" y="200.0" />
+            <omgdi:waypoint x="1250.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S9" bpmnElement="S9">
+            <omgdi:waypoint x="1350.0" y="200.0" />
+            <omgdi:waypoint x="1375.0" y="200.0" />
+            <omgdi:waypoint x="1375.0" y="600.0" />
+            <omgdi:waypoint x="1400.0" y="600.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S10" bpmnElement="S10">
+            <omgdi:waypoint x="1500.0" y="600.0" />
+            <omgdi:waypoint x="1525.0" y="600.0" />
+            <omgdi:waypoint x="1525.0" y="400.0" />
+            <omgdi:waypoint x="1550.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S11" bpmnElement="S11">
+            <omgdi:waypoint x="1650.0" y="400.0" />
+            <omgdi:waypoint x="1700.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S12" bpmnElement="S12">
+            <omgdi:waypoint x="1800.0" y="400.0" />
+            <omgdi:waypoint x="1850.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S13" bpmnElement="S13">
+            <omgdi:waypoint x="1950.0" y="400.0" />
+            <omgdi:waypoint x="2000.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S14" bpmnElement="S14">
+            <omgdi:waypoint x="2100.0" y="400.0" />
+            <omgdi:waypoint x="2125.0" y="400.0" />
+            <omgdi:waypoint x="2125.0" y="800.0" />
+            <omgdi:waypoint x="2150.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_S15" bpmnElement="S15">
+            <omgdi:waypoint x="2250.0" y="800.0" />
+            <omgdi:waypoint x="2350.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

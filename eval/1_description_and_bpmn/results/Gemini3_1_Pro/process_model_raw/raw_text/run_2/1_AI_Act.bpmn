@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             id="sid-article-62-process" 
+             targetNamespace="http://www.signavio.com">
+   
+   <collaboration id="collaboration_1">
+      <participant id="participant_ms" name="Member States" processRef="process_ms"/>
+      <participant id="participant_ai" name="AI Office" processRef="process_ai"/>
+   </collaboration>
+
+   <process id="process_ms" isClosed="false" isExecutable="false" name="Member States" processType="None">
+      <laneSet id="laneset_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>ms_start</flowNodeRef>
+            <flowNodeRef>ms_t1</flowNodeRef>
+            <flowNodeRef>ms_t2</flowNodeRef>
+            <flowNodeRef>ms_t3</flowNodeRef>
+            <flowNodeRef>ms_t4</flowNodeRef>
+            <flowNodeRef>ms_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="ms_start" name="Start">
+         <outgoing>ms_sf1</outgoing>
+      </startEvent>
+      <task id="ms_t1" name="Provide priority access to sandboxes">
+         <incoming>ms_sf1</incoming>
+         <outgoing>ms_sf2</outgoing>
+      </task>
+      <task id="ms_t2" name="Organise specific awareness raising and training activities">
+         <incoming>ms_sf2</incoming>
+         <outgoing>ms_sf3</outgoing>
+      </task>
+      <task id="ms_t3" name="Utilise existing dedicated channels and establish new ones">
+         <incoming>ms_sf3</incoming>
+         <outgoing>ms_sf4</outgoing>
+      </task>
+      <task id="ms_t4" name="Facilitate the participation in standardisation">
+         <incoming>ms_sf4</incoming>
+         <outgoing>ms_sf5</outgoing>
+      </task>
+      <endEvent id="ms_end" name="End">
+         <incoming>ms_sf5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="ms_sf1" sourceRef="ms_start" targetRef="ms_t1"/>
+      <sequenceFlow id="ms_sf2" sourceRef="ms_t1" targetRef="ms_t2"/>
+      <sequenceFlow id="ms_sf3" sourceRef="ms_t2" targetRef="ms_t3"/>
+      <sequenceFlow id="ms_sf4" sourceRef="ms_t3" targetRef="ms_t4"/>
+      <sequenceFlow id="ms_sf5" sourceRef="ms_t4" targetRef="ms_end"/>
+   </process>
+
+   <process id="process_ai" isClosed="false" isExecutable="false" name="AI Office" processType="None">
+      <laneSet id="laneset_ai">
+         <lane id="lane_ai">
+            <flowNodeRef>ai_start</flowNodeRef>
+            <flowNodeRef>ai_t1</flowNodeRef>
+            <flowNodeRef>ai_t2</flowNodeRef>
+            <flowNodeRef>ai_t3</flowNodeRef>
+            <flowNodeRef>ai_t4</flowNodeRef>
+            <flowNodeRef>ai_end</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="ai_start" name="Start">
+         <outgoing>ai_sf1</outgoing>
+      </startEvent>
+      <task id="ai_t1" name="Provide standardised templates">
+         <incoming>ai_sf1</incoming>
+         <outgoing>ai_sf2</outgoing>
+      </task>
+      <task id="ai_t2" name="Develop and maintain a single information platform">
+         <incoming>ai_sf2</incoming>
+         <outgoing>ai_sf3</outgoing>
+      </task>
+      <task id="ai_t3" name="Organise appropriate communication campaigns">
+         <incoming>ai_sf3</incoming>
+         <outgoing>ai_sf4</outgoing>
+      </task>
+      <task id="ai_t4" name="Evaluate and promote the convergence of best practices">
+         <incoming>ai_sf4</incoming>
+         <outgoing>ai_sf5</outgoing>
+      </task>
+      <endEvent id="ai_end" name="End">
+         <incoming>ai_sf5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="ai_sf1" sourceRef="ai_start" targetRef="ai_t1"/>
+      <sequenceFlow id="ai_sf2" sourceRef="ai_t1" targetRef="ai_t2"/>
+      <sequenceFlow id="ai_sf3" sourceRef="ai_t2" targetRef="ai_t3"/>
+      <sequenceFlow id="ai_sf4" sourceRef="ai_t3" targetRef="ai_t4"/>
+      <sequenceFlow id="ai_sf5" sourceRef="ai_t4" targetRef="ai_end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collaboration_1" id="BPMNPlane_1">
+         
+         <bpmndi:BPMNShape bpmnElement="participant_ms" id="shape_participant_ms" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="900.0" x="100.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="shape_lane_ms" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="870.0" x="130.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_start" id="shape_ms_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="170.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t1" id="shape_ms_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t2" id="shape_ms_t2">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t3" id="shape_ms_t3">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t4" id="shape_ms_t4">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_end" id="shape_ms_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="850.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="ms_sf1" id="edge_ms_sf1">
+            <omgdi:waypoint x="200.0" y="200.0"/>
+            <omgdi:waypoint x="250.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_sf2" id="edge_ms_sf2">
+            <omgdi:waypoint x="350.0" y="200.0"/>
+            <omgdi:waypoint x="400.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_sf3" id="edge_ms_sf3">
+            <omgdi:waypoint x="500.0" y="200.0"/>
+            <omgdi:waypoint x="550.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_sf4" id="edge_ms_sf4">
+            <omgdi:waypoint x="650.0" y="200.0"/>
+            <omgdi:waypoint x="700.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_sf5" id="edge_ms_sf5">
+            <omgdi:waypoint x="800.0" y="200.0"/>
+            <omgdi:waypoint x="850.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="participant_ai" id="shape_participant_ai" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="900.0" x="100.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ai" id="shape_lane_ai" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="870.0" x="130.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_start" id="shape_ai_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="170.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_t1" id="shape_ai_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_t2" id="shape_ai_t2">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_t3" id="shape_ai_t3">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_t4" id="shape_ai_t4">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ai_end" id="shape_ai_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="850.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="ai_sf1" id="edge_ai_sf1">
+            <omgdi:waypoint x="200.0" y="450.0"/>
+            <omgdi:waypoint x="250.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ai_sf2" id="edge_ai_sf2">
+            <omgdi:waypoint x="350.0" y="450.0"/>
+            <omgdi:waypoint x="400.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ai_sf3" id="edge_ai_sf3">
+            <omgdi:waypoint x="500.0" y="450.0"/>
+            <omgdi:waypoint x="550.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ai_sf4" id="edge_ai_sf4">
+            <omgdi:waypoint x="650.0" y="450.0"/>
+            <omgdi:waypoint x="700.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ai_sf5" id="edge_ai_sf5">
+            <omgdi:waypoint x="800.0" y="450.0"/>
+            <omgdi:waypoint x="850.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

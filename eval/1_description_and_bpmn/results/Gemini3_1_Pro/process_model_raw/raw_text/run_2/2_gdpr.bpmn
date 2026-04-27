@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-definitions-breach"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_BreachNotification">
+      <participant id="Participant_Process" name="Personal Data Breach Notification" processRef="Process_Breach"/>
+   </collaboration>
+   <process id="Process_Breach" isClosed="false" isExecutable="true" name="Breach Notification Process">
+      <laneSet id="LaneSet_Breach">
+         <lane id="Lane_Processor" name="Processor">
+            <flowNodeRef>StartEvent_Awareness</flowNodeRef>
+            <flowNodeRef>Task_NotifyController</flowNodeRef>
+         </lane>
+         <lane id="Lane_Controller" name="Controller">
+            <flowNodeRef>Task_NotifySA</flowNodeRef>
+            <flowNodeRef>Task_DocumentBreach</flowNodeRef>
+            <flowNodeRef>Task_CommunicateDS</flowNodeRef>
+            <flowNodeRef>EndEvent_Controller</flowNodeRef>
+         </lane>
+         <lane id="Lane_SupervisoryAuthority" name="Supervisory Authority">
+            <flowNodeRef>Task_VerifyCompliance</flowNodeRef>
+            <flowNodeRef>EndEvent_SA</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_Awareness" name="Become aware of breach">
+         <outgoing>Flow_StartToNotifyCtrl</outgoing>
+      </startEvent>
+      <task id="Task_NotifyController" name="notify the controller">
+         <incoming>Flow_StartToNotifyCtrl</incoming>
+         <outgoing>Flow_NotifyCtrlToNotifySA</outgoing>
+      </task>
+      <task id="Task_NotifySA" name="notify the personal data breach to the supervisory authority">
+         <incoming>Flow_NotifyCtrlToNotifySA</incoming>
+         <outgoing>Flow_NotifySAToDocument</outgoing>
+      </task>
+      <task id="Task_DocumentBreach" name="document any personal data breaches">
+         <incoming>Flow_NotifySAToDocument</incoming>
+         <outgoing>Flow_DocumentToCommunicate</outgoing>
+         <outgoing>Flow_DocumentToVerify</outgoing>
+      </task>
+      <task id="Task_CommunicateDS" name="communicate the personal data breach to the data subject">
+         <incoming>Flow_DocumentToCommunicate</incoming>
+         <outgoing>Flow_CommunicateToEnd</outgoing>
+      </task>
+      <endEvent id="EndEvent_Controller" name="End (Controller)">
+         <incoming>Flow_CommunicateToEnd</incoming>
+      </endEvent>
+      <task id="Task_VerifyCompliance" name="verify compliance">
+         <incoming>Flow_DocumentToVerify</incoming>
+         <outgoing>Flow_VerifyToEnd</outgoing>
+      </task>
+      <endEvent id="EndEvent_SA" name="End (SA)">
+         <incoming>Flow_VerifyToEnd</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_StartToNotifyCtrl" sourceRef="StartEvent_Awareness" targetRef="Task_NotifyController"/>
+      <sequenceFlow id="Flow_NotifyCtrlToNotifySA" sourceRef="Task_NotifyController" targetRef="Task_NotifySA"/>
+      <sequenceFlow id="Flow_NotifySAToDocument" sourceRef="Task_NotifySA" targetRef="Task_DocumentBreach"/>
+      <sequenceFlow id="Flow_DocumentToCommunicate" sourceRef="Task_DocumentBreach" targetRef="Task_CommunicateDS"/>
+      <sequenceFlow id="Flow_CommunicateToEnd" sourceRef="Task_CommunicateDS" targetRef="EndEvent_Controller"/>
+      <sequenceFlow id="Flow_DocumentToVerify" sourceRef="Task_DocumentBreach" targetRef="Task_VerifyCompliance"/>
+      <sequenceFlow id="Flow_VerifyToEnd" sourceRef="Task_VerifyCompliance" targetRef="EndEvent_SA"/>
+   </process>
+   <bpmndi:BPMNDiagram id="BPMNDiagram_BreachNotification">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_BreachNotification" id="BPMNPlane_BreachNotification">
+         <bpmndi:BPMNShape bpmnElement="Participant_Process" id="Participant_Process_gui" isHorizontal="true">
+            <omgdc:Bounds height="450.0" width="900.0" x="30.0" y="30.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Processor" id="Lane_Processor_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="870.0" x="60.0" y="30.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Controller" id="Lane_Controller_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="870.0" x="60.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_SupervisoryAuthority" id="Lane_SupervisoryAuthority_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="870.0" x="60.0" y="330.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Awareness" id="StartEvent_Awareness_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="90.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="80.0" x="75.0" y="125.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_NotifyController" id="Task_NotifyController_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="65.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_NotifySA" id="Task_NotifySA_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DocumentBreach" id="Task_DocumentBreach_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_CommunicateDS" id="Task_CommunicateDS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller" id="EndEvent_Controller_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="780.0" y="240.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="80.0" x="755.0" y="275.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_VerifyCompliance" id="Task_VerifyCompliance_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="365.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_SA" id="EndEvent_SA_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="630.0" y="390.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="45.0" x="622.0" y="425.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="Flow_StartToNotifyCtrl" id="Flow_StartToNotifyCtrl_gui">
+            <omgdi:waypoint x="130.0" y="105.0"/>
+            <omgdi:waypoint x="180.0" y="105.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_NotifyCtrlToNotifySA" id="Flow_NotifyCtrlToNotifySA_gui">
+            <omgdi:waypoint x="280.0" y="105.0"/>
+            <omgdi:waypoint x="305.0" y="105.0"/>
+            <omgdi:waypoint x="305.0" y="255.0"/>
+            <omgdi:waypoint x="330.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_NotifySAToDocument" id="Flow_NotifySAToDocument_gui">
+            <omgdi:waypoint x="430.0" y="255.0"/>
+            <omgdi:waypoint x="480.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_DocumentToCommunicate" id="Flow_DocumentToCommunicate_gui">
+            <omgdi:waypoint x="580.0" y="255.0"/>
+            <omgdi:waypoint x="630.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_CommunicateToEnd" id="Flow_CommunicateToEnd_gui">
+            <omgdi:waypoint x="730.0" y="255.0"/>
+            <omgdi:waypoint x="780.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_DocumentToVerify" id="Flow_DocumentToVerify_gui">
+            <omgdi:waypoint x="530.0" y="295.0"/>
+            <omgdi:waypoint x="530.0" y="365.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_VerifyToEnd" id="Flow_VerifyToEnd_gui">
+            <omgdi:waypoint x="580.0" y="405.0"/>
+            <omgdi:waypoint x="630.0" y="405.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

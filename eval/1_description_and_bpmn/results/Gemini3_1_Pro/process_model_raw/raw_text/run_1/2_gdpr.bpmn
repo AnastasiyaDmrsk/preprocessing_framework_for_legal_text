@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             id="sid-gdpr-breach-notification"
+             targetNamespace="http://example.com/bpmn">
+
+    <collaboration id="Collaboration_1">
+        <participant id="Participant_Controller" name="Controller" processRef="Process_Controller" />
+        <participant id="Participant_Processor" name="Processor" processRef="Process_Processor" />
+        <participant id="Participant_SA" name="Supervisory Authority" processRef="Process_SA" />
+        <participant id="Participant_DS" name="Data Subject" processRef="Process_DS" />
+        <messageFlow id="Flow_Msg_1" sourceRef="Task_Proc_Notify" targetRef="Start_Ctrl" />
+        <messageFlow id="Flow_Msg_2" sourceRef="Task_Ctrl_Notify_SA" targetRef="Start_SA" />
+        <messageFlow id="Flow_Msg_3" sourceRef="Task_Ctrl_Comm_DS" targetRef="Start_DS" />
+        <messageFlow id="Flow_Msg_4" sourceRef="Task_SA_Require" targetRef="Task_Ctrl_Comm_DS" />
+    </collaboration>
+
+    <process id="Process_Processor" isExecutable="false">
+        <startEvent id="Start_Proc" name="Aware of breach">
+            <outgoing>Flow_Proc_1</outgoing>
+        </startEvent>
+        <task id="Task_Proc_Notify" name="Notify controller">
+            <incoming>Flow_Proc_1</incoming>
+            <outgoing>Flow_Proc_2</outgoing>
+        </task>
+        <endEvent id="End_Proc" name="End">
+            <incoming>Flow_Proc_2</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_Proc_1" sourceRef="Start_Proc" targetRef="Task_Proc_Notify" />
+        <sequenceFlow id="Flow_Proc_2" sourceRef="Task_Proc_Notify" targetRef="End_Proc" />
+    </process>
+
+    <process id="Process_Controller" isExecutable="false">
+        <startEvent id="Start_Ctrl" name="Breach detected / Notified">
+            <outgoing>Flow_Ctrl_1</outgoing>
+        </startEvent>
+        <task id="Task_Ctrl_Notify_SA" name="Notify supervisory authority">
+            <incoming>Flow_Ctrl_1</incoming>
+            <outgoing>Flow_Ctrl_2</outgoing>
+        </task>
+        <task id="Task_Ctrl_Doc" name="Document breach">
+            <incoming>Flow_Ctrl_2</incoming>
+            <outgoing>Flow_Ctrl_3</outgoing>
+        </task>
+        <task id="Task_Ctrl_Comm_DS" name="Communicate to data subject">
+            <incoming>Flow_Ctrl_3</incoming>
+            <outgoing>Flow_Ctrl_4</outgoing>
+        </task>
+        <endEvent id="End_Ctrl" name="End">
+            <incoming>Flow_Ctrl_4</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_Ctrl_1" sourceRef="Start_Ctrl" targetRef="Task_Ctrl_Notify_SA" />
+        <sequenceFlow id="Flow_Ctrl_2" sourceRef="Task_Ctrl_Notify_SA" targetRef="Task_Ctrl_Doc" />
+        <sequenceFlow id="Flow_Ctrl_3" sourceRef="Task_Ctrl_Doc" targetRef="Task_Ctrl_Comm_DS" />
+        <sequenceFlow id="Flow_Ctrl_4" sourceRef="Task_Ctrl_Comm_DS" targetRef="End_Ctrl" />
+    </process>
+
+    <process id="Process_SA" isExecutable="false">
+        <startEvent id="Start_SA" name="Receive notification">
+            <outgoing>Flow_SA_1</outgoing>
+        </startEvent>
+        <task id="Task_SA_Verify" name="Verify compliance">
+            <incoming>Flow_SA_1</incoming>
+            <outgoing>Flow_SA_2</outgoing>
+        </task>
+        <task id="Task_SA_Require" name="Require communication">
+            <incoming>Flow_SA_2</incoming>
+            <outgoing>Flow_SA_3</outgoing>
+        </task>
+        <endEvent id="End_SA" name="End">
+            <incoming>Flow_SA_3</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_SA_1" sourceRef="Start_SA" targetRef="Task_SA_Verify" />
+        <sequenceFlow id="Flow_SA_2" sourceRef="Task_SA_Verify" targetRef="Task_SA_Require" />
+        <sequenceFlow id="Flow_SA_3" sourceRef="Task_SA_Require" targetRef="End_SA" />
+    </process>
+
+    <process id="Process_DS" isExecutable="false">
+        <startEvent id="Start_DS" name="Receive communication">
+            <outgoing>Flow_DS_1</outgoing>
+        </startEvent>
+        <task id="Task_DS_Process" name="Receive details">
+            <incoming>Flow_DS_1</incoming>
+            <outgoing>Flow_DS_2</outgoing>
+        </task>
+        <endEvent id="End_DS" name="End">
+            <incoming>Flow_DS_2</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_DS_1" sourceRef="Start_DS" targetRef="Task_DS_Process" />
+        <sequenceFlow id="Flow_DS_2" sourceRef="Task_DS_Process" targetRef="End_DS" />
+    </process>
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+            <bpmndi:BPMNShape id="Shape_Participant_Processor" bpmnElement="Participant_Processor" isHorizontal="true">
+                <omgdc:Bounds x="100" y="50" width="800" height="150" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Participant_Controller" bpmnElement="Participant_Controller" isHorizontal="true">
+                <omgdc:Bounds x="100" y="250" width="800" height="150" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Participant_SA" bpmnElement="Participant_SA" isHorizontal="true">
+                <omgdc:Bounds x="100" y="450" width="800" height="150" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Participant_DS" bpmnElement="Participant_DS" isHorizontal="true">
+                <omgdc:Bounds x="100" y="650" width="800" height="150" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_Proc" bpmnElement="Start_Proc">
+                <omgdc:Bounds x="150" y="110" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_Proc_Notify" bpmnElement="Task_Proc_Notify">
+                <omgdc:Bounds x="230" y="85" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_Proc" bpmnElement="End_Proc">
+                <omgdc:Bounds x="380" y="110" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_Ctrl" bpmnElement="Start_Ctrl">
+                <omgdc:Bounds x="150" y="310" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_Ctrl_Notify_SA" bpmnElement="Task_Ctrl_Notify_SA">
+                <omgdc:Bounds x="230" y="285" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_Ctrl_Doc" bpmnElement="Task_Ctrl_Doc">
+                <omgdc:Bounds x="380" y="285" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_Ctrl_Comm_DS" bpmnElement="Task_Ctrl_Comm_DS">
+                <omgdc:Bounds x="530" y="285" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_Ctrl" bpmnElement="End_Ctrl">
+                <omgdc:Bounds x="680" y="310" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_SA" bpmnElement="Start_SA">
+                <omgdc:Bounds x="265" y="510" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_SA_Verify" bpmnElement="Task_SA_Verify">
+                <omgdc:Bounds x="380" y="485" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_SA_Require" bpmnElement="Task_SA_Require">
+                <omgdc:Bounds x="530" y="485" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_SA" bpmnElement="End_SA">
+                <omgdc:Bounds x="680" y="510" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_DS" bpmnElement="Start_DS">
+                <omgdc:Bounds x="565" y="710" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_DS_Process" bpmnElement="Task_DS_Process">
+                <omgdc:Bounds x="650" y="685" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_DS" bpmnElement="End_DS">
+                <omgdc:Bounds x="800" y="710" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_Proc_1" bpmnElement="Flow_Proc_1">
+                <omgdi:waypoint x="180" y="125" />
+                <omgdi:waypoint x="230" y="125" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Proc_2" bpmnElement="Flow_Proc_2">
+                <omgdi:waypoint x="330" y="125" />
+                <omgdi:waypoint x="380" y="125" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_Ctrl_1" bpmnElement="Flow_Ctrl_1">
+                <omgdi:waypoint x="180" y="325" />
+                <omgdi:waypoint x="230" y="325" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Ctrl_2" bpmnElement="Flow_Ctrl_2">
+                <omgdi:waypoint x="330" y="325" />
+                <omgdi:waypoint x="380" y="325" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Ctrl_3" bpmnElement="Flow_Ctrl_3">
+                <omgdi:waypoint x="480" y="325" />
+                <omgdi:waypoint x="530" y="325" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Ctrl_4" bpmnElement="Flow_Ctrl_4">
+                <omgdi:waypoint x="630" y="325" />
+                <omgdi:waypoint x="680" y="325" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_SA_1" bpmnElement="Flow_SA_1">
+                <omgdi:waypoint x="295" y="525" />
+                <omgdi:waypoint x="380" y="525" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_SA_2" bpmnElement="Flow_SA_2">
+                <omgdi:waypoint x="480" y="525" />
+                <omgdi:waypoint x="530" y="525" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_SA_3" bpmnElement="Flow_SA_3">
+                <omgdi:waypoint x="630" y="525" />
+                <omgdi:waypoint x="680" y="525" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_DS_1" bpmnElement="Flow_DS_1">
+                <omgdi:waypoint x="595" y="725" />
+                <omgdi:waypoint x="650" y="725" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_DS_2" bpmnElement="Flow_DS_2">
+                <omgdi:waypoint x="750" y="725" />
+                <omgdi:waypoint x="800" y="725" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_Msg_1" bpmnElement="Flow_Msg_1">
+                <omgdi:waypoint x="280" y="165" />
+                <omgdi:waypoint x="280" y="240" />
+                <omgdi:waypoint x="165" y="240" />
+                <omgdi:waypoint x="165" y="310" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Msg_2" bpmnElement="Flow_Msg_2">
+                <omgdi:waypoint x="280" y="365" />
+                <omgdi:waypoint x="280" y="510" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Msg_3" bpmnElement="Flow_Msg_3">
+                <omgdi:waypoint x="580" y="365" />
+                <omgdi:waypoint x="580" y="710" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_Msg_4" bpmnElement="Flow_Msg_4">
+                <omgdi:waypoint x="580" y="485" />
+                <omgdi:waypoint x="580" y="365" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

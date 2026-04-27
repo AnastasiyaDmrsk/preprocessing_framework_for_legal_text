@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd"
+             id="Definitions_Article22">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Entity" name="Entity / Trusted Flagger" processRef="Process_Entity" />
+      <participant id="Participant_DSC" name="Digital Services Coordinator" processRef="Process_DSC" />
+      <participant id="Participant_Provider" name="Provider of online platforms" processRef="Process_Provider" />
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+
+      <messageFlow id="MessageFlow_1" sourceRef="e_apply" targetRef="dsc_award" />
+      <messageFlow id="MessageFlow_2" sourceRef="dsc_communicate" targetRef="c_publish" />
+      <messageFlow id="MessageFlow_3" sourceRef="p_communicate" targetRef="dsc_investigate" />
+      <messageFlow id="MessageFlow_4" sourceRef="dsc_afford" targetRef="e_react" />
+      <messageFlow id="MessageFlow_5" sourceRef="e_react" targetRef="dsc_revoke" />
+   </collaboration>
+
+   <process id="Process_Entity" isClosed="false" isExecutable="false" name="Entity / Trusted Flagger" processType="None">
+      <startEvent id="e_start" name="Start">
+         <outgoing>e_seq_1</outgoing>
+      </startEvent>
+      <task id="e_apply" name="apply for status">
+         <incoming>e_seq_1</incoming>
+         <outgoing>e_seq_2</outgoing>
+      </task>
+      <task id="e_publish" name="publish reports">
+         <incoming>e_seq_2</incoming>
+         <outgoing>e_seq_3</outgoing>
+      </task>
+      <task id="e_send" name="send reports">
+         <incoming>e_seq_3</incoming>
+         <outgoing>e_seq_4</outgoing>
+      </task>
+      <task id="e_react" name="react to findings">
+         <incoming>e_seq_4</incoming>
+         <outgoing>e_seq_5</outgoing>
+      </task>
+      <endEvent id="e_end" name="End">
+         <incoming>e_seq_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="e_seq_1" sourceRef="e_start" targetRef="e_apply" />
+      <sequenceFlow id="e_seq_2" sourceRef="e_apply" targetRef="e_publish" />
+      <sequenceFlow id="e_seq_3" sourceRef="e_publish" targetRef="e_send" />
+      <sequenceFlow id="e_seq_4" sourceRef="e_send" targetRef="e_react" />
+      <sequenceFlow id="e_seq_5" sourceRef="e_react" targetRef="e_end" />
+   </process>
+
+   <process id="Process_DSC" isClosed="false" isExecutable="false" name="Digital Services Coordinator" processType="None">
+      <startEvent id="dsc_start" name="Start">
+         <outgoing>dsc_seq_1</outgoing>
+      </startEvent>
+      <task id="dsc_award" name="award trusted flagger status">
+         <incoming>dsc_seq_1</incoming>
+         <outgoing>dsc_seq_2</outgoing>
+      </task>
+      <task id="dsc_communicate" name="communicate names to Commission">
+         <incoming>dsc_seq_2</incoming>
+         <outgoing>dsc_seq_3</outgoing>
+      </task>
+      <task id="dsc_investigate" name="open an investigation">
+         <incoming>dsc_seq_3</incoming>
+         <outgoing>dsc_seq_4</outgoing>
+      </task>
+      <task id="dsc_suspend" name="suspend status">
+         <incoming>dsc_seq_4</incoming>
+         <outgoing>dsc_seq_5</outgoing>
+      </task>
+      <task id="dsc_afford" name="afford opportunity to react">
+         <incoming>dsc_seq_5</incoming>
+         <outgoing>dsc_seq_6</outgoing>
+      </task>
+      <task id="dsc_revoke" name="revoke status">
+         <incoming>dsc_seq_6</incoming>
+         <outgoing>dsc_seq_7</outgoing>
+      </task>
+      <endEvent id="dsc_end" name="End">
+         <incoming>dsc_seq_7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="dsc_seq_1" sourceRef="dsc_start" targetRef="dsc_award" />
+      <sequenceFlow id="dsc_seq_2" sourceRef="dsc_award" targetRef="dsc_communicate" />
+      <sequenceFlow id="dsc_seq_3" sourceRef="dsc_communicate" targetRef="dsc_investigate" />
+      <sequenceFlow id="dsc_seq_4" sourceRef="dsc_investigate" targetRef="dsc_suspend" />
+      <sequenceFlow id="dsc_seq_5" sourceRef="dsc_suspend" targetRef="dsc_afford" />
+      <sequenceFlow id="dsc_seq_6" sourceRef="dsc_afford" targetRef="dsc_revoke" />
+      <sequenceFlow id="dsc_seq_7" sourceRef="dsc_revoke" targetRef="dsc_end" />
+   </process>
+
+   <process id="Process_Provider" isClosed="false" isExecutable="false" name="Provider of online platforms" processType="None">
+      <startEvent id="p_start" name="Start">
+         <outgoing>p_seq_1</outgoing>
+      </startEvent>
+      <task id="p_take" name="take technical and organisational measures">
+         <incoming>p_seq_1</incoming>
+         <outgoing>p_seq_2</outgoing>
+      </task>
+      <task id="p_communicate" name="communicate information about inaccurate notices">
+         <incoming>p_seq_2</incoming>
+         <outgoing>p_seq_3</outgoing>
+      </task>
+      <endEvent id="p_end" name="End">
+         <incoming>p_seq_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="p_seq_1" sourceRef="p_start" targetRef="p_take" />
+      <sequenceFlow id="p_seq_2" sourceRef="p_take" targetRef="p_communicate" />
+      <sequenceFlow id="p_seq_3" sourceRef="p_communicate" targetRef="p_end" />
+   </process>
+
+   <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="c_start" name="Start">
+         <outgoing>c_seq_1</outgoing>
+      </startEvent>
+      <task id="c_issue" name="issue guidelines">
+         <incoming>c_seq_1</incoming>
+         <outgoing>c_seq_2</outgoing>
+      </task>
+      <task id="c_publish" name="publish information">
+         <incoming>c_seq_2</incoming>
+         <outgoing>c_seq_3</outgoing>
+      </task>
+      <endEvent id="c_end" name="End">
+         <incoming>c_seq_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="c_seq_1" sourceRef="c_start" targetRef="c_issue" />
+      <sequenceFlow id="c_seq_2" sourceRef="c_issue" targetRef="c_publish" />
+      <sequenceFlow id="c_seq_3" sourceRef="c_publish" targetRef="c_end" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+         <bpmndi:BPMNShape bpmnElement="Participant_Entity" id="Participant_Entity_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1700.0" x="100.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_DSC" id="Participant_DSC_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1700.0" x="100.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Provider" id="Participant_Provider_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1700.0" x="100.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Commission" id="Participant_Commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1700.0" x="100.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="e_start" id="e_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_apply" id="e_apply_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_publish" id="e_publish_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_send" id="e_send_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_react" id="e_react_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_end" id="e_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1600.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="dsc_start" id="dsc_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_award" id="dsc_award_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_communicate" id="dsc_communicate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_investigate" id="dsc_investigate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_suspend" id="dsc_suspend_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_afford" id="dsc_afford_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_revoke" id="dsc_revoke_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_end" id="dsc_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1700.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="p_start" id="p_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="580.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_take" id="p_take_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_communicate" id="p_communicate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_end" id="p_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1000.0" y="580.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="c_start" id="c_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="780.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_issue" id="c_issue_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_publish" id="c_publish_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_end" id="c_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="850.0" y="780.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="e_seq_1" id="e_seq_1_gui">
+            <omgdi:waypoint x="180.0" y="195.0"/>
+            <omgdi:waypoint x="200.0" y="190.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_seq_2" id="e_seq_2_gui">
+            <omgdi:waypoint x="300.0" y="190.0"/>
+            <omgdi:waypoint x="650.0" y="190.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_seq_3" id="e_seq_3_gui">
+            <omgdi:waypoint x="750.0" y="190.0"/>
+            <omgdi:waypoint x="800.0" y="190.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_seq_4" id="e_seq_4_gui">
+            <omgdi:waypoint x="900.0" y="190.0"/>
+            <omgdi:waypoint x="1400.0" y="190.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_seq_5" id="e_seq_5_gui">
+            <omgdi:waypoint x="1500.0" y="190.0"/>
+            <omgdi:waypoint x="1600.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_1" id="dsc_seq_1_gui">
+            <omgdi:waypoint x="180.0" y="395.0"/>
+            <omgdi:waypoint x="350.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_2" id="dsc_seq_2_gui">
+            <omgdi:waypoint x="450.0" y="390.0"/>
+            <omgdi:waypoint x="500.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_3" id="dsc_seq_3_gui">
+            <omgdi:waypoint x="600.0" y="390.0"/>
+            <omgdi:waypoint x="950.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_4" id="dsc_seq_4_gui">
+            <omgdi:waypoint x="1050.0" y="390.0"/>
+            <omgdi:waypoint x="1100.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_5" id="dsc_seq_5_gui">
+            <omgdi:waypoint x="1200.0" y="390.0"/>
+            <omgdi:waypoint x="1250.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_6" id="dsc_seq_6_gui">
+            <omgdi:waypoint x="1350.0" y="390.0"/>
+            <omgdi:waypoint x="1550.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="dsc_seq_7" id="dsc_seq_7_gui">
+            <omgdi:waypoint x="1650.0" y="390.0"/>
+            <omgdi:waypoint x="1700.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="p_seq_1" id="p_seq_1_gui">
+            <omgdi:waypoint x="180.0" y="595.0"/>
+            <omgdi:waypoint x="200.0" y="590.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="p_seq_2" id="p_seq_2_gui">
+            <omgdi:waypoint x="300.0" y="590.0"/>
+            <omgdi:waypoint x="800.0" y="590.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="p_seq_3" id="p_seq_3_gui">
+            <omgdi:waypoint x="900.0" y="590.0"/>
+            <omgdi:waypoint x="1000.0" y="595.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="c_seq_1" id="c_seq_1_gui">
+            <omgdi:waypoint x="180.0" y="795.0"/>
+            <omgdi:waypoint x="200.0" y="790.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_seq_2" id="c_seq_2_gui">
+            <omgdi:waypoint x="300.0" y="790.0"/>
+            <omgdi:waypoint x="650.0" y="790.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_seq_3" id="c_seq_3_gui">
+            <omgdi:waypoint x="750.0" y="790.0"/>
+            <omgdi:waypoint x="850.0" y="795.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_1" id="MessageFlow_1_gui">
+            <omgdi:waypoint x="250.0" y="230.0"/>
+            <omgdi:waypoint x="400.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_2" id="MessageFlow_2_gui">
+            <omgdi:waypoint x="550.0" y="430.0"/>
+            <omgdi:waypoint x="700.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_3" id="MessageFlow_3_gui">
+            <omgdi:waypoint x="850.0" y="550.0"/>
+            <omgdi:waypoint x="1000.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_4" id="MessageFlow_4_gui">
+            <omgdi:waypoint x="1300.0" y="350.0"/>
+            <omgdi:waypoint x="1450.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_5" id="MessageFlow_5_gui">
+            <omgdi:waypoint x="1450.0" y="230.0"/>
+            <omgdi:waypoint x="1600.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
