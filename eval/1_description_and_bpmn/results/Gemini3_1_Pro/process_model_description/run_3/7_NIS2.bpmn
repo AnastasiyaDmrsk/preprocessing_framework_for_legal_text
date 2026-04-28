@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-definitions" targetNamespace="http://www.signavio.com">
+   <collaboration id="col1">
+      <participant id="p_ms" name="Member States" processRef="proc_ms" />
+      <participant id="p_eie" name="Essential and important entities" processRef="proc_eie" />
+      <participant id="p_ca" name="Competent authority" processRef="proc_ca" />
+      <participant id="p_csirt" name="CSIRT" processRef="proc_csirt" />
+      <participant id="p_spoc" name="Single point of contact" processRef="proc_spoc" />
+      <participant id="p_enisa" name="ENISA" processRef="proc_enisa" />
+      <participant id="p_com" name="Commission" processRef="proc_com" />
+   </collaboration>
+
+   <process id="proc_ms" isExecutable="false" processType="None">
+      <startEvent id="s_ms" name="Significant incident" />
+      <parallelGateway id="g_ms_s1" />
+      <task id="t_ms_1" name="ensure essential/important entities notify CSIRT or competent authority" />
+      <task id="t_ms_2" name="ensure essential/important entities report info enabling cross-border impact determination" />
+      <task id="t_ms_3" name="ensure competent authority forwards notification to CSIRT" />
+      <task id="t_ms_4" name="ensure single points of contact provided relevant information" />
+      <task id="t_ms_5" name="ensure entities communicate measures/remedies to recipients" />
+      <task id="t_ms_6" name="ensure entities submit early warning" />
+      <task id="t_ms_7" name="ensure entities submit incident notification" />
+      <task id="t_ms_8" name="ensure entities submit intermediate report" />
+      <task id="t_ms_9" name="ensure entities submit final report within 1 month" />
+      <task id="t_ms_10" name="ensure entities provide progress report" />
+      <task id="t_ms_11" name="ensure entities provide final report (ongoing)" />
+      <parallelGateway id="g_ms_j1" />
+      <task id="t_ms_12" name="ensure mere act of notification does not subject entity to increased liability" />
+      <endEvent id="e_ms" name="reporting obligations established" />
+
+      <sequenceFlow id="f_ms_1" sourceRef="s_ms" targetRef="g_ms_s1" />
+      <sequenceFlow id="f_ms_2" sourceRef="g_ms_s1" targetRef="t_ms_1" />
+      <sequenceFlow id="f_ms_3" sourceRef="g_ms_s1" targetRef="t_ms_2" />
+      <sequenceFlow id="f_ms_4" sourceRef="g_ms_s1" targetRef="t_ms_3" />
+      <sequenceFlow id="f_ms_5" sourceRef="g_ms_s1" targetRef="t_ms_4" />
+      <sequenceFlow id="f_ms_6" sourceRef="g_ms_s1" targetRef="t_ms_5" />
+      <sequenceFlow id="f_ms_7" sourceRef="g_ms_s1" targetRef="t_ms_6" />
+      <sequenceFlow id="f_ms_8" sourceRef="g_ms_s1" targetRef="t_ms_7" />
+      <sequenceFlow id="f_ms_9" sourceRef="g_ms_s1" targetRef="t_ms_8" />
+      <sequenceFlow id="f_ms_10" sourceRef="g_ms_s1" targetRef="t_ms_9" />
+      <sequenceFlow id="f_ms_11" sourceRef="g_ms_s1" targetRef="t_ms_10" />
+      <sequenceFlow id="f_ms_12" sourceRef="g_ms_s1" targetRef="t_ms_11" />
+      <sequenceFlow id="f_ms_13" sourceRef="t_ms_1" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_14" sourceRef="t_ms_2" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_15" sourceRef="t_ms_3" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_16" sourceRef="t_ms_4" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_17" sourceRef="t_ms_5" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_18" sourceRef="t_ms_6" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_19" sourceRef="t_ms_7" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_20" sourceRef="t_ms_8" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_21" sourceRef="t_ms_9" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_22" sourceRef="t_ms_10" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_23" sourceRef="t_ms_11" targetRef="g_ms_j1" />
+      <sequenceFlow id="f_ms_24" sourceRef="g_ms_j1" targetRef="t_ms_12" />
+      <sequenceFlow id="f_ms_25" sourceRef="t_ms_12" targetRef="e_ms" />
+   </process>
+
+   <process id="proc_eie" isExecutable="false" processType="None">
+      <startEvent id="s_eie" name="Significant incident" />
+      <task id="t_eie_1" name="assess whether incident caused severe operational disruption/loss/damage" />
+      <exclusiveGateway id="g_eie_ex1_s" name="If caused disruption?" />
+      <task id="t_eie_2" name="consider incident to be significant" />
+      <exclusiveGateway id="g_eie_ex1_j" />
+      <task id="t_eie_3" name="send notification of significant incident to CSIRT/CA" />
+      <task id="t_eie_4" name="report info enabling determination of cross-border impact" />
+      <task id="t_eie_5" name="assess whether appropriate to notify recipients" />
+      <exclusiveGateway id="g_eie_ex2_s" name="If appropriate?" />
+      <task id="t_eie_6" name="notify recipients of significant incidents" />
+      <exclusiveGateway id="g_eie_ex2_j" />
+      <task id="t_eie_7" name="communicate measures/remedies to recipients" />
+      <task id="t_eie_8" name="assess whether appropriate to inform recipients of threat itself" />
+      <exclusiveGateway id="g_eie_ex3_s" name="If appropriate?" />
+      <task id="t_eie_9" name="inform recipients of threat itself" />
+      <exclusiveGateway id="g_eie_ex3_j" />
+      <task id="t_eie_10" name="send early warning" />
+      <task id="t_eie_11" name="indicate suspected unlawful/malicious acts or cross-border impact" />
+      <task id="t_eie_12" name="assess whether trust service provider" />
+      <exclusiveGateway id="g_eie_ex4_s" name="If trust service provider?" />
+      <task id="t_eie_13" name="send incident notification (within 24h)" />
+      <task id="t_eie_14" name="send incident notification (within 72h)" />
+      <exclusiveGateway id="g_eie_ex4_j" />
+      <parallelGateway id="g_eie_p1_s" />
+      <task id="t_eie_15" name="update info in incident notification" />
+      <task id="t_eie_16" name="indicate initial assessment" />
+      <task id="t_eie_17" name="indicate severity and impact" />
+      <task id="t_eie_18" name="indicate indicators of compromise" />
+      <parallelGateway id="g_eie_p1_j" />
+      <task id="t_eie_19" name="send intermediate report upon request" />
+      <task id="t_eie_20" name="send final report within one month" />
+      <parallelGateway id="g_eie_p2_s" />
+      <task id="t_eie_21" name="include detailed description" />
+      <task id="t_eie_22" name="include type of threat/root cause" />
+      <task id="t_eie_23" name="include mitigation measures" />
+      <task id="t_eie_24" name="include cross-border impact" />
+      <parallelGateway id="g_eie_p2_j" />
+      <task id="t_eie_25" name="assess ongoing incident" />
+      <exclusiveGateway id="g_eie_ex5_s" name="If ongoing?" />
+      <task id="t_eie_26" name="send progress report" />
+      <task id="t_eie_27" name="send final report within 1 month of handling" />
+      <exclusiveGateway id="g_eie_ex5_j" />
+      <task id="t_eie_28" name="inform public upon requirement" />
+      <endEvent id="e_eie" name="reporting completed" />
+
+      <sequenceFlow id="f_eie_1" sourceRef="s_eie" targetRef="t_eie_1" />
+      <sequenceFlow id="f_eie_2" sourceRef="t_eie_1" targetRef="g_eie_ex1_s" />
+      <sequenceFlow id="f_eie_3" sourceRef="g_eie_ex1_s" targetRef="t_eie_2" />
+      <sequenceFlow id="f_eie_4" sourceRef="g_eie_ex1_s" targetRef="g_eie_ex1_j" />
+      <sequenceFlow id="f_eie_5" sourceRef="t_eie_2" targetRef="g_eie_ex1_j" />
+      <sequenceFlow id="f_eie_6" sourceRef="g_eie_ex1_j" targetRef="t_eie_3" />
+      <sequenceFlow id="f_eie_7" sourceRef="t_eie_3" targetRef="t_eie_4" />
+      <sequenceFlow id="f_eie_8" sourceRef="t_eie_4" targetRef="t_eie_5" />
+      <sequenceFlow id="f_eie_9" sourceRef="t_eie_5" targetRef="g_eie_ex2_s" />
+      <sequenceFlow id="f_eie_10" sourceRef="g_eie_ex2_s" targetRef="t_eie_6" />
+      <sequenceFlow id="f_eie_11" sourceRef="g_eie_ex2_s" targetRef="g_eie_ex2_j" />
+      <sequenceFlow id="f_eie_12" sourceRef="t_eie_6" targetRef="g_eie_ex2_j" />
+      <sequenceFlow id="f_eie_13" sourceRef="g_eie_ex2_j" targetRef="t_eie_7" />
+      <sequenceFlow id="f_eie_14" sourceRef="t_eie_7" targetRef="t_eie_8" />
+      <sequenceFlow id="f_eie_15" sourceRef="t_eie_8" targetRef="g_eie_ex3_s" />
+      <sequenceFlow id="f_eie_16" sourceRef="g_eie_ex3_s" targetRef="t_eie_9" />
+      <sequenceFlow id="f_eie_17" sourceRef="g_eie_ex3_s" targetRef="g_eie_ex3_j" />
+      <sequenceFlow id="f_eie_18" sourceRef="t_eie_9" targetRef="g_eie_ex3_j" />
+      <sequenceFlow id="f_eie_19" sourceRef="g_eie_ex3_j" targetRef="t_eie_10" />
+      <sequenceFlow id="f_eie_20" sourceRef="t_eie_10" targetRef="t_eie_11" />
+      <sequenceFlow id="f_eie_21" sourceRef="t_eie_11" targetRef="t_eie_12" />
+      <sequenceFlow id="f_eie_22" sourceRef="t_eie_12" targetRef="g_eie_ex4_s" />
+      <sequenceFlow id="f_eie_23" sourceRef="g_eie_ex4_s" targetRef="t_eie_13" />
+      <sequenceFlow id="f_eie_24" sourceRef="g_eie_ex4_s" targetRef="t_eie_14" />
+      <sequenceFlow id="f_eie_25" sourceRef="t_eie_13" targetRef="g_eie_ex4_j" />
+      <sequenceFlow id="f_eie_26" sourceRef="t_eie_14" targetRef="g_eie_ex4_j" />
+      <sequenceFlow id="f_eie_27" sourceRef="g_eie_ex4_j" targetRef="g_eie_p1_s" />
+      <sequenceFlow id="f_eie_28" sourceRef="g_eie_p1_s" targetRef="t_eie_15" />
+      <sequenceFlow id="f_eie_29" sourceRef="g_eie_p1_s" targetRef="t_eie_16" />
+      <sequenceFlow id="f_eie_30" sourceRef="g_eie_p1_s" targetRef="t_eie_17" />
+      <sequenceFlow id="f_eie_31" sourceRef="g_eie_p1_s" targetRef="t_eie_18" />
+      <sequenceFlow id="f_eie_32" sourceRef="t_eie_15" targetRef="g_eie_p1_j" />
+      <sequenceFlow id="f_eie_33" sourceRef="t_eie_16" targetRef="g_eie_p1_j" />
+      <sequenceFlow id="f_eie_34" sourceRef="t_eie_17" targetRef="g_eie_p1_j" />
+      <sequenceFlow id="f_eie_35" sourceRef="t_eie_18" targetRef="g_eie_p1_j" />
+      <sequenceFlow id="f_eie_36" sourceRef="g_eie_p1_j" targetRef="t_eie_19" />
+      <sequenceFlow id="f_eie_37" sourceRef="t_eie_19" targetRef="t_eie_20" />
+      <sequenceFlow id="f_eie_38" sourceRef="t_eie_20" targetRef="g_eie_p2_s" />
+      <sequenceFlow id="f_eie_39" sourceRef="g_eie_p2_s" targetRef="t_eie_21" />
+      <sequenceFlow id="f_eie_40" sourceRef="g_eie_p2_s" targetRef="t_eie_22" />
+      <sequenceFlow id="f_eie_41" sourceRef="g_eie_p2_s" targetRef="t_eie_23" />
+      <sequenceFlow id="f_eie_42" sourceRef="g_eie_p2_s" targetRef="t_eie_24" />
+      <sequenceFlow id="f_eie_43" sourceRef="t_eie_21" targetRef="g_eie_p2_j" />
+      <sequenceFlow id="f_eie_44" sourceRef="t_eie_22" targetRef="g_eie_p2_j" />
+      <sequenceFlow id="f_eie_45" sourceRef="t_eie_23" targetRef="g_eie_p2_j" />
+      <sequenceFlow id="f_eie_46" sourceRef="t_eie_24" targetRef="g_eie_p2_j" />
+      <sequenceFlow id="f_eie_47" sourceRef="g_eie_p2_j" targetRef="t_eie_25" />
+      <sequenceFlow id="f_eie_48" sourceRef="t_eie_25" targetRef="g_eie_ex5_s" />
+      <sequenceFlow id="f_eie_49" sourceRef="g_eie_ex5_s" targetRef="t_eie_26" />
+      <sequenceFlow id="f_eie_50" sourceRef="g_eie_ex5_s" targetRef="t_eie_27" />
+      <sequenceFlow id="f_eie_51" sourceRef="g_eie_ex5_s" targetRef="g_eie_ex5_j" />
+      <sequenceFlow id="f_eie_52" sourceRef="t_eie_26" targetRef="g_eie_ex5_j" />
+      <sequenceFlow id="f_eie_53" sourceRef="t_eie_27" targetRef="g_eie_ex5_j" />
+      <sequenceFlow id="f_eie_54" sourceRef="g_eie_ex5_j" targetRef="t_eie_28" />
+      <sequenceFlow id="f_eie_55" sourceRef="t_eie_28" targetRef="e_eie" />
+   </process>
+
+   <process id="proc_ca" isExecutable="false" processType="None">
+      <startEvent id="s_ca" name="Receive notification" />
+      <task id="t_ca_1" name="send notification to CSIRT" />
+      <task id="t_ca_2" name="provide response to entity" />
+      <task id="t_ca_3" name="include initial feedback" />
+      <task id="t_ca_4" name="provide guidance or operational advice" />
+      <task id="t_ca_5" name="assess whether CSIRT not initial recipient" />
+      <exclusiveGateway id="g_ca_ex1_s" name="If CSIRT not initial?" />
+      <task id="t_ca_6" name="provide guidance in cooperation with CSIRT" />
+      <exclusiveGateway id="g_ca_ex1_j" />
+      <task id="t_ca_7" name="assess criminal nature" />
+      <exclusiveGateway id="g_ca_ex2_s" name="If criminal?" />
+      <task id="t_ca_8" name="provide guidance on reporting to law enforcement" />
+      <exclusiveGateway id="g_ca_ex2_j" />
+      <task id="t_ca_9" name="assess concerns 2+ MS or appropriate" />
+      <exclusiveGateway id="g_ca_ex3_s" name="If appropriate?" />
+      <parallelGateway id="g_ca_p1_s" />
+      <task id="t_ca_10" name="inform affected MS" />
+      <task id="t_ca_11" name="inform ENISA" />
+      <parallelGateway id="g_ca_p1_j" />
+      <exclusiveGateway id="g_ca_ex3_j" />
+      <task id="t_ca_12" name="include type of information" />
+      <task id="t_ca_13" name="preserve security/commercial interests" />
+      <task id="t_ca_14" name="assess public awareness necessity" />
+      <exclusiveGateway id="g_ca_ex4_s" name="If public awareness?" />
+      <task id="t_ca_15" name="consult entity concerned" />
+      <task id="t_ca_16" name="inform public" />
+      <task id="t_ca_17" name="send requirement to inform public" />
+      <exclusiveGateway id="g_ca_ex4_j" />
+      <task id="t_ca_18" name="send request for intermediate report" />
+      <task id="t_ca_19" name="send request to forward notifications" />
+      <task id="t_ca_20" name="provide info to competent authorities" />
+      <endEvent id="e_ca" name="incident handled" />
+
+      <sequenceFlow id="f_ca_1" sourceRef="s_ca" targetRef="t_ca_1" />
+      <sequenceFlow id="f_ca_2" sourceRef="t_ca_1" targetRef="t_ca_2" />
+      <sequenceFlow id="f_ca_3" sourceRef="t_ca_2" targetRef="t_ca_3" />
+      <sequenceFlow id="f_ca_4" sourceRef="t_ca_3" targetRef="t_ca_4" />
+      <sequenceFlow id="f_ca_5" sourceRef="t_ca_4" targetRef="t_ca_5" />
+      <sequenceFlow id="f_ca_6" sourceRef="t_ca_5" targetRef="g_ca_ex1_s" />
+      <sequenceFlow id="f_ca_7" sourceRef="g_ca_ex1_s" targetRef="t_ca_6" />
+      <sequenceFlow id="f_ca_8" sourceRef="g_ca_ex1_s" targetRef="g_ca_ex1_j" />
+      <sequenceFlow id="f_ca_9" sourceRef="t_ca_6" targetRef="g_ca_ex1_j" />
+      <sequenceFlow id="f_ca_10" sourceRef="g_ca_ex1_j" targetRef="t_ca_7" />
+      <sequenceFlow id="f_ca_11" sourceRef="t_ca_7" targetRef="g_ca_ex2_s" />
+      <sequenceFlow id="f_ca_12" sourceRef="g_ca_ex2_s" targetRef="t_ca_8" />
+      <sequenceFlow id="f_ca_13" sourceRef="g_ca_ex2_s" targetRef="g_ca_ex2_j" />
+      <sequenceFlow id="f_ca_14" sourceRef="t_ca_8" targetRef="g_ca_ex2_j" />
+      <sequenceFlow id="f_ca_15" sourceRef="g_ca_ex2_j" targetRef="t_ca_9" />
+      <sequenceFlow id="f_ca_16" sourceRef="t_ca_9" targetRef="g_ca_ex3_s" />
+      <sequenceFlow id="f_ca_17" sourceRef="g_ca_ex3_s" targetRef="g_ca_p1_s" />
+      <sequenceFlow id="f_ca_18" sourceRef="g_ca_ex3_s" targetRef="g_ca_ex3_j" />
+      <sequenceFlow id="f_ca_19" sourceRef="g_ca_p1_s" targetRef="t_ca_10" />
+      <sequenceFlow id="f_ca_20" sourceRef="g_ca_p1_s" targetRef="t_ca_11" />
+      <sequenceFlow id="f_ca_21" sourceRef="t_ca_10" targetRef="g_ca_p1_j" />
+      <sequenceFlow id="f_ca_22" sourceRef="t_ca_11" targetRef="g_ca_p1_j" />
+      <sequenceFlow id="f_ca_23" sourceRef="g_ca_p1_j" targetRef="g_ca_ex3_j" />
+      <sequenceFlow id="f_ca_24" sourceRef="g_ca_ex3_j" targetRef="t_ca_12" />
+      <sequenceFlow id="f_ca_25" sourceRef="t_ca_12" targetRef="t_ca_13" />
+      <sequenceFlow id="f_ca_26" sourceRef="t_ca_13" targetRef="t_ca_14" />
+      <sequenceFlow id="f_ca_27" sourceRef="t_ca_14" targetRef="g_ca_ex4_s" />
+      <sequenceFlow id="f_ca_28" sourceRef="g_ca_ex4_s" targetRef="t_ca_15" />
+      <sequenceFlow id="f_ca_29" sourceRef="t_ca_15" targetRef="t_ca_16" />
+      <sequenceFlow id="f_ca_30" sourceRef="t_ca_16" targetRef="t_ca_17" />
+      <sequenceFlow id="f_ca_31" sourceRef="t_ca_17" targetRef="g_ca_ex4_j" />
+      <sequenceFlow id="f_ca_32" sourceRef="g_ca_ex4_s" targetRef="g_ca_ex4_j" />
+      <sequenceFlow id="f_ca_33" sourceRef="g_ca_ex4_j" targetRef="t_ca_18" />
+      <sequenceFlow id="f_ca_34" sourceRef="t_ca_18" targetRef="t_ca_19" />
+      <sequenceFlow id="f_ca_35" sourceRef="t_ca_19" targetRef="t_ca_20" />
+      <sequenceFlow id="f_ca_36" sourceRef="t_ca_20" targetRef="e_ca" />
+   </process>
+
+   <process id="proc_csirt" isExecutable="false" processType="None">
+      <startEvent id="s_csirt" name="Receive notification/warning" />
+      <task id="t_cs_1" name="process notification" />
+      <task id="t_cs_2" name="provide response" />
+      <task id="t_cs_3" name="include initial feedback" />
+      <task id="t_cs_4" name="provide guidance or operational advice" />
+      <task id="t_cs_5" name="provide additional technical support" />
+      <task id="t_cs_6" name="assess criminal nature" />
+      <exclusiveGateway id="g_cs_ex1_s" name="If criminal?" />
+      <task id="t_cs_7" name="provide guidance on reporting" />
+      <exclusiveGateway id="g_cs_ex1_j" />
+      <task id="t_cs_8" name="assess concerns 2+ MS" />
+      <exclusiveGateway id="g_cs_ex2_s" name="If appropriate?" />
+      <parallelGateway id="g_cs_p1_s" />
+      <task id="t_cs_9" name="inform MS" />
+      <task id="t_cs_10" name="inform ENISA" />
+      <parallelGateway id="g_cs_p1_j" />
+      <exclusiveGateway id="g_cs_ex2_j" />
+      <task id="t_cs_11" name="include type of information" />
+      <task id="t_cs_12" name="preserve security" />
+      <task id="t_cs_13" name="assess public awareness" />
+      <exclusiveGateway id="g_cs_ex3_s" name="If public awareness?" />
+      <task id="t_cs_14" name="consult entity" />
+      <task id="t_cs_15" name="inform public" />
+      <task id="t_cs_16" name="send requirement to inform public" />
+      <exclusiveGateway id="g_cs_ex3_j" />
+      <task id="t_cs_17" name="send request intermediate" />
+      <task id="t_cs_18" name="send request forward" />
+      <task id="t_cs_19" name="provide info to CA" />
+      <endEvent id="e_csirt" name="incident handled" />
+
+      <sequenceFlow id="f_cs_1" sourceRef="s_csirt" targetRef="t_cs_1" />
+      <sequenceFlow id="f_cs_2" sourceRef="t_cs_1" targetRef="t_cs_2" />
+      <sequenceFlow id="f_cs_3" sourceRef="t_cs_2" targetRef="t_cs_3" />
+      <sequenceFlow id="f_cs_4" sourceRef="t_cs_3" targetRef="t_cs_4" />
+      <sequenceFlow id="f_cs_5" sourceRef="t_cs_4" targetRef="t_cs_5" />
+      <sequenceFlow id="f_cs_6" sourceRef="t_cs_5" targetRef="t_cs_6" />
+      <sequenceFlow id="f_cs_7" sourceRef="t_cs_6" targetRef="g_cs_ex1_s" />
+      <sequenceFlow id="f_cs_8" sourceRef="g_cs_ex1_s" targetRef="t_cs_7" />
+      <sequenceFlow id="f_cs_9" sourceRef="g_cs_ex1_s" targetRef="g_cs_ex1_j" />
+      <sequenceFlow id="f_cs_10" sourceRef="t_cs_7" targetRef="g_cs_ex1_j" />
+      <sequenceFlow id="f_cs_11" sourceRef="g_cs_ex1_j" targetRef="t_cs_8" />
+      <sequenceFlow id="f_cs_12" sourceRef="t_cs_8" targetRef="g_cs_ex2_s" />
+      <sequenceFlow id="f_cs_13" sourceRef="g_cs_ex2_s" targetRef="g_cs_p1_s" />
+      <sequenceFlow id="f_cs_14" sourceRef="g_cs_ex2_s" targetRef="g_cs_ex2_j" />
+      <sequenceFlow id="f_cs_15" sourceRef="g_cs_p1_s" targetRef="t_cs_9" />
+      <sequenceFlow id="f_cs_16" sourceRef="g_cs_p1_s" targetRef="t_cs_10" />
+      <sequenceFlow id="f_cs_17" sourceRef="t_cs_9" targetRef="g_cs_p1_j" />
+      <sequenceFlow id="f_cs_18" sourceRef="t_cs_10" targetRef="g_cs_p1_j" />
+      <sequenceFlow id="f_cs_19" sourceRef="g_cs_p1_j" targetRef="g_cs_ex2_j" />
+      <sequenceFlow id="f_cs_20" sourceRef="g_cs_ex2_j" targetRef="t_cs_11" />
+      <sequenceFlow id="f_cs_21" sourceRef="t_cs_11" targetRef="t_cs_12" />
+      <sequenceFlow id="f_cs_22" sourceRef="t_cs_12" targetRef="t_cs_13" />
+      <sequenceFlow id="f_cs_23" sourceRef="t_cs_13" targetRef="g_cs_ex3_s" />
+      <sequenceFlow id="f_cs_24" sourceRef="g_cs_ex3_s" targetRef="t_cs_14" />
+      <sequenceFlow id="f_cs_25" sourceRef="t_cs_14" targetRef="t_cs_15" />
+      <sequenceFlow id="f_cs_26" sourceRef="t_cs_15" targetRef="t_cs_16" />
+      <sequenceFlow id="f_cs_27" sourceRef="t_cs_16" targetRef="g_cs_ex3_j" />
+      <sequenceFlow id="f_cs_28" sourceRef="g_cs_ex3_s" targetRef="g_cs_ex3_j" />
+      <sequenceFlow id="f_cs_29" sourceRef="g_cs_ex3_j" targetRef="t_cs_17" />
+      <sequenceFlow id="f_cs_30" sourceRef="t_cs_17" targetRef="t_cs_18" />
+      <sequenceFlow id="f_cs_31" sourceRef="t_cs_18" targetRef="t_cs_19" />
+      <sequenceFlow id="f_cs_32" sourceRef="t_cs_19" targetRef="e_csirt" />
+   </process>
+
+   <process id="proc_spoc" isExecutable="false" processType="None">
+      <startEvent id="s_spoc" name="Start" />
+      <task id="t_sp_1" name="assess concerns 2+ MS" />
+      <exclusiveGateway id="g_sp_ex1_s" name="If appropriate?" />
+      <parallelGateway id="g_sp_p1_s" />
+      <task id="t_sp_2" name="inform MS" />
+      <task id="t_sp_3" name="inform ENISA" />
+      <parallelGateway id="g_sp_p1_j" />
+      <exclusiveGateway id="g_sp_ex1_j" />
+      <task id="t_sp_4" name="include type info" />
+      <task id="t_sp_5" name="preserve security" />
+      <task id="t_sp_6" name="forward notifications received" />
+      <task id="t_sp_7" name="send summary report (every 3 months)" />
+      <task id="t_sp_8" name="include anonymised data" />
+      <endEvent id="e_spoc" name="reporting completed" />
+
+      <sequenceFlow id="f_sp_1" sourceRef="s_spoc" targetRef="t_sp_1" />
+      <sequenceFlow id="f_sp_2" sourceRef="t_sp_1" targetRef="g_sp_ex1_s" />
+      <sequenceFlow id="f_sp_3" sourceRef="g_sp_ex1_s" targetRef="g_sp_p1_s" />
+      <sequenceFlow id="f_sp_4" sourceRef="g_sp_ex1_s" targetRef="g_sp_ex1_j" />
+      <sequenceFlow id="f_sp_5" sourceRef="g_sp_p1_s" targetRef="t_sp_2" />
+      <sequenceFlow id="f_sp_6" sourceRef="g_sp_p1_s" targetRef="t_sp_3" />
+      <sequenceFlow id="f_sp_7" sourceRef="t_sp_2" targetRef="g_sp_p1_j" />
+      <sequenceFlow id="f_sp_8" sourceRef="t_sp_3" targetRef="g_sp_p1_j" />
+      <sequenceFlow id="f_sp_9" sourceRef="g_sp_p1_j" targetRef="g_sp_ex1_j" />
+      <sequenceFlow id="f_sp_10" sourceRef="g_sp_ex1_j" targetRef="t_sp_4" />
+      <sequenceFlow id="f_sp_11" sourceRef="t_sp_4" targetRef="t_sp_5" />
+      <sequenceFlow id="f_sp_12" sourceRef="t_sp_5" targetRef="t_sp_6" />
+      <sequenceFlow id="f_sp_13" sourceRef="t_sp_6" targetRef="t_sp_7" />
+      <sequenceFlow id="f_sp_14" sourceRef="t_sp_7" targetRef="t_sp_8" />
+      <sequenceFlow id="f_sp_15" sourceRef="t_sp_8" targetRef="e_spoc" />
+   </process>
+
+   <process id="proc_enisa" isExecutable="false" processType="None">
+      <startEvent id="s_enisa" name="Receive summary report" />
+      <task id="t_en_1" name="adopt technical guidance" />
+      <parallelGateway id="g_en_p1_s" />
+      <task id="t_en_2" name="inform Cooperation Group" />
+      <task id="t_en_3" name="inform CSIRTs network" />
+      <parallelGateway id="g_en_p1_j" />
+      <endEvent id="e_enisa" name="findings shared" />
+
+      <sequenceFlow id="f_en_1" sourceRef="s_enisa" targetRef="t_en_1" />
+      <sequenceFlow id="f_en_2" sourceRef="t_en_1" targetRef="g_en_p1_s" />
+      <sequenceFlow id="f_en_3" sourceRef="g_en_p1_s" targetRef="t_en_2" />
+      <sequenceFlow id="f_en_4" sourceRef="g_en_p1_s" targetRef="t_en_3" />
+      <sequenceFlow id="f_en_5" sourceRef="t_en_2" targetRef="g_en_p1_j" />
+      <sequenceFlow id="f_en_6" sourceRef="t_en_3" targetRef="g_en_p1_j" />
+      <sequenceFlow id="f_en_7" sourceRef="g_en_p1_j" targetRef="e_enisa" />
+   </process>
+
+   <process id="proc_com" isExecutable="false" processType="None">
+      <startEvent id="s_com" name="Start" />
+      <task id="t_com_1" name="adopt acts on info type/format" />
+      <task id="t_com_2" name="adopt acts on cases (by 2024)" />
+      <task id="t_com_3" name="adopt acts regarding other entities" />
+      <parallelGateway id="g_com_p1_s" />
+      <task id="t_com_4" name="exchange advice with Cooperation Group" />
+      <task id="t_com_5" name="cooperate with Cooperation Group" />
+      <parallelGateway id="g_com_p1_j" />
+      <task id="t_com_6" name="adopt those implementing acts" />
+      <endEvent id="e_com" name="implementing acts adopted" />
+
+      <sequenceFlow id="f_com_1" sourceRef="s_com" targetRef="t_com_1" />
+      <sequenceFlow id="f_com_2" sourceRef="t_com_1" targetRef="t_com_2" />
+      <sequenceFlow id="f_com_3" sourceRef="t_com_2" targetRef="t_com_3" />
+      <sequenceFlow id="f_com_4" sourceRef="t_com_3" targetRef="g_com_p1_s" />
+      <sequenceFlow id="f_com_5" sourceRef="g_com_p1_s" targetRef="t_com_4" />
+      <sequenceFlow id="f_com_6" sourceRef="g_com_p1_s" targetRef="t_com_5" />
+      <sequenceFlow id="f_com_7" sourceRef="t_com_4" targetRef="g_com_p1_j" />
+      <sequenceFlow id="f_com_51" sourceRef="t_com_5" targetRef="g_com_p1_j" />
+      <sequenceFlow id="f_com_8" sourceRef="g_com_p1_j" targetRef="t_com_6" />
+      <sequenceFlow id="f_com_9" sourceRef="t_com_6" targetRef="e_com" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="diag_overall">
+      <bpmndi:BPMNPlane bpmnElement="col1" id="plane_overall">
+         <bpmndi:BPMNShape bpmnElement="p_ms" isHorizontal="true">
+            <omgdc:Bounds height="1150.0" width="1000.0" x="10.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_eie" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="4600.0" x="10.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_ca" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3800.0" x="10.0" y="1650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_csirt" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3600.0" x="10.0" y="2000.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_spoc" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1600.0" x="10.0" y="2350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_enisa" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="800.0" x="10.0" y="2650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="p_com" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1200.0" x="10.0" y="2900.0"/>
+         </bpmndi:BPMNShape>
+
+         </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

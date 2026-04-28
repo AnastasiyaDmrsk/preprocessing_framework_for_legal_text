@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="AI Process Modeler" exporterVersion="1.0"
+             id="definitions_1" targetNamespace="http://www.signavio.com">
+
+    <collaboration id="Collaboration_1">
+        <participant id="Participant_MS" name="Member States" processRef="Process_MS" />
+        <participant id="Participant_COM" name="Commission" processRef="Process_COM" />
+        <participant id="Participant_ASB" name="Another supervisory body" processRef="Process_ASB" />
+        <participant id="Participant_TSP" name="Trust service providers" processRef="Process_TSP" />
+        <participant id="Participant_SB" name="Supervisory body" processRef="Process_SB" />
+
+        <messageFlow id="Flow_MF1" sourceRef="MS_T4" targetRef="COM_T1" />
+        <messageFlow id="Flow_MF2" sourceRef="SB_T25" targetRef="COM_T2" />
+        <messageFlow id="Flow_MF3" sourceRef="ASB_T1" targetRef="SB_T14" />
+        <messageFlow id="Flow_MF4" sourceRef="SB_T16" targetRef="ASB_T2" />
+        <messageFlow id="Flow_MF5" sourceRef="TSP_T6" targetRef="SB_T17" />
+        <messageFlow id="Flow_MF6" sourceRef="SB_T24" targetRef="TSP_T11" />
+        <messageFlow id="Flow_MF7" sourceRef="SB_T12" targetRef="TSP_T12" />
+    </collaboration>
+
+    <process id="Process_MS" isExecutable="true">
+        <startEvent id="MS_Start" name="Supervision starts">
+            <outgoing>MS_S1</outgoing>
+        </startEvent>
+        <task id="MS_T1" name="Designate supervisory body">
+            <incoming>MS_S1</incoming>
+            <outgoing>MS_S2</outgoing>
+        </task>
+        <task id="MS_T2" name="Give necessary powers">
+            <incoming>MS_S2</incoming>
+            <outgoing>MS_S3</outgoing>
+        </task>
+        <task id="MS_T3" name="Give adequate resources">
+            <incoming>MS_S3</incoming>
+            <outgoing>MS_S4</outgoing>
+        </task>
+        <task id="MS_T4" name="Notify names and addresses">
+            <incoming>MS_S4</incoming>
+            <outgoing>MS_S5</outgoing>
+        </task>
+        <task id="MS_T5" name="Require trust infrastructure">
+            <incoming>MS_S5</incoming>
+            <outgoing>MS_S6</outgoing>
+        </task>
+        <task id="MS_T6" name="Maintain trust infrastructure">
+            <incoming>MS_S6</incoming>
+            <outgoing>MS_S7</outgoing>
+        </task>
+        <task id="MS_T7" name="Update trust infrastructure">
+            <incoming>MS_S7</incoming>
+            <outgoing>MS_S8</outgoing>
+        </task>
+        <task id="MS_T8" name="Assess joint investigations">
+            <incoming>MS_S8</incoming>
+            <outgoing>MS_S9</outgoing>
+        </task>
+        <task id="MS_T9" name="Authorise joint investigations">
+            <incoming>MS_S9</incoming>
+            <outgoing>MS_S10</outgoing>
+        </task>
+        <task id="MS_T10" name="Agree upon arrangements">
+            <incoming>MS_S10</incoming>
+            <outgoing>MS_S11</outgoing>
+        </task>
+        <task id="MS_T11" name="Establish arrangements">
+            <incoming>MS_S11</incoming>
+            <outgoing>MS_S12</outgoing>
+        </task>
+        <endEvent id="MS_End" name="Supervision framework established">
+            <incoming>MS_S12</incoming>
+        </endEvent>
+
+        <sequenceFlow id="MS_S1" sourceRef="MS_Start" targetRef="MS_T1" />
+        <sequenceFlow id="MS_S2" sourceRef="MS_T1" targetRef="MS_T2" />
+        <sequenceFlow id="MS_S3" sourceRef="MS_T2" targetRef="MS_T3" />
+        <sequenceFlow id="MS_S4" sourceRef="MS_T3" targetRef="MS_T4" />
+        <sequenceFlow id="MS_S5" sourceRef="MS_T4" targetRef="MS_T5" />
+        <sequenceFlow id="MS_S6" sourceRef="MS_T5" targetRef="MS_T6" />
+        <sequenceFlow id="MS_S7" sourceRef="MS_T6" targetRef="MS_T7" />
+        <sequenceFlow id="MS_S8" sourceRef="MS_T7" targetRef="MS_T8" />
+        <sequenceFlow id="MS_S9" sourceRef="MS_T8" targetRef="MS_T9" />
+        <sequenceFlow id="MS_S10" sourceRef="MS_T9" targetRef="MS_T10" />
+        <sequenceFlow id="MS_S11" sourceRef="MS_T10" targetRef="MS_T11" />
+        <sequenceFlow id="MS_S12" sourceRef="MS_T11" targetRef="MS_End" />
+    </process>
+
+    <process id="Process_COM" isExecutable="true">
+        <startEvent id="COM_Start" name="Process for Commission starts">
+            <outgoing>COM_S1</outgoing>
+        </startEvent>
+        <task id="COM_T1" name="Process notification">
+            <incoming>COM_S1</incoming>
+            <outgoing>COM_S2</outgoing>
+        </task>
+        <task id="COM_T2" name="Make annual report available">
+            <incoming>COM_S2</incoming>
+            <outgoing>COM_S3</outgoing>
+        </task>
+        <parallelGateway id="COM_GW1">
+            <incoming>COM_S3</incoming>
+            <outgoing>COM_S4</outgoing>
+            <outgoing>COM_S5</outgoing>
+            <outgoing>COM_S6</outgoing>
+        </parallelGateway>
+        <task id="COM_T3" name="Define formats for report">
+            <incoming>COM_S4</incoming>
+            <outgoing>COM_S7</outgoing>
+        </task>
+        <task id="COM_T4" name="Specify measures">
+            <incoming>COM_S5</incoming>
+            <outgoing>COM_S8</outgoing>
+        </task>
+        <task id="COM_T5" name="Define formats and deadlines">
+            <incoming>COM_S6</incoming>
+            <outgoing>COM_S9</outgoing>
+        </task>
+        <parallelGateway id="COM_GW2">
+            <incoming>COM_S7</incoming>
+            <incoming>COM_S8</incoming>
+            <incoming>COM_S9</incoming>
+            <outgoing>COM_S10</outgoing>
+        </parallelGateway>
+        <task id="COM_T6" name="Adopt implementing acts">
+            <incoming>COM_S10</incoming>
+            <outgoing>COM_S11</outgoing>
+        </task>
+        <endEvent id="COM_End" name="Implementing acts adopted">
+            <incoming>COM_S11</incoming>
+        </endEvent>
+
+        <sequenceFlow id="COM_S1" sourceRef="COM_Start" targetRef="COM_T1" />
+        <sequenceFlow id="COM_S2" sourceRef="COM_T1" targetRef="COM_T2" />
+        <sequenceFlow id="COM_S3" sourceRef="COM_T2" targetRef="COM_GW1" />
+        <sequenceFlow id="COM_S4" sourceRef="COM_GW1" targetRef="COM_T3" />
+        <sequenceFlow id="COM_S5" sourceRef="COM_GW1" targetRef="COM_T4" />
+        <sequenceFlow id="COM_S6" sourceRef="COM_GW1" targetRef="COM_T5" />
+        <sequenceFlow id="COM_S7" sourceRef="COM_T3" targetRef="COM_GW2" />
+        <sequenceFlow id="COM_S8" sourceRef="COM_T4" targetRef="COM_GW2" />
+        <sequenceFlow id="COM_S9" sourceRef="COM_T5" targetRef="COM_GW2" />
+        <sequenceFlow id="COM_S10" sourceRef="COM_GW2" targetRef="COM_T6" />
+        <sequenceFlow id="COM_S11" sourceRef="COM_T6" targetRef="COM_End" />
+    </process>
+
+    <process id="Process_ASB" isExecutable="true">
+        <startEvent id="ASB_Start" name="Process starts">
+            <outgoing>ASB_S1</outgoing>
+        </startEvent>
+        <task id="ASB_T1" name="Send justified request">
+            <incoming>ASB_S1</incoming>
+            <outgoing>ASB_S2</outgoing>
+        </task>
+        <task id="ASB_T2" name="Carry out activities">
+            <incoming>ASB_S2</incoming>
+            <outgoing>ASB_S3</outgoing>
+        </task>
+        <endEvent id="ASB_End" name="Request completed">
+            <incoming>ASB_S3</incoming>
+        </endEvent>
+
+        <sequenceFlow id="ASB_S1" sourceRef="ASB_Start" targetRef="ASB_T1" />
+        <sequenceFlow id="ASB_S2" sourceRef="ASB_T1" targetRef="ASB_T2" />
+        <sequenceFlow id="ASB_S3" sourceRef="ASB_T2" targetRef="ASB_End" />
+    </process>
+
+    <process id="Process_TSP" isExecutable="true">
+        <startEvent id="TSP_Start" name="Process starts">
+            <outgoing>TSP_S1</outgoing>
+        </startEvent>
+        <task id="TSP_T1" name="Take technical measures">
+            <incoming>TSP_S1</incoming>
+            <outgoing>TSP_S2</outgoing>
+        </task>
+        <task id="TSP_T2" name="Ensure security level">
+            <incoming>TSP_S2</incoming>
+            <outgoing>TSP_S3</outgoing>
+        </task>
+        <parallelGateway id="TSP_GW1">
+            <incoming>TSP_S3</incoming>
+            <outgoing>TSP_S4</outgoing>
+            <outgoing>TSP_S5</outgoing>
+            <outgoing>TSP_S6</outgoing>
+        </parallelGateway>
+        <task id="TSP_T3" name="Prevent impact">
+            <incoming>TSP_S4</incoming>
+            <outgoing>TSP_S7</outgoing>
+        </task>
+        <task id="TSP_T4" name="Minimise impact">
+            <incoming>TSP_S5</incoming>
+            <outgoing>TSP_S8</outgoing>
+        </task>
+        <task id="TSP_T5" name="Inform stakeholders">
+            <incoming>TSP_S6</incoming>
+            <outgoing>TSP_S9</outgoing>
+        </task>
+        <parallelGateway id="TSP_GW2">
+            <incoming>TSP_S7</incoming>
+            <incoming>TSP_S8</incoming>
+            <incoming>TSP_S9</incoming>
+            <outgoing>TSP_S10</outgoing>
+        </parallelGateway>
+        <task id="TSP_T6" name="Notify breach to SB">
+            <incoming>TSP_S10</incoming>
+            <outgoing>TSP_S11</outgoing>
+        </task>
+        <task id="TSP_T7" name="Assess relevant bodies">
+            <incoming>TSP_S11</incoming>
+            <outgoing>TSP_S12</outgoing>
+        </task>
+        <task id="TSP_T8" name="Notify relevant bodies">
+            <incoming>TSP_S12</incoming>
+            <outgoing>TSP_S13</outgoing>
+        </task>
+        <task id="TSP_T9" name="Assess adverse effects">
+            <incoming>TSP_S13</incoming>
+            <outgoing>TSP_S14</outgoing>
+        </task>
+        <task id="TSP_T10" name="Notify natural/legal person">
+            <incoming>TSP_S14</incoming>
+            <outgoing>TSP_S15</outgoing>
+        </task>
+        <task id="TSP_T11" name="Inform public">
+            <incoming>TSP_S15</incoming>
+            <outgoing>TSP_S16</outgoing>
+        </task>
+        <task id="TSP_T12" name="Remedy failure">
+            <incoming>TSP_S16</incoming>
+            <outgoing>TSP_S17</outgoing>
+        </task>
+        <endEvent id="TSP_End" name="Security measures applied">
+            <incoming>TSP_S17</incoming>
+        </endEvent>
+
+        <sequenceFlow id="TSP_S1" sourceRef="TSP_Start" targetRef="TSP_T1" />
+        <sequenceFlow id="TSP_S2" sourceRef="TSP_T1" targetRef="TSP_T2" />
+        <sequenceFlow id="TSP_S3" sourceRef="TSP_T2" targetRef="TSP_GW1" />
+        <sequenceFlow id="TSP_S4" sourceRef="TSP_GW1" targetRef="TSP_T3" />
+        <sequenceFlow id="TSP_S5" sourceRef="TSP_GW1" targetRef="TSP_T4" />
+        <sequenceFlow id="TSP_S6" sourceRef="TSP_GW1" targetRef="TSP_T5" />
+        <sequenceFlow id="TSP_S7" sourceRef="TSP_T3" targetRef="TSP_GW2" />
+        <sequenceFlow id="TSP_S8" sourceRef="TSP_T4" targetRef="TSP_GW2" />
+        <sequenceFlow id="TSP_S9" sourceRef="TSP_T5" targetRef="TSP_GW2" />
+        <sequenceFlow id="TSP_S10" sourceRef="TSP_GW2" targetRef="TSP_T6" />
+        <sequenceFlow id="TSP_S11" sourceRef="TSP_T6" targetRef="TSP_T7" />
+        <sequenceFlow id="TSP_S12" sourceRef="TSP_T7" targetRef="TSP_T8" />
+        <sequenceFlow id="TSP_S13" sourceRef="TSP_T8" targetRef="TSP_T9" />
+        <sequenceFlow id="TSP_S14" sourceRef="TSP_T9" targetRef="TSP_T10" />
+        <sequenceFlow id="TSP_S15" sourceRef="TSP_T10" targetRef="TSP_T11" />
+        <sequenceFlow id="TSP_S16" sourceRef="TSP_T11" targetRef="TSP_T12" />
+        <sequenceFlow id="TSP_S17" sourceRef="TSP_T12" targetRef="TSP_End" />
+    </process>
+
+    <process id="Process_SB" isExecutable="true">
+        <startEvent id="SB_Start" name="Process starts">
+            <outgoing>SB_S1</outgoing>
+        </startEvent>
+        <parallelGateway id="SB_GW1">
+            <incoming>SB_S1</incoming>
+            <outgoing>SB_S2</outgoing>
+            <outgoing>SB_S3</outgoing>
+        </parallelGateway>
+        <task id="SB_T1" name="Supervise qualified TSPs">
+            <incoming>SB_S2</incoming>
+            <outgoing>SB_S4</outgoing>
+        </task>
+        <task id="SB_T2" name="Assess non-qualified TSPs">
+            <incoming>SB_S3</incoming>
+            <outgoing>SB_S5</outgoing>
+        </task>
+        <parallelGateway id="SB_GW2">
+            <incoming>SB_S4</incoming>
+            <incoming>SB_S5</incoming>
+            <outgoing>SB_S6</outgoing>
+        </parallelGateway>
+        <parallelGateway id="SB_GW3">
+            <incoming>SB_S6</incoming>
+            <outgoing>SB_S7_1</outgoing>
+            <outgoing>SB_S7_2</outgoing>
+            <outgoing>SB_S7_3</outgoing>
+            <outgoing>SB_S7_4</outgoing>
+            <outgoing>SB_S7_5</outgoing>
+            <outgoing>SB_S7_6</outgoing>
+            <outgoing>SB_S7_7</outgoing>
+            <outgoing>SB_S7_8</outgoing>
+            <outgoing>SB_S7_9</outgoing>
+        </parallelGateway>
+        <task id="SB_T3" name="Cooperate with other SBs"><incoming>SB_S7_1</incoming><outgoing>SB_S8_1</outgoing></task>
+        <task id="SB_T4" name="Analyse conformity reports"><incoming>SB_S7_2</incoming><outgoing>SB_S8_2</outgoing></task>
+        <task id="SB_T5" name="Carry out audits"><incoming>SB_S7_3</incoming><outgoing>SB_S8_3</outgoing></task>
+        <task id="SB_T6" name="Request conformity assessment"><incoming>SB_S7_4</incoming><outgoing>SB_S8_4</outgoing></task>
+        <task id="SB_T7" name="Assess data protection breaches"><incoming>SB_S7_5</incoming><outgoing>SB_S8_5</outgoing></task>
+        <task id="SB_T8" name="Grant qualified status"><incoming>SB_S7_6</incoming><outgoing>SB_S8_6</outgoing></task>
+        <task id="SB_T9" name="Withdraw qualified status"><incoming>SB_S7_7</incoming><outgoing>SB_S8_7</outgoing></task>
+        <task id="SB_T10" name="Assess national trusted list"><incoming>SB_S7_8</incoming><outgoing>SB_S8_8</outgoing></task>
+        <task id="SB_T11" name="Verify termination plans"><incoming>SB_S7_9</incoming><outgoing>SB_S8_9</outgoing></task>
+        <parallelGateway id="SB_GW4">
+            <incoming>SB_S8_1</incoming><incoming>SB_S8_2</incoming><incoming>SB_S8_3</incoming><incoming>SB_S8_4</incoming>
+            <incoming>SB_S8_5</incoming><incoming>SB_S8_6</incoming><incoming>SB_S8_7</incoming><incoming>SB_S8_8</incoming>
+            <incoming>SB_S8_9</incoming>
+            <outgoing>SB_S9</outgoing>
+        </parallelGateway>
+        <task id="SB_T12" name="Require remedy for failure">
+            <incoming>SB_S9</incoming>
+            <outgoing>SB_S10</outgoing>
+        </task>
+        <task id="SB_T13" name="Cooperate exchanging practice">
+            <incoming>SB_S10</incoming>
+            <outgoing>SB_S11</outgoing>
+        </task>
+        <task id="SB_T14" name="Assess competence for assistance">
+            <incoming>SB_S11</incoming>
+            <outgoing>SB_S12</outgoing>
+        </task>
+        <task id="SB_T15" name="Refuse request">
+            <incoming>SB_S12</incoming>
+            <outgoing>SB_S13</outgoing>
+        </task>
+        <task id="SB_T16" name="Provide assistance">
+            <incoming>SB_S13</incoming>
+            <outgoing>SB_S14</outgoing>
+        </task>
+        <task id="SB_T17" name="Inform SBs and public">
+            <incoming>SB_S14</incoming>
+            <outgoing>SB_S15</outgoing>
+        </task>
+        <task id="SB_T18" name="Assess breach 2+ MS">
+            <incoming>SB_S15</incoming>
+            <outgoing>SB_S16</outgoing>
+        </task>
+        <task id="SB_T19" name="Notify SBs in other MS">
+            <incoming>SB_S16</incoming>
+            <outgoing>SB_S17</outgoing>
+        </task>
+        <task id="SB_T20" name="Notify ENISA">
+            <incoming>SB_S17</incoming>
+            <outgoing>SB_S18</outgoing>
+        </task>
+        <task id="SB_T21" name="Assess public interest">
+            <incoming>SB_S18</incoming>
+            <outgoing>SB_S19</outgoing>
+        </task>
+        <task id="SB_T22" name="Assess direct public info">
+            <incoming>SB_S19</incoming>
+            <outgoing>SB_S20</outgoing>
+        </task>
+        <task id="SB_T23" name="Inform public directly">
+            <incoming>SB_S20</incoming>
+            <outgoing>SB_S21</outgoing>
+        </task>
+        <task id="SB_T24" name="Send requirement to inform">
+            <incoming>SB_S21</incoming>
+            <outgoing>SB_S22</outgoing>
+        </task>
+        <task id="SB_T25" name="Send report to COM">
+            <incoming>SB_S22</incoming>
+            <outgoing>SB_S23</outgoing>
+        </task>
+        <task id="SB_T26" name="Send summary to ENISA">
+            <incoming>SB_S23</incoming>
+            <outgoing>SB_S24</outgoing>
+        </task>
+        <endEvent id="SB_End" name="Supervision completed">
+            <incoming>SB_S24</incoming>
+        </endEvent>
+
+        <sequenceFlow id="SB_S1" sourceRef="SB_Start" targetRef="SB_GW1" />
+        <sequenceFlow id="SB_S2" sourceRef="SB_GW1" targetRef="SB_T1" />
+        <sequenceFlow id="SB_S3" sourceRef="SB_GW1" targetRef="SB_T2" />
+        <sequenceFlow id="SB_S4" sourceRef="SB_T1" targetRef="SB_GW2" />
+        <sequenceFlow id="SB_S5" sourceRef="SB_T2" targetRef="SB_GW2" />
+        <sequenceFlow id="SB_S6" sourceRef="SB_GW2" targetRef="SB_GW3" />
+        <sequenceFlow id="SB_S7_1" sourceRef="SB_GW3" targetRef="SB_T3" />
+        <sequenceFlow id="SB_S7_2" sourceRef="SB_GW3" targetRef="SB_T4" />
+        <sequenceFlow id="SB_S7_3" sourceRef="SB_GW3" targetRef="SB_T5" />
+        <sequenceFlow id="SB_S7_4" sourceRef="SB_GW3" targetRef="SB_T6" />
+        <sequenceFlow id="SB_S7_5" sourceRef="SB_GW3" targetRef="SB_T7" />
+        <sequenceFlow id="SB_S7_6" sourceRef="SB_GW3" targetRef="SB_T8" />
+        <sequenceFlow id="SB_S7_7" sourceRef="SB_GW3" targetRef="SB_T9" />
+        <sequenceFlow id="SB_S7_8" sourceRef="SB_GW3" targetRef="SB_T10" />
+        <sequenceFlow id="SB_S7_9" sourceRef="SB_GW3" targetRef="SB_T11" />
+        <sequenceFlow id="SB_S8_1" sourceRef="SB_T3" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_2" sourceRef="SB_T4" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_3" sourceRef="SB_T5" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_4" sourceRef="SB_T6" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_5" sourceRef="SB_T7" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_6" sourceRef="SB_T8" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_7" sourceRef="SB_T9" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_8" sourceRef="SB_T10" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S8_9" sourceRef="SB_T11" targetRef="SB_GW4" />
+        <sequenceFlow id="SB_S9" sourceRef="SB_GW4" targetRef="SB_T12" />
+        <sequenceFlow id="SB_S10" sourceRef="SB_T12" targetRef="SB_T13" />
+        <sequenceFlow id="SB_S11" sourceRef="SB_T13" targetRef="SB_T14" />
+        <sequenceFlow id="SB_S12" sourceRef="SB_T14" targetRef="SB_T15" />
+        <sequenceFlow id="SB_S13" sourceRef="SB_T15" targetRef="SB_T16" />
+        <sequenceFlow id="SB_S14" sourceRef="SB_T16" targetRef="SB_T17" />
+        <sequenceFlow id="SB_S15" sourceRef="SB_T17" targetRef="SB_T18" />
+        <sequenceFlow id="SB_S16" sourceRef="SB_T18" targetRef="SB_T19" />
+        <sequenceFlow id="SB_S17" sourceRef="SB_T19" targetRef="SB_T20" />
+        <sequenceFlow id="SB_S18" sourceRef="SB_T20" targetRef="SB_T21" />
+        <sequenceFlow id="SB_S19" sourceRef="SB_T21" targetRef="SB_T22" />
+        <sequenceFlow id="SB_S20" sourceRef="SB_T22" targetRef="SB_T23" />
+        <sequenceFlow id="SB_S21" sourceRef="SB_T23" targetRef="SB_T24" />
+        <sequenceFlow id="SB_S22" sourceRef="SB_T24" targetRef="SB_T25" />
+        <sequenceFlow id="SB_S23" sourceRef="SB_T25" targetRef="SB_T26" />
+        <sequenceFlow id="SB_S24" sourceRef="SB_T26" targetRef="SB_End" />
+    </process>
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+            <bpmndi:BPMNShape id="Participant_MS_di" bpmnElement="Participant_MS" isHorizontal="true">
+                <omgdc:Bounds x="100" y="50" width="1800" height="150" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Participant_COM_di" bpmnElement="Participant_COM" isHorizontal="true">
+                <omgdc:Bounds x="100" y="250" width="1800" height="250" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Participant_ASB_di" bpmnElement="Participant_ASB" isHorizontal="true">
+                <omgdc:Bounds x="100" y="550" width="1800" height="150" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Participant_TSP_di" bpmnElement="Participant_TSP" isHorizontal="true">
+                <omgdc:Bounds x="100" y="750" width="2200" height="250" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Participant_SB_di" bpmnElement="Participant_SB" isHorizontal="true">
+                <omgdc:Bounds x="100" y="1050" width="4000" height="1000" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="MS_Start_di" bpmnElement="MS_Start">
+                <omgdc:Bounds x="150" y="100" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T1_di" bpmnElement="MS_T1">
+                <omgdc:Bounds x="230" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T2_di" bpmnElement="MS_T2">
+                <omgdc:Bounds x="360" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T3_di" bpmnElement="MS_T3">
+                <omgdc:Bounds x="490" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T4_di" bpmnElement="MS_T4">
+                <omgdc:Bounds x="620" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T5_di" bpmnElement="MS_T5">
+                <omgdc:Bounds x="750" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T6_di" bpmnElement="MS_T6">
+                <omgdc:Bounds x="880" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T7_di" bpmnElement="MS_T7">
+                <omgdc:Bounds x="1010" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T8_di" bpmnElement="MS_T8">
+                <omgdc:Bounds x="1140" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T9_di" bpmnElement="MS_T9">
+                <omgdc:Bounds x="1270" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T10_di" bpmnElement="MS_T10">
+                <omgdc:Bounds x="1400" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_T11_di" bpmnElement="MS_T11">
+                <omgdc:Bounds x="1530" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="MS_End_di" bpmnElement="MS_End">
+                <omgdc:Bounds x="1680" y="100" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="COM_Start_di" bpmnElement="COM_Start">
+                <omgdc:Bounds x="150" y="350" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T1_di" bpmnElement="COM_T1">
+                <omgdc:Bounds x="230" y="325" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T2_di" bpmnElement="COM_T2">
+                <omgdc:Bounds x="360" y="325" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_GW1_di" bpmnElement="COM_GW1">
+                <omgdc:Bounds x="490" y="340" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T3_di" bpmnElement="COM_T3">
+                <omgdc:Bounds x="580" y="270" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T4_di" bpmnElement="COM_T4">
+                <omgdc:Bounds x="580" y="370" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T5_di" bpmnElement="COM_T5">
+                <omgdc:Bounds x="580" y="470" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_GW2_di" bpmnElement="COM_GW2">
+                <omgdc:Bounds x="730" y="340" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_T6_di" bpmnElement="COM_T6">
+                <omgdc:Bounds x="820" y="325" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="COM_End_di" bpmnElement="COM_End">
+                <omgdc:Bounds x="970" y="350" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="ASB_Start_di" bpmnElement="ASB_Start">
+                <omgdc:Bounds x="150" y="600" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ASB_T1_di" bpmnElement="ASB_T1">
+                <omgdc:Bounds x="230" y="575" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ASB_T2_di" bpmnElement="ASB_T2">
+                <omgdc:Bounds x="360" y="575" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ASB_End_di" bpmnElement="ASB_End">
+                <omgdc:Bounds x="510" y="600" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="TSP_Start_di" bpmnElement="TSP_Start">
+                <omgdc:Bounds x="150" y="850" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T1_di" bpmnElement="TSP_T1">
+                <omgdc:Bounds x="230" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T2_di" bpmnElement="TSP_T2">
+                <omgdc:Bounds x="360" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_GW1_di" bpmnElement="TSP_GW1">
+                <omgdc:Bounds x="490" y="840" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T3_di" bpmnElement="TSP_T3">
+                <omgdc:Bounds x="580" y="760" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T4_di" bpmnElement="TSP_T4">
+                <omgdc:Bounds x="580" y="850" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T5_di" bpmnElement="TSP_T5">
+                <omgdc:Bounds x="580" y="940" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_GW2_di" bpmnElement="TSP_GW2">
+                <omgdc:Bounds x="730" y="840" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T6_di" bpmnElement="TSP_T6">
+                <omgdc:Bounds x="820" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T7_di" bpmnElement="TSP_T7">
+                <omgdc:Bounds x="950" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T8_di" bpmnElement="TSP_T8">
+                <omgdc:Bounds x="1080" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T9_di" bpmnElement="TSP_T9">
+                <omgdc:Bounds x="1210" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T10_di" bpmnElement="TSP_T10">
+                <omgdc:Bounds x="1340" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T11_di" bpmnElement="TSP_T11">
+                <omgdc:Bounds x="1470" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_T12_di" bpmnElement="TSP_T12">
+                <omgdc:Bounds x="1600" y="825" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="TSP_End_di" bpmnElement="TSP_End">
+                <omgdc:Bounds x="1750" y="850" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="SB_Start_di" bpmnElement="SB_Start">
+                <omgdc:Bounds x="150" y="1500" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_GW1_di" bpmnElement="SB_GW1">
+                <omgdc:Bounds x="220" y="1495" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T1_di" bpmnElement="SB_T1">
+                <omgdc:Bounds x="300" y="1420" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T2_di" bpmnElement="SB_T2">
+                <omgdc:Bounds x="300" y="1520" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_GW2_di" bpmnElement="SB_GW2">
+                <omgdc:Bounds x="440" y="1495" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_GW3_di" bpmnElement="SB_GW3">
+                <omgdc:Bounds x="520" y="1495" width="40" height="40" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="SB_T3_di" bpmnElement="SB_T3"><omgdc:Bounds x="610" y="1100" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T4_di" bpmnElement="SB_T4"><omgdc:Bounds x="610" y="1200" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T5_di" bpmnElement="SB_T5"><omgdc:Bounds x="610" y="1300" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T6_di" bpmnElement="SB_T6"><omgdc:Bounds x="610" y="1400" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T7_di" bpmnElement="SB_T7"><omgdc:Bounds x="610" y="1500" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T8_di" bpmnElement="SB_T8"><omgdc:Bounds x="610" y="1600" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T9_di" bpmnElement="SB_T9"><omgdc:Bounds x="610" y="1700" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T10_di" bpmnElement="SB_T10"><omgdc:Bounds x="610" y="1800" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T11_di" bpmnElement="SB_T11"><omgdc:Bounds x="610" y="1900" width="100" height="80" /></bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="SB_GW4_di" bpmnElement="SB_GW4">
+                <omgdc:Bounds x="750" y="1495" width="40" height="40" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="SB_T12_di" bpmnElement="SB_T12"><omgdc:Bounds x="830" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T13_di" bpmnElement="SB_T13"><omgdc:Bounds x="960" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T14_di" bpmnElement="SB_T14"><omgdc:Bounds x="1090" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T15_di" bpmnElement="SB_T15"><omgdc:Bounds x="1220" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T16_di" bpmnElement="SB_T16"><omgdc:Bounds x="1350" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T17_di" bpmnElement="SB_T17"><omgdc:Bounds x="1480" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T18_di" bpmnElement="SB_T18"><omgdc:Bounds x="1610" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T19_di" bpmnElement="SB_T19"><omgdc:Bounds x="1740" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T20_di" bpmnElement="SB_T20"><omgdc:Bounds x="1870" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T21_di" bpmnElement="SB_T21"><omgdc:Bounds x="2000" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T22_di" bpmnElement="SB_T22"><omgdc:Bounds x="2130" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T23_di" bpmnElement="SB_T23"><omgdc:Bounds x="2260" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T24_di" bpmnElement="SB_T24"><omgdc:Bounds x="2390" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T25_di" bpmnElement="SB_T25"><omgdc:Bounds x="2520" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_T26_di" bpmnElement="SB_T26"><omgdc:Bounds x="2650" y="1475" width="100" height="80" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="SB_End_di" bpmnElement="SB_End"><omgdc:Bounds x="2800" y="1500" width="30" height="30" /></bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge id="Flow_MF1_di" bpmnElement="Flow_MF1">
+                <omgdi:waypoint x="670" y="160" />
+                <omgdi:waypoint x="280" y="325" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF2_di" bpmnElement="Flow_MF2">
+                <omgdi:waypoint x="2570" y="1475" />
+                <omgdi:waypoint x="410" y="405" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF3_di" bpmnElement="Flow_MF3">
+                <omgdi:waypoint x="280" y="655" />
+                <omgdi:waypoint x="1140" y="1475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF4_di" bpmnElement="Flow_MF4">
+                <omgdi:waypoint x="1400" y="1475" />
+                <omgdi:waypoint x="410" y="655" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF5_di" bpmnElement="Flow_MF5">
+                <omgdi:waypoint x="870" y="905" />
+                <omgdi:waypoint x="1530" y="1475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF6_di" bpmnElement="Flow_MF6">
+                <omgdi:waypoint x="2440" y="1475" />
+                <omgdi:waypoint x="1520" y="905" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_MF7_di" bpmnElement="Flow_MF7">
+                <omgdi:waypoint x="880" y="1475" />
+                <omgdi:waypoint x="1650" y="905" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

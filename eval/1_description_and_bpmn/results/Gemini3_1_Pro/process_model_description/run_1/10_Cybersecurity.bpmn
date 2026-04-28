@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-cybersecurity-certification"
+             targetNamespace="http://www.signavio.com">
+    <collaboration id="Collaboration_1">
+        <participant id="Participant_Commission" name="Commission" processRef="Process_Commission"/>
+        <participant id="Participant_ECCG" name="ECCG" processRef="Process_ECCG"/>
+        <participant id="Participant_ENISA" name="ENISA" processRef="Process_ENISA"/>
+
+        <messageFlow id="MF_C2_EN" sourceRef="Task_C2" targetRef="Start_EN"/>
+        <messageFlow id="MF_E2_EN" sourceRef="Task_E2" targetRef="Start_EN"/>
+        <messageFlow id="MF_EN6_E1" sourceRef="Task_EN6" targetRef="Catch_E1"/>
+        <messageFlow id="MF_E5_EN7" sourceRef="Task_E5" targetRef="Task_EN7"/>
+        <messageFlow id="MF_EN9_C1" sourceRef="Task_EN9" targetRef="Catch_C1"/>
+        <messageFlow id="MF_C8_EN2" sourceRef="Task_C8" targetRef="Catch_EN2"/>
+        <messageFlow id="MF_E7_EN2" sourceRef="Task_E7" targetRef="Catch_EN2"/>
+    </collaboration>
+
+    <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission">
+        <startEvent id="Start_C" name="Need for a European cybersecurity certification scheme">
+            <outgoing>Flow_C1</outgoing>
+        </startEvent>
+        <task id="Task_C1" name="Assess whether a candidate scheme is based on the Union rolling work programme">
+            <incoming>Flow_C1</incoming>
+            <outgoing>Flow_C2</outgoing>
+        </task>
+        <exclusiveGateway id="GW_C1" name="Based on programme or duly justified?">
+            <incoming>Flow_C2</incoming>
+            <outgoing>Flow_C3</outgoing>
+            <outgoing>Flow_C4</outgoing>
+        </exclusiveGateway>
+        <task id="Task_C2" name="Send a request to prepare or review scheme to ENISA">
+            <incoming>Flow_C3</incoming>
+            <incoming>Flow_C4</incoming>
+            <outgoing>Flow_C5</outgoing>
+        </task>
+        <task id="Task_C3" name="Assess whether a scheme requested is not included in the Union rolling work programme">
+            <incoming>Flow_C5</incoming>
+            <outgoing>Flow_C6</outgoing>
+        </task>
+        <exclusiveGateway id="GW_C2" name="Not included?">
+            <incoming>Flow_C6</incoming>
+            <outgoing>Flow_C7</outgoing>
+            <outgoing>Flow_C8</outgoing>
+        </exclusiveGateway>
+        <task id="Task_C4" name="Update the Union rolling work programme accordingly">
+            <incoming>Flow_C7</incoming>
+            <outgoing>Flow_C9</outgoing>
+        </task>
+        <exclusiveGateway id="GW_C2_Merge">
+            <incoming>Flow_C8</incoming>
+            <incoming>Flow_C9</incoming>
+            <outgoing>Flow_C10</outgoing>
+        </exclusiveGateway>
+        <intermediateCatchEvent id="Catch_C1" name="Receive candidate scheme from ENISA">
+            <incoming>Flow_C10</incoming>
+            <outgoing>Flow_C11</outgoing>
+            <messageEventDefinition/>
+        </intermediateCatchEvent>
+        <task id="Task_C5" name="Adopt implementing acts providing for a European cybersecurity certification scheme">
+            <incoming>Flow_C11</incoming>
+            <outgoing>Flow_C12</outgoing>
+        </task>
+        <task id="Task_C6" name="Adopt those implementing acts in accordance with examination procedure">
+            <incoming>Flow_C12</incoming>
+            <outgoing>Flow_C13</outgoing>
+        </task>
+        <task id="Task_C7" name="Assess whether it is necessary to revise the adopted scheme">
+            <incoming>Flow_C13</incoming>
+            <outgoing>Flow_C14</outgoing>
+        </task>
+        <exclusiveGateway id="GW_C3" name="Is necessary?">
+            <incoming>Flow_C14</incoming>
+            <outgoing>Flow_C15</outgoing>
+            <outgoing>Flow_C16</outgoing>
+        </exclusiveGateway>
+        <task id="Task_C8" name="Send a request to start process of developing a revised candidate scheme to ENISA">
+            <incoming>Flow_C15</incoming>
+            <outgoing>Flow_C17</outgoing>
+        </task>
+        <endEvent id="End_C" name="Scheme adopted">
+            <incoming>Flow_C16</incoming>
+            <incoming>Flow_C17</incoming>
+        </endEvent>
+
+        <sequenceFlow id="Flow_C1" sourceRef="Start_C" targetRef="Task_C1"/>
+        <sequenceFlow id="Flow_C2" sourceRef="Task_C1" targetRef="GW_C1"/>
+        <sequenceFlow id="Flow_C3" name="Based on programme" sourceRef="GW_C1" targetRef="Task_C2"/>
+        <sequenceFlow id="Flow_C4" name="Duly justified" sourceRef="GW_C1" targetRef="Task_C2"/>
+        <sequenceFlow id="Flow_C5" sourceRef="Task_C2" targetRef="Task_C3"/>
+        <sequenceFlow id="Flow_C6" sourceRef="Task_C3" targetRef="GW_C2"/>
+        <sequenceFlow id="Flow_C7" name="Yes" sourceRef="GW_C2" targetRef="Task_C4"/>
+        <sequenceFlow id="Flow_C8" name="No" sourceRef="GW_C2" targetRef="GW_C2_Merge"/>
+        <sequenceFlow id="Flow_C9" sourceRef="Task_C4" targetRef="GW_C2_Merge"/>
+        <sequenceFlow id="Flow_C10" sourceRef="GW_C2_Merge" targetRef="Catch_C1"/>
+        <sequenceFlow id="Flow_C11" sourceRef="Catch_C1" targetRef="Task_C5"/>
+        <sequenceFlow id="Flow_C12" sourceRef="Task_C5" targetRef="Task_C6"/>
+        <sequenceFlow id="Flow_C13" sourceRef="Task_C6" targetRef="Task_C7"/>
+        <sequenceFlow id="Flow_C14" sourceRef="Task_C7" targetRef="GW_C3"/>
+        <sequenceFlow id="Flow_C15" name="Yes" sourceRef="GW_C3" targetRef="Task_C8"/>
+        <sequenceFlow id="Flow_C16" name="No" sourceRef="GW_C3" targetRef="End_C"/>
+        <sequenceFlow id="Flow_C17" sourceRef="Task_C8" targetRef="End_C"/>
+    </process>
+
+    <process id="Process_ECCG" isClosed="false" isExecutable="false" name="ECCG">
+        <startEvent id="Start_E" name="Need for a European cybersecurity certification scheme">
+            <outgoing>Flow_E1</outgoing>
+        </startEvent>
+        <task id="Task_E1" name="Assess whether a candidate scheme is a duly justified case">
+            <incoming>Flow_E1</incoming>
+            <outgoing>Flow_E2</outgoing>
+        </task>
+        <exclusiveGateway id="GW_E1" name="Duly justified?">
+            <incoming>Flow_E2</incoming>
+            <outgoing>Flow_E3</outgoing>
+            <outgoing>Flow_E4</outgoing>
+        </exclusiveGateway>
+        <task id="Task_E2" name="Send a request to prepare or review scheme to ENISA">
+            <incoming>Flow_E3</incoming>
+            <outgoing>Flow_E5</outgoing>
+        </task>
+        <exclusiveGateway id="GW_E1_Merge">
+            <incoming>Flow_E4</incoming>
+            <incoming>Flow_E5</incoming>
+            <outgoing>Flow_E6</outgoing>
+        </exclusiveGateway>
+        <intermediateCatchEvent id="Catch_E1" name="Receive request for assistance and expert advice from ENISA">
+            <incoming>Flow_E6</incoming>
+            <outgoing>Flow_E7</outgoing>
+            <messageEventDefinition/>
+        </intermediateCatchEvent>
+        <task id="Task_E3" name="Provide ENISA with assistance and expert advice">
+            <incoming>Flow_E7</incoming>
+            <outgoing>Flow_E8</outgoing>
+        </task>
+        <task id="Task_E4" name="Adopt an opinion on the candidate scheme">
+            <incoming>Flow_E8</incoming>
+            <outgoing>Flow_E9</outgoing>
+        </task>
+        <task id="Task_E5" name="Send the opinion on the candidate scheme to ENISA">
+            <incoming>Flow_E9</incoming>
+            <outgoing>Flow_E10</outgoing>
+        </task>
+        <task id="Task_E6" name="Assess whether it is necessary to revise the adopted scheme">
+            <incoming>Flow_E10</incoming>
+            <outgoing>Flow_E11</outgoing>
+        </task>
+        <exclusiveGateway id="GW_E2" name="Is necessary?">
+            <incoming>Flow_E11</incoming>
+            <outgoing>Flow_E12</outgoing>
+            <outgoing>Flow_E13</outgoing>
+        </exclusiveGateway>
+        <task id="Task_E7" name="Send a request to start process of developing a revised scheme to ENISA">
+            <incoming>Flow_E12</incoming>
+            <outgoing>Flow_E14</outgoing>
+        </task>
+        <endEvent id="End_E" name="Scheme reviewed">
+            <incoming>Flow_E13</incoming>
+            <incoming>Flow_E14</incoming>
+        </endEvent>
+
+        <sequenceFlow id="Flow_E1" sourceRef="Start_E" targetRef="Task_E1"/>
+        <sequenceFlow id="Flow_E2" sourceRef="Task_E1" targetRef="GW_E1"/>
+        <sequenceFlow id="Flow_E3" name="Yes" sourceRef="GW_E1" targetRef="Task_E2"/>
+        <sequenceFlow id="Flow_E4" name="No" sourceRef="GW_E1" targetRef="GW_E1_Merge"/>
+        <sequenceFlow id="Flow_E5" sourceRef="Task_E2" targetRef="GW_E1_Merge"/>
+        <sequenceFlow id="Flow_E6" sourceRef="GW_E1_Merge" targetRef="Catch_E1"/>
+        <sequenceFlow id="Flow_E7" sourceRef="Catch_E1" targetRef="Task_E3"/>
+        <sequenceFlow id="Flow_E8" sourceRef="Task_E3" targetRef="Task_E4"/>
+        <sequenceFlow id="Flow_E9" sourceRef="Task_E4" targetRef="Task_E5"/>
+        <sequenceFlow id="Flow_E10" sourceRef="Task_E5" targetRef="Task_E6"/>
+        <sequenceFlow id="Flow_E11" sourceRef="Task_E6" targetRef="GW_E2"/>
+        <sequenceFlow id="Flow_E12" name="Yes" sourceRef="GW_E2" targetRef="Task_E7"/>
+        <sequenceFlow id="Flow_E13" name="No" sourceRef="GW_E2" targetRef="End_E"/>
+        <sequenceFlow id="Flow_E14" sourceRef="Task_E7" targetRef="End_E"/>
+    </process>
+
+    <process id="Process_ENISA" isClosed="false" isExecutable="false" name="ENISA">
+        <laneSet id="LaneSet_ENISA">
+            <lane id="Lane_ENISA_General" name="ENISA">
+                <flowNodeRef>Start_EN</flowNodeRef>
+                <flowNodeRef>Task_EN1</flowNodeRef>
+                <flowNodeRef>GW_EN1</flowNodeRef>
+                <flowNodeRef>GW_EN_Refuse</flowNodeRef>
+                <flowNodeRef>Task_EN2</flowNodeRef>
+                <flowNodeRef>Task_EN_Refuse_Reason</flowNodeRef>
+                <flowNodeRef>End_EN_Refused</flowNodeRef>
+                <flowNodeRef>GW_EN_Split</flowNodeRef>
+                <flowNodeRef>Task_EN3</flowNodeRef>
+                <flowNodeRef>Task_EN4</flowNodeRef>
+                <flowNodeRef>Task_EN5</flowNodeRef>
+                <flowNodeRef>GW_EN_Join</flowNodeRef>
+                <flowNodeRef>Task_EN6</flowNodeRef>
+                <flowNodeRef>Task_EN7</flowNodeRef>
+                <flowNodeRef>GW_EN_Opinion</flowNodeRef>
+                <flowNodeRef>Task_EN8</flowNodeRef>
+                <flowNodeRef>GW_EN_Opinion_Join</flowNodeRef>
+                <flowNodeRef>Task_EN9</flowNodeRef>
+                <flowNodeRef>Task_EN10</flowNodeRef>
+                <flowNodeRef>Task_EN11</flowNodeRef>
+                <flowNodeRef>Catch_EN2</flowNodeRef>
+                <flowNodeRef>Task_EN12</flowNodeRef>
+                <flowNodeRef>End_EN</flowNodeRef>
+            </lane>
+            <lane id="Lane_Management_Board" name="Management Board">
+                <flowNodeRef>Task_MB1</flowNodeRef>
+            </lane>
+        </laneSet>
+
+        <startEvent id="Start_EN" name="Receive request to prepare or review scheme">
+            <outgoing>Flow_EN1</outgoing>
+        </startEvent>
+        <task id="Task_EN1" name="Assess whether the request is from the Commission or ECCG">
+            <incoming>Flow_EN1</incoming>
+            <outgoing>Flow_EN2</outgoing>
+        </task>
+        <exclusiveGateway id="GW_EN1" name="From whom?">
+            <incoming>Flow_EN2</incoming>
+            <outgoing>Flow_EN3</outgoing>
+            <outgoing>Flow_EN4</outgoing>
+        </exclusiveGateway>
+        <exclusiveGateway id="GW_EN_Refuse" name="Refuse ECCG Request?">
+            <incoming>Flow_EN4</incoming>
+            <outgoing>Flow_EN5</outgoing>
+            <outgoing>Flow_EN6</outgoing>
+        </exclusiveGateway>
+        <task id="Task_EN2" name="Prepare a candidate scheme">
+            <incoming>Flow_EN3</incoming>
+            <incoming>Flow_EN6</incoming>
+            <outgoing>Flow_EN7</outgoing>
+        </task>
+
+        <task id="Task_MB1" name="Take any decision to refuse request">
+            <incoming>Flow_EN5</incoming>
+            <outgoing>Flow_EN8</outgoing>
+        </task>
+        <task id="Task_EN_Refuse_Reason" name="Give reasons for its refusal">
+            <incoming>Flow_EN8</incoming>
+            <outgoing>Flow_EN9</outgoing>
+        </task>
+        <endEvent id="End_EN_Refused" name="Request refused">
+            <incoming>Flow_EN9</incoming>
+        </endEvent>
+
+        <parallelGateway id="GW_EN_Split">
+            <incoming>Flow_EN7</incoming>
+            <outgoing>Flow_EN10</outgoing>
+            <outgoing>Flow_EN11</outgoing>
+            <outgoing>Flow_EN12</outgoing>
+        </parallelGateway>
+        <task id="Task_EN3" name="Consult all relevant stakeholders">
+            <incoming>Flow_EN10</incoming>
+            <outgoing>Flow_EN13</outgoing>
+        </task>
+        <task id="Task_EN4" name="Establish an ad hoc working group">
+            <incoming>Flow_EN11</incoming>
+            <outgoing>Flow_EN14</outgoing>
+        </task>
+        <task id="Task_EN5" name="Closely cooperate with the ECCG">
+            <incoming>Flow_EN12</incoming>
+            <outgoing>Flow_EN15</outgoing>
+        </task>
+        <parallelGateway id="GW_EN_Join">
+            <incoming>Flow_EN13</incoming>
+            <incoming>Flow_EN14</incoming>
+            <incoming>Flow_EN15</incoming>
+            <outgoing>Flow_EN16</outgoing>
+        </parallelGateway>
+
+        <task id="Task_EN6" name="Send a request for assistance and expert advice to the ECCG">
+            <incoming>Flow_EN16</incoming>
+            <outgoing>Flow_EN17</outgoing>
+        </task>
+        <task id="Task_EN7" name="Assess whether the ECCG sends an opinion">
+            <incoming>Flow_EN17</incoming>
+            <outgoing>Flow_EN18</outgoing>
+        </task>
+        <exclusiveGateway id="GW_EN_Opinion" name="Opinion sent?">
+            <incoming>Flow_EN18</incoming>
+            <outgoing>Flow_EN19</outgoing>
+            <outgoing>Flow_EN20</outgoing>
+        </exclusiveGateway>
+        <task id="Task_EN8" name="Take utmost account of the opinion">
+            <incoming>Flow_EN19</incoming>
+            <outgoing>Flow_EN21</outgoing>
+        </task>
+        <exclusiveGateway id="GW_EN_Opinion_Join">
+            <incoming>Flow_EN20</incoming>
+            <incoming>Flow_EN21</incoming>
+            <outgoing>Flow_EN22</outgoing>
+        </exclusiveGateway>
+        <task id="Task_EN9" name="Send the candidate scheme prepared to the Commission">
+            <incoming>Flow_EN22</incoming>
+            <outgoing>Flow_EN23</outgoing>
+        </task>
+        <task id="Task_EN10" name="Evaluate each adopted European cybersecurity certification scheme">
+            <incoming>Flow_EN23</incoming>
+            <outgoing>Flow_EN24</outgoing>
+        </task>
+        <task id="Task_EN11" name="Take into account the feedback received">
+            <incoming>Flow_EN24</incoming>
+            <outgoing>Flow_EN25</outgoing>
+        </task>
+        <intermediateCatchEvent id="Catch_EN2" name="Receive request to start process of developing revised scheme">
+            <incoming>Flow_EN25</incoming>
+            <outgoing>Flow_EN26</outgoing>
+            <messageEventDefinition/>
+        </intermediateCatchEvent>
+        <task id="Task_EN12" name="Start the process of developing a revised candidate scheme">
+            <incoming>Flow_EN26</incoming>
+            <outgoing>Flow_EN27</outgoing>
+        </task>
+        <endEvent id="End_EN" name="Scheme evaluated">
+            <incoming>Flow_EN27</incoming>
+        </endEvent>
+
+        <sequenceFlow id="Flow_EN1" sourceRef="Start_EN" targetRef="Task_EN1"/>
+        <sequenceFlow id="Flow_EN2" sourceRef="Task_EN1" targetRef="GW_EN1"/>
+        <sequenceFlow id="Flow_EN3" name="Commission" sourceRef="GW_EN1" targetRef="Task_EN2"/>
+        <sequenceFlow id="Flow_EN4" name="ECCG" sourceRef="GW_EN1" targetRef="GW_EN_Refuse"/>
+        <sequenceFlow id="Flow_EN5" name="Refuse" sourceRef="GW_EN_Refuse" targetRef="Task_MB1"/>
+        <sequenceFlow id="Flow_EN6" name="Accept" sourceRef="GW_EN_Refuse" targetRef="Task_EN2"/>
+        <sequenceFlow id="Flow_EN7" sourceRef="Task_EN2" targetRef="GW_EN_Split"/>
+        <sequenceFlow id="Flow_EN8" sourceRef="Task_MB1" targetRef="Task_EN_Refuse_Reason"/>
+        <sequenceFlow id="Flow_EN9" sourceRef="Task_EN_Refuse_Reason" targetRef="End_EN_Refused"/>
+        <sequenceFlow id="Flow_EN10" sourceRef="GW_EN_Split" targetRef="Task_EN3"/>
+        <sequenceFlow id="Flow_EN11" sourceRef="GW_EN_Split" targetRef="Task_EN4"/>
+        <sequenceFlow id="Flow_EN12" sourceRef="GW_EN_Split" targetRef="Task_EN5"/>
+        <sequenceFlow id="Flow_EN13" sourceRef="Task_EN3" targetRef="GW_EN_Join"/>
+        <sequenceFlow id="Flow_EN14" sourceRef="Task_EN4" targetRef="GW_EN_Join"/>
+        <sequenceFlow id="Flow_EN15" sourceRef="Task_EN5" targetRef="GW_EN_Join"/>
+        <sequenceFlow id="Flow_EN16" sourceRef="GW_EN_Join" targetRef="Task_EN6"/>
+        <sequenceFlow id="Flow_EN17" sourceRef="Task_EN6" targetRef="Task_EN7"/>
+        <sequenceFlow id="Flow_EN18" sourceRef="Task_EN7" targetRef="GW_EN_Opinion"/>
+        <sequenceFlow id="Flow_EN19" name="Yes" sourceRef="GW_EN_Opinion" targetRef="Task_EN8"/>
+        <sequenceFlow id="Flow_EN20" name="No" sourceRef="GW_EN_Opinion" targetRef="GW_EN_Opinion_Join"/>
+        <sequenceFlow id="Flow_EN21" sourceRef="Task_EN8" targetRef="GW_EN_Opinion_Join"/>
+        <sequenceFlow id="Flow_EN22" sourceRef="GW_EN_Opinion_Join" targetRef="Task_EN9"/>
+        <sequenceFlow id="Flow_EN23" sourceRef="Task_EN9" targetRef="Task_EN10"/>
+        <sequenceFlow id="Flow_EN24" sourceRef="Task_EN10" targetRef="Task_EN11"/>
+        <sequenceFlow id="Flow_EN25" sourceRef="Task_EN11" targetRef="Catch_EN2"/>
+        <sequenceFlow id="Flow_EN26" sourceRef="Catch_EN2" targetRef="Task_EN12"/>
+        <sequenceFlow id="Flow_EN27" sourceRef="Task_EN12" targetRef="End_EN"/>
+    </process>
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+            <bpmndi:BPMNShape id="Shape_Participant_Commission" bpmnElement="Participant_Commission" isHorizontal="true">
+                <omgdc:Bounds x="100" y="50" width="2800" height="200"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Start_C" bpmnElement="Start_C">
+                <omgdc:Bounds x="150" y="135" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C1" bpmnElement="Task_C1">
+                <omgdc:Bounds x="230" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_C1" bpmnElement="GW_C1">
+                <omgdc:Bounds x="380" y="130" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C2" bpmnElement="Task_C2">
+                <omgdc:Bounds x="470" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C3" bpmnElement="Task_C3">
+                <omgdc:Bounds x="620" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_C2" bpmnElement="GW_C2">
+                <omgdc:Bounds x="770" y="130" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C4" bpmnElement="Task_C4">
+                <omgdc:Bounds x="860" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_C2_Merge" bpmnElement="GW_C2_Merge">
+                <omgdc:Bounds x="1010" y="130" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Catch_C1" bpmnElement="Catch_C1">
+                <omgdc:Bounds x="1100" y="135" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C5" bpmnElement="Task_C5">
+                <omgdc:Bounds x="1180" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C6" bpmnElement="Task_C6">
+                <omgdc:Bounds x="1330" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C7" bpmnElement="Task_C7">
+                <omgdc:Bounds x="1480" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_C3" bpmnElement="GW_C3">
+                <omgdc:Bounds x="1630" y="130" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_C8" bpmnElement="Task_C8">
+                <omgdc:Bounds x="1720" y="110" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_C" bpmnElement="End_C">
+                <omgdc:Bounds x="1870" y="135" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Participant_ECCG" bpmnElement="Participant_ECCG" isHorizontal="true">
+                <omgdc:Bounds x="100" y="300" width="2800" height="200"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Start_E" bpmnElement="Start_E">
+                <omgdc:Bounds x="150" y="385" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E1" bpmnElement="Task_E1">
+                <omgdc:Bounds x="230" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_E1" bpmnElement="GW_E1">
+                <omgdc:Bounds x="380" y="380" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E2" bpmnElement="Task_E2">
+                <omgdc:Bounds x="470" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_E1_Merge" bpmnElement="GW_E1_Merge">
+                <omgdc:Bounds x="620" y="380" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Catch_E1" bpmnElement="Catch_E1">
+                <omgdc:Bounds x="710" y="385" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E3" bpmnElement="Task_E3">
+                <omgdc:Bounds x="790" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E4" bpmnElement="Task_E4">
+                <omgdc:Bounds x="940" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E5" bpmnElement="Task_E5">
+                <omgdc:Bounds x="1090" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E6" bpmnElement="Task_E6">
+                <omgdc:Bounds x="1240" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_E2" bpmnElement="GW_E2">
+                <omgdc:Bounds x="1390" y="380" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_E7" bpmnElement="Task_E7">
+                <omgdc:Bounds x="1480" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_E" bpmnElement="End_E">
+                <omgdc:Bounds x="1630" y="385" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Participant_ENISA" bpmnElement="Participant_ENISA" isHorizontal="true">
+                <omgdc:Bounds x="100" y="550" width="2800" height="400"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Lane_ENISA" bpmnElement="Lane_ENISA_General" isHorizontal="true">
+                <omgdc:Bounds x="130" y="550" width="2770" height="250"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Lane_MB" bpmnElement="Lane_Management_Board" isHorizontal="true">
+                <omgdc:Bounds x="130" y="800" width="2770" height="150"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_EN" bpmnElement="Start_EN">
+                <omgdc:Bounds x="180" y="655" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN1" bpmnElement="Task_EN1">
+                <omgdc:Bounds x="260" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_EN1" bpmnElement="GW_EN1">
+                <omgdc:Bounds x="410" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_EN_Refuse" bpmnElement="GW_EN_Refuse">
+                <omgdc:Bounds x="500" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN2" bpmnElement="Task_EN2">
+                <omgdc:Bounds x="590" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Task_MB1" bpmnElement="Task_MB1">
+                <omgdc:Bounds x="500" y="830" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN_Refuse_Reason" bpmnElement="Task_EN_Refuse_Reason">
+                <omgdc:Bounds x="650" y="830" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_EN_Refused" bpmnElement="End_EN_Refused">
+                <omgdc:Bounds x="800" y="855" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_GW_EN_Split" bpmnElement="GW_EN_Split">
+                <omgdc:Bounds x="740" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN3" bpmnElement="Task_EN3">
+                <omgdc:Bounds x="830" y="560" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN4" bpmnElement="Task_EN4">
+                <omgdc:Bounds x="830" y="650" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN5" bpmnElement="Task_EN5">
+                <omgdc:Bounds x="830" y="740" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_EN_Join" bpmnElement="GW_EN_Join">
+                <omgdc:Bounds x="980" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Task_EN6" bpmnElement="Task_EN6">
+                <omgdc:Bounds x="1070" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN7" bpmnElement="Task_EN7">
+                <omgdc:Bounds x="1220" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_EN_Opinion" bpmnElement="GW_EN_Opinion">
+                <omgdc:Bounds x="1370" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN8" bpmnElement="Task_EN8">
+                <omgdc:Bounds x="1460" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_GW_EN_Opinion_Join" bpmnElement="GW_EN_Opinion_Join">
+                <omgdc:Bounds x="1610" y="650" width="40" height="40"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN9" bpmnElement="Task_EN9">
+                <omgdc:Bounds x="1700" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN10" bpmnElement="Task_EN10">
+                <omgdc:Bounds x="1850" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN11" bpmnElement="Task_EN11">
+                <omgdc:Bounds x="2000" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Catch_EN2" bpmnElement="Catch_EN2">
+                <omgdc:Bounds x="2150" y="655" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EN12" bpmnElement="Task_EN12">
+                <omgdc:Bounds x="2230" y="630" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_EN" bpmnElement="End_EN">
+                <omgdc:Bounds x="2380" y="655" width="30" height="30"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

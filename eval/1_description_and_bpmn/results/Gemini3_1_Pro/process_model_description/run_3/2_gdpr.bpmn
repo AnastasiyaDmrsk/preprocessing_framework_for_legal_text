@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_GDPR_Breach">
+      <participant id="Participant_Processor" name="Processor" processRef="Process_Processor" />
+      <participant id="Participant_Controller" name="Controller" processRef="Process_Controller" />
+      <participant id="Participant_SA" name="Supervisory authority" processRef="Process_SA" />
+      <messageFlow id="MF1" sourceRef="Task_Notify_Controller" targetRef="StartEvent_Controller" />
+      <messageFlow id="MF2" sourceRef="Task_Notify_SA" targetRef="StartEvent_SA" />
+      <messageFlow id="MF3" sourceRef="Task_Require_Comm" targetRef="StartEvent_Req_SA" />
+   </collaboration>
+
+   <process id="Process_Processor" isExecutable="true" name="Processor">
+      <startEvent id="StartEvent_Processor" name="Personal data breach">
+         <outgoing>Flow_P1</outgoing>
+      </startEvent>
+      <task id="Task_Notify_Controller" name="Notify personal data breach to the controller">
+         <incoming>Flow_P1</incoming>
+         <outgoing>Flow_P2</outgoing>
+      </task>
+      <endEvent id="EndEvent_Processor" name="Notification sent">
+         <incoming>Flow_P2</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_P1" sourceRef="StartEvent_Processor" targetRef="Task_Notify_Controller" />
+      <sequenceFlow id="Flow_P2" sourceRef="Task_Notify_Controller" targetRef="EndEvent_Processor" />
+   </process>
+
+   <process id="Process_Controller" isExecutable="true" name="Controller">
+      <startEvent id="StartEvent_Controller" name="Receive personal data breach notification">
+         <outgoing>Flow_C1</outgoing>
+         <messageEventDefinition id="MsgDef_C1" />
+      </startEvent>
+      <task id="Task_Assess_Risk" name="Assess whether unlikely to result in a risk">
+         <incoming>Flow_C1</incoming>
+         <outgoing>Flow_C2</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_Risk" name="Likely to result in a risk?">
+         <incoming>Flow_C2</incoming>
+         <outgoing>Flow_C3</outgoing>
+         <outgoing>Flow_C4</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Notify_SA" name="Notify personal data breach to supervisory authority">
+         <incoming>Flow_C3</incoming>
+         <outgoing>Flow_C5</outgoing>
+      </task>
+      <task id="Task_Assess_72h" name="Assess whether notification is made within 72 hours">
+         <incoming>Flow_C5</incoming>
+         <outgoing>Flow_C6</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_72h" name="Made within 72 hours?">
+         <incoming>Flow_C6</incoming>
+         <outgoing>Flow_C7</outgoing>
+         <outgoing>Flow_C8</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Reasons" name="Accompany notification with reasons for delay">
+         <incoming>Flow_C7</incoming>
+         <outgoing>Flow_C9</outgoing>
+      </task>
+      <task id="Task_Assess_Time" name="Assess whether possible to provide info at same time">
+         <incoming>Flow_C8</incoming>
+         <incoming>Flow_C9</incoming>
+         <outgoing>Flow_C10</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_Time" name="Possible at the same time?">
+         <incoming>Flow_C10</incoming>
+         <outgoing>Flow_C11</outgoing>
+         <outgoing>Flow_C12</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Phases" name="Provide the information in phases">
+         <incoming>Flow_C11</incoming>
+         <outgoing>Flow_C13</outgoing>
+      </task>
+
+      <parallelGateway id="ParallelGateway_Split">
+         <incoming>Flow_C4</incoming>
+         <incoming>Flow_C12</incoming>
+         <incoming>Flow_C13</incoming>
+         <outgoing>Flow_C14</outgoing>
+         <outgoing>Flow_C15</outgoing>
+         <outgoing>Flow_C16</outgoing>
+         <outgoing>Flow_C17</outgoing>
+      </parallelGateway>
+      <task id="Task_Describe_Nature" name="Describe nature of breach">
+         <incoming>Flow_C14</incoming>
+         <outgoing>Flow_C18</outgoing>
+      </task>
+      <task id="Task_Communicate_DPO" name="Communicate DPO contact details">
+         <incoming>Flow_C15</incoming>
+         <outgoing>Flow_C19</outgoing>
+      </task>
+      <task id="Task_Describe_Conseq" name="Describe likely consequences">
+         <incoming>Flow_C16</incoming>
+         <outgoing>Flow_C20</outgoing>
+      </task>
+      <task id="Task_Describe_Measures" name="Describe measures taken">
+         <incoming>Flow_C17</incoming>
+         <outgoing>Flow_C21</outgoing>
+      </task>
+      <parallelGateway id="ParallelGateway_Join">
+         <incoming>Flow_C18</incoming>
+         <incoming>Flow_C19</incoming>
+         <incoming>Flow_C20</incoming>
+         <incoming>Flow_C21</incoming>
+         <outgoing>Flow_C22</outgoing>
+      </parallelGateway>
+
+      <task id="Task_Document" name="Document any personal data breaches">
+         <incoming>Flow_C22</incoming>
+         <outgoing>Flow_C23</outgoing>
+      </task>
+      <task id="Task_Include_Facts" name="Include the facts relating to the breach">
+         <incoming>Flow_C23</incoming>
+         <outgoing>Flow_C24</outgoing>
+      </task>
+      <task id="Task_Assess_HighRisk" name="Assess whether likely high risk">
+         <incoming>Flow_C24</incoming>
+         <outgoing>Flow_C25</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_HighRisk" name="Likely high risk?">
+         <incoming>Flow_C25</incoming>
+         <outgoing>Flow_C26</outgoing>
+         <outgoing>Flow_C27</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Communicate_DS" name="Communicate breach to data subject">
+         <incoming>Flow_C26</incoming>
+         <outgoing>Flow_C28</outgoing>
+      </task>
+      <task id="Task_Describe_Clear" name="Describe nature in clear language">
+         <incoming>Flow_C28</incoming>
+         <outgoing>Flow_C29</outgoing>
+      </task>
+      <task id="Task_Include_Info" name="Include information and measures">
+         <incoming>Flow_C29</incoming>
+         <outgoing>Flow_C30</outgoing>
+      </task>
+      <task id="Task_Assess_Effort" name="Assess disproportionate effort">
+         <incoming>Flow_C30</incoming>
+         <outgoing>Flow_C31</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_Effort" name="Disproportionate effort?">
+         <incoming>Flow_C31</incoming>
+         <outgoing>Flow_C32</outgoing>
+         <outgoing>Flow_C33</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Public_Comm" name="Make public communication">
+         <incoming>Flow_C32</incoming>
+         <outgoing>Flow_C34</outgoing>
+      </task>
+      <endEvent id="EndEvent_Controller_Main" name="Documentation and communication completed">
+         <incoming>Flow_C27</incoming>
+         <incoming>Flow_C33</incoming>
+         <incoming>Flow_C34</incoming>
+      </endEvent>
+
+      <startEvent id="StartEvent_Req_SA" name="Receive SA requirement">
+         <outgoing>Flow_Req1</outgoing>
+         <messageEventDefinition id="MsgDef_Req" />
+      </startEvent>
+      <task id="Task_Comm_DS_Req" name="Communicate breach to data subject (Req)">
+         <incoming>Flow_Req1</incoming>
+         <outgoing>Flow_Req2</outgoing>
+      </task>
+      <endEvent id="EndEvent_Controller_Req" name="Communication completed">
+         <incoming>Flow_Req2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_C1" sourceRef="StartEvent_Controller" targetRef="Task_Assess_Risk" />
+      <sequenceFlow id="Flow_C2" sourceRef="Task_Assess_Risk" targetRef="ExclusiveGateway_Risk" />
+      <sequenceFlow id="Flow_C3" sourceRef="ExclusiveGateway_Risk" targetRef="Task_Notify_SA" name="Yes" />
+      <sequenceFlow id="Flow_C4" sourceRef="ExclusiveGateway_Risk" targetRef="ParallelGateway_Split" name="No" />
+      <sequenceFlow id="Flow_C5" sourceRef="Task_Notify_SA" targetRef="Task_Assess_72h" />
+      <sequenceFlow id="Flow_C6" sourceRef="Task_Assess_72h" targetRef="ExclusiveGateway_72h" />
+      <sequenceFlow id="Flow_C7" sourceRef="ExclusiveGateway_72h" targetRef="Task_Reasons" name="No" />
+      <sequenceFlow id="Flow_C8" sourceRef="ExclusiveGateway_72h" targetRef="Task_Assess_Time" name="Yes" />
+      <sequenceFlow id="Flow_C9" sourceRef="Task_Reasons" targetRef="Task_Assess_Time" />
+      <sequenceFlow id="Flow_C10" sourceRef="Task_Assess_Time" targetRef="ExclusiveGateway_Time" />
+      <sequenceFlow id="Flow_C11" sourceRef="ExclusiveGateway_Time" targetRef="Task_Phases" name="No" />
+      <sequenceFlow id="Flow_C12" sourceRef="ExclusiveGateway_Time" targetRef="ParallelGateway_Split" name="Yes" />
+      <sequenceFlow id="Flow_C13" sourceRef="Task_Phases" targetRef="ParallelGateway_Split" />
+      <sequenceFlow id="Flow_C14" sourceRef="ParallelGateway_Split" targetRef="Task_Describe_Nature" />
+      <sequenceFlow id="Flow_C15" sourceRef="ParallelGateway_Split" targetRef="Task_Communicate_DPO" />
+      <sequenceFlow id="Flow_C16" sourceRef="ParallelGateway_Split" targetRef="Task_Describe_Conseq" />
+      <sequenceFlow id="Flow_C17" sourceRef="ParallelGateway_Split" targetRef="Task_Describe_Measures" />
+      <sequenceFlow id="Flow_C18" sourceRef="Task_Describe_Nature" targetRef="ParallelGateway_Join" />
+      <sequenceFlow id="Flow_C19" sourceRef="Task_Communicate_DPO" targetRef="ParallelGateway_Join" />
+      <sequenceFlow id="Flow_C20" sourceRef="Task_Describe_Conseq" targetRef="ParallelGateway_Join" />
+      <sequenceFlow id="Flow_C21" sourceRef="Task_Describe_Measures" targetRef="ParallelGateway_Join" />
+      <sequenceFlow id="Flow_C22" sourceRef="ParallelGateway_Join" targetRef="Task_Document" />
+      <sequenceFlow id="Flow_C23" sourceRef="Task_Document" targetRef="Task_Include_Facts" />
+      <sequenceFlow id="Flow_C24" sourceRef="Task_Include_Facts" targetRef="Task_Assess_HighRisk" />
+      <sequenceFlow id="Flow_C25" sourceRef="Task_Assess_HighRisk" targetRef="ExclusiveGateway_HighRisk" />
+      <sequenceFlow id="Flow_C26" sourceRef="ExclusiveGateway_HighRisk" targetRef="Task_Communicate_DS" name="Yes" />
+      <sequenceFlow id="Flow_C27" sourceRef="ExclusiveGateway_HighRisk" targetRef="EndEvent_Controller_Main" name="No" />
+      <sequenceFlow id="Flow_C28" sourceRef="Task_Communicate_DS" targetRef="Task_Describe_Clear" />
+      <sequenceFlow id="Flow_C29" sourceRef="Task_Describe_Clear" targetRef="Task_Include_Info" />
+      <sequenceFlow id="Flow_C30" sourceRef="Task_Include_Info" targetRef="Task_Assess_Effort" />
+      <sequenceFlow id="Flow_C31" sourceRef="Task_Assess_Effort" targetRef="ExclusiveGateway_Effort" />
+      <sequenceFlow id="Flow_C32" sourceRef="ExclusiveGateway_Effort" targetRef="Task_Public_Comm" name="Yes" />
+      <sequenceFlow id="Flow_C33" sourceRef="ExclusiveGateway_Effort" targetRef="EndEvent_Controller_Main" name="No" />
+      <sequenceFlow id="Flow_C34" sourceRef="Task_Public_Comm" targetRef="EndEvent_Controller_Main" />
+      <sequenceFlow id="Flow_Req1" sourceRef="StartEvent_Req_SA" targetRef="Task_Comm_DS_Req" />
+      <sequenceFlow id="Flow_Req2" sourceRef="Task_Comm_DS_Req" targetRef="EndEvent_Controller_Req" />
+   </process>
+
+   <process id="Process_SA" isExecutable="true" name="Supervisory authority">
+      <startEvent id="StartEvent_SA" name="Receive notification from controller">
+         <outgoing>Flow_S1</outgoing>
+         <messageEventDefinition id="MsgDef_S1" />
+      </startEvent>
+      <task id="Task_Verify_Comp" name="Verify compliance using documentation">
+         <incoming>Flow_S1</incoming>
+         <outgoing>Flow_S2</outgoing>
+      </task>
+      <task id="Task_Assess_NotComm" name="Assess whether not already communicated">
+         <incoming>Flow_S2</incoming>
+         <outgoing>Flow_S3</outgoing>
+      </task>
+      <exclusiveGateway id="ExclusiveGateway_NotComm" name="Not already communicated?">
+         <incoming>Flow_S3</incoming>
+         <outgoing>Flow_S4</outgoing>
+         <outgoing>Flow_S7</outgoing>
+      </exclusiveGateway>
+      <parallelGateway id="ParallelGateway_SA_Split">
+         <incoming>Flow_S4</incoming>
+         <outgoing>Flow_SA_P1</outgoing>
+         <outgoing>Flow_SA_P2</outgoing>
+         <outgoing>Flow_SA_P3</outgoing>
+      </parallelGateway>
+      <task id="Task_Consider_Likelihood" name="Consider likelihood of high risk">
+         <incoming>Flow_SA_P1</incoming>
+         <outgoing>Flow_SA_P4</outgoing>
+      </task>
+      <task id="Task_Require_Comm" name="Require controller to communicate">
+         <incoming>Flow_SA_P2</incoming>
+         <outgoing>Flow_SA_P5</outgoing>
+      </task>
+      <task id="Task_Decide_Cond" name="Decide conditions are met">
+         <incoming>Flow_SA_P3</incoming>
+         <outgoing>Flow_SA_P6</outgoing>
+      </task>
+      <parallelGateway id="ParallelGateway_SA_Join">
+         <incoming>Flow_SA_P4</incoming>
+         <incoming>Flow_SA_P5</incoming>
+         <incoming>Flow_SA_P6</incoming>
+         <outgoing>Flow_SA_P7</outgoing>
+      </parallelGateway>
+      <endEvent id="EndEvent_SA" name="Verification and assessment completed">
+         <incoming>Flow_S7</incoming>
+         <incoming>Flow_SA_P7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_S1" sourceRef="StartEvent_SA" targetRef="Task_Verify_Comp" />
+      <sequenceFlow id="Flow_S2" sourceRef="Task_Verify_Comp" targetRef="Task_Assess_NotComm" />
+      <sequenceFlow id="Flow_S3" sourceRef="Task_Assess_NotComm" targetRef="ExclusiveGateway_NotComm" />
+      <sequenceFlow id="Flow_S4" sourceRef="ExclusiveGateway_NotComm" targetRef="ParallelGateway_SA_Split" name="Yes" />
+      <sequenceFlow id="Flow_S7" sourceRef="ExclusiveGateway_NotComm" targetRef="EndEvent_SA" name="No" />
+      <sequenceFlow id="Flow_SA_P1" sourceRef="ParallelGateway_SA_Split" targetRef="Task_Consider_Likelihood" />
+      <sequenceFlow id="Flow_SA_P2" sourceRef="ParallelGateway_SA_Split" targetRef="Task_Require_Comm" />
+      <sequenceFlow id="Flow_SA_P3" sourceRef="ParallelGateway_SA_Split" targetRef="Task_Decide_Cond" />
+      <sequenceFlow id="Flow_SA_P4" sourceRef="Task_Consider_Likelihood" targetRef="ParallelGateway_SA_Join" />
+      <sequenceFlow id="Flow_SA_P5" sourceRef="Task_Require_Comm" targetRef="ParallelGateway_SA_Join" />
+      <sequenceFlow id="Flow_SA_P6" sourceRef="Task_Decide_Cond" targetRef="ParallelGateway_SA_Join" />
+      <sequenceFlow id="Flow_SA_P7" sourceRef="ParallelGateway_SA_Join" targetRef="EndEvent_SA" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_GDPR_Breach" id="BPMNPlane_1">
+
+         <bpmndi:BPMNShape bpmnElement="Participant_Processor" id="Shape_Participant_Processor" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="800.0" x="100.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Controller" id="Shape_Participant_Controller" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="3500.0" x="100.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_SA" id="Shape_Participant_SA" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1600.0" x="100.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Processor" id="Shape_StartEvent_Processor">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Notify_Controller" id="Shape_Task_Notify_Controller">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="85.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Processor" id="Shape_EndEvent_Processor">
+            <omgdc:Bounds height="30.0" width="30.0" x="400.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Controller" id="Shape_StartEvent_Controller">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_Risk" id="Shape_Task_Assess_Risk">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_Risk" id="Shape_ExclusiveGateway_Risk">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Notify_SA" id="Shape_Task_Notify_SA">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_72h" id="Shape_Task_Assess_72h">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_72h" id="Shape_ExclusiveGateway_72h">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Reasons" id="Shape_Task_Reasons">
+            <omgdc:Bounds height="80.0" width="100.0" x="900.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_Time" id="Shape_Task_Assess_Time">
+            <omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_Time" id="Shape_ExclusiveGateway_Time">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Phases" id="Shape_Task_Phases">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ParallelGateway_Split" id="Shape_ParallelGateway_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="1450.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Describe_Nature" id="Shape_Task_Describe_Nature">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Communicate_DPO" id="Shape_Task_Communicate_DPO">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="370.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Describe_Conseq" id="Shape_Task_Describe_Conseq">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="470.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Describe_Measures" id="Shape_Task_Describe_Measures">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ParallelGateway_Join" id="Shape_ParallelGateway_Join">
+            <omgdc:Bounds height="40.0" width="40.0" x="1700.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Document" id="Shape_Task_Document">
+            <omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Include_Facts" id="Shape_Task_Include_Facts">
+            <omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_HighRisk" id="Shape_Task_Assess_HighRisk">
+            <omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_HighRisk" id="Shape_ExclusiveGateway_HighRisk">
+            <omgdc:Bounds height="40.0" width="40.0" x="2250.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Communicate_DS" id="Shape_Task_Communicate_DS">
+            <omgdc:Bounds height="80.0" width="100.0" x="2350.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Describe_Clear" id="Shape_Task_Describe_Clear">
+            <omgdc:Bounds height="80.0" width="100.0" x="2500.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Include_Info" id="Shape_Task_Include_Info">
+            <omgdc:Bounds height="80.0" width="100.0" x="2650.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_Effort" id="Shape_Task_Assess_Effort">
+            <omgdc:Bounds height="80.0" width="100.0" x="2800.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_Effort" id="Shape_ExclusiveGateway_Effort">
+            <omgdc:Bounds height="40.0" width="40.0" x="2950.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Public_Comm" id="Shape_Task_Public_Comm">
+            <omgdc:Bounds height="80.0" width="100.0" x="3050.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller_Main" id="Shape_EndEvent_Controller_Main">
+            <omgdc:Bounds height="30.0" width="30.0" x="3200.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Req_SA" id="Shape_StartEvent_Req_SA">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Comm_DS_Req" id="Shape_Task_Comm_DS_Req">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="575.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller_Req" id="Shape_EndEvent_Controller_Req">
+            <omgdc:Bounds height="30.0" width="30.0" x="400.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_SA" id="Shape_StartEvent_SA">
+            <omgdc:Bounds height="30.0" width="30.0" x="535.0" y="900.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Verify_Comp" id="Shape_Task_Verify_Comp">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="875.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Assess_NotComm" id="Shape_Task_Assess_NotComm">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="875.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_NotComm" id="Shape_ExclusiveGateway_NotComm">
+            <omgdc:Bounds height="40.0" width="40.0" x="950.0" y="895.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ParallelGateway_SA_Split" id="Shape_ParallelGateway_SA_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="1050.0" y="895.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Consider_Likelihood" id="Shape_Task_Consider_Likelihood">
+            <omgdc:Bounds height="80.0" width="100.0" x="1150.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Require_Comm" id="Shape_Task_Require_Comm">
+            <omgdc:Bounds height="80.0" width="100.0" x="1150.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Decide_Cond" id="Shape_Task_Decide_Cond">
+            <omgdc:Bounds height="80.0" width="100.0" x="1150.0" y="1010.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ParallelGateway_SA_Join" id="Shape_ParallelGateway_SA_Join">
+            <omgdc:Bounds height="40.0" width="40.0" x="1300.0" y="895.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_SA" id="Shape_EndEvent_SA">
+            <omgdc:Bounds height="30.0" width="30.0" x="1400.0" y="900.0"/>
+         </bpmndi:BPMNShape>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

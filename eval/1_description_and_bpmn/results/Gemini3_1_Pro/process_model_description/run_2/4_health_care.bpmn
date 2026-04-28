@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_HealthDataExchange">
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+      <participant id="Participant_TMS" name="Transferring Member State" processRef="Process_TMS" />
+      <participant id="Participant_MSR" name="Member State responsible" processRef="Process_MSR" />
+      <messageFlow id="MessageFlow_TransmitInfo" name="Information on special needs" sourceRef="Task_TMS_Transmit" targetRef="StartEvent_MSR" />
+   </collaboration>
+
+   <process id="Process_Commission" isExecutable="true" name="Commission">
+      <startEvent id="StartEvent_Comm" name="Need for exchange of health data">
+         <outgoing>Flow_C1</outgoing>
+      </startEvent>
+      <parallelGateway id="Gateway_Comm_Split">
+         <incoming>Flow_C1</incoming>
+         <outgoing>Flow_C2</outgoing>
+         <outgoing>Flow_C3</outgoing>
+      </parallelGateway>
+      <task id="Task_Comm_DrawUp" name="draw up the common health certificate">
+         <incoming>Flow_C2</incoming>
+         <outgoing>Flow_C4</outgoing>
+      </task>
+      <task id="Task_Comm_AdoptUniform" name="adopt uniform conditions and practical arrangements">
+         <incoming>Flow_C3</incoming>
+         <outgoing>Flow_C5</outgoing>
+      </task>
+      <parallelGateway id="Gateway_Comm_Merge">
+         <incoming>Flow_C4</incoming>
+         <incoming>Flow_C5</incoming>
+         <outgoing>Flow_C6</outgoing>
+      </parallelGateway>
+      <endEvent id="EndEvent_Comm" name="implementing acts adopted">
+         <incoming>Flow_C6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_C1" sourceRef="StartEvent_Comm" targetRef="Gateway_Comm_Split" />
+      <sequenceFlow id="Flow_C2" sourceRef="Gateway_Comm_Split" targetRef="Task_Comm_DrawUp" />
+      <sequenceFlow id="Flow_C3" sourceRef="Gateway_Comm_Split" targetRef="Task_Comm_AdoptUniform" />
+      <sequenceFlow id="Flow_C4" sourceRef="Task_Comm_DrawUp" targetRef="Gateway_Comm_Merge" />
+      <sequenceFlow id="Flow_C5" sourceRef="Task_Comm_AdoptUniform" targetRef="Gateway_Comm_Merge" />
+      <sequenceFlow id="Flow_C6" sourceRef="Gateway_Comm_Merge" targetRef="EndEvent_Comm" />
+   </process>
+
+   <process id="Process_TMS" isExecutable="true" name="Transferring Member State">
+      <startEvent id="StartEvent_TMS" name="Need for exchange of health data">
+         <outgoing>Flow_T1</outgoing>
+      </startEvent>
+      <task id="Task_TMS_ProcessData" name="carry out the processing of personal health data">
+         <incoming>Flow_T1</incoming>
+         <outgoing>Flow_T2</outgoing>
+      </task>
+      <task id="Task_TMS_AssessIncapable" name="assess whether applicant is physically or legally incapable">
+         <incoming>Flow_T2</incoming>
+         <outgoing>Flow_T3</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Incapable_Split" name="Incapable?">
+         <incoming>Flow_T3</incoming>
+         <outgoing>Flow_T4_Yes</outgoing>
+         <outgoing>Flow_T4_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_TMS_AssessNecessary" name="assess whether transmission is necessary to protect vital interests">
+         <incoming>Flow_T4_Yes</incoming>
+         <outgoing>Flow_T5</outgoing>
+      </task>
+      <task id="Task_TMS_ObtainConsent" name="obtain explicit consent">
+         <incoming>Flow_T4_No</incoming>
+         <outgoing>Flow_T6</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Incapable_Merge">
+         <incoming>Flow_T5</incoming>
+         <incoming>Flow_T6</incoming>
+         <outgoing>Flow_T7</outgoing>
+      </exclusiveGateway>
+      <task id="Task_TMS_EnsureLack" name="ensure lack of consent does not constitute obstacle">
+         <incoming>Flow_T7</incoming>
+         <outgoing>Flow_T8</outgoing>
+      </task>
+      <task id="Task_TMS_AssessConsent" name="assess whether explicit consent is obtained or transmission necessary">
+         <incoming>Flow_T8</incoming>
+         <outgoing>Flow_T9</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Consent_Split" name="Obtained or necessary?">
+         <incoming>Flow_T9</incoming>
+         <outgoing>Flow_T10_Yes</outgoing>
+         <outgoing>Flow_T10_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_TMS_AssessSpecialNeeds" name="assess whether information on special needs is available">
+         <incoming>Flow_T10_Yes</incoming>
+         <outgoing>Flow_T11</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Info_Split" name="Information available?">
+         <incoming>Flow_T11</incoming>
+         <outgoing>Flow_T12_Yes</outgoing>
+         <outgoing>Flow_T12_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_TMS_Transmit" name="transmit information on any special needs">
+         <incoming>Flow_T12_Yes</incoming>
+         <outgoing>Flow_T13</outgoing>
+      </task>
+      <task id="Task_TMS_Transfer" name="transfer information in a common health certificate">
+         <incoming>Flow_T13</incoming>
+         <outgoing>Flow_T14</outgoing>
+      </task>
+      <task id="Task_TMS_Exchange" name="exchange information only between health professionals">
+         <incoming>Flow_T14</incoming>
+         <outgoing>Flow_T15</outgoing>
+      </task>
+      <task id="Task_TMS_Use" name="use information exchanged only for the purposes">
+         <incoming>Flow_T15</incoming>
+         <outgoing>Flow_T16</outgoing>
+      </task>
+      <task id="Task_TMS_NotProcess" name="not further process the information exchanged">
+         <incoming>Flow_T16</incoming>
+         <outgoing>Flow_T17</outgoing>
+      </task>
+      <task id="Task_TMS_ApplyRules" name="apply rules laid down in Article 34">
+         <incoming>Flow_T17</incoming>
+         <outgoing>Flow_T18</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Final_Merge">
+         <incoming>Flow_T10_No</incoming>
+         <incoming>Flow_T12_No</incoming>
+         <incoming>Flow_T18</incoming>
+         <outgoing>Flow_T19</outgoing>
+      </exclusiveGateway>
+      <endEvent id="EndEvent_TMS" name="health data transmitted">
+         <incoming>Flow_T19</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_T1" sourceRef="StartEvent_TMS" targetRef="Task_TMS_ProcessData" />
+      <sequenceFlow id="Flow_T2" sourceRef="Task_TMS_ProcessData" targetRef="Task_TMS_AssessIncapable" />
+      <sequenceFlow id="Flow_T3" sourceRef="Task_TMS_AssessIncapable" targetRef="Gateway_Incapable_Split" />
+      <sequenceFlow id="Flow_T4_Yes" name="Yes" sourceRef="Gateway_Incapable_Split" targetRef="Task_TMS_AssessNecessary" />
+      <sequenceFlow id="Flow_T4_No" name="No" sourceRef="Gateway_Incapable_Split" targetRef="Task_TMS_ObtainConsent" />
+      <sequenceFlow id="Flow_T5" sourceRef="Task_TMS_AssessNecessary" targetRef="Gateway_Incapable_Merge" />
+      <sequenceFlow id="Flow_T6" sourceRef="Task_TMS_ObtainConsent" targetRef="Gateway_Incapable_Merge" />
+      <sequenceFlow id="Flow_T7" sourceRef="Gateway_Incapable_Merge" targetRef="Task_TMS_EnsureLack" />
+      <sequenceFlow id="Flow_T8" sourceRef="Task_TMS_EnsureLack" targetRef="Task_TMS_AssessConsent" />
+      <sequenceFlow id="Flow_T9" sourceRef="Task_TMS_AssessConsent" targetRef="Gateway_Consent_Split" />
+      <sequenceFlow id="Flow_T10_Yes" name="Yes" sourceRef="Gateway_Consent_Split" targetRef="Task_TMS_AssessSpecialNeeds" />
+      <sequenceFlow id="Flow_T10_No" name="No" sourceRef="Gateway_Consent_Split" targetRef="Gateway_Final_Merge" />
+      <sequenceFlow id="Flow_T11" sourceRef="Task_TMS_AssessSpecialNeeds" targetRef="Gateway_Info_Split" />
+      <sequenceFlow id="Flow_T12_Yes" name="Yes" sourceRef="Gateway_Info_Split" targetRef="Task_TMS_Transmit" />
+      <sequenceFlow id="Flow_T12_No" name="No" sourceRef="Gateway_Info_Split" targetRef="Gateway_Final_Merge" />
+      <sequenceFlow id="Flow_T13" sourceRef="Task_TMS_Transmit" targetRef="Task_TMS_Transfer" />
+      <sequenceFlow id="Flow_T14" sourceRef="Task_TMS_Transfer" targetRef="Task_TMS_Exchange" />
+      <sequenceFlow id="Flow_T15" sourceRef="Task_TMS_Exchange" targetRef="Task_TMS_Use" />
+      <sequenceFlow id="Flow_T16" sourceRef="Task_TMS_Use" targetRef="Task_TMS_NotProcess" />
+      <sequenceFlow id="Flow_T17" sourceRef="Task_TMS_NotProcess" targetRef="Task_TMS_ApplyRules" />
+      <sequenceFlow id="Flow_T18" sourceRef="Task_TMS_ApplyRules" targetRef="Gateway_Final_Merge" />
+      <sequenceFlow id="Flow_T19" sourceRef="Gateway_Final_Merge" targetRef="EndEvent_TMS" />
+   </process>
+
+   <process id="Process_MSR" isExecutable="true" name="Member State responsible">
+      <startEvent id="StartEvent_MSR" name="Upon receiving information">
+         <outgoing>Flow_M1</outgoing>
+         <messageEventDefinition id="MessageDef_MSR"/>
+      </startEvent>
+      <task id="Task_MSR_Ensure" name="ensure special needs are adequately addressed">
+         <incoming>Flow_M1</incoming>
+         <outgoing>Flow_M2</outgoing>
+      </task>
+      <task id="Task_MSR_Include" name="include essential medical care">
+         <incoming>Flow_M2</incoming>
+         <outgoing>Flow_M3</outgoing>
+      </task>
+      <task id="Task_MSR_Exchange" name="exchange information only between health professionals">
+         <incoming>Flow_M3</incoming>
+         <outgoing>Flow_M4</outgoing>
+      </task>
+      <task id="Task_MSR_Use" name="use information exchanged only for the purposes">
+         <incoming>Flow_M4</incoming>
+         <outgoing>Flow_M5</outgoing>
+      </task>
+      <task id="Task_MSR_NotProcess" name="not further process information exchanged">
+         <incoming>Flow_M5</incoming>
+         <outgoing>Flow_M6</outgoing>
+      </task>
+      <task id="Task_MSR_ApplyRules" name="apply rules laid down in Article 34">
+         <incoming>Flow_M6</incoming>
+         <outgoing>Flow_M7</outgoing>
+      </task>
+      <endEvent id="EndEvent_MSR" name="special needs addressed">
+         <incoming>Flow_M7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_M1" sourceRef="StartEvent_MSR" targetRef="Task_MSR_Ensure" />
+      <sequenceFlow id="Flow_M2" sourceRef="Task_MSR_Ensure" targetRef="Task_MSR_Include" />
+      <sequenceFlow id="Flow_M3" sourceRef="Task_MSR_Include" targetRef="Task_MSR_Exchange" />
+      <sequenceFlow id="Flow_M4" sourceRef="Task_MSR_Exchange" targetRef="Task_MSR_Use" />
+      <sequenceFlow id="Flow_M5" sourceRef="Task_MSR_Use" targetRef="Task_MSR_NotProcess" />
+      <sequenceFlow id="Flow_M6" sourceRef="Task_MSR_NotProcess" targetRef="Task_MSR_ApplyRules" />
+      <sequenceFlow id="Flow_M7" sourceRef="Task_MSR_ApplyRules" targetRef="EndEvent_MSR" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_HealthDataExchange">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_HealthDataExchange" id="BPMNPlane_HealthDataExchange">
+
+         <bpmndi:BPMNShape bpmnElement="Participant_Commission" id="Shape_Participant_Commission" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2800.0" x="100.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Comm" id="Shape_StartEvent_Comm">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="150.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Comm_Split" id="Shape_Gateway_Comm_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="230.0" y="145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Comm_DrawUp" id="Shape_Task_Comm_DrawUp">
+            <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Comm_AdoptUniform" id="Shape_Task_Comm_AdoptUniform">
+            <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="180.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Comm_Merge" id="Shape_Gateway_Comm_Merge">
+            <omgdc:Bounds height="40.0" width="40.0" x="470.0" y="145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Comm" id="Shape_EndEvent_Comm">
+            <omgdc:Bounds height="30.0" width="30.0" x="560.0" y="150.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_C1" id="Edge_Flow_C1">
+            <omgdi:waypoint x="180.0" y="165.0" />
+            <omgdi:waypoint x="230.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C2" id="Edge_Flow_C2">
+            <omgdi:waypoint x="250.0" y="145.0" />
+            <omgdi:waypoint x="250.0" y="120.0" />
+            <omgdi:waypoint x="320.0" y="120.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C3" id="Edge_Flow_C3">
+            <omgdi:waypoint x="250.0" y="185.0" />
+            <omgdi:waypoint x="250.0" y="220.0" />
+            <omgdi:waypoint x="320.0" y="220.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C4" id="Edge_Flow_C4">
+            <omgdi:waypoint x="420.0" y="120.0" />
+            <omgdi:waypoint x="490.0" y="120.0" />
+            <omgdi:waypoint x="490.0" y="145.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C5" id="Edge_Flow_C5">
+            <omgdi:waypoint x="420.0" y="220.0" />
+            <omgdi:waypoint x="490.0" y="220.0" />
+            <omgdi:waypoint x="490.0" y="185.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C6" id="Edge_Flow_C6">
+            <omgdi:waypoint x="510.0" y="165.0" />
+            <omgdi:waypoint x="560.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_TMS" id="Shape_Participant_TMS" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="2800.0" x="100.0" y="350.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_TMS" id="Shape_StartEvent_TMS">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="535.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_ProcessData" id="Shape_Task_TMS_ProcessData">
+            <omgdc:Bounds height="80.0" width="100.0" x="230.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_AssessIncapable" id="Shape_Task_TMS_AssessIncapable">
+            <omgdc:Bounds height="80.0" width="100.0" x="380.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Incapable_Split" id="Shape_Gateway_Incapable_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="530.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_AssessNecessary" id="Shape_Task_TMS_AssessNecessary">
+            <omgdc:Bounds height="80.0" width="100.0" x="620.0" y="420.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_ObtainConsent" id="Shape_Task_TMS_ObtainConsent">
+            <omgdc:Bounds height="80.0" width="100.0" x="620.0" y="600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Incapable_Merge" id="Shape_Gateway_Incapable_Merge">
+            <omgdc:Bounds height="40.0" width="40.0" x="770.0" y="530.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_EnsureLack" id="Shape_Task_TMS_EnsureLack">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_AssessConsent" id="Shape_Task_TMS_AssessConsent">
+            <omgdc:Bounds height="80.0" width="100.0" x="1010.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Consent_Split" id="Shape_Gateway_Consent_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="1160.0" y="530.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_AssessSpecialNeeds" id="Shape_Task_TMS_AssessSpecialNeeds">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Info_Split" id="Shape_Gateway_Info_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="1400.0" y="530.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_Transmit" id="Shape_Task_TMS_Transmit">
+            <omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_Transfer" id="Shape_Task_TMS_Transfer">
+            <omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_Exchange" id="Shape_Task_TMS_Exchange">
+            <omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_Use" id="Shape_Task_TMS_Use">
+            <omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_NotProcess" id="Shape_Task_TMS_NotProcess">
+            <omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TMS_ApplyRules" id="Shape_Task_TMS_ApplyRules">
+            <omgdc:Bounds height="80.0" width="100.0" x="2250.0" y="510.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Final_Merge" id="Shape_Gateway_Final_Merge">
+            <omgdc:Bounds height="40.0" width="40.0" x="2400.0" y="530.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_TMS" id="Shape_EndEvent_TMS">
+            <omgdc:Bounds height="30.0" width="30.0" x="2500.0" y="535.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_T1" id="Edge_Flow_T1">
+            <omgdi:waypoint x="180.0" y="550.0" />
+            <omgdi:waypoint x="230.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T2" id="Edge_Flow_T2">
+            <omgdi:waypoint x="330.0" y="550.0" />
+            <omgdi:waypoint x="380.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T3" id="Edge_Flow_T3">
+            <omgdi:waypoint x="480.0" y="550.0" />
+            <omgdi:waypoint x="530.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T4_Yes" id="Edge_Flow_T4_Yes">
+            <omgdi:waypoint x="550.0" y="530.0" />
+            <omgdi:waypoint x="550.0" y="460.0" />
+            <omgdi:waypoint x="620.0" y="460.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T4_No" id="Edge_Flow_T4_No">
+            <omgdi:waypoint x="550.0" y="570.0" />
+            <omgdi:waypoint x="550.0" y="640.0" />
+            <omgdi:waypoint x="620.0" y="640.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T5" id="Edge_Flow_T5">
+            <omgdi:waypoint x="720.0" y="460.0" />
+            <omgdi:waypoint x="790.0" y="460.0" />
+            <omgdi:waypoint x="790.0" y="530.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T6" id="Edge_Flow_T6">
+            <omgdi:waypoint x="720.0" y="640.0" />
+            <omgdi:waypoint x="790.0" y="640.0" />
+            <omgdi:waypoint x="790.0" y="570.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T7" id="Edge_Flow_T7">
+            <omgdi:waypoint x="810.0" y="550.0" />
+            <omgdi:waypoint x="860.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T8" id="Edge_Flow_T8">
+            <omgdi:waypoint x="960.0" y="550.0" />
+            <omgdi:waypoint x="1010.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T9" id="Edge_Flow_T9">
+            <omgdi:waypoint x="1110.0" y="550.0" />
+            <omgdi:waypoint x="1160.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T10_Yes" id="Edge_Flow_T10_Yes">
+            <omgdi:waypoint x="1200.0" y="550.0" />
+            <omgdi:waypoint x="1250.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T10_No" id="Edge_Flow_T10_No">
+            <omgdi:waypoint x="1180.0" y="570.0" />
+            <omgdi:waypoint x="1180.0" y="700.0" />
+            <omgdi:waypoint x="2420.0" y="700.0" />
+            <omgdi:waypoint x="2420.0" y="570.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T11" id="Edge_Flow_T11">
+            <omgdi:waypoint x="1350.0" y="550.0" />
+            <omgdi:waypoint x="1400.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T12_Yes" id="Edge_Flow_T12_Yes">
+            <omgdi:waypoint x="1440.0" y="550.0" />
+            <omgdi:waypoint x="1500.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T12_No" id="Edge_Flow_T12_No">
+            <omgdi:waypoint x="1420.0" y="570.0" />
+            <omgdi:waypoint x="1420.0" y="680.0" />
+            <omgdi:waypoint x="2420.0" y="680.0" />
+            <omgdi:waypoint x="2420.0" y="570.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T13" id="Edge_Flow_T13">
+            <omgdi:waypoint x="1600.0" y="550.0" />
+            <omgdi:waypoint x="1650.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T14" id="Edge_Flow_T14">
+            <omgdi:waypoint x="1750.0" y="550.0" />
+            <omgdi:waypoint x="1800.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T15" id="Edge_Flow_T15">
+            <omgdi:waypoint x="1900.0" y="550.0" />
+            <omgdi:waypoint x="1950.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T16" id="Edge_Flow_T16">
+            <omgdi:waypoint x="2050.0" y="550.0" />
+            <omgdi:waypoint x="2100.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T17" id="Edge_Flow_T17">
+            <omgdi:waypoint x="2200.0" y="550.0" />
+            <omgdi:waypoint x="2250.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T18" id="Edge_Flow_T18">
+            <omgdi:waypoint x="2350.0" y="550.0" />
+            <omgdi:waypoint x="2400.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T19" id="Edge_Flow_T19">
+            <omgdi:waypoint x="2440.0" y="550.0" />
+            <omgdi:waypoint x="2500.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Participant_MSR" id="Shape_Participant_MSR" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2800.0" x="100.0" y="800.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_MSR" id="Shape_StartEvent_MSR">
+            <omgdc:Bounds height="30.0" width="30.0" x="1535.0" y="900.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_Ensure" id="Shape_Task_MSR_Ensure">
+            <omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_Include" id="Shape_Task_MSR_Include">
+            <omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_Exchange" id="Shape_Task_MSR_Exchange">
+            <omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_Use" id="Shape_Task_MSR_Use">
+            <omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_NotProcess" id="Shape_Task_MSR_NotProcess">
+            <omgdc:Bounds height="80.0" width="100.0" x="2250.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MSR_ApplyRules" id="Shape_Task_MSR_ApplyRules">
+            <omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="875.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_MSR" id="Shape_EndEvent_MSR">
+            <omgdc:Bounds height="30.0" width="30.0" x="2550.0" y="900.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_M1" id="Edge_Flow_M1">
+            <omgdi:waypoint x="1565.0" y="915.0" />
+            <omgdi:waypoint x="1650.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M2" id="Edge_Flow_M2">
+            <omgdi:waypoint x="1750.0" y="915.0" />
+            <omgdi:waypoint x="1800.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M3" id="Edge_Flow_M3">
+            <omgdi:waypoint x="1900.0" y="915.0" />
+            <omgdi:waypoint x="1950.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M4" id="Edge_Flow_M4">
+            <omgdi:waypoint x="2050.0" y="915.0" />
+            <omgdi:waypoint x="2100.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M5" id="Edge_Flow_M5">
+            <omgdi:waypoint x="2200.0" y="915.0" />
+            <omgdi:waypoint x="2250.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M6" id="Edge_Flow_M6">
+            <omgdi:waypoint x="2350.0" y="915.0" />
+            <omgdi:waypoint x="2400.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_M7" id="Edge_Flow_M7">
+            <omgdi:waypoint x="2500.0" y="915.0" />
+            <omgdi:waypoint x="2550.0" y="915.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_TransmitInfo" id="Edge_MessageFlow_TransmitInfo">
+            <omgdi:waypoint x="1550.0" y="590.0" />
+            <omgdi:waypoint x="1550.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

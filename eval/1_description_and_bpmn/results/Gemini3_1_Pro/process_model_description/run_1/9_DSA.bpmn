@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-dsa-process"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+
+  <collaboration id="Collaboration_1">
+    <participant id="Participant_Entities" name="Entities" processRef="Process_Entities"/>
+    <participant id="Participant_DSC" name="Digital Services Coordinator" processRef="Process_DSC"/>
+    <participant id="Participant_TF" name="Trusted flaggers" processRef="Process_TF"/>
+    <participant id="Participant_POP" name="Providers of online platforms" processRef="Process_POP"/>
+    <participant id="Participant_Commission" name="Commission" processRef="Process_Commission"/>
+    <participant id="Participant_Board" name="Board" processRef="Process_Board"/>
+
+    <messageFlow id="Flow_Msg_App" sourceRef="Activity_Ent_SendApp" targetRef="Start_DSC"/>
+    <messageFlow id="Flow_Msg_Info" sourceRef="Activity_POP_SendInfo" targetRef="Catch_DSC_Info"/>
+    <messageFlow id="Flow_Msg_Docs" sourceRef="Activity_POP_SendDocs" targetRef="Catch_DSC_Info"/>
+    <messageFlow id="Flow_Msg_React" sourceRef="Activity_DSC_SendReact" targetRef="Catch_TF_React"/>
+    <messageFlow id="Flow_Msg_Comm" sourceRef="Activity_DSC_SendComm" targetRef="Catch_Comm_Names"/>
+    <messageFlow id="Flow_Msg_Board" sourceRef="Activity_DSC_SendBoard" targetRef="Catch_Board_Names"/>
+    <messageFlow id="Flow_Msg_Reports" sourceRef="Activity_TF_SendReports" targetRef="Catch_DSC_Reports"/>
+    <messageFlow id="Flow_Msg_Consult" sourceRef="Activity_Comm_SendConsult" targetRef="Catch_Board_Consult"/>
+  </collaboration>
+
+  <process id="Process_Entities" isExecutable="true">
+    <startEvent id="Start_Entities" name="Process starts">
+      <outgoing>Flow_Ent_1</outgoing>
+    </startEvent>
+    <task id="Activity_Ent_SendApp" name="Send application for trusted flagger status">
+      <incoming>Flow_Ent_1</incoming>
+      <outgoing>Flow_Ent_2</outgoing>
+    </task>
+    <parallelGateway id="Gateway_Ent_Split">
+      <incoming>Flow_Ent_2</incoming>
+      <outgoing>Flow_Ent_3</outgoing>
+      <outgoing>Flow_Ent_4</outgoing>
+      <outgoing>Flow_Ent_5</outgoing>
+    </parallelGateway>
+    <task id="Activity_Ent_Dem1" name="Demonstrate expertise and competence">
+      <incoming>Flow_Ent_3</incoming>
+      <outgoing>Flow_Ent_6</outgoing>
+    </task>
+    <task id="Activity_Ent_Dem2" name="Demonstrate independence">
+      <incoming>Flow_Ent_4</incoming>
+      <outgoing>Flow_Ent_7</outgoing>
+    </task>
+    <task id="Activity_Ent_Dem3" name="Demonstrate diligence accurately">
+      <incoming>Flow_Ent_5</incoming>
+      <outgoing>Flow_Ent_8</outgoing>
+    </task>
+    <parallelGateway id="Gateway_Ent_Join">
+      <incoming>Flow_Ent_6</incoming>
+      <incoming>Flow_Ent_7</incoming>
+      <incoming>Flow_Ent_8</incoming>
+      <outgoing>Flow_Ent_9</outgoing>
+    </parallelGateway>
+    <endEvent id="End_Entities" name="Application submitted">
+      <incoming>Flow_Ent_9</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_Ent_1" sourceRef="Start_Entities" targetRef="Activity_Ent_SendApp"/>
+    <sequenceFlow id="Flow_Ent_2" sourceRef="Activity_Ent_SendApp" targetRef="Gateway_Ent_Split"/>
+    <sequenceFlow id="Flow_Ent_3" sourceRef="Gateway_Ent_Split" targetRef="Activity_Ent_Dem1"/>
+    <sequenceFlow id="Flow_Ent_4" sourceRef="Gateway_Ent_Split" targetRef="Activity_Ent_Dem2"/>
+    <sequenceFlow id="Flow_Ent_5" sourceRef="Gateway_Ent_Split" targetRef="Activity_Ent_Dem3"/>
+    <sequenceFlow id="Flow_Ent_6" sourceRef="Activity_Ent_Dem1" targetRef="Gateway_Ent_Join"/>
+    <sequenceFlow id="Flow_Ent_7" sourceRef="Activity_Ent_Dem2" targetRef="Gateway_Ent_Join"/>
+    <sequenceFlow id="Flow_Ent_8" sourceRef="Activity_Ent_Dem3" targetRef="Gateway_Ent_Join"/>
+    <sequenceFlow id="Flow_Ent_9" sourceRef="Gateway_Ent_Join" targetRef="End_Entities"/>
+  </process>
+
+  <process id="Process_DSC" isExecutable="true">
+    <startEvent id="Start_DSC" name="Receive application">
+      <outgoing>Flow_DSC_1</outgoing>
+      <messageEventDefinition id="MsgDef_App"/>
+    </startEvent>
+    <task id="Activity_DSC_Assess1" name="Assess if conditions met">
+      <incoming>Flow_DSC_1</incoming>
+      <outgoing>Flow_DSC_2</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_DSC_Cond1" name="Meets conditions?">
+      <incoming>Flow_DSC_2</incoming>
+      <outgoing>Flow_DSC_3</outgoing>
+      <outgoing>Flow_DSC_4</outgoing>
+    </exclusiveGateway>
+    <task id="Activity_DSC_Award" name="Award trusted flagger status">
+      <incoming>Flow_DSC_3</incoming>
+      <outgoing>Flow_DSC_5</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_DSC_Join1">
+      <incoming>Flow_DSC_4</incoming>
+      <incoming>Flow_DSC_5</incoming>
+      <outgoing>Flow_DSC_6</outgoing>
+    </exclusiveGateway>
+    <intermediateCatchEvent id="Catch_DSC_Info" name="Receive info">
+      <incoming>Flow_DSC_6</incoming>
+      <outgoing>Flow_DSC_7</outgoing>
+      <messageEventDefinition id="MsgDef_Info"/>
+    </intermediateCatchEvent>
+    <task id="Activity_DSC_Assess2" name="Assess legitimate reasons">
+      <incoming>Flow_DSC_7</incoming>
+      <outgoing>Flow_DSC_8</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_DSC_Cond2" name="Legitimate reasons?">
+      <incoming>Flow_DSC_8</incoming>
+      <outgoing>Flow_DSC_9</outgoing>
+      <outgoing>Flow_DSC_10</outgoing>
+    </exclusiveGateway>
+    <parallelGateway id="Gateway_DSC_Split1">
+      <incoming>Flow_DSC_9</incoming>
+      <outgoing>Flow_DSC_11</outgoing>
+      <outgoing>Flow_DSC_12</outgoing>
+    </parallelGateway>
+    <task id="Activity_DSC_Suspend" name="Suspend status">
+      <incoming>Flow_DSC_11</incoming>
+      <outgoing>Flow_DSC_13</outgoing>
+    </task>
+    <task id="Activity_DSC_Investigate" name="Carry out investigation">
+      <incoming>Flow_DSC_12</incoming>
+      <outgoing>Flow_DSC_14</outgoing>
+    </task>
+    <parallelGateway id="Gateway_DSC_Join2">
+      <incoming>Flow_DSC_13</incoming>
+      <incoming>Flow_DSC_14</incoming>
+      <outgoing>Flow_DSC_15</outgoing>
+    </parallelGateway>
+    <exclusiveGateway id="Gateway_DSC_Join3">
+      <incoming>Flow_DSC_10</incoming>
+      <incoming>Flow_DSC_15</incoming>
+      <outgoing>Flow_DSC_16</outgoing>
+    </exclusiveGateway>
+    <task id="Activity_DSC_Assess3" name="Assess if no longer meets conditions">
+      <incoming>Flow_DSC_16</incoming>
+      <outgoing>Flow_DSC_17</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_DSC_Cond3" name="No longer meets?">
+      <incoming>Flow_DSC_17</incoming>
+      <outgoing>Flow_DSC_18</outgoing>
+      <outgoing>Flow_DSC_19</outgoing>
+    </exclusiveGateway>
+    <parallelGateway id="Gateway_DSC_Split2">
+      <incoming>Flow_DSC_18</incoming>
+      <outgoing>Flow_DSC_20</outgoing>
+      <outgoing>Flow_DSC_21</outgoing>
+    </parallelGateway>
+    <task id="Activity_DSC_SendReact" name="Send opportunity to react">
+      <incoming>Flow_DSC_20</incoming>
+      <outgoing>Flow_DSC_22</outgoing>
+    </task>
+    <task id="Activity_DSC_Revoke" name="Revoke status">
+      <incoming>Flow_DSC_21</incoming>
+      <outgoing>Flow_DSC_23</outgoing>
+    </task>
+    <parallelGateway id="Gateway_DSC_Join4">
+      <incoming>Flow_DSC_22</incoming>
+      <incoming>Flow_DSC_23</incoming>
+      <outgoing>Flow_DSC_24</outgoing>
+    </parallelGateway>
+    <exclusiveGateway id="Gateway_DSC_Join5">
+      <incoming>Flow_DSC_19</incoming>
+      <incoming>Flow_DSC_24</incoming>
+      <outgoing>Flow_DSC_25</outgoing>
+    </exclusiveGateway>
+    <parallelGateway id="Gateway_DSC_Split3">
+      <incoming>Flow_DSC_25</incoming>
+      <outgoing>Flow_DSC_26</outgoing>
+      <outgoing>Flow_DSC_27</outgoing>
+    </parallelGateway>
+    <task id="Activity_DSC_SendComm" name="Send info to Commission">
+      <incoming>Flow_DSC_26</incoming>
+      <outgoing>Flow_DSC_28</outgoing>
+    </task>
+    <task id="Activity_DSC_SendBoard" name="Send info to Board">
+      <incoming>Flow_DSC_27</incoming>
+      <outgoing>Flow_DSC_29</outgoing>
+    </task>
+    <parallelGateway id="Gateway_DSC_Join6">
+      <incoming>Flow_DSC_28</incoming>
+      <incoming>Flow_DSC_29</incoming>
+      <outgoing>Flow_DSC_30</outgoing>
+    </parallelGateway>
+    <intermediateCatchEvent id="Catch_DSC_Reports" name="Receive reports">
+      <incoming>Flow_DSC_30</incoming>
+      <outgoing>Flow_DSC_31</outgoing>
+      <messageEventDefinition id="MsgDef_Reports"/>
+    </intermediateCatchEvent>
+    <task id="Activity_DSC_ProcessRep" name="Process reports">
+      <incoming>Flow_DSC_31</incoming>
+      <outgoing>Flow_DSC_32</outgoing>
+    </task>
+    <endEvent id="End_DSC" name="Status managed">
+      <incoming>Flow_DSC_32</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_DSC_1" sourceRef="Start_DSC" targetRef="Activity_DSC_Assess1"/>
+    <sequenceFlow id="Flow_DSC_2" sourceRef="Activity_DSC_Assess1" targetRef="Gateway_DSC_Cond1"/>
+    <sequenceFlow id="Flow_DSC_3" name="Yes" sourceRef="Gateway_DSC_Cond1" targetRef="Activity_DSC_Award"/>
+    <sequenceFlow id="Flow_DSC_4" name="No" sourceRef="Gateway_DSC_Cond1" targetRef="Gateway_DSC_Join1"/>
+    <sequenceFlow id="Flow_DSC_5" sourceRef="Activity_DSC_Award" targetRef="Gateway_DSC_Join1"/>
+    <sequenceFlow id="Flow_DSC_6" sourceRef="Gateway_DSC_Join1" targetRef="Catch_DSC_Info"/>
+    <sequenceFlow id="Flow_DSC_7" sourceRef="Catch_DSC_Info" targetRef="Activity_DSC_Assess2"/>
+    <sequenceFlow id="Flow_DSC_8" sourceRef="Activity_DSC_Assess2" targetRef="Gateway_DSC_Cond2"/>
+    <sequenceFlow id="Flow_DSC_9" name="Yes" sourceRef="Gateway_DSC_Cond2" targetRef="Gateway_DSC_Split1"/>
+    <sequenceFlow id="Flow_DSC_10" name="No" sourceRef="Gateway_DSC_Cond2" targetRef="Gateway_DSC_Join3"/>
+    <sequenceFlow id="Flow_DSC_11" sourceRef="Gateway_DSC_Split1" targetRef="Activity_DSC_Suspend"/>
+    <sequenceFlow id="Flow_DSC_12" sourceRef="Gateway_DSC_Split1" targetRef="Activity_DSC_Investigate"/>
+    <sequenceFlow id="Flow_DSC_13" sourceRef="Activity_DSC_Suspend" targetRef="Gateway_DSC_Join2"/>
+    <sequenceFlow id="Flow_DSC_14" sourceRef="Activity_DSC_Investigate" targetRef="Gateway_DSC_Join2"/>
+    <sequenceFlow id="Flow_DSC_15" sourceRef="Gateway_DSC_Join2" targetRef="Gateway_DSC_Join3"/>
+    <sequenceFlow id="Flow_DSC_16" sourceRef="Gateway_DSC_Join3" targetRef="Activity_DSC_Assess3"/>
+    <sequenceFlow id="Flow_DSC_17" sourceRef="Activity_DSC_Assess3" targetRef="Gateway_DSC_Cond3"/>
+    <sequenceFlow id="Flow_DSC_18" name="Yes" sourceRef="Gateway_DSC_Cond3" targetRef="Gateway_DSC_Split2"/>
+    <sequenceFlow id="Flow_DSC_19" name="No" sourceRef="Gateway_DSC_Cond3" targetRef="Gateway_DSC_Join5"/>
+    <sequenceFlow id="Flow_DSC_20" sourceRef="Gateway_DSC_Split2" targetRef="Activity_DSC_SendReact"/>
+    <sequenceFlow id="Flow_DSC_21" sourceRef="Gateway_DSC_Split2" targetRef="Activity_DSC_Revoke"/>
+    <sequenceFlow id="Flow_DSC_22" sourceRef="Activity_DSC_SendReact" targetRef="Gateway_DSC_Join4"/>
+    <sequenceFlow id="Flow_DSC_23" sourceRef="Activity_DSC_Revoke" targetRef="Gateway_DSC_Join4"/>
+    <sequenceFlow id="Flow_DSC_24" sourceRef="Gateway_DSC_Join4" targetRef="Gateway_DSC_Join5"/>
+    <sequenceFlow id="Flow_DSC_25" sourceRef="Gateway_DSC_Join5" targetRef="Gateway_DSC_Split3"/>
+    <sequenceFlow id="Flow_DSC_26" sourceRef="Gateway_DSC_Split3" targetRef="Activity_DSC_SendComm"/>
+    <sequenceFlow id="Flow_DSC_27" sourceRef="Gateway_DSC_Split3" targetRef="Activity_DSC_SendBoard"/>
+    <sequenceFlow id="Flow_DSC_28" sourceRef="Activity_DSC_SendComm" targetRef="Gateway_DSC_Join6"/>
+    <sequenceFlow id="Flow_DSC_29" sourceRef="Activity_DSC_SendBoard" targetRef="Gateway_DSC_Join6"/>
+    <sequenceFlow id="Flow_DSC_30" sourceRef="Gateway_DSC_Join6" targetRef="Catch_DSC_Reports"/>
+    <sequenceFlow id="Flow_DSC_31" sourceRef="Catch_DSC_Reports" targetRef="Activity_DSC_ProcessRep"/>
+    <sequenceFlow id="Flow_DSC_32" sourceRef="Activity_DSC_ProcessRep" targetRef="End_DSC"/>
+  </process>
+
+  <process id="Process_TF" isExecutable="true">
+    <startEvent id="Start_TF" name="Process starts">
+      <outgoing>Flow_TF_1</outgoing>
+    </startEvent>
+    <task id="Activity_TF_Publish" name="Publish reports">
+      <incoming>Flow_TF_1</incoming>
+      <outgoing>Flow_TF_2</outgoing>
+    </task>
+    <parallelGateway id="Gateway_TF_Split1">
+      <incoming>Flow_TF_2</incoming>
+      <outgoing>Flow_TF_3</outgoing>
+      <outgoing>Flow_TF_4</outgoing>
+      <outgoing>Flow_TF_5</outgoing>
+    </parallelGateway>
+    <task id="Activity_TF_List" name="List notices categorised">
+      <incoming>Flow_TF_3</incoming>
+      <outgoing>Flow_TF_6</outgoing>
+    </task>
+    <task id="Activity_TF_Exp" name="Include explanation of procedures">
+      <incoming>Flow_TF_4</incoming>
+      <outgoing>Flow_TF_7</outgoing>
+    </task>
+    <task id="Activity_TF_Ensure" name="Ensure no personal data">
+      <incoming>Flow_TF_5</incoming>
+      <outgoing>Flow_TF_8</outgoing>
+    </task>
+    <parallelGateway id="Gateway_TF_Join1">
+      <incoming>Flow_TF_6</incoming>
+      <incoming>Flow_TF_7</incoming>
+      <incoming>Flow_TF_8</incoming>
+      <outgoing>Flow_TF_9</outgoing>
+    </parallelGateway>
+    <parallelGateway id="Gateway_TF_Split2">
+      <incoming>Flow_TF_9</incoming>
+      <outgoing>Flow_TF_10</outgoing>
+      <outgoing>Flow_TF_11</outgoing>
+    </parallelGateway>
+    <task id="Activity_TF_SendReports" name="Send reports to DSC">
+      <incoming>Flow_TF_10</incoming>
+      <outgoing>Flow_TF_12</outgoing>
+    </task>
+    <task id="Activity_TF_MakePublic" name="Make reports public">
+      <incoming>Flow_TF_11</incoming>
+      <outgoing>Flow_TF_13</outgoing>
+    </task>
+    <parallelGateway id="Gateway_TF_Join2">
+      <incoming>Flow_TF_12</incoming>
+      <incoming>Flow_TF_13</incoming>
+      <outgoing>Flow_TF_14</outgoing>
+    </parallelGateway>
+    <intermediateCatchEvent id="Catch_TF_React" name="Receive opportunity">
+      <incoming>Flow_TF_14</incoming>
+      <outgoing>Flow_TF_15</outgoing>
+      <messageEventDefinition id="MsgDef_React"/>
+    </intermediateCatchEvent>
+    <task id="Activity_TF_React" name="React to findings">
+      <incoming>Flow_TF_15</incoming>
+      <outgoing>Flow_TF_16</outgoing>
+    </task>
+    <endEvent id="End_TF" name="Duties fulfilled">
+      <incoming>Flow_TF_16</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_TF_1" sourceRef="Start_TF" targetRef="Activity_TF_Publish"/>
+    <sequenceFlow id="Flow_TF_2" sourceRef="Activity_TF_Publish" targetRef="Gateway_TF_Split1"/>
+    <sequenceFlow id="Flow_TF_3" sourceRef="Gateway_TF_Split1" targetRef="Activity_TF_List"/>
+    <sequenceFlow id="Flow_TF_4" sourceRef="Gateway_TF_Split1" targetRef="Activity_TF_Exp"/>
+    <sequenceFlow id="Flow_TF_5" sourceRef="Gateway_TF_Split1" targetRef="Activity_TF_Ensure"/>
+    <sequenceFlow id="Flow_TF_6" sourceRef="Activity_TF_List" targetRef="Gateway_TF_Join1"/>
+    <sequenceFlow id="Flow_TF_7" sourceRef="Activity_TF_Exp" targetRef="Gateway_TF_Join1"/>
+    <sequenceFlow id="Flow_TF_8" sourceRef="Activity_TF_Ensure" targetRef="Gateway_TF_Join1"/>
+    <sequenceFlow id="Flow_TF_9" sourceRef="Gateway_TF_Join1" targetRef="Gateway_TF_Split2"/>
+    <sequenceFlow id="Flow_TF_10" sourceRef="Gateway_TF_Split2" targetRef="Activity_TF_SendReports"/>
+    <sequenceFlow id="Flow_TF_11" sourceRef="Gateway_TF_Split2" targetRef="Activity_TF_MakePublic"/>
+    <sequenceFlow id="Flow_TF_12" sourceRef="Activity_TF_SendReports" targetRef="Gateway_TF_Join2"/>
+    <sequenceFlow id="Flow_TF_13" sourceRef="Activity_TF_MakePublic" targetRef="Gateway_TF_Join2"/>
+    <sequenceFlow id="Flow_TF_14" sourceRef="Gateway_TF_Join2" targetRef="Catch_TF_React"/>
+    <sequenceFlow id="Flow_TF_15" sourceRef="Catch_TF_React" targetRef="Activity_TF_React"/>
+    <sequenceFlow id="Flow_TF_16" sourceRef="Activity_TF_React" targetRef="End_TF"/>
+  </process>
+
+  <process id="Process_POP" isExecutable="true">
+    <startEvent id="Start_POP" name="Process starts">
+      <outgoing>Flow_POP_1</outgoing>
+    </startEvent>
+    <task id="Activity_POP_Measures" name="Take necessary measures">
+      <incoming>Flow_POP_1</incoming>
+      <outgoing>Flow_POP_2</outgoing>
+    </task>
+    <task id="Activity_POP_Assess" name="Assess information on notices">
+      <incoming>Flow_POP_2</incoming>
+      <outgoing>Flow_POP_3</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_POP_Cond" name="Have information?">
+      <incoming>Flow_POP_3</incoming>
+      <outgoing>Flow_POP_4</outgoing>
+      <outgoing>Flow_POP_5</outgoing>
+    </exclusiveGateway>
+    <parallelGateway id="Gateway_POP_Split">
+      <incoming>Flow_POP_4</incoming>
+      <outgoing>Flow_POP_6</outgoing>
+      <outgoing>Flow_POP_7</outgoing>
+    </parallelGateway>
+    <task id="Activity_POP_SendInfo" name="Send information to DSC">
+      <incoming>Flow_POP_6</incoming>
+      <outgoing>Flow_POP_8</outgoing>
+    </task>
+    <task id="Activity_POP_SendDocs" name="Send explanations/docs to DSC">
+      <incoming>Flow_POP_7</incoming>
+      <outgoing>Flow_POP_9</outgoing>
+    </task>
+    <parallelGateway id="Gateway_POP_Join">
+      <incoming>Flow_POP_8</incoming>
+      <incoming>Flow_POP_9</incoming>
+      <outgoing>Flow_POP_10</outgoing>
+    </parallelGateway>
+    <exclusiveGateway id="Gateway_POP_JoinFinal">
+      <incoming>Flow_POP_5</incoming>
+      <incoming>Flow_POP_10</incoming>
+      <outgoing>Flow_POP_11</outgoing>
+    </exclusiveGateway>
+    <endEvent id="End_POP" name="Notices processed">
+      <incoming>Flow_POP_11</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_POP_1" sourceRef="Start_POP" targetRef="Activity_POP_Measures"/>
+    <sequenceFlow id="Flow_POP_2" sourceRef="Activity_POP_Measures" targetRef="Activity_POP_Assess"/>
+    <sequenceFlow id="Flow_POP_3" sourceRef="Activity_POP_Assess" targetRef="Gateway_POP_Cond"/>
+    <sequenceFlow id="Flow_POP_4" name="Yes" sourceRef="Gateway_POP_Cond" targetRef="Gateway_POP_Split"/>
+    <sequenceFlow id="Flow_POP_5" name="No" sourceRef="Gateway_POP_Cond" targetRef="Gateway_POP_JoinFinal"/>
+    <sequenceFlow id="Flow_POP_6" sourceRef="Gateway_POP_Split" targetRef="Activity_POP_SendInfo"/>
+    <sequenceFlow id="Flow_POP_7" sourceRef="Gateway_POP_Split" targetRef="Activity_POP_SendDocs"/>
+    <sequenceFlow id="Flow_POP_8" sourceRef="Activity_POP_SendInfo" targetRef="Gateway_POP_Join"/>
+    <sequenceFlow id="Flow_POP_9" sourceRef="Activity_POP_SendDocs" targetRef="Gateway_POP_Join"/>
+    <sequenceFlow id="Flow_POP_10" sourceRef="Gateway_POP_Join" targetRef="Gateway_POP_JoinFinal"/>
+    <sequenceFlow id="Flow_POP_11" sourceRef="Gateway_POP_JoinFinal" targetRef="End_POP"/>
+  </process>
+
+  <process id="Process_Commission" isExecutable="true">
+    <startEvent id="Start_Comm" name="Process starts">
+      <outgoing>Flow_Comm_1</outgoing>
+    </startEvent>
+    <intermediateCatchEvent id="Catch_Comm_Names" name="Receive entities info">
+      <incoming>Flow_Comm_1</incoming>
+      <outgoing>Flow_Comm_2</outgoing>
+      <messageEventDefinition id="MsgDef_Comm_Names"/>
+    </intermediateCatchEvent>
+    <task id="Activity_Comm_Publish" name="Publish info in database">
+      <incoming>Flow_Comm_2</incoming>
+      <outgoing>Flow_Comm_3</outgoing>
+    </task>
+    <task id="Activity_Comm_Update" name="Keep database up to date">
+      <incoming>Flow_Comm_3</incoming>
+      <outgoing>Flow_Comm_4</outgoing>
+    </task>
+    <task id="Activity_Comm_Assess" name="Assess necessary to issue guidelines">
+      <incoming>Flow_Comm_4</incoming>
+      <outgoing>Flow_Comm_5</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_Comm_Cond" name="Is necessary?">
+      <incoming>Flow_Comm_5</incoming>
+      <outgoing>Flow_Comm_6</outgoing>
+      <outgoing>Flow_Comm_7</outgoing>
+    </exclusiveGateway>
+    <task id="Activity_Comm_SendConsult" name="Send consultation to Board">
+      <incoming>Flow_Comm_6</incoming>
+      <outgoing>Flow_Comm_8</outgoing>
+    </task>
+    <task id="Activity_Comm_Issue" name="Issue guidelines">
+      <incoming>Flow_Comm_8</incoming>
+      <outgoing>Flow_Comm_9</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_Comm_Join">
+      <incoming>Flow_Comm_7</incoming>
+      <incoming>Flow_Comm_9</incoming>
+      <outgoing>Flow_Comm_10</outgoing>
+    </exclusiveGateway>
+    <endEvent id="End_Comm" name="Guidelines managed">
+      <incoming>Flow_Comm_10</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_Comm_1" sourceRef="Start_Comm" targetRef="Catch_Comm_Names"/>
+    <sequenceFlow id="Flow_Comm_2" sourceRef="Catch_Comm_Names" targetRef="Activity_Comm_Publish"/>
+    <sequenceFlow id="Flow_Comm_3" sourceRef="Activity_Comm_Publish" targetRef="Activity_Comm_Update"/>
+    <sequenceFlow id="Flow_Comm_4" sourceRef="Activity_Comm_Update" targetRef="Activity_Comm_Assess"/>
+    <sequenceFlow id="Flow_Comm_5" sourceRef="Activity_Comm_Assess" targetRef="Gateway_Comm_Cond"/>
+    <sequenceFlow id="Flow_Comm_6" name="Yes" sourceRef="Gateway_Comm_Cond" targetRef="Activity_Comm_SendConsult"/>
+    <sequenceFlow id="Flow_Comm_7" name="No" sourceRef="Gateway_Comm_Cond" targetRef="Gateway_Comm_Join"/>
+    <sequenceFlow id="Flow_Comm_8" sourceRef="Activity_Comm_SendConsult" targetRef="Activity_Comm_Issue"/>
+    <sequenceFlow id="Flow_Comm_9" sourceRef="Activity_Comm_Issue" targetRef="Gateway_Comm_Join"/>
+    <sequenceFlow id="Flow_Comm_10" sourceRef="Gateway_Comm_Join" targetRef="End_Comm"/>
+  </process>
+
+  <process id="Process_Board" isExecutable="true">
+    <startEvent id="Start_Board" name="Process starts">
+      <outgoing>Flow_Board_1</outgoing>
+    </startEvent>
+    <intermediateCatchEvent id="Catch_Board_Names" name="Receive info">
+      <incoming>Flow_Board_1</incoming>
+      <outgoing>Flow_Board_2</outgoing>
+      <messageEventDefinition id="MsgDef_Board_Names"/>
+    </intermediateCatchEvent>
+    <task id="Activity_Board_Process" name="Process communication">
+      <incoming>Flow_Board_2</incoming>
+      <outgoing>Flow_Board_3</outgoing>
+    </task>
+    <intermediateCatchEvent id="Catch_Board_Consult" name="Receive consultation">
+      <incoming>Flow_Board_3</incoming>
+      <outgoing>Flow_Board_4</outgoing>
+      <messageEventDefinition id="MsgDef_Board_Consult"/>
+    </intermediateCatchEvent>
+    <task id="Activity_Board_Advice" name="Provide advice">
+      <incoming>Flow_Board_4</incoming>
+      <outgoing>Flow_Board_5</outgoing>
+    </task>
+    <endEvent id="End_Board" name="Consultation completed">
+      <incoming>Flow_Board_5</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_Board_1" sourceRef="Start_Board" targetRef="Catch_Board_Names"/>
+    <sequenceFlow id="Flow_Board_2" sourceRef="Catch_Board_Names" targetRef="Activity_Board_Process"/>
+    <sequenceFlow id="Flow_Board_3" sourceRef="Activity_Board_Process" targetRef="Catch_Board_Consult"/>
+    <sequenceFlow id="Flow_Board_4" sourceRef="Catch_Board_Consult" targetRef="Activity_Board_Advice"/>
+    <sequenceFlow id="Flow_Board_5" sourceRef="Activity_Board_Advice" targetRef="End_Board"/>
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+
+      <bpmndi:BPMNShape id="Participant_Entities_di" bpmnElement="Participant_Entities" isHorizontal="true">
+        <omgdc:Bounds x="50" y="50" width="850" height="250"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_DSC_di" bpmnElement="Participant_DSC" isHorizontal="true">
+        <omgdc:Bounds x="50" y="320" width="2250" height="280"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_TF_di" bpmnElement="Participant_TF" isHorizontal="true">
+        <omgdc:Bounds x="50" y="620" width="1450" height="280"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_POP_di" bpmnElement="Participant_POP" isHorizontal="true">
+        <omgdc:Bounds x="50" y="920" width="1100" height="250"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Commission_di" bpmnElement="Participant_Commission" isHorizontal="true">
+        <omgdc:Bounds x="50" y="1190" width="1150" height="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_Board_di" bpmnElement="Participant_Board" isHorizontal="true">
+        <omgdc:Bounds x="50" y="1410" width="900" height="150"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_Entities_di" bpmnElement="Start_Entities">
+        <omgdc:Bounds x="100" y="150" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Ent_SendApp_di" bpmnElement="Activity_Ent_SendApp">
+        <omgdc:Bounds x="180" y="125" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Ent_Split_di" bpmnElement="Gateway_Ent_Split">
+        <omgdc:Bounds x="330" y="145" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Ent_Dem1_di" bpmnElement="Activity_Ent_Dem1">
+        <omgdc:Bounds x="420" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Ent_Dem2_di" bpmnElement="Activity_Ent_Dem2">
+        <omgdc:Bounds x="420" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Ent_Dem3_di" bpmnElement="Activity_Ent_Dem3">
+        <omgdc:Bounds x="420" y="260" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Ent_Join_di" bpmnElement="Gateway_Ent_Join">
+        <omgdc:Bounds x="570" y="145" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Entities_di" bpmnElement="End_Entities">
+        <omgdc:Bounds x="660" y="150" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_DSC_di" bpmnElement="Start_DSC">
+        <omgdc:Bounds x="100" y="440" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Assess1_di" bpmnElement="Activity_DSC_Assess1">
+        <omgdc:Bounds x="180" y="415" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Cond1_di" bpmnElement="Gateway_DSC_Cond1">
+        <omgdc:Bounds x="330" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Award_di" bpmnElement="Activity_DSC_Award">
+        <omgdc:Bounds x="420" y="415" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join1_di" bpmnElement="Gateway_DSC_Join1">
+        <omgdc:Bounds x="570" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_DSC_Info_di" bpmnElement="Catch_DSC_Info">
+        <omgdc:Bounds x="660" y="440" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Assess2_di" bpmnElement="Activity_DSC_Assess2">
+        <omgdc:Bounds x="740" y="415" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Cond2_di" bpmnElement="Gateway_DSC_Cond2">
+        <omgdc:Bounds x="890" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Split1_di" bpmnElement="Gateway_DSC_Split1">
+        <omgdc:Bounds x="980" y="375" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Suspend_di" bpmnElement="Activity_DSC_Suspend">
+        <omgdc:Bounds x="1070" y="335" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Investigate_di" bpmnElement="Activity_DSC_Investigate">
+        <omgdc:Bounds x="1070" y="435" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join2_di" bpmnElement="Gateway_DSC_Join2">
+        <omgdc:Bounds x="1220" y="375" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join3_di" bpmnElement="Gateway_DSC_Join3">
+        <omgdc:Bounds x="1310" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Assess3_di" bpmnElement="Activity_DSC_Assess3">
+        <omgdc:Bounds x="1400" y="415" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Cond3_di" bpmnElement="Gateway_DSC_Cond3">
+        <omgdc:Bounds x="1550" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Split2_di" bpmnElement="Gateway_DSC_Split2">
+        <omgdc:Bounds x="1640" y="375" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_SendReact_di" bpmnElement="Activity_DSC_SendReact">
+        <omgdc:Bounds x="1730" y="335" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_Revoke_di" bpmnElement="Activity_DSC_Revoke">
+        <omgdc:Bounds x="1730" y="435" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join4_di" bpmnElement="Gateway_DSC_Join4">
+        <omgdc:Bounds x="1880" y="375" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join5_di" bpmnElement="Gateway_DSC_Join5">
+        <omgdc:Bounds x="1970" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Split3_di" bpmnElement="Gateway_DSC_Split3">
+        <omgdc:Bounds x="2060" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_SendComm_di" bpmnElement="Activity_DSC_SendComm">
+        <omgdc:Bounds x="2150" y="375" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_SendBoard_di" bpmnElement="Activity_DSC_SendBoard">
+        <omgdc:Bounds x="2150" y="475" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DSC_Join6_di" bpmnElement="Gateway_DSC_Join6">
+        <omgdc:Bounds x="2300" y="435" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_DSC_Reports_di" bpmnElement="Catch_DSC_Reports">
+        <omgdc:Bounds x="2390" y="440" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_DSC_ProcessRep_di" bpmnElement="Activity_DSC_ProcessRep">
+        <omgdc:Bounds x="2470" y="415" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_DSC_di" bpmnElement="End_DSC">
+        <omgdc:Bounds x="2620" y="440" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_TF_di" bpmnElement="Start_TF">
+        <omgdc:Bounds x="100" y="750" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_Publish_di" bpmnElement="Activity_TF_Publish">
+        <omgdc:Bounds x="180" y="725" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_TF_Split1_di" bpmnElement="Gateway_TF_Split1">
+        <omgdc:Bounds x="330" y="745" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_List_di" bpmnElement="Activity_TF_List">
+        <omgdc:Bounds x="420" y="650" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_Exp_di" bpmnElement="Activity_TF_Exp">
+        <omgdc:Bounds x="420" y="745" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_Ensure_di" bpmnElement="Activity_TF_Ensure">
+        <omgdc:Bounds x="420" y="840" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_TF_Join1_di" bpmnElement="Gateway_TF_Join1">
+        <omgdc:Bounds x="570" y="745" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_TF_Split2_di" bpmnElement="Gateway_TF_Split2">
+        <omgdc:Bounds x="660" y="745" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_SendReports_di" bpmnElement="Activity_TF_SendReports">
+        <omgdc:Bounds x="750" y="685" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_MakePublic_di" bpmnElement="Activity_TF_MakePublic">
+        <omgdc:Bounds x="750" y="785" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_TF_Join2_di" bpmnElement="Gateway_TF_Join2">
+        <omgdc:Bounds x="900" y="745" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_TF_React_di" bpmnElement="Catch_TF_React">
+        <omgdc:Bounds x="990" y="750" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_TF_React_di" bpmnElement="Activity_TF_React">
+        <omgdc:Bounds x="1070" y="725" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_TF_di" bpmnElement="End_TF">
+        <omgdc:Bounds x="1220" y="750" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_POP_di" bpmnElement="Start_POP">
+        <omgdc:Bounds x="100" y="1050" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_POP_Measures_di" bpmnElement="Activity_POP_Measures">
+        <omgdc:Bounds x="180" y="1025" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_POP_Assess_di" bpmnElement="Activity_POP_Assess">
+        <omgdc:Bounds x="330" y="1025" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_POP_Cond_di" bpmnElement="Gateway_POP_Cond">
+        <omgdc:Bounds x="480" y="1045" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_POP_Split_di" bpmnElement="Gateway_POP_Split">
+        <omgdc:Bounds x="570" y="995" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_POP_SendInfo_di" bpmnElement="Activity_POP_SendInfo">
+        <omgdc:Bounds x="660" y="945" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_POP_SendDocs_di" bpmnElement="Activity_POP_SendDocs">
+        <omgdc:Bounds x="660" y="1055" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_POP_Join_di" bpmnElement="Gateway_POP_Join">
+        <omgdc:Bounds x="810" y="995" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_POP_JoinFinal_di" bpmnElement="Gateway_POP_JoinFinal">
+        <omgdc:Bounds x="900" y="1045" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_POP_di" bpmnElement="End_POP">
+        <omgdc:Bounds x="990" y="1050" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_Comm_di" bpmnElement="Start_Comm">
+        <omgdc:Bounds x="100" y="1280" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_Comm_Names_di" bpmnElement="Catch_Comm_Names">
+        <omgdc:Bounds x="180" y="1280" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Comm_Publish_di" bpmnElement="Activity_Comm_Publish">
+        <omgdc:Bounds x="260" y="1255" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Comm_Update_di" bpmnElement="Activity_Comm_Update">
+        <omgdc:Bounds x="410" y="1255" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Comm_Assess_di" bpmnElement="Activity_Comm_Assess">
+        <omgdc:Bounds x="560" y="1255" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Comm_Cond_di" bpmnElement="Gateway_Comm_Cond">
+        <omgdc:Bounds x="710" y="1275" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Comm_SendConsult_di" bpmnElement="Activity_Comm_SendConsult">
+        <omgdc:Bounds x="800" y="1215" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Comm_Issue_di" bpmnElement="Activity_Comm_Issue">
+        <omgdc:Bounds x="950" y="1215" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Comm_Join_di" bpmnElement="Gateway_Comm_Join">
+        <omgdc:Bounds x="1080" y="1275" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Comm_di" bpmnElement="End_Comm">
+        <omgdc:Bounds x="1170" y="1280" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_Board_di" bpmnElement="Start_Board">
+        <omgdc:Bounds x="100" y="1470" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_Board_Names_di" bpmnElement="Catch_Board_Names">
+        <omgdc:Bounds x="180" y="1470" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Board_Process_di" bpmnElement="Activity_Board_Process">
+        <omgdc:Bounds x="260" y="1445" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_Board_Consult_di" bpmnElement="Catch_Board_Consult">
+        <omgdc:Bounds x="410" y="1470" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Board_Advice_di" bpmnElement="Activity_Board_Advice">
+        <omgdc:Bounds x="490" y="1445" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Board_di" bpmnElement="End_Board">
+        <omgdc:Bounds x="640" y="1470" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

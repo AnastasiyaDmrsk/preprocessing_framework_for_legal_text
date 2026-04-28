@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="sid-definitions" targetNamespace="http://www.signavio.com" exporter="Signavio Process Editor" exporterVersion="19.2.2">
+  <collaboration id="collaboration_1">
+    <participant id="p_mfr" name="Manufacturers" processRef="proc_mfr" />
+    <participant id="p_com" name="Commission" processRef="proc_com" />
+    <participant id="p_ca" name="Competent authority" processRef="proc_ca" />
+    <participant id="p_nlp" name="Natural or legal persons" processRef="proc_nlp" />
+    <messageFlow id="mf1" sourceRef="ca_t1" targetRef="mfr_t10" />
+    <messageFlow id="mf2" sourceRef="ca_t2" targetRef="mfr_t23" />
+    <messageFlow id="mf3" sourceRef="ca_t3" targetRef="mfr_t24" />
+    <messageFlow id="mf4" sourceRef="ca_t4" targetRef="mfr_t25" />
+  </collaboration>
+
+  <process id="proc_mfr" isExecutable="false" name="Manufacturers">
+    <startEvent id="mfr_st" name="Placing devices on the market" />
+    <task id="mfr_t1" name="Ensure designed and manufactured in accordance with requirements" />
+    <parallelGateway id="mfr_ps1" />
+    <task id="mfr_t2_1" name="Establish a system for risk management" />
+    <task id="mfr_t2_2" name="Document a system for risk management" />
+    <task id="mfr_t2_3" name="Implement a system for risk management" />
+    <task id="mfr_t2_4" name="Maintain a system for risk management" />
+    <parallelGateway id="mfr_pj1" />
+    <task id="mfr_t3" name="Conduct a clinical evaluation" />
+    <task id="mfr_t4" name="Assess whether devices are custom-made" />
+    <exclusiveGateway id="mfr_xs1" />
+    <parallelGateway id="mfr_ps1c" />
+    <task id="mfr_tc1" name="Draw up documentation" />
+    <task id="mfr_tc2" name="Keep up to date documentation" />
+    <task id="mfr_tc3" name="Keep available documentation" />
+    <parallelGateway id="mfr_pj1c" />
+    <parallelGateway id="mfr_ps1nc" />
+    <task id="mfr_tnc1" name="Draw up technical documentation" />
+    <task id="mfr_tnc2" name="Keep up to date technical documentation" />
+    <task id="mfr_tnc3" name="Include elements in technical documentation" />
+    <parallelGateway id="mfr_pj1nc" />
+    <exclusiveGateway id="mfr_xj1" />
+    <task id="mfr_t5" name="Assess compliance demonstrated and other than custom/investigational" />
+    <exclusiveGateway id="mfr_xs2" />
+    <parallelGateway id="mfr_ps2" />
+    <task id="mfr_td1" name="Draw up EU declaration of conformity" />
+    <task id="mfr_td2" name="Affix CE marking" />
+    <parallelGateway id="mfr_pj2" />
+    <exclusiveGateway id="mfr_xj2" />
+    <parallelGateway id="mfr_ps3" />
+    <task id="mfr_tu1" name="Comply with UDI system obligations" />
+    <task id="mfr_tu2" name="Comply with registration obligations" />
+    <parallelGateway id="mfr_pj3" />
+    <task id="mfr_t8" name="Assess whether implantable" />
+    <exclusiveGateway id="mfr_xs3" />
+    <task id="mfr_t9_ni" name="Keep docs available for 10 years" />
+    <task id="mfr_t9_i" name="Keep docs available for 15 years" />
+    <exclusiveGateway id="mfr_xj3" />
+    <task id="mfr_t10" name="Provide technical documentation upon request" />
+    <task id="mfr_t11" name="Assess business outside Union" />
+    <exclusiveGateway id="mfr_xs4" />
+    <task id="mfr_t12" name="Ensure authorised representative has docs" />
+    <exclusiveGateway id="mfr_xj4" />
+    <task id="mfr_t13" name="Ensure procedures to keep series production in conformity" />
+    <task id="mfr_t14" name="Adequately take into account changes" />
+    <task id="mfr_t15" name="Assess whether other than investigational" />
+    <exclusiveGateway id="mfr_xs5" />
+    <parallelGateway id="mfr_ps4" />
+    <task id="mfr_tq1" name="Establish QMS" />
+    <task id="mfr_tq2" name="Document QMS" />
+    <task id="mfr_tq3" name="Implement QMS" />
+    <task id="mfr_tq4" name="Maintain QMS" />
+    <task id="mfr_tq5" name="Keep up to date QMS" />
+    <task id="mfr_tq6" name="Continually improve QMS" />
+    <parallelGateway id="mfr_pj4" />
+    <task id="mfr_t16" name="Cover all parts of organisation in QMS" />
+    <task id="mfr_t17" name="Govern structure and responsibilities" />
+    <parallelGateway id="mfr_ps5" />
+    <task id="mfr_tqa1" name="Address strategy for regulatory compliance" />
+    <task id="mfr_tqa2" name="Address identification of safety requirements" />
+    <task id="mfr_tqa3" name="Address responsibility of management" />
+    <task id="mfr_tqa4" name="Address resource management" />
+    <task id="mfr_tqa5" name="Address risk management" />
+    <task id="mfr_tqa6" name="Address clinical evaluation" />
+    <task id="mfr_tqa7" name="Address product realisation" />
+    <task id="mfr_tqa8" name="Address verification of UDI" />
+    <task id="mfr_tqa9" name="Address post-market surveillance system" />
+    <task id="mfr_tqa10" name="Address handling communication" />
+    <task id="mfr_tqa11" name="Address vigilance reporting" />
+    <task id="mfr_tqa12" name="Address CAPA management" />
+    <task id="mfr_tqa13" name="Address monitoring and data analysis" />
+    <parallelGateway id="mfr_pj5" />
+    <exclusiveGateway id="mfr_xj5" />
+    <parallelGateway id="mfr_ps6" />
+    <task id="mfr_tp1" name="Implement post-market surveillance system" />
+    <task id="mfr_tp2" name="Keep up to date post-market surveillance system" />
+    <parallelGateway id="mfr_pj6" />
+    <task id="mfr_t18" name="Ensure device accompanied by info" />
+    <task id="mfr_t19" name="Ensure particulars indelible" />
+    <task id="mfr_t20" name="Assess reason to believe not in conformity" />
+    <exclusiveGateway id="mfr_xs6" />
+    <parallelGateway id="mfr_ps7" />
+    <task id="mfr_tcor1" name="Take necessary corrective action" />
+    <task id="mfr_tcor2" name="Inform distributors and representatives" />
+    <parallelGateway id="mfr_pj7" />
+    <exclusiveGateway id="mfr_xj6" />
+    <task id="mfr_t21" name="Assess serious risk" />
+    <exclusiveGateway id="mfr_xs7" />
+    <task id="mfr_tsr" name="Inform competent authorities" />
+    <exclusiveGateway id="mfr_xj7" />
+    <task id="mfr_t22" name="Have system for recording incidents" />
+    <task id="mfr_t23" name="Provide info to demonstrate conformity" />
+    <task id="mfr_t24" name="Provide samples" />
+    <task id="mfr_t25" name="Cooperate on any corrective action taken" />
+    <task id="mfr_t26" name="Assess designed/manufactured by another person" />
+    <exclusiveGateway id="mfr_xs8" />
+    <task id="mfr_tap" name="Include info on identity" />
+    <exclusiveGateway id="mfr_xj8" />
+    <task id="mfr_t27" name="Have measures for financial coverage" />
+    <endEvent id="mfr_end" name="Obligations fulfilled" />
+
+    <sequenceFlow id="E_M1" sourceRef="mfr_st" targetRef="mfr_t1" />
+    <sequenceFlow id="E_M2" sourceRef="mfr_t1" targetRef="mfr_ps1" />
+    <sequenceFlow id="E_M3" sourceRef="mfr_ps1" targetRef="mfr_t2_1" />
+    <sequenceFlow id="E_M4" sourceRef="mfr_ps1" targetRef="mfr_t2_2" />
+    <sequenceFlow id="E_M5" sourceRef="mfr_ps1" targetRef="mfr_t2_3" />
+    <sequenceFlow id="E_M6" sourceRef="mfr_ps1" targetRef="mfr_t2_4" />
+    <sequenceFlow id="E_M7" sourceRef="mfr_t2_1" targetRef="mfr_pj1" />
+    <sequenceFlow id="E_M8" sourceRef="mfr_t2_2" targetRef="mfr_pj1" />
+    <sequenceFlow id="E_M9" sourceRef="mfr_t2_3" targetRef="mfr_pj1" />
+    <sequenceFlow id="E_M10" sourceRef="mfr_t2_4" targetRef="mfr_pj1" />
+    <sequenceFlow id="E_M11" sourceRef="mfr_pj1" targetRef="mfr_t3" />
+    <sequenceFlow id="E_M12" sourceRef="mfr_t3" targetRef="mfr_t4" />
+    <sequenceFlow id="E_M13" sourceRef="mfr_t4" targetRef="mfr_xs1" />
+
+    <sequenceFlow id="E_M14" sourceRef="mfr_xs1" targetRef="mfr_ps1c" name="Custom-made" />
+    <sequenceFlow id="E_M15" sourceRef="mfr_ps1c" targetRef="mfr_tc1" />
+    <sequenceFlow id="E_M16" sourceRef="mfr_ps1c" targetRef="mfr_tc2" />
+    <sequenceFlow id="E_M17" sourceRef="mfr_ps1c" targetRef="mfr_tc3" />
+    <sequenceFlow id="E_M18" sourceRef="mfr_tc1" targetRef="mfr_pj1c" />
+    <sequenceFlow id="E_M19" sourceRef="mfr_tc2" targetRef="mfr_pj1c" />
+    <sequenceFlow id="E_M20" sourceRef="mfr_tc3" targetRef="mfr_pj1c" />
+    <sequenceFlow id="E_M21" sourceRef="mfr_pj1c" targetRef="mfr_xj1" />
+
+    <sequenceFlow id="E_M22" sourceRef="mfr_xs1" targetRef="mfr_ps1nc" name="Not custom-made" />
+    <sequenceFlow id="E_M23" sourceRef="mfr_ps1nc" targetRef="mfr_tnc1" />
+    <sequenceFlow id="E_M24" sourceRef="mfr_ps1nc" targetRef="mfr_tnc2" />
+    <sequenceFlow id="E_M25" sourceRef="mfr_ps1nc" targetRef="mfr_tnc3" />
+    <sequenceFlow id="E_M26" sourceRef="mfr_tnc1" targetRef="mfr_pj1nc" />
+    <sequenceFlow id="E_M27" sourceRef="mfr_tnc2" targetRef="mfr_pj1nc" />
+    <sequenceFlow id="E_M28" sourceRef="mfr_tnc3" targetRef="mfr_pj1nc" />
+    <sequenceFlow id="E_M29" sourceRef="mfr_pj1nc" targetRef="mfr_xj1" />
+
+    <sequenceFlow id="E_M30" sourceRef="mfr_xj1" targetRef="mfr_t5" />
+    <sequenceFlow id="E_M31" sourceRef="mfr_t5" targetRef="mfr_xs2" />
+    <sequenceFlow id="E_M32" sourceRef="mfr_xs2" targetRef="mfr_ps2" name="Demonstrated and other" />
+    <sequenceFlow id="E_M33" sourceRef="mfr_xs2" targetRef="mfr_xj2" />
+    <sequenceFlow id="E_M34" sourceRef="mfr_ps2" targetRef="mfr_td1" />
+    <sequenceFlow id="E_M35" sourceRef="mfr_ps2" targetRef="mfr_td2" />
+    <sequenceFlow id="E_M36" sourceRef="mfr_td1" targetRef="mfr_pj2" />
+    <sequenceFlow id="E_M37" sourceRef="mfr_td2" targetRef="mfr_pj2" />
+    <sequenceFlow id="E_M38" sourceRef="mfr_pj2" targetRef="mfr_xj2" />
+
+    <sequenceFlow id="E_M39" sourceRef="mfr_xj2" targetRef="mfr_ps3" />
+    <sequenceFlow id="E_M40" sourceRef="mfr_ps3" targetRef="mfr_tu1" />
+    <sequenceFlow id="E_M41" sourceRef="mfr_ps3" targetRef="mfr_tu2" />
+    <sequenceFlow id="E_M42" sourceRef="mfr_tu1" targetRef="mfr_pj3" />
+    <sequenceFlow id="E_M43" sourceRef="mfr_tu2" targetRef="mfr_pj3" />
+    <sequenceFlow id="E_M44" sourceRef="mfr_pj3" targetRef="mfr_t8" />
+
+    <sequenceFlow id="E_M45" sourceRef="mfr_t8" targetRef="mfr_xs3" />
+    <sequenceFlow id="E_M46" sourceRef="mfr_xs3" targetRef="mfr_t9_ni" name="Not implantable" />
+    <sequenceFlow id="E_M47" sourceRef="mfr_xs3" targetRef="mfr_t9_i" name="Implantable" />
+    <sequenceFlow id="E_M48" sourceRef="mfr_t9_ni" targetRef="mfr_xj3" />
+    <sequenceFlow id="E_M49" sourceRef="mfr_t9_i" targetRef="mfr_xj3" />
+
+    <sequenceFlow id="E_M50" sourceRef="mfr_xj3" targetRef="mfr_t10" />
+    <sequenceFlow id="E_M51" sourceRef="mfr_t10" targetRef="mfr_t11" />
+    <sequenceFlow id="E_M52" sourceRef="mfr_t11" targetRef="mfr_xs4" />
+    <sequenceFlow id="E_M53" sourceRef="mfr_xs4" targetRef="mfr_t12" name="Outside Union" />
+    <sequenceFlow id="E_M54" sourceRef="mfr_xs4" targetRef="mfr_xj4" />
+    <sequenceFlow id="E_M55" sourceRef="mfr_t12" targetRef="mfr_xj4" />
+
+    <sequenceFlow id="E_M56" sourceRef="mfr_xj4" targetRef="mfr_t13" />
+    <sequenceFlow id="E_M57" sourceRef="mfr_t13" targetRef="mfr_t14" />
+    <sequenceFlow id="E_M58" sourceRef="mfr_t14" targetRef="mfr_t15" />
+    <sequenceFlow id="E_M59" sourceRef="mfr_t15" targetRef="mfr_xs5" />
+
+    <sequenceFlow id="E_M60" sourceRef="mfr_xs5" targetRef="mfr_ps4" name="Other than investigational" />
+    <sequenceFlow id="E_M61" sourceRef="mfr_xs5" targetRef="mfr_xj5" />
+    <sequenceFlow id="E_M62" sourceRef="mfr_ps4" targetRef="mfr_tq1" />
+    <sequenceFlow id="E_M63" sourceRef="mfr_ps4" targetRef="mfr_tq2" />
+    <sequenceFlow id="E_M64" sourceRef="mfr_ps4" targetRef="mfr_tq3" />
+    <sequenceFlow id="E_M65" sourceRef="mfr_ps4" targetRef="mfr_tq4" />
+    <sequenceFlow id="E_M66" sourceRef="mfr_ps4" targetRef="mfr_tq5" />
+    <sequenceFlow id="E_M67" sourceRef="mfr_ps4" targetRef="mfr_tq6" />
+    <sequenceFlow id="E_M68" sourceRef="mfr_tq1" targetRef="mfr_pj4" />
+    <sequenceFlow id="E_M69" sourceRef="mfr_tq2" targetRef="mfr_pj4" />
+    <sequenceFlow id="E_M70" sourceRef="mfr_tq3" targetRef="mfr_pj4" />
+    <sequenceFlow id="E_M71" sourceRef="mfr_tq4" targetRef="mfr_pj4" />
+    <sequenceFlow id="E_M72" sourceRef="mfr_tq5" targetRef="mfr_pj4" />
+    <sequenceFlow id="E_M73" sourceRef="mfr_tq6" targetRef="mfr_pj4" />
+
+    <sequenceFlow id="E_M74" sourceRef="mfr_pj4" targetRef="mfr_t16" />
+    <sequenceFlow id="E_M75" sourceRef="mfr_t16" targetRef="mfr_t17" />
+    <sequenceFlow id="E_M76" sourceRef="mfr_t17" targetRef="mfr_ps5" />
+    <sequenceFlow id="E_M77" sourceRef="mfr_ps5" targetRef="mfr_tqa1" />
+    <sequenceFlow id="E_M78" sourceRef="mfr_ps5" targetRef="mfr_tqa2" />
+    <sequenceFlow id="E_M79" sourceRef="mfr_ps5" targetRef="mfr_tqa3" />
+    <sequenceFlow id="E_M80" sourceRef="mfr_ps5" targetRef="mfr_tqa4" />
+    <sequenceFlow id="E_M81" sourceRef="mfr_ps5" targetRef="mfr_tqa5" />
+    <sequenceFlow id="E_M82" sourceRef="mfr_ps5" targetRef="mfr_tqa6" />
+    <sequenceFlow id="E_M83" sourceRef="mfr_ps5" targetRef="mfr_tqa7" />
+    <sequenceFlow id="E_M84" sourceRef="mfr_ps5" targetRef="mfr_tqa8" />
+    <sequenceFlow id="E_M85" sourceRef="mfr_ps5" targetRef="mfr_tqa9" />
+    <sequenceFlow id="E_M86" sourceRef="mfr_ps5" targetRef="mfr_tqa10" />
+    <sequenceFlow id="E_M87" sourceRef="mfr_ps5" targetRef="mfr_tqa11" />
+    <sequenceFlow id="E_M88" sourceRef="mfr_ps5" targetRef="mfr_tqa12" />
+    <sequenceFlow id="E_M89" sourceRef="mfr_ps5" targetRef="mfr_tqa13" />
+    <sequenceFlow id="E_M90" sourceRef="mfr_tqa1" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M91" sourceRef="mfr_tqa2" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M92" sourceRef="mfr_tqa3" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M93" sourceRef="mfr_tqa4" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M94" sourceRef="mfr_tqa5" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M95" sourceRef="mfr_tqa6" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M96" sourceRef="mfr_tqa7" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M97" sourceRef="mfr_tqa8" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M98" sourceRef="mfr_tqa9" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M99" sourceRef="mfr_tqa10" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M100" sourceRef="mfr_tqa11" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M101" sourceRef="mfr_tqa12" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M102" sourceRef="mfr_tqa13" targetRef="mfr_pj5" />
+    <sequenceFlow id="E_M103" sourceRef="mfr_pj5" targetRef="mfr_xj5" />
+
+    <sequenceFlow id="E_M104" sourceRef="mfr_xj5" targetRef="mfr_ps6" />
+    <sequenceFlow id="E_M105" sourceRef="mfr_ps6" targetRef="mfr_tp1" />
+    <sequenceFlow id="E_M106" sourceRef="mfr_ps6" targetRef="mfr_tp2" />
+    <sequenceFlow id="E_M107" sourceRef="mfr_tp1" targetRef="mfr_pj6" />
+    <sequenceFlow id="E_M108" sourceRef="mfr_tp2" targetRef="mfr_pj6" />
+    <sequenceFlow id="E_M109" sourceRef="mfr_pj6" targetRef="mfr_t18" />
+
+    <sequenceFlow id="E_M110" sourceRef="mfr_t18" targetRef="mfr_t19" />
+    <sequenceFlow id="E_M111" sourceRef="mfr_t19" targetRef="mfr_t20" />
+    <sequenceFlow id="E_M112" sourceRef="mfr_t20" targetRef="mfr_xs6" />
+
+    <sequenceFlow id="E_M113" sourceRef="mfr_xs6" targetRef="mfr_ps7" name="Not in conformity" />
+    <sequenceFlow id="E_M114" sourceRef="mfr_xs6" targetRef="mfr_xj6" />
+    <sequenceFlow id="E_M115" sourceRef="mfr_ps7" targetRef="mfr_tcor1" />
+    <sequenceFlow id="E_M116" sourceRef="mfr_ps7" targetRef="mfr_tcor2" />
+    <sequenceFlow id="E_M117" sourceRef="mfr_tcor1" targetRef="mfr_pj7" />
+    <sequenceFlow id="E_M118" sourceRef="mfr_tcor2" targetRef="mfr_pj7" />
+    <sequenceFlow id="E_M119" sourceRef="mfr_pj7" targetRef="mfr_xj6" />
+
+    <sequenceFlow id="E_M120" sourceRef="mfr_xj6" targetRef="mfr_t21" />
+    <sequenceFlow id="E_M121" sourceRef="mfr_t21" targetRef="mfr_xs7" />
+    <sequenceFlow id="E_M122" sourceRef="mfr_xs7" targetRef="mfr_tsr" name="Serious risk" />
+    <sequenceFlow id="E_M123" sourceRef="mfr_xs7" targetRef="mfr_xj7" />
+    <sequenceFlow id="E_M124" sourceRef="mfr_tsr" targetRef="mfr_xj7" />
+
+    <sequenceFlow id="E_M125" sourceRef="mfr_xj7" targetRef="mfr_t22" />
+    <sequenceFlow id="E_M126" sourceRef="mfr_t22" targetRef="mfr_t23" />
+    <sequenceFlow id="E_M127" sourceRef="mfr_t23" targetRef="mfr_t24" />
+    <sequenceFlow id="E_M128" sourceRef="mfr_t24" targetRef="mfr_t25" />
+    <sequenceFlow id="E_M129" sourceRef="mfr_t25" targetRef="mfr_t26" />
+
+    <sequenceFlow id="E_M130" sourceRef="mfr_t26" targetRef="mfr_xs8" />
+    <sequenceFlow id="E_M131" sourceRef="mfr_xs8" targetRef="mfr_tap" name="Another person" />
+    <sequenceFlow id="E_M132" sourceRef="mfr_xs8" targetRef="mfr_xj8" />
+    <sequenceFlow id="E_M133" sourceRef="mfr_tap" targetRef="mfr_xj8" />
+
+    <sequenceFlow id="E_M134" sourceRef="mfr_xj8" targetRef="mfr_t27" />
+    <sequenceFlow id="E_M135" sourceRef="mfr_t27" targetRef="mfr_end" />
+  </process>
+
+  <process id="proc_com" isExecutable="false" name="Commission">
+    <startEvent id="com_st" name="Start" />
+    <task id="com_t1" name="Adopt delegated acts" />
+    <endEvent id="com_end" name="Delegated acts adopted" />
+    <sequenceFlow id="E_C1" sourceRef="com_st" targetRef="com_t1" />
+    <sequenceFlow id="E_C2" sourceRef="com_t1" targetRef="com_end" />
+  </process>
+
+  <process id="proc_ca" isExecutable="false" name="Competent authority">
+    <startEvent id="ca_st" name="Start" />
+    <task id="ca_t1" name="Send request for tech doc" />
+    <task id="ca_t2" name="Send request to demonstrate conformity" />
+    <task id="ca_t3" name="Send requirement to provide samples" />
+    <task id="ca_t4" name="Send request to cooperate" />
+    <task id="ca_t5" name="Assess if manufacturer fails to cooperate" />
+    <exclusiveGateway id="ca_xs1" />
+    <task id="ca_t6" name="Take appropriate measures to prohibit or restrict" />
+    <exclusiveGateway id="ca_xj1" />
+    <task id="ca_t7" name="Assess if device caused damage" />
+    <exclusiveGateway id="ca_xs2" />
+    <task id="ca_t8" name="Assess disclosure in legal proceedings" />
+    <exclusiveGateway id="ca_xs3" />
+    <task id="ca_t9" name="Facilitate provision of information" />
+    <exclusiveGateway id="ca_xj3" />
+    <exclusiveGateway id="ca_xj2" />
+    <endEvent id="ca_end" name="Supervision completed" />
+
+    <sequenceFlow id="E_CA1" sourceRef="ca_st" targetRef="ca_t1" />
+    <sequenceFlow id="E_CA2" sourceRef="ca_t1" targetRef="ca_t2" />
+    <sequenceFlow id="E_CA3" sourceRef="ca_t2" targetRef="ca_t3" />
+    <sequenceFlow id="E_CA4" sourceRef="ca_t3" targetRef="ca_t4" />
+    <sequenceFlow id="E_CA5" sourceRef="ca_t4" targetRef="ca_t5" />
+    <sequenceFlow id="E_CA6" sourceRef="ca_t5" targetRef="ca_xs1" />
+    <sequenceFlow id="E_CA7" sourceRef="ca_xs1" targetRef="ca_t6" name="Fails to cooperate" />
+    <sequenceFlow id="E_CA8" sourceRef="ca_xs1" targetRef="ca_xj1" />
+    <sequenceFlow id="E_CA9" sourceRef="ca_t6" targetRef="ca_xj1" />
+    <sequenceFlow id="E_CA10" sourceRef="ca_xj1" targetRef="ca_t7" />
+    <sequenceFlow id="E_CA11" sourceRef="ca_t7" targetRef="ca_xs2" />
+    <sequenceFlow id="E_CA12" sourceRef="ca_xs2" targetRef="ca_t8" name="Caused damage" />
+    <sequenceFlow id="E_CA13" sourceRef="ca_xs2" targetRef="ca_xj2" />
+    <sequenceFlow id="E_CA14" sourceRef="ca_t8" targetRef="ca_xs3" />
+    <sequenceFlow id="E_CA15" sourceRef="ca_xs3" targetRef="ca_t9" name="Not ordinarily dealt with" />
+    <sequenceFlow id="E_CA16" sourceRef="ca_xs3" targetRef="ca_xj3" />
+    <sequenceFlow id="E_CA17" sourceRef="ca_t9" targetRef="ca_xj3" />
+    <sequenceFlow id="E_CA18" sourceRef="ca_xj3" targetRef="ca_xj2" />
+    <sequenceFlow id="E_CA19" sourceRef="ca_xj2" targetRef="ca_end" />
+  </process>
+
+  <process id="proc_nlp" isExecutable="false" name="Natural or legal persons">
+    <startEvent id="nlp_st" name="Start" />
+    <task id="nlp_t1" name="Claim compensation" />
+    <endEvent id="nlp_end" name="Compensation claimed" />
+    <sequenceFlow id="E_N1" sourceRef="nlp_st" targetRef="nlp_t1" />
+    <sequenceFlow id="E_N2" sourceRef="nlp_t1" targetRef="nlp_end" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane bpmnElement="collaboration_1" id="BPMNPlane_1">
+      <bpmndi:BPMNShape id="p_mfr_gui" bpmnElement="p_mfr" isHorizontal="true">
+        <omgdc:Bounds height="1100.0" width="8900.0" x="50.0" y="50.0" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="p_com_gui" bpmnElement="p_com" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="8900.0" x="50.0" y="1200.0" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="p_ca_gui" bpmnElement="p_ca" isHorizontal="true">
+        <omgdc:Bounds height="400.0" width="8900.0" x="50.0" y="1450.0" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="p_nlp_gui" bpmnElement="p_nlp" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="8900.0" x="50.0" y="1900.0" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="mfr_st_gui" bpmnElement="mfr_st"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="165.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="mfr_t1_gui" bpmnElement="mfr_t1"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="140.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="mfr_end_gui" bpmnElement="mfr_end"><omgdc:Bounds height="30.0" width="30.0" x="8750.0" y="165.0" /></bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="com_st_gui" bpmnElement="com_st"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1285.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="com_t1_gui" bpmnElement="com_t1"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1260.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="com_end_gui" bpmnElement="com_end"><omgdc:Bounds height="30.0" width="30.0" x="400.0" y="1285.0" /></bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="ca_st_gui" bpmnElement="ca_st"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1535.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ca_t1_gui" bpmnElement="ca_t1"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1510.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ca_t2_gui" bpmnElement="ca_t2"><omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1510.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ca_t3_gui" bpmnElement="ca_t3"><omgdc:Bounds height="80.0" width="100.0" x="550.0" y="1510.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ca_t4_gui" bpmnElement="ca_t4"><omgdc:Bounds height="80.0" width="100.0" x="700.0" y="1510.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ca_end_gui" bpmnElement="ca_end"><omgdc:Bounds height="30.0" width="30.0" x="2300.0" y="1535.0" /></bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="nlp_st_gui" bpmnElement="nlp_st"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1985.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="nlp_t1_gui" bpmnElement="nlp_t1"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1960.0" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="nlp_end_gui" bpmnElement="nlp_end"><omgdc:Bounds height="30.0" width="30.0" x="400.0" y="1985.0" /></bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="mf1_gui" bpmnElement="mf1">
+         <omgdi:waypoint x="300.0" y="1510.0" />
+         <omgdi:waypoint x="300.0" y="500.0" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="mf2_gui" bpmnElement="mf2">
+         <omgdi:waypoint x="450.0" y="1510.0" />
+         <omgdi:waypoint x="450.0" y="500.0" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="mf3_gui" bpmnElement="mf3">
+         <omgdi:waypoint x="600.0" y="1510.0" />
+         <omgdi:waypoint x="600.0" y="500.0" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="mf4_gui" bpmnElement="mf4">
+         <omgdi:waypoint x="750.0" y="1510.0" />
+         <omgdi:waypoint x="750.0" y="500.0" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

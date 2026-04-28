@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-ai-regulation-definitions"
+             targetNamespace="http://www.signavio.com">
+
+   <collaboration id="Collab_1">
+      <participant id="Part_MS" name="Member States" processRef="Proc_MS" />
+      <participant id="Part_Board" name="The Board" processRef="Proc_Board" />
+      <participant id="Part_AIO" name="The AI Office" processRef="Proc_AIO" />
+      <messageFlow id="Msg_Board_AIO" sourceRef="Task_Board_1" targetRef="Task_AIO_1_1" />
+   </collaboration>
+
+   <process id="Proc_MS" isClosed="false" isExecutable="true" name="Member States Process">
+      <startEvent id="Start_MS" name="Need to implement measures">
+         <outgoing>Flow_Start_MS</outgoing>
+      </startEvent>
+
+      <parallelGateway id="Split_MS">
+         <incoming>Flow_Start_MS</incoming>
+         <outgoing>Flow_MS_B1</outgoing>
+         <outgoing>Flow_MS_B2</outgoing>
+         <outgoing>Flow_MS_B3</outgoing>
+         <outgoing>Flow_MS_B4</outgoing>
+         <outgoing>Flow_MS_B5</outgoing>
+      </parallelGateway>
+
+      <task id="Task_MS_1_1" name="Assess whether SMEs having a registered office or a branch in the Union fulfil the eligibility conditions and selection criteria">
+         <incoming>Flow_MS_B1</incoming>
+         <outgoing>Flow_MS_1_1_X1</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_1_1" name="Fulfil conditions?">
+         <incoming>Flow_MS_1_1_X1</incoming>
+         <outgoing>Flow_X1_Yes</outgoing>
+         <outgoing>Flow_X1_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_1_2" name="Provide SMEs with priority access to the AI regulatory sandboxes">
+         <incoming>Flow_X1_Yes</incoming>
+         <outgoing>Flow_1_2_XM1</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_1_1_Merge">
+         <incoming>Flow_1_2_XM1</incoming>
+         <incoming>Flow_X1_No</incoming>
+         <outgoing>Flow_XM1_1_3</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_1_3" name="Assess whether other SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>Flow_XM1_1_3</incoming>
+         <outgoing>Flow_1_3_X2</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_1_2" name="Other SMEs fulfil?">
+         <incoming>Flow_1_3_X2</incoming>
+         <outgoing>Flow_X2_Yes</outgoing>
+         <outgoing>Flow_X2_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_1_4" name="Provide other SMEs with access to the AI regulatory sandbox">
+         <incoming>Flow_X2_Yes</incoming>
+         <outgoing>Flow_1_4_XM2</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_1_2_Merge">
+         <incoming>Flow_1_4_XM2</incoming>
+         <incoming>Flow_X2_No</incoming>
+         <outgoing>Flow_B1_End</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_2_1" name="Organise specific awareness raising activities on the application of this Regulation tailored to the needs of SMEs, deployers and local public authorities">
+         <incoming>Flow_MS_B2</incoming>
+         <outgoing>Flow_2_1_2_2</outgoing>
+      </task>
+      <task id="Task_MS_2_2" name="Organise training activities on the application of this Regulation tailored to the needs of SMEs, deployers and local public authorities">
+         <incoming>Flow_2_1_2_2</incoming>
+         <outgoing>Flow_B2_End</outgoing>
+      </task>
+
+      <task id="Task_MS_3_1" name="Utilise existing dedicated channels for communication with SMEs, deployers, other innovators and local public authorities">
+         <incoming>Flow_MS_B3</incoming>
+         <outgoing>Flow_3_1_3_2</outgoing>
+      </task>
+      <task id="Task_MS_3_2" name="Assess whether it is appropriate to establish new channels for communication">
+         <incoming>Flow_3_1_3_2</incoming>
+         <outgoing>Flow_3_2_X3</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_3_1" name="Appropriate?">
+         <incoming>Flow_3_2_X3</incoming>
+         <outgoing>Flow_X3_Yes</outgoing>
+         <outgoing>Flow_X3_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_3_3" name="Establish new channels for communication">
+         <incoming>Flow_X3_Yes</incoming>
+         <outgoing>Flow_3_3_XM3</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_3_1_Merge">
+         <incoming>Flow_3_3_XM3</incoming>
+         <incoming>Flow_X3_No</incoming>
+         <outgoing>Flow_XM3_3_4</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_3_4" name="Provide advice about the implementation of this Regulation">
+         <incoming>Flow_XM3_3_4</incoming>
+         <outgoing>Flow_3_4_3_5</outgoing>
+      </task>
+      <task id="Task_MS_3_5" name="Respond to queries about the implementation of this Regulation">
+         <incoming>Flow_3_4_3_5</incoming>
+         <outgoing>Flow_B3_End</outgoing>
+      </task>
+
+      <task id="Task_MS_4_1" name="Facilitate the participation of SMEs in the standardisation development process">
+         <incoming>Flow_MS_B4</incoming>
+         <outgoing>Flow_4_1_4_2</outgoing>
+      </task>
+      <task id="Task_MS_4_2" name="Facilitate the participation of other relevant stakeholders in the standardisation development process">
+         <incoming>Flow_4_1_4_2</incoming>
+         <outgoing>Flow_B4_End</outgoing>
+      </task>
+
+      <task id="Task_MS_5_1" name="Take into account the specific interests and needs of the SME providers when setting the fees for conformity assessment">
+         <incoming>Flow_MS_B5</incoming>
+         <outgoing>Flow_5_1_5_2</outgoing>
+      </task>
+      <task id="Task_MS_5_2" name="Reduce those fees proportionately to their size, market size and other relevant indicators">
+         <incoming>Flow_5_1_5_2</incoming>
+         <outgoing>Flow_B5_End</outgoing>
+      </task>
+
+      <parallelGateway id="Join_MS">
+         <incoming>Flow_B1_End</incoming>
+         <incoming>Flow_B2_End</incoming>
+         <incoming>Flow_B3_End</incoming>
+         <incoming>Flow_B4_End</incoming>
+         <incoming>Flow_B5_End</incoming>
+         <outgoing>Flow_Join_End_MS</outgoing>
+      </parallelGateway>
+      <endEvent id="End_MS" name="Measures implemented">
+         <incoming>Flow_Join_End_MS</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Start_MS" sourceRef="Start_MS" targetRef="Split_MS" />
+      <sequenceFlow id="Flow_MS_B1" sourceRef="Split_MS" targetRef="Task_MS_1_1" />
+      <sequenceFlow id="Flow_MS_B2" sourceRef="Split_MS" targetRef="Task_MS_2_1" />
+      <sequenceFlow id="Flow_MS_B3" sourceRef="Split_MS" targetRef="Task_MS_3_1" />
+      <sequenceFlow id="Flow_MS_B4" sourceRef="Split_MS" targetRef="Task_MS_4_1" />
+      <sequenceFlow id="Flow_MS_B5" sourceRef="Split_MS" targetRef="Task_MS_5_1" />
+
+      <sequenceFlow id="Flow_MS_1_1_X1" sourceRef="Task_MS_1_1" targetRef="XOR_MS_1_1" />
+      <sequenceFlow id="Flow_X1_Yes" name="Yes" sourceRef="XOR_MS_1_1" targetRef="Task_MS_1_2" />
+      <sequenceFlow id="Flow_X1_No" name="No" sourceRef="XOR_MS_1_1" targetRef="XOR_MS_1_1_Merge" />
+      <sequenceFlow id="Flow_1_2_XM1" sourceRef="Task_MS_1_2" targetRef="XOR_MS_1_1_Merge" />
+      <sequenceFlow id="Flow_XM1_1_3" sourceRef="XOR_MS_1_1_Merge" targetRef="Task_MS_1_3" />
+      <sequenceFlow id="Flow_1_3_X2" sourceRef="Task_MS_1_3" targetRef="XOR_MS_1_2" />
+      <sequenceFlow id="Flow_X2_Yes" name="Yes" sourceRef="XOR_MS_1_2" targetRef="Task_MS_1_4" />
+      <sequenceFlow id="Flow_X2_No" name="No" sourceRef="XOR_MS_1_2" targetRef="XOR_MS_1_2_Merge" />
+      <sequenceFlow id="Flow_1_4_XM2" sourceRef="Task_MS_1_4" targetRef="XOR_MS_1_2_Merge" />
+      <sequenceFlow id="Flow_B1_End" sourceRef="XOR_MS_1_2_Merge" targetRef="Join_MS" />
+
+      <sequenceFlow id="Flow_2_1_2_2" sourceRef="Task_MS_2_1" targetRef="Task_MS_2_2" />
+      <sequenceFlow id="Flow_B2_End" sourceRef="Task_MS_2_2" targetRef="Join_MS" />
+
+      <sequenceFlow id="Flow_3_1_3_2" sourceRef="Task_MS_3_1" targetRef="Task_MS_3_2" />
+      <sequenceFlow id="Flow_3_2_X3" sourceRef="Task_MS_3_2" targetRef="XOR_MS_3_1" />
+      <sequenceFlow id="Flow_X3_Yes" name="Yes" sourceRef="XOR_MS_3_1" targetRef="Task_MS_3_3" />
+      <sequenceFlow id="Flow_X3_No" name="No" sourceRef="XOR_MS_3_1" targetRef="XOR_MS_3_1_Merge" />
+      <sequenceFlow id="Flow_3_3_XM3" sourceRef="Task_MS_3_3" targetRef="XOR_MS_3_1_Merge" />
+      <sequenceFlow id="Flow_XM3_3_4" sourceRef="XOR_MS_3_1_Merge" targetRef="Task_MS_3_4" />
+      <sequenceFlow id="Flow_3_4_3_5" sourceRef="Task_MS_3_4" targetRef="Task_MS_3_5" />
+      <sequenceFlow id="Flow_B3_End" sourceRef="Task_MS_3_5" targetRef="Join_MS" />
+
+      <sequenceFlow id="Flow_4_1_4_2" sourceRef="Task_MS_4_1" targetRef="Task_MS_4_2" />
+      <sequenceFlow id="Flow_B4_End" sourceRef="Task_MS_4_2" targetRef="Join_MS" />
+
+      <sequenceFlow id="Flow_5_1_5_2" sourceRef="Task_MS_5_1" targetRef="Task_MS_5_2" />
+      <sequenceFlow id="Flow_B5_End" sourceRef="Task_MS_5_2" targetRef="Join_MS" />
+
+      <sequenceFlow id="Flow_Join_End_MS" sourceRef="Join_MS" targetRef="End_MS" />
+   </process>
+
+   <process id="Proc_Board" isClosed="false" isExecutable="true" name="The Board Process">
+      <startEvent id="Start_Board" name="Need to implement measures">
+         <outgoing>Flow_Start_Board</outgoing>
+      </startEvent>
+      <task id="Task_Board_1" name="Send a request specifying standardised templates for areas covered by this Regulation to the AI Office">
+         <incoming>Flow_Start_Board</incoming>
+         <outgoing>Flow_Board_End</outgoing>
+      </task>
+      <endEvent id="End_Board" name="Request sent">
+         <incoming>Flow_Board_End</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_Start_Board" sourceRef="Start_Board" targetRef="Task_Board_1" />
+      <sequenceFlow id="Flow_Board_End" sourceRef="Task_Board_1" targetRef="End_Board" />
+   </process>
+
+   <process id="Proc_AIO" isClosed="false" isExecutable="true" name="The AI Office Process">
+      <startEvent id="Start_AIO" name="Need to implement measures">
+         <outgoing>Flow_Start_AIO</outgoing>
+      </startEvent>
+
+      <parallelGateway id="Split_AIO">
+         <incoming>Flow_Start_AIO</incoming>
+         <outgoing>Flow_AIO_B1</outgoing>
+         <outgoing>Flow_AIO_B2</outgoing>
+         <outgoing>Flow_AIO_B3</outgoing>
+         <outgoing>Flow_AIO_B4</outgoing>
+      </parallelGateway>
+
+      <receiveTask id="Task_AIO_1_1" name="Receive a request specifying standardised templates for areas covered by this Regulation">
+         <incoming>Flow_AIO_B1</incoming>
+         <outgoing>Flow_AIO_1_1_1_2</outgoing>
+      </receiveTask>
+      <task id="Task_AIO_1_2" name="Provide standardised templates">
+         <incoming>Flow_AIO_1_1_1_2</incoming>
+         <outgoing>Flow_AIO_B1_End</outgoing>
+      </task>
+
+      <task id="Task_AIO_2_1" name="Develop a single information platform providing easy to use information in relation to this Regulation for all operators across the Union">
+         <incoming>Flow_AIO_B2</incoming>
+         <outgoing>Flow_AIO_2_1_2_2</outgoing>
+      </task>
+      <task id="Task_AIO_2_2" name="Maintain a single information platform providing easy to use information in relation to this Regulation for all operators across the Union">
+         <incoming>Flow_AIO_2_1_2_2</incoming>
+         <outgoing>Flow_AIO_B2_End</outgoing>
+      </task>
+
+      <task id="Task_AIO_3_1" name="Organise appropriate communication campaigns to raise awareness about the obligations arising from this Regulation">
+         <incoming>Flow_AIO_B3</incoming>
+         <outgoing>Flow_AIO_B3_End</outgoing>
+      </task>
+
+      <task id="Task_AIO_4_1" name="Evaluate the convergence of best practices in public procurement procedures in relation to AI systems">
+         <incoming>Flow_AIO_B4</incoming>
+         <outgoing>Flow_AIO_4_1_4_2</outgoing>
+      </task>
+      <task id="Task_AIO_4_2" name="Promote the convergence of best practices in public procurement procedures in relation to AI systems">
+         <incoming>Flow_AIO_4_1_4_2</incoming>
+         <outgoing>Flow_AIO_B4_End</outgoing>
+      </task>
+
+      <parallelGateway id="Join_AIO">
+         <incoming>Flow_AIO_B1_End</incoming>
+         <incoming>Flow_AIO_B2_End</incoming>
+         <incoming>Flow_AIO_B3_End</incoming>
+         <incoming>Flow_AIO_B4_End</incoming>
+         <outgoing>Flow_Join_End_AIO</outgoing>
+      </parallelGateway>
+      <endEvent id="End_AIO" name="Measures implemented">
+         <incoming>Flow_Join_End_AIO</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Start_AIO" sourceRef="Start_AIO" targetRef="Split_AIO" />
+      <sequenceFlow id="Flow_AIO_B1" sourceRef="Split_AIO" targetRef="Task_AIO_1_1" />
+      <sequenceFlow id="Flow_AIO_B2" sourceRef="Split_AIO" targetRef="Task_AIO_2_1" />
+      <sequenceFlow id="Flow_AIO_B3" sourceRef="Split_AIO" targetRef="Task_AIO_3_1" />
+      <sequenceFlow id="Flow_AIO_B4" sourceRef="Split_AIO" targetRef="Task_AIO_4_1" />
+
+      <sequenceFlow id="Flow_AIO_1_1_1_2" sourceRef="Task_AIO_1_1" targetRef="Task_AIO_1_2" />
+      <sequenceFlow id="Flow_AIO_B1_End" sourceRef="Task_AIO_1_2" targetRef="Join_AIO" />
+
+      <sequenceFlow id="Flow_AIO_2_1_2_2" sourceRef="Task_AIO_2_1" targetRef="Task_AIO_2_2" />
+      <sequenceFlow id="Flow_AIO_B2_End" sourceRef="Task_AIO_2_2" targetRef="Join_AIO" />
+
+      <sequenceFlow id="Flow_AIO_B3_End" sourceRef="Task_AIO_3_1" targetRef="Join_AIO" />
+
+      <sequenceFlow id="Flow_AIO_4_1_4_2" sourceRef="Task_AIO_4_1" targetRef="Task_AIO_4_2" />
+      <sequenceFlow id="Flow_AIO_B4_End" sourceRef="Task_AIO_4_2" targetRef="Join_AIO" />
+
+      <sequenceFlow id="Flow_Join_End_AIO" sourceRef="Join_AIO" targetRef="End_AIO" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collab_1">
+
+         <bpmndi:BPMNShape id="Part_MS_di" bpmnElement="Part_MS" isHorizontal="true">
+            <omgdc:Bounds x="30" y="30" width="1450" height="740" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Part_Board_di" bpmnElement="Part_Board" isHorizontal="true">
+            <omgdc:Bounds x="30" y="800" width="1450" height="150" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Part_AIO_di" bpmnElement="Part_AIO" isHorizontal="true">
+            <omgdc:Bounds x="30" y="980" width="1450" height="600" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Start_MS_di" bpmnElement="Start_MS">
+            <omgdc:Bounds x="80" y="382" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Split_MS_di" bpmnElement="Split_MS">
+            <omgdc:Bounds x="160" y="375" width="50" height="50" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_MS_1_1_di" bpmnElement="Task_MS_1_1">
+            <omgdc:Bounds x="250" y="90" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_1_1_di" bpmnElement="XOR_MS_1_1">
+            <omgdc:Bounds x="380" y="105" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_1_2_di" bpmnElement="Task_MS_1_2">
+            <omgdc:Bounds x="460" y="40" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_1_1_Merge_di" bpmnElement="XOR_MS_1_1_Merge">
+            <omgdc:Bounds x="580" y="105" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_1_3_di" bpmnElement="Task_MS_1_3">
+            <omgdc:Bounds x="660" y="90" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_1_2_di" bpmnElement="XOR_MS_1_2">
+            <omgdc:Bounds x="790" y="105" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_1_4_di" bpmnElement="Task_MS_1_4">
+            <omgdc:Bounds x="870" y="40" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_1_2_Merge_di" bpmnElement="XOR_MS_1_2_Merge">
+            <omgdc:Bounds x="990" y="105" width="50" height="50" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_MS_2_1_di" bpmnElement="Task_MS_2_1">
+            <omgdc:Bounds x="350" y="220" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_2_2_di" bpmnElement="Task_MS_2_2">
+            <omgdc:Bounds x="550" y="220" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_MS_3_1_di" bpmnElement="Task_MS_3_1">
+            <omgdc:Bounds x="250" y="360" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_3_2_di" bpmnElement="Task_MS_3_2">
+            <omgdc:Bounds x="380" y="360" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_3_1_di" bpmnElement="XOR_MS_3_1">
+            <omgdc:Bounds x="510" y="375" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_3_3_di" bpmnElement="Task_MS_3_3">
+            <omgdc:Bounds x="590" y="300" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="XOR_MS_3_1_Merge_di" bpmnElement="XOR_MS_3_1_Merge">
+            <omgdc:Bounds x="720" y="375" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_3_4_di" bpmnElement="Task_MS_3_4">
+            <omgdc:Bounds x="800" y="360" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_3_5_di" bpmnElement="Task_MS_3_5">
+            <omgdc:Bounds x="930" y="360" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_MS_4_1_di" bpmnElement="Task_MS_4_1">
+            <omgdc:Bounds x="350" y="500" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_4_2_di" bpmnElement="Task_MS_4_2">
+            <omgdc:Bounds x="550" y="500" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_MS_5_1_di" bpmnElement="Task_MS_5_1">
+            <omgdc:Bounds x="350" y="620" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_5_2_di" bpmnElement="Task_MS_5_2">
+            <omgdc:Bounds x="550" y="620" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Join_MS_di" bpmnElement="Join_MS">
+            <omgdc:Bounds x="1100" y="375" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_MS_di" bpmnElement="End_MS">
+            <omgdc:Bounds x="1200" y="382" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_Start_MS_di" bpmnElement="Flow_Start_MS">
+            <omgdi:waypoint x="116" y="400" />
+            <omgdi:waypoint x="160" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_B1_di" bpmnElement="Flow_MS_B1">
+            <omgdi:waypoint x="185" y="375" />
+            <omgdi:waypoint x="185" y="130" />
+            <omgdi:waypoint x="250" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_B2_di" bpmnElement="Flow_MS_B2">
+            <omgdi:waypoint x="185" y="375" />
+            <omgdi:waypoint x="185" y="260" />
+            <omgdi:waypoint x="350" y="260" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_B3_di" bpmnElement="Flow_MS_B3">
+            <omgdi:waypoint x="210" y="400" />
+            <omgdi:waypoint x="250" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_B4_di" bpmnElement="Flow_MS_B4">
+            <omgdi:waypoint x="185" y="425" />
+            <omgdi:waypoint x="185" y="540" />
+            <omgdi:waypoint x="350" y="540" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_B5_di" bpmnElement="Flow_MS_B5">
+            <omgdi:waypoint x="185" y="425" />
+            <omgdi:waypoint x="185" y="660" />
+            <omgdi:waypoint x="350" y="660" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_MS_1_1_X1_di" bpmnElement="Flow_MS_1_1_X1">
+            <omgdi:waypoint x="350" y="130" />
+            <omgdi:waypoint x="380" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X1_Yes_di" bpmnElement="Flow_X1_Yes">
+            <omgdi:waypoint x="405" y="105" />
+            <omgdi:waypoint x="405" y="80" />
+            <omgdi:waypoint x="460" y="80" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X1_No_di" bpmnElement="Flow_X1_No">
+            <omgdi:waypoint x="430" y="130" />
+            <omgdi:waypoint x="580" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_1_2_XM1_di" bpmnElement="Flow_1_2_XM1">
+            <omgdi:waypoint x="560" y="80" />
+            <omgdi:waypoint x="605" y="80" />
+            <omgdi:waypoint x="605" y="105" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_XM1_1_3_di" bpmnElement="Flow_XM1_1_3">
+            <omgdi:waypoint x="630" y="130" />
+            <omgdi:waypoint x="660" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_1_3_X2_di" bpmnElement="Flow_1_3_X2">
+            <omgdi:waypoint x="760" y="130" />
+            <omgdi:waypoint x="790" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X2_Yes_di" bpmnElement="Flow_X2_Yes">
+            <omgdi:waypoint x="815" y="105" />
+            <omgdi:waypoint x="815" y="80" />
+            <omgdi:waypoint x="870" y="80" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X2_No_di" bpmnElement="Flow_X2_No">
+            <omgdi:waypoint x="840" y="130" />
+            <omgdi:waypoint x="990" y="130" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_1_4_XM2_di" bpmnElement="Flow_1_4_XM2">
+            <omgdi:waypoint x="970" y="80" />
+            <omgdi:waypoint x="1015" y="80" />
+            <omgdi:waypoint x="1015" y="105" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_B1_End_di" bpmnElement="Flow_B1_End">
+            <omgdi:waypoint x="1040" y="130" />
+            <omgdi:waypoint x="1125" y="130" />
+            <omgdi:waypoint x="1125" y="375" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_2_1_2_2_di" bpmnElement="Flow_2_1_2_2">
+            <omgdi:waypoint x="450" y="260" />
+            <omgdi:waypoint x="550" y="260" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_B2_End_di" bpmnElement="Flow_B2_End">
+            <omgdi:waypoint x="650" y="260" />
+            <omgdi:waypoint x="1125" y="260" />
+            <omgdi:waypoint x="1125" y="375" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_3_1_3_2_di" bpmnElement="Flow_3_1_3_2">
+            <omgdi:waypoint x="350" y="400" />
+            <omgdi:waypoint x="380" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_3_2_X3_di" bpmnElement="Flow_3_2_X3">
+            <omgdi:waypoint x="480" y="400" />
+            <omgdi:waypoint x="510" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X3_Yes_di" bpmnElement="Flow_X3_Yes">
+            <omgdi:waypoint x="535" y="375" />
+            <omgdi:waypoint x="535" y="340" />
+            <omgdi:waypoint x="590" y="340" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_X3_No_di" bpmnElement="Flow_X3_No">
+            <omgdi:waypoint x="560" y="400" />
+            <omgdi:waypoint x="720" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_3_3_XM3_di" bpmnElement="Flow_3_3_XM3">
+            <omgdi:waypoint x="690" y="340" />
+            <omgdi:waypoint x="745" y="340" />
+            <omgdi:waypoint x="745" y="375" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_XM3_3_4_di" bpmnElement="Flow_XM3_3_4">
+            <omgdi:waypoint x="770" y="400" />
+            <omgdi:waypoint x="800" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_3_4_3_5_di" bpmnElement="Flow_3_4_3_5">
+            <omgdi:waypoint x="900" y="400" />
+            <omgdi:waypoint x="930" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_B3_End_di" bpmnElement="Flow_B3_End">
+            <omgdi:waypoint x="1030" y="400" />
+            <omgdi:waypoint x="1100" y="400" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_4_1_4_2_di" bpmnElement="Flow_4_1_4_2">
+            <omgdi:waypoint x="450" y="540" />
+            <omgdi:waypoint x="550" y="540" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_B4_End_di" bpmnElement="Flow_B4_End">
+            <omgdi:waypoint x="650" y="540" />
+            <omgdi:waypoint x="1125" y="540" />
+            <omgdi:waypoint x="1125" y="425" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_5_1_5_2_di" bpmnElement="Flow_5_1_5_2">
+            <omgdi:waypoint x="450" y="660" />
+            <omgdi:waypoint x="550" y="660" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_B5_End_di" bpmnElement="Flow_B5_End">
+            <omgdi:waypoint x="650" y="660" />
+            <omgdi:waypoint x="1125" y="660" />
+            <omgdi:waypoint x="1125" y="425" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_Join_End_MS_di" bpmnElement="Flow_Join_End_MS">
+            <omgdi:waypoint x="1150" y="400" />
+            <omgdi:waypoint x="1200" y="400" />
+         </bpmndi:BPMNEdge>
+
+
+         <bpmndi:BPMNShape id="Start_Board_di" bpmnElement="Start_Board">
+            <omgdc:Bounds x="80" y="857" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Board_1_di" bpmnElement="Task_Board_1">
+            <omgdc:Bounds x="350" y="835" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_Board_di" bpmnElement="End_Board">
+            <omgdc:Bounds x="600" y="857" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_Start_Board_di" bpmnElement="Flow_Start_Board">
+            <omgdi:waypoint x="116" y="875" />
+            <omgdi:waypoint x="350" y="875" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Board_End_di" bpmnElement="Flow_Board_End">
+            <omgdi:waypoint x="450" y="875" />
+            <omgdi:waypoint x="600" y="875" />
+         </bpmndi:BPMNEdge>
+
+
+         <bpmndi:BPMNShape id="Start_AIO_di" bpmnElement="Start_AIO">
+            <omgdc:Bounds x="80" y="1257" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Split_AIO_di" bpmnElement="Split_AIO">
+            <omgdc:Bounds x="160" y="1250" width="50" height="50" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_AIO_1_1_di" bpmnElement="Task_AIO_1_1">
+            <omgdc:Bounds x="350" y="1020" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_AIO_1_2_di" bpmnElement="Task_AIO_1_2">
+            <omgdc:Bounds x="550" y="1020" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_AIO_2_1_di" bpmnElement="Task_AIO_2_1">
+            <omgdc:Bounds x="350" y="1150" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_AIO_2_2_di" bpmnElement="Task_AIO_2_2">
+            <omgdc:Bounds x="550" y="1150" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_AIO_3_1_di" bpmnElement="Task_AIO_3_1">
+            <omgdc:Bounds x="350" y="1280" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Task_AIO_4_1_di" bpmnElement="Task_AIO_4_1">
+            <omgdc:Bounds x="350" y="1410" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_AIO_4_2_di" bpmnElement="Task_AIO_4_2">
+            <omgdc:Bounds x="550" y="1410" width="100" height="80" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Join_AIO_di" bpmnElement="Join_AIO">
+            <omgdc:Bounds x="800" y="1250" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="End_AIO_di" bpmnElement="End_AIO">
+            <omgdc:Bounds x="900" y="1257" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_Start_AIO_di" bpmnElement="Flow_Start_AIO">
+            <omgdi:waypoint x="116" y="1275" />
+            <omgdi:waypoint x="160" y="1275" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B1_di" bpmnElement="Flow_AIO_B1">
+            <omgdi:waypoint x="185" y="1250" />
+            <omgdi:waypoint x="185" y="1060" />
+            <omgdi:waypoint x="350" y="1060" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B2_di" bpmnElement="Flow_AIO_B2">
+            <omgdi:waypoint x="185" y="1250" />
+            <omgdi:waypoint x="185" y="1190" />
+            <omgdi:waypoint x="350" y="1190" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B3_di" bpmnElement="Flow_AIO_B3">
+            <omgdi:waypoint x="185" y="1300" />
+            <omgdi:waypoint x="185" y="1320" />
+            <omgdi:waypoint x="350" y="1320" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B4_di" bpmnElement="Flow_AIO_B4">
+            <omgdi:waypoint x="185" y="1300" />
+            <omgdi:waypoint x="185" y="1450" />
+            <omgdi:waypoint x="350" y="1450" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_AIO_1_1_1_2_di" bpmnElement="Flow_AIO_1_1_1_2">
+            <omgdi:waypoint x="450" y="1060" />
+            <omgdi:waypoint x="550" y="1060" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B1_End_di" bpmnElement="Flow_AIO_B1_End">
+            <omgdi:waypoint x="650" y="1060" />
+            <omgdi:waypoint x="825" y="1060" />
+            <omgdi:waypoint x="825" y="1250" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_AIO_2_1_2_2_di" bpmnElement="Flow_AIO_2_1_2_2">
+            <omgdi:waypoint x="450" y="1190" />
+            <omgdi:waypoint x="550" y="1190" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B2_End_di" bpmnElement="Flow_AIO_B2_End">
+            <omgdi:waypoint x="650" y="1190" />
+            <omgdi:waypoint x="825" y="1190" />
+            <omgdi:waypoint x="825" y="1250" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_AIO_B3_End_di" bpmnElement="Flow_AIO_B3_End">
+            <omgdi:waypoint x="450" y="1320" />
+            <omgdi:waypoint x="825" y="1320" />
+            <omgdi:waypoint x="825" y="1300" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_AIO_4_1_4_2_di" bpmnElement="Flow_AIO_4_1_4_2">
+            <omgdi:waypoint x="450" y="1450" />
+            <omgdi:waypoint x="550" y="1450" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_AIO_B4_End_di" bpmnElement="Flow_AIO_B4_End">
+            <omgdi:waypoint x="650" y="1450" />
+            <omgdi:waypoint x="825" y="1450" />
+            <omgdi:waypoint x="825" y="1300" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Flow_Join_End_AIO_di" bpmnElement="Flow_Join_End_AIO">
+            <omgdi:waypoint x="850" y="1275" />
+            <omgdi:waypoint x="900" y="1275" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Msg_Board_AIO_di" bpmnElement="Msg_Board_AIO">
+            <omgdi:waypoint x="400" y="915" />
+            <omgdi:waypoint x="400" y="1020" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

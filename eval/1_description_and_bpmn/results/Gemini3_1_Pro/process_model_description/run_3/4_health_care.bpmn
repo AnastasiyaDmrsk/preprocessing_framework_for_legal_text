@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-health-data-exchange">
+
+   <collaboration id="Collaboration_HealthData">
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+      <participant id="Participant_TMS" name="Transferring Member State" processRef="Process_TMS" />
+      <participant id="Participant_MSR" name="Member State responsible" processRef="Process_MSR" />
+      <messageFlow id="MessageFlow_TransmitInfo" sourceRef="Task_TMS_7" targetRef="StartEvent_MSR" />
+   </collaboration>
+
+   <process id="Process_Commission" isExecutable="false">
+      <startEvent id="StartEvent_Commission" name="Process starts">
+         <outgoing>Flow_Comm_1</outgoing>
+      </startEvent>
+      <sequenceFlow id="Flow_Comm_1" sourceRef="StartEvent_Commission" targetRef="Gateway_Comm_Split" />
+
+      <parallelGateway id="Gateway_Comm_Split">
+         <incoming>Flow_Comm_1</incoming>
+         <outgoing>Flow_Comm_2</outgoing>
+         <outgoing>Flow_Comm_3</outgoing>
+      </parallelGateway>
+
+      <task id="Task_Comm_1" name="draw up the common health certificate by means of implementing acts">
+         <incoming>Flow_Comm_2</incoming>
+         <outgoing>Flow_Comm_4</outgoing>
+      </task>
+      <sequenceFlow id="Flow_Comm_2" sourceRef="Gateway_Comm_Split" targetRef="Task_Comm_1" />
+
+      <task id="Task_Comm_2" name="adopt uniform conditions and practical arrangements">
+         <incoming>Flow_Comm_3</incoming>
+         <outgoing>Flow_Comm_5</outgoing>
+      </task>
+      <sequenceFlow id="Flow_Comm_3" sourceRef="Gateway_Comm_Split" targetRef="Task_Comm_2" />
+
+      <parallelGateway id="Gateway_Comm_Merge">
+         <incoming>Flow_Comm_4</incoming>
+         <incoming>Flow_Comm_5</incoming>
+         <outgoing>Flow_Comm_6</outgoing>
+      </parallelGateway>
+      <sequenceFlow id="Flow_Comm_4" sourceRef="Task_Comm_1" targetRef="Gateway_Comm_Merge" />
+      <sequenceFlow id="Flow_Comm_5" sourceRef="Task_Comm_2" targetRef="Gateway_Comm_Merge" />
+
+      <endEvent id="EndEvent_Commission" name="implementing acts adopted">
+         <incoming>Flow_Comm_6</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_Comm_6" sourceRef="Gateway_Comm_Merge" targetRef="EndEvent_Commission" />
+   </process>
+
+   <process id="Process_TMS" isExecutable="false">
+      <startEvent id="StartEvent_TMS" name="Process starts">
+         <outgoing>Flow_TMS_1</outgoing>
+      </startEvent>
+
+      <task id="Task_TMS_1" name="carry out the processing of personal health data">
+         <incoming>Flow_TMS_1</incoming>
+         <outgoing>Flow_TMS_2</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_1" sourceRef="StartEvent_TMS" targetRef="Task_TMS_1" />
+
+      <task id="Task_TMS_2" name="assess whether the applicant is physically or legally incapable">
+         <incoming>Flow_TMS_2</incoming>
+         <outgoing>Flow_TMS_3</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_2" sourceRef="Task_TMS_1" targetRef="Task_TMS_2" />
+
+      <exclusiveGateway id="Gateway_TMS_1" name="incapable?">
+         <incoming>Flow_TMS_3</incoming>
+         <outgoing>Flow_TMS_4</outgoing>
+         <outgoing>Flow_TMS_5</outgoing>
+      </exclusiveGateway>
+      <sequenceFlow id="Flow_TMS_3" sourceRef="Task_TMS_2" targetRef="Gateway_TMS_1" />
+
+      <task id="Task_TMS_3_1" name="assess whether transmission is necessary to protect vital interests">
+         <incoming>Flow_TMS_4</incoming>
+         <outgoing>Flow_TMS_6</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_4" name="Yes" sourceRef="Gateway_TMS_1" targetRef="Task_TMS_3_1" />
+
+      <task id="Task_TMS_3_2" name="obtain explicit consent">
+         <incoming>Flow_TMS_5</incoming>
+         <outgoing>Flow_TMS_7</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_5" name="No" sourceRef="Gateway_TMS_1" targetRef="Task_TMS_3_2" />
+
+      <exclusiveGateway id="Gateway_TMS_2">
+         <incoming>Flow_TMS_6</incoming>
+         <incoming>Flow_TMS_7</incoming>
+         <outgoing>Flow_TMS_8</outgoing>
+      </exclusiveGateway>
+      <sequenceFlow id="Flow_TMS_6" sourceRef="Task_TMS_3_1" targetRef="Gateway_TMS_2" />
+      <sequenceFlow id="Flow_TMS_7" sourceRef="Task_TMS_3_2" targetRef="Gateway_TMS_2" />
+
+      <task id="Task_TMS_4" name="ensure lack of consent does not constitute an obstacle">
+         <incoming>Flow_TMS_8</incoming>
+         <outgoing>Flow_TMS_9</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_8" sourceRef="Gateway_TMS_2" targetRef="Task_TMS_4" />
+
+      <task id="Task_TMS_5" name="assess whether explicit consent is obtained or transmission necessary">
+         <incoming>Flow_TMS_9</incoming>
+         <outgoing>Flow_TMS_10</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_9" sourceRef="Task_TMS_4" targetRef="Task_TMS_5" />
+
+      <exclusiveGateway id="Gateway_TMS_3" name="consent or vital interests?">
+         <incoming>Flow_TMS_10</incoming>
+         <outgoing>Flow_TMS_11</outgoing>
+         <outgoing>Flow_TMS_End1</outgoing>
+      </exclusiveGateway>
+      <sequenceFlow id="Flow_TMS_10" sourceRef="Task_TMS_5" targetRef="Gateway_TMS_3" />
+
+      <endEvent id="EndEvent_TMS_Alternative1" name="End">
+         <incoming>Flow_TMS_End1</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_TMS_End1" name="No" sourceRef="Gateway_TMS_3" targetRef="EndEvent_TMS_Alternative1" />
+
+      <task id="Task_TMS_6" name="assess whether information on special needs is available">
+         <incoming>Flow_TMS_11</incoming>
+         <outgoing>Flow_TMS_12</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_11" name="Yes" sourceRef="Gateway_TMS_3" targetRef="Task_TMS_6" />
+
+      <exclusiveGateway id="Gateway_TMS_4" name="information available?">
+         <incoming>Flow_TMS_12</incoming>
+         <outgoing>Flow_TMS_13</outgoing>
+         <outgoing>Flow_TMS_End2</outgoing>
+      </exclusiveGateway>
+      <sequenceFlow id="Flow_TMS_12" sourceRef="Task_TMS_6" targetRef="Gateway_TMS_4" />
+
+      <endEvent id="EndEvent_TMS_Alternative2" name="End">
+         <incoming>Flow_TMS_End2</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_TMS_End2" name="No" sourceRef="Gateway_TMS_4" targetRef="EndEvent_TMS_Alternative2" />
+
+      <task id="Task_TMS_7" name="transmit information on any special needs">
+         <incoming>Flow_TMS_13</incoming>
+         <outgoing>Flow_TMS_14</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_13" name="Yes" sourceRef="Gateway_TMS_4" targetRef="Task_TMS_7" />
+
+      <task id="Task_TMS_8" name="transfer information in a common health certificate">
+         <incoming>Flow_TMS_14</incoming>
+         <outgoing>Flow_TMS_15</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_14" sourceRef="Task_TMS_7" targetRef="Task_TMS_8" />
+
+      <task id="Task_TMS_9" name="exchange information only between health professionals">
+         <incoming>Flow_TMS_15</incoming>
+         <outgoing>Flow_TMS_16</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_15" sourceRef="Task_TMS_8" targetRef="Task_TMS_9" />
+
+      <task id="Task_TMS_10" name="use information exchanged only for purposes">
+         <incoming>Flow_TMS_16</incoming>
+         <outgoing>Flow_TMS_17</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_16" sourceRef="Task_TMS_9" targetRef="Task_TMS_10" />
+
+      <task id="Task_TMS_11" name="not further process the information exchanged">
+         <incoming>Flow_TMS_17</incoming>
+         <outgoing>Flow_TMS_18</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_17" sourceRef="Task_TMS_10" targetRef="Task_TMS_11" />
+
+      <task id="Task_TMS_12" name="apply rules laid down in Article 34(8) to (12)">
+         <incoming>Flow_TMS_18</incoming>
+         <outgoing>Flow_TMS_19</outgoing>
+      </task>
+      <sequenceFlow id="Flow_TMS_18" sourceRef="Task_TMS_11" targetRef="Task_TMS_12" />
+
+      <endEvent id="EndEvent_TMS" name="health data transmitted">
+         <incoming>Flow_TMS_19</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_TMS_19" sourceRef="Task_TMS_12" targetRef="EndEvent_TMS" />
+   </process>
+
+   <process id="Process_MSR" isExecutable="false">
+      <startEvent id="StartEvent_MSR" name="receive information on special needs">
+         <outgoing>Flow_MSR_1</outgoing>
+         <messageEventDefinition id="MessageDef_1" />
+      </startEvent>
+
+      <task id="Task_MSR_1" name="ensure special needs are adequately addressed">
+         <incoming>Flow_MSR_1</incoming>
+         <outgoing>Flow_MSR_2</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_1" sourceRef="StartEvent_MSR" targetRef="Task_MSR_1" />
+
+      <task id="Task_MSR_2" name="include any essential medical care">
+         <incoming>Flow_MSR_2</incoming>
+         <outgoing>Flow_MSR_3</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_2" sourceRef="Task_MSR_1" targetRef="Task_MSR_2" />
+
+      <task id="Task_MSR_3" name="exchange information only between professionals">
+         <incoming>Flow_MSR_3</incoming>
+         <outgoing>Flow_MSR_4</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_3" sourceRef="Task_MSR_2" targetRef="Task_MSR_3" />
+
+      <task id="Task_MSR_4" name="use information exchanged only for purposes">
+         <incoming>Flow_MSR_4</incoming>
+         <outgoing>Flow_MSR_5</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_4" sourceRef="Task_MSR_3" targetRef="Task_MSR_4" />
+
+      <task id="Task_MSR_5" name="not further process the information">
+         <incoming>Flow_MSR_5</incoming>
+         <outgoing>Flow_MSR_6</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_5" sourceRef="Task_MSR_4" targetRef="Task_MSR_5" />
+
+      <task id="Task_MSR_6" name="apply rules laid down in Article 34(8) to (12)">
+         <incoming>Flow_MSR_6</incoming>
+         <outgoing>Flow_MSR_7</outgoing>
+      </task>
+      <sequenceFlow id="Flow_MSR_6" sourceRef="Task_MSR_5" targetRef="Task_MSR_6" />
+
+      <endEvent id="EndEvent_MSR" name="special needs addressed">
+         <incoming>Flow_MSR_7</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_MSR_7" sourceRef="Task_MSR_6" targetRef="EndEvent_MSR" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_HealthData">
+      <bpmndi:BPMNPlane id="BPMNPlane_HealthData" bpmnElement="Collaboration_HealthData">
+
+         <bpmndi:BPMNShape id="Participant_Commission_gui" bpmnElement="Participant_Commission" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="800.0" x="100.0" y="50.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Participant_TMS_gui" bpmnElement="Participant_TMS" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="2500.0" x="100.0" y="350.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Participant_MSR_gui" bpmnElement="Participant_MSR" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1300.0" x="1400.0" y="850.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="StartEvent_Commission_gui" bpmnElement="StartEvent_Commission">
+            <omgdc:Bounds height="36.0" width="36.0" x="150.0" y="150.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_Comm_Split_gui" bpmnElement="Gateway_Comm_Split">
+            <omgdc:Bounds height="50.0" width="50.0" x="250.0" y="143.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Comm_1_gui" bpmnElement="Task_Comm_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_Comm_2_gui" bpmnElement="Task_Comm_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_Comm_Merge_gui" bpmnElement="Gateway_Comm_Merge">
+            <omgdc:Bounds height="50.0" width="50.0" x="500.0" y="143.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_Commission_gui" bpmnElement="EndEvent_Commission">
+            <omgdc:Bounds height="36.0" width="36.0" x="600.0" y="150.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_Comm_1_gui" bpmnElement="Flow_Comm_1">
+            <omgdi:waypoint x="186.0" y="168.0" />
+            <omgdi:waypoint x="250.0" y="168.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_2_gui" bpmnElement="Flow_Comm_2">
+            <omgdi:waypoint x="275.0" y="143.0" />
+            <omgdi:waypoint x="275.0" y="120.0" />
+            <omgdi:waypoint x="350.0" y="120.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_3_gui" bpmnElement="Flow_Comm_3">
+            <omgdi:waypoint x="275.0" y="193.0" />
+            <omgdi:waypoint x="275.0" y="240.0" />
+            <omgdi:waypoint x="350.0" y="240.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_4_gui" bpmnElement="Flow_Comm_4">
+            <omgdi:waypoint x="450.0" y="120.0" />
+            <omgdi:waypoint x="525.0" y="120.0" />
+            <omgdi:waypoint x="525.0" y="143.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_5_gui" bpmnElement="Flow_Comm_5">
+            <omgdi:waypoint x="450.0" y="240.0" />
+            <omgdi:waypoint x="525.0" y="240.0" />
+            <omgdi:waypoint x="525.0" y="193.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_Comm_6_gui" bpmnElement="Flow_Comm_6">
+            <omgdi:waypoint x="550.0" y="168.0" />
+            <omgdi:waypoint x="600.0" y="168.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape id="StartEvent_TMS_gui" bpmnElement="StartEvent_TMS">
+            <omgdc:Bounds height="36.0" width="36.0" x="150.0" y="550.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_1_gui" bpmnElement="Task_TMS_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_2_gui" bpmnElement="Task_TMS_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_TMS_1_gui" bpmnElement="Gateway_TMS_1">
+            <omgdc:Bounds height="50.0" width="50.0" x="550.0" y="543.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_3_1_gui" bpmnElement="Task_TMS_3_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="450.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_3_2_gui" bpmnElement="Task_TMS_3_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_TMS_2_gui" bpmnElement="Gateway_TMS_2">
+            <omgdc:Bounds height="50.0" width="50.0" x="800.0" y="543.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_4_gui" bpmnElement="Task_TMS_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="900.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_5_gui" bpmnElement="Task_TMS_5">
+            <omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_TMS_3_gui" bpmnElement="Gateway_TMS_3">
+            <omgdc:Bounds height="50.0" width="50.0" x="1200.0" y="543.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_TMS_Alternative1_gui" bpmnElement="EndEvent_TMS_Alternative1">
+            <omgdc:Bounds height="36.0" width="36.0" x="1207.0" y="650.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_6_gui" bpmnElement="Task_TMS_6">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_TMS_4_gui" bpmnElement="Gateway_TMS_4">
+            <omgdc:Bounds height="50.0" width="50.0" x="1450.0" y="543.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_TMS_Alternative2_gui" bpmnElement="EndEvent_TMS_Alternative2">
+            <omgdc:Bounds height="36.0" width="36.0" x="1457.0" y="650.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_7_gui" bpmnElement="Task_TMS_7">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_8_gui" bpmnElement="Task_TMS_8">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_9_gui" bpmnElement="Task_TMS_9">
+            <omgdc:Bounds height="80.0" width="100.0" x="1850.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_10_gui" bpmnElement="Task_TMS_10">
+            <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_11_gui" bpmnElement="Task_TMS_11">
+            <omgdc:Bounds height="80.0" width="100.0" x="2150.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_TMS_12_gui" bpmnElement="Task_TMS_12">
+            <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="528.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_TMS_gui" bpmnElement="EndEvent_TMS">
+            <omgdc:Bounds height="36.0" width="36.0" x="2450.0" y="550.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_TMS_1_gui" bpmnElement="Flow_TMS_1">
+            <omgdi:waypoint x="186.0" y="568.0" />
+            <omgdi:waypoint x="250.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_2_gui" bpmnElement="Flow_TMS_2">
+            <omgdi:waypoint x="350.0" y="568.0" />
+            <omgdi:waypoint x="400.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_3_gui" bpmnElement="Flow_TMS_3">
+            <omgdi:waypoint x="500.0" y="568.0" />
+            <omgdi:waypoint x="550.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_4_gui" bpmnElement="Flow_TMS_4">
+            <omgdi:waypoint x="575.0" y="543.0" />
+            <omgdi:waypoint x="575.0" y="490.0" />
+            <omgdi:waypoint x="650.0" y="490.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_5_gui" bpmnElement="Flow_TMS_5">
+            <omgdi:waypoint x="575.0" y="593.0" />
+            <omgdi:waypoint x="575.0" y="640.0" />
+            <omgdi:waypoint x="650.0" y="640.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_6_gui" bpmnElement="Flow_TMS_6">
+            <omgdi:waypoint x="750.0" y="490.0" />
+            <omgdi:waypoint x="825.0" y="490.0" />
+            <omgdi:waypoint x="825.0" y="543.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_7_gui" bpmnElement="Flow_TMS_7">
+            <omgdi:waypoint x="750.0" y="640.0" />
+            <omgdi:waypoint x="825.0" y="640.0" />
+            <omgdi:waypoint x="825.0" y="593.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_8_gui" bpmnElement="Flow_TMS_8">
+            <omgdi:waypoint x="850.0" y="568.0" />
+            <omgdi:waypoint x="900.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_9_gui" bpmnElement="Flow_TMS_9">
+            <omgdi:waypoint x="1000.0" y="568.0" />
+            <omgdi:waypoint x="1050.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_10_gui" bpmnElement="Flow_TMS_10">
+            <omgdi:waypoint x="1150.0" y="568.0" />
+            <omgdi:waypoint x="1200.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_11_gui" bpmnElement="Flow_TMS_11">
+            <omgdi:waypoint x="1250.0" y="568.0" />
+            <omgdi:waypoint x="1300.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_End1_gui" bpmnElement="Flow_TMS_End1">
+            <omgdi:waypoint x="1225.0" y="593.0" />
+            <omgdi:waypoint x="1225.0" y="650.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_12_gui" bpmnElement="Flow_TMS_12">
+            <omgdi:waypoint x="1400.0" y="568.0" />
+            <omgdi:waypoint x="1450.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_13_gui" bpmnElement="Flow_TMS_13">
+            <omgdi:waypoint x="1500.0" y="568.0" />
+            <omgdi:waypoint x="1550.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_End2_gui" bpmnElement="Flow_TMS_End2">
+            <omgdi:waypoint x="1475.0" y="593.0" />
+            <omgdi:waypoint x="1475.0" y="650.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_14_gui" bpmnElement="Flow_TMS_14">
+            <omgdi:waypoint x="1650.0" y="568.0" />
+            <omgdi:waypoint x="1700.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_15_gui" bpmnElement="Flow_TMS_15">
+            <omgdi:waypoint x="1800.0" y="568.0" />
+            <omgdi:waypoint x="1850.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_16_gui" bpmnElement="Flow_TMS_16">
+            <omgdi:waypoint x="1950.0" y="568.0" />
+            <omgdi:waypoint x="2000.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_17_gui" bpmnElement="Flow_TMS_17">
+            <omgdi:waypoint x="2100.0" y="568.0" />
+            <omgdi:waypoint x="2150.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_18_gui" bpmnElement="Flow_TMS_18">
+            <omgdi:waypoint x="2250.0" y="568.0" />
+            <omgdi:waypoint x="2300.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_TMS_19_gui" bpmnElement="Flow_TMS_19">
+            <omgdi:waypoint x="2400.0" y="568.0" />
+            <omgdi:waypoint x="2450.0" y="568.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape id="StartEvent_MSR_gui" bpmnElement="StartEvent_MSR">
+            <omgdc:Bounds height="36.0" width="36.0" x="1582.0" y="952.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_1_gui" bpmnElement="Task_MSR_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_2_gui" bpmnElement="Task_MSR_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="1850.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_3_gui" bpmnElement="Task_MSR_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_4_gui" bpmnElement="Task_MSR_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="2150.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_5_gui" bpmnElement="Task_MSR_5">
+            <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MSR_6_gui" bpmnElement="Task_MSR_6">
+            <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_MSR_gui" bpmnElement="EndEvent_MSR">
+            <omgdc:Bounds height="36.0" width="36.0" x="2600.0" y="952.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Flow_MSR_1_gui" bpmnElement="Flow_MSR_1">
+            <omgdi:waypoint x="1618.0" y="970.0" />
+            <omgdi:waypoint x="1700.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_2_gui" bpmnElement="Flow_MSR_2">
+            <omgdi:waypoint x="1800.0" y="970.0" />
+            <omgdi:waypoint x="1850.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_3_gui" bpmnElement="Flow_MSR_3">
+            <omgdi:waypoint x="1950.0" y="970.0" />
+            <omgdi:waypoint x="2000.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_4_gui" bpmnElement="Flow_MSR_4">
+            <omgdi:waypoint x="2100.0" y="970.0" />
+            <omgdi:waypoint x="2150.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_5_gui" bpmnElement="Flow_MSR_5">
+            <omgdi:waypoint x="2250.0" y="970.0" />
+            <omgdi:waypoint x="2300.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_6_gui" bpmnElement="Flow_MSR_6">
+            <omgdi:waypoint x="2400.0" y="970.0" />
+            <omgdi:waypoint x="2450.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MSR_7_gui" bpmnElement="Flow_MSR_7">
+            <omgdi:waypoint x="2550.0" y="970.0" />
+            <omgdi:waypoint x="2600.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="MessageFlow_TransmitInfo_gui" bpmnElement="MessageFlow_TransmitInfo">
+            <omgdi:waypoint x="1600.0" y="608.0" />
+            <omgdi:waypoint x="1600.0" y="952.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
