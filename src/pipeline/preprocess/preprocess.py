@@ -4,26 +4,32 @@ from typing import Tuple, List, Optional, Set, Callable
 import spacy
 from spacy.matcher import Matcher, PhraseMatcher
 
-from .text_utils import build_eu_ref_matcher
 from .const import (
     ARTICLE_STANDARD_RE, ARTICLE_ALT_RE, SECTION_NUMBERING_RE,
-    ARTICLE_MULTI_REF_RE, ARTICLE_SINGLE_REF_RE, INTERNAL_REF_RE,
-    DEONTIC_MODALS, OBLIGATION_RE,
-    SUBORDINATE_LABELS, CONDITIONAL_SUBORDINATORS,
-    REFERENCE_MARKERS, LEGAL_ENTITY_KEYWORDS,
+    ARTICLE_MULTI_REF_RE, INTERNAL_REF_RE, OBLIGATION_RE,
+    SUBORDINATE_LABELS, REFERENCE_MARKERS, LEGAL_ENTITY_KEYWORDS,
     PARALLEL_GATEWAY_START, PARALLEL_GATEWAY_END, GATEWAY_MARKER_PREFIX,
-    _BENEPAR_MAX_TOKENS,
+    _BENEPAR_MAX_TOKENS, _P1, _P2, _CONDITIONAL_FIRST, _SECTION_HEADING_MAX_WORDS, _PARAGRAPH_STARTERS,
+    _SECTION_MIN_MATCHES, _REF_CONTEXT_WINDOW, _REF_CONTEXT_MARKERS, _REF_TYPES, _ROMAN,
 )
 from .nlp_utils import (
     plan_filler_removal,
     extract_explicit_actor, has_actor_and_activity,
-    plan_pronoun_resolution, plan_passive_resolution,
-    highlight_or_between_verbs, highlight_and_between_modal_verbs, remove_external_reference_phrases,
+    plan_pronoun_resolution, plan_passive_resolution, remove_external_reference_phrases,
+    _has_deontic_in_span, highlight_gateway_coordinators, _has_deontic_in_span_text, _is_conditional_opener,
+    _is_complement_clause,
 )
+from .text_utils import build_eu_ref_matcher
 from .text_utils import (
     normalize_whitespace, apply_iaw, apply_static_fillers, normalize_if,
     TokenTransformPlan,
 )
+
+
+@staticmethod
+def _normalize_ref(text: str) -> str:
+    """Collapse internal whitespace and strip; prevents near-duplicate rows."""
+    return re.sub(r'\s+', ' ', text).strip()
 
 
 class RegulatoryTextPreprocessor:
@@ -56,24 +62,69 @@ class RegulatoryTextPreprocessor:
         else:
             self._benepar_available = True
 
-        self._eu_ref_matcher       = None
+        self._eu_ref_matcher = None
         self._internal_ref_matcher = None
-        self._ref_marker_matcher   = None
+        self._ref_marker_matcher = None
         self._init_matchers()
 
     def _init_matchers(self) -> None:
+        """
+        Initialize all spaCy rule-based matchers used during reference extraction.
+        """
         self._eu_ref_matcher = build_eu_ref_matcher(self.nlp)
         internal = Matcher(self.nlp.vocab)
-        for label in ["Article", "Paragraph", "Section", "Art."]:
-            internal.add(f"INT_REF_{label.upper().rstrip('.')}", [[
-                {"LOWER": label.lower().rstrip(".")},
+        for lower, label_id in _REF_TYPES:
+            internal.add(f"INT_{label_id}_ARABIC", [[
+                {"LOWER": lower},
                 {"LIKE_NUM": True},
             ]])
+            internal.add(f"INT_{label_id}_ROMAN", [[
+                {"LOWER": lower},
+                _ROMAN,
+            ]])
+        internal.add("INT_ART_DOT_ARABIC", [[
+            {"LOWER": "art"},
+            {"TEXT": "."},
+            {"LIKE_NUM": True},
+        ]])
+        internal.add("INT_ART_DOT_ROMAN", [[
+            {"LOWER": "art"},
+            {"TEXT": "."},
+            _ROMAN,
+        ]])
+        internal.add("INT_ANNEX_ROMAN_POINT", [[
+            {"LOWER": "annex"},
+            _ROMAN,
+            {"TEXT": ","},
+            {"LOWER": "point"},
+            {"LIKE_NUM": True},
+        ]])
+        internal.add("INT_ANNEX_ARABIC_POINT", [[
+            {"LOWER": "annex"},
+            {"LIKE_NUM": True},
+            {"TEXT": ","},
+            {"LOWER": "point"},
+            {"LIKE_NUM": True},
+        ]])
+        internal.add("INT_ARTICLE_PARA", [[
+            {"LOWER": "article"},
+            {"LIKE_NUM": True},
+            {"TEXT": "("},
+            {"LIKE_NUM": True},
+            {"TEXT": ")"},
+        ]])
+        internal.add("INT_ARTICLE_PARA_EXPLICIT", [[
+            {"LOWER": "article"},
+            {"LIKE_NUM": True},
+            {"TEXT": ","},
+            {"LOWER": "paragraph"},
+            {"LIKE_NUM": True},
+        ]])
+
         self._internal_ref_matcher = internal
         phrase = PhraseMatcher(self.nlp.vocab, attr="LOWER")
         phrase.add("REF_MARKER", [self.nlp.make_doc(m) for m in REFERENCE_MARKERS])
         self._ref_marker_matcher = phrase
-
 
     def _parse_plain(self, text: str):
         """Parse with spaCy dep/POS only — BenePar disabled."""
@@ -82,32 +133,67 @@ class RegulatoryTextPreprocessor:
                 return self.nlp(text)
         return self.nlp(text)
 
-
     def _extract_references_from_doc(
-        self, doc, location: str
+            self,
+            doc,
+            location: str,
+            existing_articles: Set[str],
     ) -> Tuple[List[str], List[Tuple[int, int]]]:
-        refs: List[str] = []
-        ext_spans: List[Tuple[int, int]] = []
         if not location:
-            return refs, ext_spans
+            return [], []
+        refs: set[str] = set()
+        ext_spans: List[Tuple[int, int]] = []
+
+        # EU legislative act citations
         for _match_id, start, end in self._eu_ref_matcher(doc):
-            refs.append(f"{location},{doc[start:end].text.strip()}")
+            ref_text = _normalize_ref(doc[start:end].text)
+            refs.add(f"{location},{ref_text}")
             ext_spans.append((start, end))
-        marker_end_positions: Set[int] = {
+
+        # Internal refs with discourse marker guard
+        marker_end_positions: set[int] = {
             m_end for _, _m_start, m_end in self._ref_marker_matcher(doc)
         }
-        for _, a_start, a_end in self._internal_ref_matcher(doc):
-            if a_start in marker_end_positions or (a_start - 1) in marker_end_positions:
-                refs.append(f"{location},{doc[a_start:a_end].text.strip()}")
+        for match_id, a_start, a_end in self._internal_ref_matcher(doc):
+            if a_start not in marker_end_positions and (a_start - 1) not in marker_end_positions:
+                continue
+            ref_text = _normalize_ref(doc[a_start:a_end].text)
+            refs.add(f"{location},{ref_text}")
+
+            num_match = re.search(r"\d+|[IVXLCDM]{1,10}", ref_text) # TODO: handle paragraphs which are currently considered as ignored + check articles existing
+            if num_match:
+                num = num_match.group(0)
+                is_external = (not existing_articles) or (num not in existing_articles)
+            else:
+                is_external = True
+
+            if is_external:
+                ext_spans.append((a_start, a_end))
+
+        # Coordinated multi-article refs
         text = doc.text
         for m in ARTICLE_MULTI_REF_RE.finditer(text):
-            for part in re.split(r",|and", m.group(1)):
-                num = part.strip()
-                if num:
-                    refs.append(f"{location},Article {num}")
-        for m in ARTICLE_SINGLE_REF_RE.finditer(text):
-            refs.append(f"{location},Article {m.group(1)}")
-        return refs, ext_spans
+            context = text[max(0, m.start() - _REF_CONTEXT_WINDOW): m.start()].lower()
+            if not any(marker in context for marker in _REF_CONTEXT_MARKERS):
+                continue
+            nums = [
+                _normalize_ref(p)
+                for p in re.split(r",\s*|\s+and\s+", m.group(1))
+            ]
+            nums = [n for n in nums if n]
+            external_nums = (
+                [n for n in nums if n not in existing_articles]
+                if existing_articles else nums
+            )
+            for num in external_nums:
+                refs.add(f"{location},Article {num}")
+
+            if external_nums and len(external_nums) == len(nums):
+                char_span = doc.char_span(m.start(), m.end(), alignment_mode="expand")
+                if char_span is not None:
+                    ext_spans.append((char_span.start, char_span.end))
+
+        return sorted(refs), ext_spans
 
     def _plan_subordinate_removal(self, doc, plan: TokenTransformPlan) -> None:
         """
@@ -125,28 +211,38 @@ class RegulatoryTextPreprocessor:
 
     def _collect_subordinate_spans(self, sent_span, plan: TokenTransformPlan) -> None:
         """
-        Recursive BenePar tree walk. Marks SBAR/WHNP/WHADVP/WHPP for removal
-        unless a guard fires:
+        Recursive BenePar constituency-tree walk. Marks SBAR / WHNP / WHADVP /
+        WHPP spans for removal unless a guard fires.
 
-        G1  Deontic modal present         → obligation or condition carrier — KEEP
-        G2  Conditional first token       → gateway condition — KEEP
-        G3  Internal reference present    → paragraph/article X — KEEP
-        G5  Process actor + activity      → legal entity as nsubj — KEEP
+        Guards (evaluated cheapest-first; first match → KEEP entire span):
+          G1  Deontic modal present        — obligation / condition carrier
+          G2  Conditional opener           — temporal, logical, or concessive
+                                             subordinating conjunction (SCONJ)
+          G3  Internal reference present   — paragraph / article N
+          G6  Complement clause            — ccomp / xcomp of main verb;
+                                             this span IS the obligation content
+          G5  Process actor + activity     — NOUN/PROPN/NER nsubj with a verb
 
-        G4 (external citation) is NOT a guard: citations are already extracted
-        into the reference table by _extract_references_from_doc before this
-        runs, so the clause can be removed without losing the reference.
+        Guard order rationale:
+          G1 / G2 / G3 need no NLP parse → checked first (pure token iteration).
+          G6 is a single-pass dep-label check → faster than G5's noun-chunk scan.
+          G5 (noun-chunk + NER iteration) is last.
+
+        G4 (external citation) is NOT a guard: citations are already captured in
+        the reference CSV before this walk runs.
         """
+
         def _walk(constituent) -> None:
             if not any(lbl in SUBORDINATE_LABELS for lbl in constituent._.labels):
                 for child in constituent._.children:
                     _walk(child)
                 return
-            if any(t.lemma_ in DEONTIC_MODALS for t in constituent):               return  # G1
-            if constituent and constituent[0].text.lower() in CONDITIONAL_SUBORDINATORS:
-                                                                                    return  # G2
-            if INTERNAL_REF_RE.search(constituent.text):                            return  # G3
-            if has_actor_and_activity(constituent):                                 return  # G5
+
+            if _has_deontic_in_span(constituent):       return  # G1
+            if _is_conditional_opener(constituent):     return  # G2
+            if INTERNAL_REF_RE.search(constituent.text): return  # G3
+            if _is_complement_clause(constituent):      return  # G6
+            if has_actor_and_activity(constituent):     return  # G5
             plan.remove_span(constituent.start, constituent.end)
 
         _walk(sent_span)
@@ -156,32 +252,85 @@ class RegulatoryTextPreprocessor:
         Regex fallback (BenePar unavailable). Same guards as _collect_subordinate_spans.
         G4 is not a guard here either — external refs are extracted before this runs.
         """
-        def _check(match: re.Match) -> str:
-            clause = match.group(0)
-            if OBLIGATION_RE.search(clause):                                    return clause  # G1
-            first = clause.strip().split()[0].lower() if clause.strip() else ""
-            if first in CONDITIONAL_SUBORDINATORS:                              return clause  # G2
-            if INTERNAL_REF_RE.search(clause):                                  return clause  # G3
-            clause_doc = self._parse_plain(clause)
-            for token in clause_doc:
-                if token.dep_ in {"nsubj", "nsubjpass"}:
+        raw: list[tuple[int, int, str]] = []
+        for pattern in (_P1, _P2):
+            for m in pattern.finditer(sentence):
+                raw.append((m.start(), m.end(), m.group(0)))
+
+        if not raw:
+            return sentence
+
+        raw.sort(key=lambda x: (x[0], -(x[1] - x[0])))
+        candidates: list[tuple[int, int, str]] = []
+        last_end = -1
+        for start, end, text in raw:
+            if start >= last_end:
+                candidates.append((start, end, text))
+                last_end = end
+
+        # G1 / G2 / G3 pre-filter
+        needs_g5: list[int] = []
+        keep_mask = [False] * len(candidates)
+
+        for idx, (start, end, clause_text) in enumerate(candidates):
+            # G1
+            if _has_deontic_in_span_text(clause_text):
+                keep_mask[idx] = True
+                continue
+
+            # G2
+            stripped = clause_text.lstrip(", \t")
+            first_word = stripped.split()[0].lower() if stripped.split() else ""
+            if first_word in _CONDITIONAL_FIRST:
+                keep_mask[idx] = True
+                continue
+
+            # G3
+            if INTERNAL_REF_RE.search(clause_text):
+                keep_mask[idx] = True
+                continue
+
+            needs_g5.append(idx)
+
+        # G5
+        if needs_g5:
+            clause_texts = [candidates[i][2] for i in needs_g5]
+
+            if self._benepar_available:
+                with self.nlp.select_pipes(disable=["benepar"]):
+                    parsed = list(self.nlp.pipe(clause_texts))
+            else:
+                parsed = list(self.nlp.pipe(clause_texts))
+
+            for batch_i, cand_i in enumerate(needs_g5):
+                clause_doc = parsed[batch_i]
+                for token in clause_doc:
+                    if token.dep_ not in {"nsubj", "nsubjpass"}:
+                        continue
                     if any(kw in token.text.lower() for kw in LEGAL_ENTITY_KEYWORDS):
-                        return clause  # G5
+                        keep_mask[cand_i] = True
+                        break
                     for chunk in clause_doc.noun_chunks:
                         if chunk.root.i == token.i and any(
-                                kw in chunk.text.lower() for kw in LEGAL_ENTITY_KEYWORDS):
-                            return clause  # G5
-            return ""
+                                kw in chunk.text.lower() for kw in LEGAL_ENTITY_KEYWORDS
+                        ):
+                            keep_mask[cand_i] = True
+                            break
+                    if keep_mask[cand_i]:
+                        break
 
-        return normalize_whitespace(re.sub(
-            r"\s+(?:that|which|who)\s+[^,.;]+", _check, sentence, flags=re.IGNORECASE
-        ))
+        result = sentence
+        for idx, (start, end, _) in reversed(list(enumerate(candidates))):
+            if not keep_mask[idx]:
+                result = result[:start] + result[end:]
+
+        return normalize_whitespace(result)
 
     def preprocess(self, input_text: str) -> Tuple[str, List[str]]:
         input_text = "\n".join(line.strip() for line in input_text.split("\n"))
         dispatch: dict[str, Callable[[str], Tuple[str, List[str]]]] = {
-            "standard_article":  self._preprocess_standard_articles,
-            "alt_article":       self._preprocess_alt_articles,
+            "standard_article": self._preprocess_standard_articles,
+            "alt_article": self._preprocess_alt_articles,
             "section_numbering": self._preprocess_section_numbering,
         }
         structure = self._detect_document_structure(input_text)
@@ -190,13 +339,33 @@ class RegulatoryTextPreprocessor:
         )
         return handler(input_text)
 
-
     def _detect_document_structure(self, text: str) -> str:
-        if ARTICLE_STANDARD_RE.search(text):  return "standard_article"
-        if ARTICLE_ALT_RE.search(text):       return "alt_article"
-        if SECTION_NUMBERING_RE.search(text): return "section_numbering"
-        return "raw_text"
+        if ARTICLE_STANDARD_RE.search(text):
+            return "standard_article"
+        if ARTICLE_ALT_RE.search(text):
+            return "alt_article"
 
+        qualifying_sections: list[re.Match] = []
+        for m in SECTION_NUMBERING_RE.finditer(text):
+            heading = m.group(2).strip()
+            words = heading.split()
+
+            if not words:
+                continue
+            if len(words) > _SECTION_HEADING_MAX_WORDS:
+                continue
+            if words[0].lower() in _PARAGRAPH_STARTERS:
+                continue
+            if OBLIGATION_RE.search(heading):
+                continue
+            if not heading[0].isupper():
+                continue
+
+            qualifying_sections.append(m)
+
+        if len(qualifying_sections) >= _SECTION_MIN_MATCHES:
+            return "section_numbering"
+        return "raw_text"
 
     def _collect_existing_articles(self, text: str, pattern) -> Set[str]:
         return {m.group(2) for m in pattern.finditer(text) if len(m.groups()) >= 2}
@@ -208,7 +377,7 @@ class RegulatoryTextPreprocessor:
             return [(fallback_id, "", text)]
         return [
             (m.group(1), m.group(3).strip() if len(m.groups()) >= 3 else "",
-             text[m.end():(matches[i+1].start() if i+1 < len(matches) else len(text))].strip())
+             text[m.end():(matches[i + 1].start() if i + 1 < len(matches) else len(text))].strip())
             for i, m in enumerate(matches)
         ]
 
@@ -224,10 +393,9 @@ class RegulatoryTextPreprocessor:
             return [("0", "", text)]
         return [
             (m.group(1), m.group(2).strip(),
-             text[m.end():(matches[i+1].start() if i+1 < len(matches) else len(text))].strip())
+             text[m.end():(matches[i + 1].start() if i + 1 < len(matches) else len(text))].strip())
             for i, m in enumerate(matches)
         ]
-
 
     def _preprocess_standard_articles(self, text: str) -> Tuple[str, List[str]]:
         existing = self._collect_existing_articles(text, ARTICLE_STANDARD_RE)
@@ -293,14 +461,14 @@ class RegulatoryTextPreprocessor:
 
     def _parse_paragraphs_with_lists(self, art_text: str, art_id: str) -> List:
         result = []
-        para_parts = re.split(r"(?m)^(\d+)\.\s*", art_text)
+        para_parts = re.split(r"(?m)^(\d{1,2})\.\s+(?=[A-Z])", art_text)
         for i in range(1, len(para_parts), 2):
             if i + 1 >= len(para_parts):
                 continue
-            para_num  = para_parts[i]
+            para_num = para_parts[i]
             para_text = para_parts[i + 1].strip()
-            para_loc  = f"{art_id}.{para_num}"
-            list_paren    = list(re.finditer(
+            para_loc = f"{art_id}.{para_num}"
+            list_paren = list(re.finditer(
                 r"\(([a-z])\)\s*\n(.+?)(?=\n\s*\([a-z]\)|\Z)", para_text, re.DOTALL))
             list_no_paren = list(re.finditer(
                 r"^([a-z])\)\s*\n?(.+?)(?=^[a-z]\)|\Z)", para_text,
@@ -314,8 +482,8 @@ class RegulatoryTextPreprocessor:
                     flags=re.IGNORECASE).strip()
                 result.append((para_loc, PARALLEL_GATEWAY_START, False, False, None))
                 for idx, match in enumerate(list_items):
-                    letter    = (f"{para_num}({match.group(1)})" if list_paren
-                                 else f"{para_num}{match.group(1)})")
+                    letter = (f"{para_num}({match.group(1)})" if list_paren
+                              else f"{para_num}{match.group(1)})")
                     item_text = match.group(2).strip().rstrip(";").rstrip(".").strip()
                     result.append((
                         f"{para_loc} ({letter})",
@@ -329,18 +497,17 @@ class RegulatoryTextPreprocessor:
                         result.append((para_loc, sent.strip(), False, False, None))
         return result
 
-
     def _process_sentence(
-        self,
-        sentence:          str,
-        location:          str,
-        existing_articles: Set[str],
-        last_actor:        Optional[str],
-        references_set:    Set[str],
+            self,
+            sentence: str,
+            location: str,
+            existing_articles: Set[str],
+            last_actor: Optional[str],
+            references_set: Set[str],
     ) -> Optional[Tuple[str, Optional[str]]]:
 
-        sentence, _ = apply_static_fillers(sentence)
-        sentence    = normalize_whitespace(sentence)
+        sentence = apply_static_fillers(sentence)
+        sentence = normalize_whitespace(sentence)
 
         if self._benepar_available:
             try:
@@ -350,12 +517,13 @@ class RegulatoryTextPreprocessor:
                 sentence = normalize_whitespace(sentence)
                 doc = self._parse_plain(sentence)
         else:
+            print("BENEPAR NOT AVAILABLE, USING REGEX FALLBACK")
             sentence = self._remove_subordinate_clauses_regex(sentence)
             sentence = normalize_whitespace(sentence)
             doc = self._parse_plain(sentence)
         plan = TokenTransformPlan(doc)
 
-        extracted, ext_spans = self._extract_references_from_doc(doc, location)
+        extracted, ext_spans = self._extract_references_from_doc(doc, location, existing_articles)
         references_set.update(extracted)
         for start, end in ext_spans:
             plan.remove_span(start, end)
@@ -367,15 +535,17 @@ class RegulatoryTextPreprocessor:
         plan_pronoun_resolution(doc, plan, explicit_actor, last_actor)
         plan_passive_resolution(doc, plan, explicit_actor or last_actor)
 
-        sentence = plan.apply()
-        sentence = remove_external_reference_phrases(sentence, existing_articles)
-        if not OBLIGATION_RE.search(sentence):
-            return None
+        sentence_after = plan.apply()
+        sentence_after = remove_external_reference_phrases(sentence_after, existing_articles)
 
-        # BenePar OFF
-        doc      = self._parse_plain(sentence)
-        sentence = highlight_or_between_verbs(sentence, doc)
-        sentence = highlight_and_between_modal_verbs(sentence, doc)
+        if not OBLIGATION_RE.search(sentence_after):
+            return None
+        if sentence_after == sentence:
+            pass
+        else:
+            doc = self._parse_plain(sentence_after)
+            sentence = sentence_after
+        sentence = highlight_gateway_coordinators(sentence, doc)
         sentence = normalize_if(sentence)
         sentence = apply_iaw(sentence)
 
