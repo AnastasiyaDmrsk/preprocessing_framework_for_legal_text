@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <collaboration id="Collaboration_1">
+    <participant id="Participant_Process_1" name="Reporting Obligations" processRef="Process_1" />
+  </collaboration>
+  <process id="Process_1" isExecutable="false">
+    <laneSet id="LaneSet_1">
+      <lane id="Lane_Entities" name="Entities">
+        <flowNodeRef>StartEvent_1</flowNodeRef>
+        <flowNodeRef>T1</flowNodeRef>
+        <flowNodeRef>Gateway_Split_Main</flowNodeRef>
+        <flowNodeRef>Gateway_Split_4</flowNodeRef>
+        <flowNodeRef>T_4a</flowNodeRef>
+        <flowNodeRef>T_4b</flowNodeRef>
+        <flowNodeRef>T_4c</flowNodeRef>
+        <flowNodeRef>T_4d</flowNodeRef>
+        <flowNodeRef>Gateway_Join_4</flowNodeRef>
+        <flowNodeRef>Gateway_Join_Main</flowNodeRef>
+        <flowNodeRef>EndEvent_1</flowNodeRef>
+      </lane>
+      <lane id="Lane_MS" name="Member States">
+        <flowNodeRef>Gateway_Split_3</flowNodeRef>
+        <flowNodeRef>T_3a</flowNodeRef>
+        <flowNodeRef>T_3b</flowNodeRef>
+        <flowNodeRef>Gateway_Join_3</flowNodeRef>
+      </lane>
+      <lane id="Lane_CA" name="Competent Authority">
+        <flowNodeRef>T_CA</flowNodeRef>
+      </lane>
+      <lane id="Lane_CSIRT" name="CSIRT">
+        <flowNodeRef>T_CSIRT</flowNodeRef>
+      </lane>
+      <lane id="Lane_SPOC" name="Single Point of Contact">
+        <flowNodeRef>T_SPOC</flowNodeRef>
+      </lane>
+      <lane id="Lane_ENISA" name="ENISA">
+        <flowNodeRef>T_ENISA</flowNodeRef>
+      </lane>
+      <lane id="Lane_COM" name="Commission">
+        <flowNodeRef>T_COM</flowNodeRef>
+      </lane>
+    </laneSet>
+
+    <startEvent id="StartEvent_1" name="Incident Occurs">
+      <outgoing>Flow_Start_T1</outgoing>
+    </startEvent>
+    <task id="T1" name="Notify CSIRT or Competent Authority">
+      <incoming>Flow_Start_T1</incoming>
+      <outgoing>Flow_T1_GSM</outgoing>
+    </task>
+    <parallelGateway id="Gateway_Split_Main">
+      <incoming>Flow_T1_GSM</incoming>
+      <outgoing>Flow_GSM_GS3</outgoing>
+      <outgoing>Flow_GSM_GS4</outgoing>
+      <outgoing>Flow_GSM_TCA</outgoing>
+      <outgoing>Flow_GSM_TCSIRT</outgoing>
+      <outgoing>Flow_GSM_TSPOC</outgoing>
+      <outgoing>Flow_GSM_TENISA</outgoing>
+      <outgoing>Flow_GSM_TCOM</outgoing>
+    </parallelGateway>
+
+    <!-- Block 3: Member States Parallel Tasks -->
+    <parallelGateway id="Gateway_Split_3">
+      <incoming>Flow_GSM_GS3</incoming>
+      <outgoing>Flow_GS3_T3a</outgoing>
+      <outgoing>Flow_GS3_T3b</outgoing>
+    </parallelGateway>
+    <task id="T_3a" name="Consider incident significant (severe operational disruption)">
+      <incoming>Flow_GS3_T3a</incoming>
+      <outgoing>Flow_T3a_GJ3</outgoing>
+    </task>
+    <task id="T_3b" name="Consider incident significant (material damage)">
+      <incoming>Flow_GS3_T3b</incoming>
+      <outgoing>Flow_T3b_GJ3</outgoing>
+    </task>
+    <parallelGateway id="Gateway_Join_3">
+      <incoming>Flow_T3a_GJ3</incoming>
+      <incoming>Flow_T3b_GJ3</incoming>
+      <outgoing>Flow_GJ3_GJM</outgoing>
+    </parallelGateway>
+
+    <!-- Block 4: Entities Parallel Tasks -->
+    <parallelGateway id="Gateway_Split_4">
+      <incoming>Flow_GSM_GS4</incoming>
+      <outgoing>Flow_GS4_T4a</outgoing>
+      <outgoing>Flow_GS4_T4b</outgoing>
+      <outgoing>Flow_GS4_T4c</outgoing>
+      <outgoing>Flow_GS4_T4d</outgoing>
+    </parallelGateway>
+    <task id="T_4a" name="Submit early warning">
+      <incoming>Flow_GS4_T4a</incoming>
+      <outgoing>Flow_T4a_GJ4</outgoing>
+    </task>
+    <task id="T_4b" name="Submit incident notification">
+      <incoming>Flow_GS4_T4b</incoming>
+      <outgoing>Flow_T4b_GJ4</outgoing>
+    </task>
+    <task id="T_4c" name="Submit intermediate report">
+      <incoming>Flow_GS4_T4c</incoming>
+      <outgoing>Flow_T4c_GJ4</outgoing>
+    </task>
+    <task id="T_4d" name="Submit final report">
+      <incoming>Flow_GS4_T4d</incoming>
+      <outgoing>Flow_T4d_GJ4</outgoing>
+    </task>
+    <parallelGateway id="Gateway_Join_4">
+      <incoming>Flow_T4a_GJ4</incoming>
+      <incoming>Flow_T4b_GJ4</incoming>
+      <incoming>Flow_T4c_GJ4</incoming>
+      <incoming>Flow_T4d_GJ4</incoming>
+      <outgoing>Flow_GJ4_GJM</outgoing>
+    </parallelGateway>
+
+    <!-- Downstream Authority Tasks -->
+    <task id="T_CA" name="Forward notification to CSIRT">
+      <incoming>Flow_GSM_TCA</incoming>
+      <outgoing>Flow_TCA_GJM</outgoing>
+    </task>
+    <task id="T_CSIRT" name="Provide response to notifying entity">
+      <incoming>Flow_GSM_TCSIRT</incoming>
+      <outgoing>Flow_TCSIRT_GJM</outgoing>
+    </task>
+    <task id="T_SPOC" name="Submit summary report to ENISA">
+      <incoming>Flow_GSM_TSPOC</incoming>
+      <outgoing>Flow_TSPOC_GJM</outgoing>
+    </task>
+    <task id="T_ENISA" name="Inform Cooperation Group">
+      <incoming>Flow_GSM_TENISA</incoming>
+      <outgoing>Flow_TENISA_GJM</outgoing>
+    </task>
+    <task id="T_COM" name="Adopt implementing acts">
+      <incoming>Flow_GSM_TCOM</incoming>
+      <outgoing>Flow_TCOM_GJM</outgoing>
+    </task>
+
+    <!-- Main Merge -->
+    <parallelGateway id="Gateway_Join_Main">
+      <incoming>Flow_GJ3_GJM</incoming>
+      <incoming>Flow_GJ4_GJM</incoming>
+      <incoming>Flow_TCA_GJM</incoming>
+      <incoming>Flow_TCSIRT_GJM</incoming>
+      <incoming>Flow_TSPOC_GJM</incoming>
+      <incoming>Flow_TENISA_GJM</incoming>
+      <incoming>Flow_TCOM_GJM</incoming>
+      <outgoing>Flow_GJM_End</outgoing>
+    </parallelGateway>
+    <endEvent id="EndEvent_1" name="Process End">
+      <incoming>Flow_GJM_End</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_Start_T1" sourceRef="StartEvent_1" targetRef="T1" />
+    <sequenceFlow id="Flow_T1_GSM" sourceRef="T1" targetRef="Gateway_Split_Main" />
+    <sequenceFlow id="Flow_GSM_GS3" sourceRef="Gateway_Split_Main" targetRef="Gateway_Split_3" />
+    <sequenceFlow id="Flow_GSM_GS4" sourceRef="Gateway_Split_Main" targetRef="Gateway_Split_4" />
+    <sequenceFlow id="Flow_GSM_TCA" sourceRef="Gateway_Split_Main" targetRef="T_CA" />
+    <sequenceFlow id="Flow_GSM_TCSIRT" sourceRef="Gateway_Split_Main" targetRef="T_CSIRT" />
+    <sequenceFlow id="Flow_GSM_TSPOC" sourceRef="Gateway_Split_Main" targetRef="T_SPOC" />
+    <sequenceFlow id="Flow_GSM_TENISA" sourceRef="Gateway_Split_Main" targetRef="T_ENISA" />
+    <sequenceFlow id="Flow_GSM_TCOM" sourceRef="Gateway_Split_Main" targetRef="T_COM" />
+
+    <sequenceFlow id="Flow_GS3_T3a" sourceRef="Gateway_Split_3" targetRef="T_3a" />
+    <sequenceFlow id="Flow_GS3_T3b" sourceRef="Gateway_Split_3" targetRef="T_3b" />
+    <sequenceFlow id="Flow_T3a_GJ3" sourceRef="T_3a" targetRef="Gateway_Join_3" />
+    <sequenceFlow id="Flow_T3b_GJ3" sourceRef="T_3b" targetRef="Gateway_Join_3" />
+    <sequenceFlow id="Flow_GJ3_GJM" sourceRef="Gateway_Join_3" targetRef="Gateway_Join_Main" />
+
+    <sequenceFlow id="Flow_GS4_T4a" sourceRef="Gateway_Split_4" targetRef="T_4a" />
+    <sequenceFlow id="Flow_GS4_T4b" sourceRef="Gateway_Split_4" targetRef="T_4b" />
+    <sequenceFlow id="Flow_GS4_T4c" sourceRef="Gateway_Split_4" targetRef="T_4c" />
+    <sequenceFlow id="Flow_GS4_T4d" sourceRef="Gateway_Split_4" targetRef="T_4d" />
+    <sequenceFlow id="Flow_T4a_GJ4" sourceRef="T_4a" targetRef="Gateway_Join_4" />
+    <sequenceFlow id="Flow_T4b_GJ4" sourceRef="T_4b" targetRef="Gateway_Join_4" />
+    <sequenceFlow id="Flow_T4c_GJ4" sourceRef="T_4c" targetRef="Gateway_Join_4" />
+    <sequenceFlow id="Flow_T4d_GJ4" sourceRef="T_4d" targetRef="Gateway_Join_4" />
+    <sequenceFlow id="Flow_GJ4_GJM" sourceRef="Gateway_Join_4" targetRef="Gateway_Join_Main" />
+
+    <sequenceFlow id="Flow_TCA_GJM" sourceRef="T_CA" targetRef="Gateway_Join_Main" />
+    <sequenceFlow id="Flow_TCSIRT_GJM" sourceRef="T_CSIRT" targetRef="Gateway_Join_Main" />
+    <sequenceFlow id="Flow_TSPOC_GJM" sourceRef="T_SPOC" targetRef="Gateway_Join_Main" />
+    <sequenceFlow id="Flow_TENISA_GJM" sourceRef="T_ENISA" targetRef="Gateway_Join_Main" />
+    <sequenceFlow id="Flow_TCOM_GJM" sourceRef="T_COM" targetRef="Gateway_Join_Main" />
+    <sequenceFlow id="Flow_GJM_End" sourceRef="Gateway_Join_Main" targetRef="EndEvent_1" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_Process_1_di" bpmnElement="Participant_Process_1" isHorizontal="true">
+        <omgdc:Bounds x="10" y="0" width="850" height="1600" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Entities_di" bpmnElement="Lane_Entities" isHorizontal="true">
+        <omgdc:Bounds x="40" y="0" width="820" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_MS_di" bpmnElement="Lane_MS" isHorizontal="true">
+        <omgdc:Bounds x="40" y="400" width="820" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_CA_di" bpmnElement="Lane_CA" isHorizontal="true">
+        <omgdc:Bounds x="40" y="600" width="820" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_CSIRT_di" bpmnElement="Lane_CSIRT" isHorizontal="true">
+        <omgdc:Bounds x="40" y="800" width="820" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SPOC_di" bpmnElement="Lane_SPOC" isHorizontal="true">
+        <omgdc:Bounds x="40" y="1000" width="820" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_ENISA_di" bpmnElement="Lane_ENISA" isHorizontal="true">
+        <omgdc:Bounds x="40" y="1200" width="820" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_COM_di" bpmnElement="Lane_COM" isHorizontal="true">
+        <omgdc:Bounds x="40" y="1400" width="820" height="200" />
+      </bpmndi:BPMNShape>
+
+      <!-- Events & Gateways -->
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="70" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T1_di" bpmnElement="T1">
+        <omgdc:Bounds x="150" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Split_Main_di" bpmnElement="Gateway_Split_Main">
+        <omgdc:Bounds x="290" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <!-- MS Tasks -->
+      <bpmndi:BPMNShape id="Gateway_Split_3_di" bpmnElement="Gateway_Split_3">
+        <omgdc:Bounds x="360" y="475" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_3a_di" bpmnElement="T_3a">
+        <omgdc:Bounds x="450" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_3b_di" bpmnElement="T_3b">
+        <omgdc:Bounds x="450" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Join_3_di" bpmnElement="Gateway_Join_3">
+        <omgdc:Bounds x="590" y="475" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <!-- Entities Tasks -->
+      <bpmndi:BPMNShape id="Gateway_Split_4_di" bpmnElement="Gateway_Split_4">
+        <omgdc:Bounds x="360" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_4a_di" bpmnElement="T_4a">
+        <omgdc:Bounds x="450" y="10" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_4b_di" bpmnElement="T_4b">
+        <omgdc:Bounds x="450" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_4c_di" bpmnElement="T_4c">
+        <omgdc:Bounds x="450" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_4d_di" bpmnElement="T_4d">
+        <omgdc:Bounds x="450" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Join_4_di" bpmnElement="Gateway_Join_4">
+        <omgdc:Bounds x="590" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <!-- Sub-Lanes Standard Tasks -->
+      <bpmndi:BPMNShape id="T_CA_di" bpmnElement="T_CA">
+        <omgdc:Bounds x="450" y="660" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_CSIRT_di" bpmnElement="T_CSIRT">
+        <omgdc:Bounds x="450" y="860" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_SPOC_di" bpmnElement="T_SPOC">
+        <omgdc:Bounds x="450" y="1060" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_ENISA_di" bpmnElement="T_ENISA">
+        <omgdc:Bounds x="450" y="1260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_COM_di" bpmnElement="T_COM">
+        <omgdc:Bounds x="450" y="1460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Gateway_Join_Main_di" bpmnElement="Gateway_Join_Main">
+        <omgdc:Bounds x="680" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <omgdc:Bounds x="770" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <!-- Connecting Lines (Edges) -->
+      <bpmndi:BPMNEdge id="Flow_Start_T1_di" bpmnElement="Flow_Start_T1">
+        <omgdi:waypoint x="106" y="200" />
+        <omgdi:waypoint x="150" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T1_GSM_di" bpmnElement="Flow_T1_GSM">
+        <omgdi:waypoint x="250" y="200" />
+        <omgdi:waypoint x="290" y="200" />
+      </bpmndi:BPMNEdge>
+
+      <!-- Main Split flows -->
+      <bpmndi:BPMNEdge id="Flow_GSM_GS3_di" bpmnElement="Flow_GSM_GS3">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="500" />
+        <omgdi:waypoint x="360" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_GS4_di" bpmnElement="Flow_GSM_GS4">
+        <omgdi:waypoint x="340" y="200" />
+        <omgdi:waypoint x="360" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_TCA_di" bpmnElement="Flow_GSM_TCA">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="700" />
+        <omgdi:waypoint x="450" y="700" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_TCSIRT_di" bpmnElement="Flow_GSM_TCSIRT">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="900" />
+        <omgdi:waypoint x="450" y="900" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_TSPOC_di" bpmnElement="Flow_GSM_TSPOC">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="1100" />
+        <omgdi:waypoint x="450" y="1100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_TENISA_di" bpmnElement="Flow_GSM_TENISA">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="1300" />
+        <omgdi:waypoint x="450" y="1300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GSM_TCOM_di" bpmnElement="Flow_GSM_TCOM">
+        <omgdi:waypoint x="315" y="225" />
+        <omgdi:waypoint x="315" y="1500" />
+        <omgdi:waypoint x="450" y="1500" />
+      </bpmndi:BPMNEdge>
+
+      <!-- MS Parallel Task flows -->
+      <bpmndi:BPMNEdge id="Flow_GS3_T3a_di" bpmnElement="Flow_GS3_T3a">
+        <omgdi:waypoint x="385" y="475" />
+        <omgdi:waypoint x="385" y="450" />
+        <omgdi:waypoint x="450" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GS3_T3b_di" bpmnElement="Flow_GS3_T3b">
+        <omgdi:waypoint x="385" y="525" />
+        <omgdi:waypoint x="385" y="550" />
+        <omgdi:waypoint x="450" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T3a_GJ3_di" bpmnElement="Flow_T3a_GJ3">
+        <omgdi:waypoint x="550" y="450" />
+        <omgdi:waypoint x="615" y="450" />
+        <omgdi:waypoint x="615" y="475" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T3b_GJ3_di" bpmnElement="Flow_T3b_GJ3">
+        <omgdi:waypoint x="550" y="550" />
+        <omgdi:waypoint x="615" y="550" />
+        <omgdi:waypoint x="615" y="525" />
+      </bpmndi:BPMNEdge>
+
+      <!-- Entities Parallel Task flows -->
+      <bpmndi:BPMNEdge id="Flow_GS4_T4a_di" bpmnElement="Flow_GS4_T4a">
+        <omgdi:waypoint x="385" y="175" />
+        <omgdi:waypoint x="385" y="50" />
+        <omgdi:waypoint x="450" y="50" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GS4_T4b_di" bpmnElement="Flow_GS4_T4b">
+        <omgdi:waypoint x="385" y="175" />
+        <omgdi:waypoint x="385" y="140" />
+        <omgdi:waypoint x="450" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GS4_T4c_di" bpmnElement="Flow_GS4_T4c">
+        <omgdi:waypoint x="385" y="225" />
+        <omgdi:waypoint x="385" y="240" />
+        <omgdi:waypoint x="450" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GS4_T4d_di" bpmnElement="Flow_GS4_T4d">
+        <omgdi:waypoint x="385" y="225" />
+        <omgdi:waypoint x="385" y="340" />
+        <omgdi:waypoint x="450" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T4a_GJ4_di" bpmnElement="Flow_T4a_GJ4">
+        <omgdi:waypoint x="550" y="50" />
+        <omgdi:waypoint x="615" y="50" />
+        <omgdi:waypoint x="615" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T4b_GJ4_di" bpmnElement="Flow_T4b_GJ4">
+        <omgdi:waypoint x="550" y="140" />
+        <omgdi:waypoint x="615" y="140" />
+        <omgdi:waypoint x="615" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T4c_GJ4_di" bpmnElement="Flow_T4c_GJ4">
+        <omgdi:waypoint x="550" y="240" />
+        <omgdi:waypoint x="615" y="240" />
+        <omgdi:waypoint x="615" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_T4d_GJ4_di" bpmnElement="Flow_T4d_GJ4">
+        <omgdi:waypoint x="550" y="340" />
+        <omgdi:waypoint x="615" y="340" />
+        <omgdi:waypoint x="615" y="225" />
+      </bpmndi:BPMNEdge>
+
+      <!-- Joins to Main Join -->
+      <bpmndi:BPMNEdge id="Flow_GJ3_GJM_di" bpmnElement="Flow_GJ3_GJM">
+        <omgdi:waypoint x="640" y="500" />
+        <omgdi:waypoint x="705" y="500" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GJ4_GJM_di" bpmnElement="Flow_GJ4_GJM">
+        <omgdi:waypoint x="640" y="200" />
+        <omgdi:waypoint x="680" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TCA_GJM_di" bpmnElement="Flow_TCA_GJM">
+        <omgdi:waypoint x="550" y="700" />
+        <omgdi:waypoint x="705" y="700" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TCSIRT_GJM_di" bpmnElement="Flow_TCSIRT_GJM">
+        <omgdi:waypoint x="550" y="900" />
+        <omgdi:waypoint x="705" y="900" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TSPOC_GJM_di" bpmnElement="Flow_TSPOC_GJM">
+        <omgdi:waypoint x="550" y="1100" />
+        <omgdi:waypoint x="705" y="1100" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TENISA_GJM_di" bpmnElement="Flow_TENISA_GJM">
+        <omgdi:waypoint x="550" y="1300" />
+        <omgdi:waypoint x="705" y="1300" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TCOM_GJM_di" bpmnElement="Flow_TCOM_GJM">
+        <omgdi:waypoint x="550" y="1500" />
+        <omgdi:waypoint x="705" y="1500" />
+        <omgdi:waypoint x="705" y="225" />
+      </bpmndi:BPMNEdge>
+
+      <!-- Final End Edge -->
+      <bpmndi:BPMNEdge id="Flow_GJM_End_di" bpmnElement="Flow_GJM_End">
+        <omgdi:waypoint x="730" y="200" />
+        <omgdi:waypoint x="770" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

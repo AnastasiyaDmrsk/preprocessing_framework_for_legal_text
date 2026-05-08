@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-definitions"
+             targetNamespace="http://www.signavio.com">
+    <collaboration id="collab_1">
+        <participant id="p_manufacturer" name="Manufacturer" processRef="proc_manufacturer"/>
+        <participant id="p_competent_authority" name="Competent Authority" processRef="proc_ca"/>
+        <messageFlow id="mf1" sourceRef="t14" targetRef="p_competent_authority"/>
+    </collaboration>
+
+    <process id="proc_manufacturer" isExecutable="true" name="Manufacturer">
+        <startEvent id="start" name="Start Obligations">
+            <outgoing>sf_start_t1</outgoing>
+        </startEvent>
+
+        <task id="t1" name="Ensure design and manufacture IAW requirements">
+            <incoming>sf_start_t1</incoming>
+            <outgoing>sf_t1_t2</outgoing>
+        </task>
+        <task id="t2" name="Establish risk management system">
+            <incoming>sf_t1_t2</incoming>
+            <outgoing>sf_t2_t3</outgoing>
+        </task>
+        <task id="t3" name="Conduct clinical evaluation">
+            <incoming>sf_t2_t3</incoming>
+            <outgoing>sf_t3_t4</outgoing>
+        </task>
+        <task id="t4" name="Draw up technical documentation">
+            <incoming>sf_t3_t4</incoming>
+            <outgoing>sf_t4_t5</outgoing>
+        </task>
+        <task id="t5" name="Draw up EU declaration and affix CE marking">
+            <incoming>sf_t4_t5</incoming>
+            <outgoing>sf_t5_t6</outgoing>
+        </task>
+        <task id="t6" name="Comply with UDI and registration obligations">
+            <incoming>sf_t5_t6</incoming>
+            <outgoing>sf_t6_t7</outgoing>
+        </task>
+        <task id="t7" name="Keep documentation available">
+            <incoming>sf_t6_t7</incoming>
+            <outgoing>sf_t7_t8</outgoing>
+        </task>
+        <task id="t8" name="Ensure authorised rep has documentation">
+            <incoming>sf_t7_t8</incoming>
+            <outgoing>sf_t8_gw1</outgoing>
+        </task>
+
+        <parallelGateway id="gw1" name="Start QMS Parallel Tasks">
+            <incoming>sf_t8_gw1</incoming>
+            <outgoing>sf_gw1_t9a</outgoing>
+            <outgoing>sf_gw1_t9b</outgoing>
+            <outgoing>sf_gw1_t9c</outgoing>
+            <outgoing>sf_gw1_t9d</outgoing>
+            <outgoing>sf_gw1_t9e</outgoing>
+            <outgoing>sf_gw1_t9f</outgoing>
+            <outgoing>sf_gw1_t9g</outgoing>
+            <outgoing>sf_gw1_t9h</outgoing>
+            <outgoing>sf_gw1_t9i</outgoing>
+            <outgoing>sf_gw1_t9j</outgoing>
+            <outgoing>sf_gw1_t9k</outgoing>
+            <outgoing>sf_gw1_t9l</outgoing>
+            <outgoing>sf_gw1_t9m</outgoing>
+        </parallelGateway>
+
+        <task id="t9a" name="QMS: Strategy for regulatory compliance">
+            <incoming>sf_gw1_t9a</incoming>
+            <outgoing>sf_t9a_gw2</outgoing>
+        </task>
+        <task id="t9b" name="QMS: General safety &amp; performance requirements">
+            <incoming>sf_gw1_t9b</incoming>
+            <outgoing>sf_t9b_gw2</outgoing>
+        </task>
+        <task id="t9c" name="QMS: Responsibility of the management">
+            <incoming>sf_gw1_t9c</incoming>
+            <outgoing>sf_t9c_gw2</outgoing>
+        </task>
+        <task id="t9d" name="QMS: Resource management">
+            <incoming>sf_gw1_t9d</incoming>
+            <outgoing>sf_t9d_gw2</outgoing>
+        </task>
+        <task id="t9e" name="QMS: Risk management">
+            <incoming>sf_gw1_t9e</incoming>
+            <outgoing>sf_t9e_gw2</outgoing>
+        </task>
+        <task id="t9f" name="QMS: Clinical evaluation">
+            <incoming>sf_gw1_t9f</incoming>
+            <outgoing>sf_t9f_gw2</outgoing>
+        </task>
+        <task id="t9g" name="QMS: Product realisation">
+            <incoming>sf_gw1_t9g</incoming>
+            <outgoing>sf_t9g_gw2</outgoing>
+        </task>
+        <task id="t9h" name="QMS: Verification of UDI assignments">
+            <incoming>sf_gw1_t9h</incoming>
+            <outgoing>sf_t9h_gw2</outgoing>
+        </task>
+        <task id="t9i" name="QMS: Post-market surveillance system">
+            <incoming>sf_gw1_t9i</incoming>
+            <outgoing>sf_t9i_gw2</outgoing>
+        </task>
+        <task id="t9j" name="QMS: Handling communication">
+            <incoming>sf_gw1_t9j</incoming>
+            <outgoing>sf_t9j_gw2</outgoing>
+        </task>
+        <task id="t9k" name="QMS: Reporting of serious incidents">
+            <incoming>sf_gw1_t9k</incoming>
+            <outgoing>sf_t9k_gw2</outgoing>
+        </task>
+        <task id="t9l" name="QMS: Corrective and preventive actions">
+            <incoming>sf_gw1_t9l</incoming>
+            <outgoing>sf_t9l_gw2</outgoing>
+        </task>
+        <task id="t9m" name="QMS: Monitoring and product improvement">
+            <incoming>sf_gw1_t9m</incoming>
+            <outgoing>sf_t9m_gw2</outgoing>
+        </task>
+
+        <parallelGateway id="gw2" name="End QMS Parallel Tasks">
+            <incoming>sf_t9a_gw2</incoming>
+            <incoming>sf_t9b_gw2</incoming>
+            <incoming>sf_t9c_gw2</incoming>
+            <incoming>sf_t9d_gw2</incoming>
+            <incoming>sf_t9e_gw2</incoming>
+            <incoming>sf_t9f_gw2</incoming>
+            <incoming>sf_t9g_gw2</incoming>
+            <incoming>sf_t9h_gw2</incoming>
+            <incoming>sf_t9i_gw2</incoming>
+            <incoming>sf_t9j_gw2</incoming>
+            <incoming>sf_t9k_gw2</incoming>
+            <incoming>sf_t9l_gw2</incoming>
+            <incoming>sf_t9m_gw2</incoming>
+            <outgoing>sf_gw2_t10</outgoing>
+        </parallelGateway>
+
+        <task id="t10" name="Implement post-market surveillance system">
+            <incoming>sf_gw2_t10</incoming>
+            <outgoing>sf_t10_t11</outgoing>
+        </task>
+        <task id="t11" name="Ensure device accompanied by information">
+            <incoming>sf_t10_t11</incoming>
+            <outgoing>sf_t11_t12</outgoing>
+        </task>
+        <task id="t12" name="Take corrective action">
+            <incoming>sf_t11_t12</incoming>
+            <outgoing>sf_t12_t13</outgoing>
+        </task>
+        <task id="t13" name="Record and report incidents">
+            <incoming>sf_t12_t13</incoming>
+            <outgoing>sf_t13_t14</outgoing>
+        </task>
+        <task id="t14" name="Cooperate with competent authority">
+            <incoming>sf_t13_t14</incoming>
+            <outgoing>sf_t14_t15</outgoing>
+        </task>
+        <task id="t15" name="Submit identity of other designers">
+            <incoming>sf_t14_t15</incoming>
+            <outgoing>sf_t15_t16</outgoing>
+        </task>
+        <task id="t16" name="Provide financial coverage">
+            <incoming>sf_t15_t16</incoming>
+            <outgoing>sf_t16_end</outgoing>
+        </task>
+
+        <endEvent id="end" name="End Obligations">
+            <incoming>sf_t16_end</incoming>
+        </endEvent>
+
+        <!-- Sequence Flows -->
+        <sequenceFlow id="sf_start_t1" sourceRef="start" targetRef="t1"/>
+        <sequenceFlow id="sf_t1_t2" sourceRef="t1" targetRef="t2"/>
+        <sequenceFlow id="sf_t2_t3" sourceRef="t2" targetRef="t3"/>
+        <sequenceFlow id="sf_t3_t4" sourceRef="t3" targetRef="t4"/>
+        <sequenceFlow id="sf_t4_t5" sourceRef="t4" targetRef="t5"/>
+        <sequenceFlow id="sf_t5_t6" sourceRef="t5" targetRef="t6"/>
+        <sequenceFlow id="sf_t6_t7" sourceRef="t6" targetRef="t7"/>
+        <sequenceFlow id="sf_t7_t8" sourceRef="t7" targetRef="t8"/>
+        <sequenceFlow id="sf_t8_gw1" sourceRef="t8" targetRef="gw1"/>
+
+        <sequenceFlow id="sf_gw1_t9a" sourceRef="gw1" targetRef="t9a"/>
+        <sequenceFlow id="sf_gw1_t9b" sourceRef="gw1" targetRef="t9b"/>
+        <sequenceFlow id="sf_gw1_t9c" sourceRef="gw1" targetRef="t9c"/>
+        <sequenceFlow id="sf_gw1_t9d" sourceRef="gw1" targetRef="t9d"/>
+        <sequenceFlow id="sf_gw1_t9e" sourceRef="gw1" targetRef="t9e"/>
+        <sequenceFlow id="sf_gw1_t9f" sourceRef="gw1" targetRef="t9f"/>
+        <sequenceFlow id="sf_gw1_t9g" sourceRef="gw1" targetRef="t9g"/>
+        <sequenceFlow id="sf_gw1_t9h" sourceRef="gw1" targetRef="t9h"/>
+        <sequenceFlow id="sf_gw1_t9i" sourceRef="gw1" targetRef="t9i"/>
+        <sequenceFlow id="sf_gw1_t9j" sourceRef="gw1" targetRef="t9j"/>
+        <sequenceFlow id="sf_gw1_t9k" sourceRef="gw1" targetRef="t9k"/>
+        <sequenceFlow id="sf_gw1_t9l" sourceRef="gw1" targetRef="t9l"/>
+        <sequenceFlow id="sf_gw1_t9m" sourceRef="gw1" targetRef="t9m"/>
+
+        <sequenceFlow id="sf_t9a_gw2" sourceRef="t9a" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9b_gw2" sourceRef="t9b" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9c_gw2" sourceRef="t9c" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9d_gw2" sourceRef="t9d" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9e_gw2" sourceRef="t9e" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9f_gw2" sourceRef="t9f" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9g_gw2" sourceRef="t9g" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9h_gw2" sourceRef="t9h" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9i_gw2" sourceRef="t9i" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9j_gw2" sourceRef="t9j" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9k_gw2" sourceRef="t9k" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9l_gw2" sourceRef="t9l" targetRef="gw2"/>
+        <sequenceFlow id="sf_t9m_gw2" sourceRef="t9m" targetRef="gw2"/>
+
+        <sequenceFlow id="sf_gw2_t10" sourceRef="gw2" targetRef="t10"/>
+        <sequenceFlow id="sf_t10_t11" sourceRef="t10" targetRef="t11"/>
+        <sequenceFlow id="sf_t11_t12" sourceRef="t11" targetRef="t12"/>
+        <sequenceFlow id="sf_t12_t13" sourceRef="t12" targetRef="t13"/>
+        <sequenceFlow id="sf_t13_t14" sourceRef="t13" targetRef="t14"/>
+        <sequenceFlow id="sf_t14_t15" sourceRef="t14" targetRef="t15"/>
+        <sequenceFlow id="sf_t15_t16" sourceRef="t15" targetRef="t16"/>
+        <sequenceFlow id="sf_t16_end" sourceRef="t16" targetRef="end"/>
+    </process>
+
+    <process id="proc_ca" isExecutable="false" name="Competent Authority">
+        <!-- Kept empty as a black-box pool for the boundary interaction -->
+    </process>
+
+    <!-- BPMN DI layout mapping -->
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+            <bpmndi:BPMNShape bpmnElement="p_manufacturer" id="shape_p_manufacturer" isHorizontal="true">
+                <omgdc:Bounds height="1400.0" width="3100.0" x="10.0" y="10.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_competent_authority" id="shape_p_ca" isHorizontal="true">
+                <omgdc:Bounds height="150.0" width="3100.0" x="10.0" y="1450.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="start" id="shape_start">
+                <omgdc:Bounds height="30.0" width="30.0" x="50.0" y="675.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="t1" id="shape_t1">
+                <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2" id="shape_t2">
+                <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3" id="shape_t3">
+                <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t4" id="shape_t4">
+                <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t5" id="shape_t5">
+                <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t6" id="shape_t6">
+                <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t7" id="shape_t7">
+                <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t8" id="shape_t8">
+                <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="gw1" id="shape_gw1">
+                <omgdc:Bounds height="50.0" width="50.0" x="1400.0" y="665.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="t9a" id="shape_t9a">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="50.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9b" id="shape_t9b">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="150.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9c" id="shape_t9c">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="250.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9d" id="shape_t9d">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="350.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9e" id="shape_t9e">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="450.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9f" id="shape_t9f">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="550.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9g" id="shape_t9g">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9h" id="shape_t9h">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="750.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9i" id="shape_t9i">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="850.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9j" id="shape_t9j">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="950.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9k" id="shape_t9k">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="1050.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9l" id="shape_t9l">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="1150.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9m" id="shape_t9m">
+                <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="1250.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="gw2" id="shape_gw2">
+                <omgdc:Bounds height="50.0" width="50.0" x="1700.0" y="665.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="t10" id="shape_t10">
+                <omgdc:Bounds height="80.0" width="100.0" x="1850.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t11" id="shape_t11">
+                <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t12" id="shape_t12">
+                <omgdc:Bounds height="80.0" width="100.0" x="2150.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t13" id="shape_t13">
+                <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t14" id="shape_t14">
+                <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t15" id="shape_t15">
+                <omgdc:Bounds height="80.0" width="100.0" x="2600.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t16" id="shape_t16">
+                <omgdc:Bounds height="80.0" width="100.0" x="2750.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="end" id="shape_end">
+                <omgdc:Bounds height="30.0" width="30.0" x="2950.0" y="675.0"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Connecting Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_start_t1" id="edge_start_t1">
+                <omgdi:waypoint x="80.0" y="690.0"/>
+                <omgdi:waypoint x="200.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t1_t2" id="edge_t1_t2">
+                <omgdi:waypoint x="300.0" y="690.0"/>
+                <omgdi:waypoint x="350.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t2_t3" id="edge_t2_t3">
+                <omgdi:waypoint x="450.0" y="690.0"/>
+                <omgdi:waypoint x="500.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t3_t4" id="edge_t3_t4">
+                <omgdi:waypoint x="600.0" y="690.0"/>
+                <omgdi:waypoint x="650.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t4_t5" id="edge_t4_t5">
+                <omgdi:waypoint x="750.0" y="690.0"/>
+                <omgdi:waypoint x="800.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t5_t6" id="edge_t5_t6">
+                <omgdi:waypoint x="900.0" y="690.0"/>
+                <omgdi:waypoint x="950.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t6_t7" id="edge_t6_t7">
+                <omgdi:waypoint x="1050.0" y="690.0"/>
+                <omgdi:waypoint x="1100.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t7_t8" id="edge_t7_t8">
+                <omgdi:waypoint x="1200.0" y="690.0"/>
+                <omgdi:waypoint x="1250.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t8_gw1" id="edge_t8_gw1">
+                <omgdi:waypoint x="1350.0" y="690.0"/>
+                <omgdi:waypoint x="1400.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+
+            <!-- Gateway 1 Outgoing -->
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9a" id="edge_gw1_t9a">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="90.0"/>
+                <omgdi:waypoint x="1550.0" y="90.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9b" id="edge_gw1_t9b">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="190.0"/>
+                <omgdi:waypoint x="1550.0" y="190.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9c" id="edge_gw1_t9c">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="290.0"/>
+                <omgdi:waypoint x="1550.0" y="290.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9d" id="edge_gw1_t9d">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="390.0"/>
+                <omgdi:waypoint x="1550.0" y="390.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9e" id="edge_gw1_t9e">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="490.0"/>
+                <omgdi:waypoint x="1550.0" y="490.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9f" id="edge_gw1_t9f">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="590.0"/>
+                <omgdi:waypoint x="1550.0" y="590.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9g" id="edge_gw1_t9g">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1550.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9h" id="edge_gw1_t9h">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="790.0"/>
+                <omgdi:waypoint x="1550.0" y="790.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9i" id="edge_gw1_t9i">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="890.0"/>
+                <omgdi:waypoint x="1550.0" y="890.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9j" id="edge_gw1_t9j">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="990.0"/>
+                <omgdi:waypoint x="1550.0" y="990.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9k" id="edge_gw1_t9k">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="1090.0"/>
+                <omgdi:waypoint x="1550.0" y="1090.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9l" id="edge_gw1_t9l">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="1190.0"/>
+                <omgdi:waypoint x="1550.0" y="1190.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_gw1_t9m" id="edge_gw1_t9m">
+                <omgdi:waypoint x="1450.0" y="690.0"/>
+                <omgdi:waypoint x="1450.0" y="1290.0"/>
+                <omgdi:waypoint x="1550.0" y="1290.0"/>
+            </bpmndi:BPMNEdge>
+
+            <!-- Gateway 2 Incoming -->
+            <bpmndi:BPMNEdge bpmnElement="sf_t9a_gw2" id="edge_t9a_gw2">
+                <omgdi:waypoint x="1650.0" y="90.0"/>
+                <omgdi:waypoint x="1725.0" y="90.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9b_gw2" id="edge_t9b_gw2">
+                <omgdi:waypoint x="1650.0" y="190.0"/>
+                <omgdi:waypoint x="1725.0" y="190.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9c_gw2" id="edge_t9c_gw2">
+                <omgdi:waypoint x="1650.0" y="290.0"/>
+                <omgdi:waypoint x="1725.0" y="290.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9d_gw2" id="edge_t9d_gw2">
+                <omgdi:waypoint x="1650.0" y="390.0"/>
+                <omgdi:waypoint x="1725.0" y="390.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9e_gw2" id="edge_t9e_gw2">
+                <omgdi:waypoint x="1650.0" y="490.0"/>
+                <omgdi:waypoint x="1725.0" y="490.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9f_gw2" id="edge_t9f_gw2">
+                <omgdi:waypoint x="1650.0" y="590.0"/>
+                <omgdi:waypoint x="1725.0" y="590.0"/>
+                <omgdi:waypoint x="1725.0" y="665.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9g_gw2" id="edge_t9g_gw2">
+                <omgdi:waypoint x="1650.0" y="690.0"/>
+                <omgdi:waypoint x="1700.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9h_gw2" id="edge_t9h_gw2">
+                <omgdi:waypoint x="1650.0" y="790.0"/>
+                <omgdi:waypoint x="1725.0" y="790.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9i_gw2" id="edge_t9i_gw2">
+                <omgdi:waypoint x="1650.0" y="890.0"/>
+                <omgdi:waypoint x="1725.0" y="890.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9j_gw2" id="edge_t9j_gw2">
+                <omgdi:waypoint x="1650.0" y="990.0"/>
+                <omgdi:waypoint x="1725.0" y="990.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9k_gw2" id="edge_t9k_gw2">
+                <omgdi:waypoint x="1650.0" y="1090.0"/>
+                <omgdi:waypoint x="1725.0" y="1090.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9l_gw2" id="edge_t9l_gw2">
+                <omgdi:waypoint x="1650.0" y="1190.0"/>
+                <omgdi:waypoint x="1725.0" y="1190.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t9m_gw2" id="edge_t9m_gw2">
+                <omgdi:waypoint x="1650.0" y="1290.0"/>
+                <omgdi:waypoint x="1725.0" y="1290.0"/>
+                <omgdi:waypoint x="1725.0" y="715.0"/>
+            </bpmndi:BPMNEdge>
+
+            <!-- Remaining edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_gw2_t10" id="edge_gw2_t10">
+                <omgdi:waypoint x="1750.0" y="690.0"/>
+                <omgdi:waypoint x="1850.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t10_t11" id="edge_t10_t11">
+                <omgdi:waypoint x="1950.0" y="690.0"/>
+                <omgdi:waypoint x="2000.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t11_t12" id="edge_t11_t12">
+                <omgdi:waypoint x="2100.0" y="690.0"/>
+                <omgdi:waypoint x="2150.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t12_t13" id="edge_t12_t13">
+                <omgdi:waypoint x="2250.0" y="690.0"/>
+                <omgdi:waypoint x="2300.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t13_t14" id="edge_t13_t14">
+                <omgdi:waypoint x="2400.0" y="690.0"/>
+                <omgdi:waypoint x="2450.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t14_t15" id="edge_t14_t15">
+                <omgdi:waypoint x="2550.0" y="690.0"/>
+                <omgdi:waypoint x="2600.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t15_t16" id="edge_t15_t16">
+                <omgdi:waypoint x="2700.0" y="690.0"/>
+                <omgdi:waypoint x="2750.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t16_end" id="edge_t16_end">
+                <omgdi:waypoint x="2850.0" y="690.0"/>
+                <omgdi:waypoint x="2950.0" y="690.0"/>
+            </bpmndi:BPMNEdge>
+
+            <!-- Message Flows -->
+            <bpmndi:BPMNEdge bpmnElement="mf1" id="edge_mf1">
+                <omgdi:waypoint x="2500.0" y="730.0"/>
+                <omgdi:waypoint x="2500.0" y="1450.0"/>
+            </bpmndi:BPMNEdge>
+
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

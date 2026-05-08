@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Manufacturers" name="Manufacturers" processRef="Process_Manufacturers" />
+      <participant id="Participant_CA" name="Competent Authority" />
+      <messageFlow id="Flow_Msg_1" sourceRef="Task_7" targetRef="Participant_CA" />
+      <messageFlow id="Flow_Msg_2" sourceRef="Participant_CA" targetRef="Task_14" />
+   </collaboration>
+
+   <process id="Process_Manufacturers" isExecutable="false" name="Manufacturers" processType="None">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_1" name="Manufacturers">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Task_1</flowNodeRef>
+            <flowNodeRef>Task_2</flowNodeRef>
+            <flowNodeRef>Task_3</flowNodeRef>
+            <flowNodeRef>Task_4</flowNodeRef>
+            <flowNodeRef>Task_5</flowNodeRef>
+            <flowNodeRef>Task_6</flowNodeRef>
+            <flowNodeRef>Task_7</flowNodeRef>
+            <flowNodeRef>GW_Split</flowNodeRef>
+            <flowNodeRef>Task_9a</flowNodeRef>
+            <flowNodeRef>Task_9b</flowNodeRef>
+            <flowNodeRef>Task_9c</flowNodeRef>
+            <flowNodeRef>Task_9d</flowNodeRef>
+            <flowNodeRef>Task_9e</flowNodeRef>
+            <flowNodeRef>Task_9f</flowNodeRef>
+            <flowNodeRef>Task_9g</flowNodeRef>
+            <flowNodeRef>Task_9h</flowNodeRef>
+            <flowNodeRef>Task_9i</flowNodeRef>
+            <flowNodeRef>Task_9j</flowNodeRef>
+            <flowNodeRef>Task_9k</flowNodeRef>
+            <flowNodeRef>Task_9l</flowNodeRef>
+            <flowNodeRef>Task_9m</flowNodeRef>
+            <flowNodeRef>GW_Join</flowNodeRef>
+            <flowNodeRef>Task_10</flowNodeRef>
+            <flowNodeRef>Task_11</flowNodeRef>
+            <flowNodeRef>Task_12</flowNodeRef>
+            <flowNodeRef>Task_13</flowNodeRef>
+            <flowNodeRef>Task_14</flowNodeRef>
+            <flowNodeRef>Task_15</flowNodeRef>
+            <flowNodeRef>Task_16</flowNodeRef>
+            <flowNodeRef>EndEvent_1</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_1" name="Start">
+         <outgoing>Flow_S_T1</outgoing>
+      </startEvent>
+      <task id="Task_1" name="ensure devices designed and manufactured">
+         <incoming>Flow_S_T1</incoming>
+         <outgoing>Flow_T1_T2</outgoing>
+      </task>
+      <task id="Task_2" name="establish risk management system">
+         <incoming>Flow_T1_T2</incoming>
+         <outgoing>Flow_T2_T3</outgoing>
+      </task>
+      <task id="Task_3" name="conduct clinical evaluation">
+         <incoming>Flow_T2_T3</incoming>
+         <outgoing>Flow_T3_T4</outgoing>
+      </task>
+      <task id="Task_4" name="draw up technical documentation">
+         <incoming>Flow_T3_T4</incoming>
+         <outgoing>Flow_T4_T5</outgoing>
+      </task>
+      <task id="Task_5" name="draw up EU declaration of conformity">
+         <incoming>Flow_T4_T5</incoming>
+         <outgoing>Flow_T5_T6</outgoing>
+      </task>
+      <task id="Task_6" name="comply with UDI system">
+         <incoming>Flow_T5_T6</incoming>
+         <outgoing>Flow_T6_T7</outgoing>
+      </task>
+      <task id="Task_7" name="keep documentation available">
+         <incoming>Flow_T6_T7</incoming>
+         <outgoing>Flow_T7_GW1</outgoing>
+      </task>
+
+      <parallelGateway id="GW_Split" name="Parallel Split">
+         <incoming>Flow_T7_GW1</incoming>
+         <outgoing>Flow_GW1_9a</outgoing>
+         <outgoing>Flow_GW1_9b</outgoing>
+         <outgoing>Flow_GW1_9c</outgoing>
+         <outgoing>Flow_GW1_9d</outgoing>
+         <outgoing>Flow_GW1_9e</outgoing>
+         <outgoing>Flow_GW1_9f</outgoing>
+         <outgoing>Flow_GW1_9g</outgoing>
+         <outgoing>Flow_GW1_9h</outgoing>
+         <outgoing>Flow_GW1_9i</outgoing>
+         <outgoing>Flow_GW1_9j</outgoing>
+         <outgoing>Flow_GW1_9k</outgoing>
+         <outgoing>Flow_GW1_9l</outgoing>
+         <outgoing>Flow_GW1_9m</outgoing>
+      </parallelGateway>
+
+      <task id="Task_9a" name="QMS: regulatory compliance">
+         <incoming>Flow_GW1_9a</incoming>
+         <outgoing>Flow_9a_GW2</outgoing>
+      </task>
+      <task id="Task_9b" name="QMS: safety requirements">
+         <incoming>Flow_GW1_9b</incoming>
+         <outgoing>Flow_9b_GW2</outgoing>
+      </task>
+      <task id="Task_9c" name="QMS: management responsibility">
+         <incoming>Flow_GW1_9c</incoming>
+         <outgoing>Flow_9c_GW2</outgoing>
+      </task>
+      <task id="Task_9d" name="QMS: resource management">
+         <incoming>Flow_GW1_9d</incoming>
+         <outgoing>Flow_9d_GW2</outgoing>
+      </task>
+      <task id="Task_9e" name="QMS: risk management">
+         <incoming>Flow_GW1_9e</incoming>
+         <outgoing>Flow_9e_GW2</outgoing>
+      </task>
+      <task id="Task_9f" name="QMS: clinical evaluation">
+         <incoming>Flow_GW1_9f</incoming>
+         <outgoing>Flow_9f_GW2</outgoing>
+      </task>
+      <task id="Task_9g" name="QMS: product realisation">
+         <incoming>Flow_GW1_9g</incoming>
+         <outgoing>Flow_9g_GW2</outgoing>
+      </task>
+      <task id="Task_9h" name="QMS: verification of UDI">
+         <incoming>Flow_GW1_9h</incoming>
+         <outgoing>Flow_9h_GW2</outgoing>
+      </task>
+      <task id="Task_9i" name="QMS: post-market surveillance">
+         <incoming>Flow_GW1_9i</incoming>
+         <outgoing>Flow_9i_GW2</outgoing>
+      </task>
+      <task id="Task_9j" name="QMS: handling communication">
+         <incoming>Flow_GW1_9j</incoming>
+         <outgoing>Flow_9j_GW2</outgoing>
+      </task>
+      <task id="Task_9k" name="QMS: reporting serious incidents">
+         <incoming>Flow_GW1_9k</incoming>
+         <outgoing>Flow_9k_GW2</outgoing>
+      </task>
+      <task id="Task_9l" name="QMS: management of CAPA">
+         <incoming>Flow_GW1_9l</incoming>
+         <outgoing>Flow_9l_GW2</outgoing>
+      </task>
+      <task id="Task_9m" name="QMS: monitoring and measurement">
+         <incoming>Flow_GW1_9m</incoming>
+         <outgoing>Flow_9m_GW2</outgoing>
+      </task>
+
+      <parallelGateway id="GW_Join" name="Parallel Join">
+         <incoming>Flow_9a_GW2</incoming>
+         <incoming>Flow_9b_GW2</incoming>
+         <incoming>Flow_9c_GW2</incoming>
+         <incoming>Flow_9d_GW2</incoming>
+         <incoming>Flow_9e_GW2</incoming>
+         <incoming>Flow_9f_GW2</incoming>
+         <incoming>Flow_9g_GW2</incoming>
+         <incoming>Flow_9h_GW2</incoming>
+         <incoming>Flow_9i_GW2</incoming>
+         <incoming>Flow_9j_GW2</incoming>
+         <incoming>Flow_9k_GW2</incoming>
+         <incoming>Flow_9l_GW2</incoming>
+         <incoming>Flow_9m_GW2</incoming>
+         <outgoing>Flow_GW2_T10</outgoing>
+      </parallelGateway>
+
+      <task id="Task_10" name="implement post-market surveillance">
+         <incoming>Flow_GW2_T10</incoming>
+         <outgoing>Flow_T10_T11</outgoing>
+      </task>
+      <task id="Task_11" name="ensure device accompanied by info">
+         <incoming>Flow_T10_T11</incoming>
+         <outgoing>Flow_T11_T12</outgoing>
+      </task>
+      <task id="Task_12" name="take corrective action">
+         <incoming>Flow_T11_T12</incoming>
+         <outgoing>Flow_T12_T13</outgoing>
+      </task>
+      <task id="Task_13" name="record and report incidents">
+         <incoming>Flow_T12_T13</incoming>
+         <outgoing>Flow_T13_T14</outgoing>
+      </task>
+      <task id="Task_14" name="provide info and documentation">
+         <incoming>Flow_T13_T14</incoming>
+         <outgoing>Flow_T14_T15</outgoing>
+      </task>
+      <task id="Task_15" name="submit identity info">
+         <incoming>Flow_T14_T15</incoming>
+         <outgoing>Flow_T15_T16</outgoing>
+      </task>
+      <task id="Task_16" name="maintain financial coverage">
+         <incoming>Flow_T15_T16</incoming>
+         <outgoing>Flow_T16_End</outgoing>
+      </task>
+      <endEvent id="EndEvent_1" name="End">
+         <incoming>Flow_T16_End</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_S_T1" sourceRef="StartEvent_1" targetRef="Task_1" />
+      <sequenceFlow id="Flow_T1_T2" sourceRef="Task_1" targetRef="Task_2" />
+      <sequenceFlow id="Flow_T2_T3" sourceRef="Task_2" targetRef="Task_3" />
+      <sequenceFlow id="Flow_T3_T4" sourceRef="Task_3" targetRef="Task_4" />
+      <sequenceFlow id="Flow_T4_T5" sourceRef="Task_4" targetRef="Task_5" />
+      <sequenceFlow id="Flow_T5_T6" sourceRef="Task_5" targetRef="Task_6" />
+      <sequenceFlow id="Flow_T6_T7" sourceRef="Task_6" targetRef="Task_7" />
+      <sequenceFlow id="Flow_T7_GW1" sourceRef="Task_7" targetRef="GW_Split" />
+      <sequenceFlow id="Flow_GW1_9a" sourceRef="GW_Split" targetRef="Task_9a" />
+      <sequenceFlow id="Flow_GW1_9b" sourceRef="GW_Split" targetRef="Task_9b" />
+      <sequenceFlow id="Flow_GW1_9c" sourceRef="GW_Split" targetRef="Task_9c" />
+      <sequenceFlow id="Flow_GW1_9d" sourceRef="GW_Split" targetRef="Task_9d" />
+      <sequenceFlow id="Flow_GW1_9e" sourceRef="GW_Split" targetRef="Task_9e" />
+      <sequenceFlow id="Flow_GW1_9f" sourceRef="GW_Split" targetRef="Task_9f" />
+      <sequenceFlow id="Flow_GW1_9g" sourceRef="GW_Split" targetRef="Task_9g" />
+      <sequenceFlow id="Flow_GW1_9h" sourceRef="GW_Split" targetRef="Task_9h" />
+      <sequenceFlow id="Flow_GW1_9i" sourceRef="GW_Split" targetRef="Task_9i" />
+      <sequenceFlow id="Flow_GW1_9j" sourceRef="GW_Split" targetRef="Task_9j" />
+      <sequenceFlow id="Flow_GW1_9k" sourceRef="GW_Split" targetRef="Task_9k" />
+      <sequenceFlow id="Flow_GW1_9l" sourceRef="GW_Split" targetRef="Task_9l" />
+      <sequenceFlow id="Flow_GW1_9m" sourceRef="GW_Split" targetRef="Task_9m" />
+      <sequenceFlow id="Flow_9a_GW2" sourceRef="Task_9a" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9b_GW2" sourceRef="Task_9b" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9c_GW2" sourceRef="Task_9c" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9d_GW2" sourceRef="Task_9d" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9e_GW2" sourceRef="Task_9e" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9f_GW2" sourceRef="Task_9f" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9g_GW2" sourceRef="Task_9g" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9h_GW2" sourceRef="Task_9h" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9i_GW2" sourceRef="Task_9i" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9j_GW2" sourceRef="Task_9j" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9k_GW2" sourceRef="Task_9k" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9l_GW2" sourceRef="Task_9l" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_9m_GW2" sourceRef="Task_9m" targetRef="GW_Join" />
+      <sequenceFlow id="Flow_GW2_T10" sourceRef="GW_Join" targetRef="Task_10" />
+      <sequenceFlow id="Flow_T10_T11" sourceRef="Task_10" targetRef="Task_11" />
+      <sequenceFlow id="Flow_T11_T12" sourceRef="Task_11" targetRef="Task_12" />
+      <sequenceFlow id="Flow_T12_T13" sourceRef="Task_12" targetRef="Task_13" />
+      <sequenceFlow id="Flow_T13_T14" sourceRef="Task_13" targetRef="Task_14" />
+      <sequenceFlow id="Flow_T14_T15" sourceRef="Task_14" targetRef="Task_15" />
+      <sequenceFlow id="Flow_T15_T16" sourceRef="Task_15" targetRef="Task_16" />
+      <sequenceFlow id="Flow_T16_End" sourceRef="Task_16" targetRef="EndEvent_1" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+         <bpmndi:BPMNShape bpmnElement="Participant_Manufacturers" id="Participant_Manufacturers_gui" isHorizontal="true">
+            <omgdc:Bounds height="1150.0" width="2750.0" x="30.0" y="30.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_1" id="Lane_1_gui" isHorizontal="true">
+            <omgdc:Bounds height="1150.0" width="2720.0" x="60.0" y="30.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_CA" id="Participant_CA_gui" isHorizontal="true">
+            <omgdc:Bounds height="100.0" width="2750.0" x="30.0" y="1200.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="605.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_1" id="Task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_2" id="Task_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_3" id="Task_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="460.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_4" id="Task_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5" id="Task_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="740.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_6" id="Task_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_7" id="Task_7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1020.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Split" id="GW_Split_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1160.0" y="595.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_9a" id="Task_9a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9b" id="Task_9b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="180.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9c" id="Task_9c_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="260.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9d" id="Task_9d_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9e" id="Task_9e_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="420.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9f" id="Task_9f_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="500.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9g" id="Task_9g_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9h" id="Task_9h_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="660.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9i" id="Task_9i_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="740.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9j" id="Task_9j_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="820.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9k" id="Task_9k_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="900.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9l" id="Task_9l_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="980.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9m" id="Task_9m_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="1060.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="GW_Join" id="GW_Join_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1460.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_10" id="Task_10_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1560.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_11" id="Task_11_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_12" id="Task_12_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1840.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_13" id="Task_13_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1980.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_14" id="Task_14_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2120.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_15" id="Task_15_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2260.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_16" id="Task_16_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_1" id="EndEvent_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2560.0" y="605.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_Msg_1" id="Flow_Msg_1_gui">
+            <omgdi:waypoint x="1070.0" y="660.0" />
+            <omgdi:waypoint x="1070.0" y="1200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Msg_2" id="Flow_Msg_2_gui">
+            <omgdi:waypoint x="2170.0" y="1200.0" />
+            <omgdi:waypoint x="2170.0" y="660.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows Main Process -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_S_T1" id="Flow_S_T1_gui">
+            <omgdi:waypoint x="130.0" y="620.0" />
+            <omgdi:waypoint x="180.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T1_T2" id="Flow_T1_T2_gui">
+            <omgdi:waypoint x="280.0" y="620.0" />
+            <omgdi:waypoint x="320.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T2_T3" id="Flow_T2_T3_gui">
+            <omgdi:waypoint x="420.0" y="620.0" />
+            <omgdi:waypoint x="460.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T3_T4" id="Flow_T3_T4_gui">
+            <omgdi:waypoint x="560.0" y="620.0" />
+            <omgdi:waypoint x="600.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T4_T5" id="Flow_T4_T5_gui">
+            <omgdi:waypoint x="700.0" y="620.0" />
+            <omgdi:waypoint x="740.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T5_T6" id="Flow_T5_T6_gui">
+            <omgdi:waypoint x="840.0" y="620.0" />
+            <omgdi:waypoint x="880.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T6_T7" id="Flow_T6_T7_gui">
+            <omgdi:waypoint x="980.0" y="620.0" />
+            <omgdi:waypoint x="1020.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T7_GW1" id="Flow_T7_GW1_gui">
+            <omgdi:waypoint x="1120.0" y="620.0" />
+            <omgdi:waypoint x="1160.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Gateway Split Flows -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9a" id="Flow_GW1_9a_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="140.0" />
+            <omgdi:waypoint x="1300.0" y="140.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9b" id="Flow_GW1_9b_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="220.0" />
+            <omgdi:waypoint x="1300.0" y="220.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9c" id="Flow_GW1_9c_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="300.0" />
+            <omgdi:waypoint x="1300.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9d" id="Flow_GW1_9d_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="380.0" />
+            <omgdi:waypoint x="1300.0" y="380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9e" id="Flow_GW1_9e_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="460.0" />
+            <omgdi:waypoint x="1300.0" y="460.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9f" id="Flow_GW1_9f_gui">
+            <omgdi:waypoint x="1185.0" y="595.0" />
+            <omgdi:waypoint x="1185.0" y="540.0" />
+            <omgdi:waypoint x="1300.0" y="540.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9g" id="Flow_GW1_9g_gui">
+            <omgdi:waypoint x="1210.0" y="620.0" />
+            <omgdi:waypoint x="1300.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9h" id="Flow_GW1_9h_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="700.0" />
+            <omgdi:waypoint x="1300.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9i" id="Flow_GW1_9i_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="780.0" />
+            <omgdi:waypoint x="1300.0" y="780.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9j" id="Flow_GW1_9j_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="860.0" />
+            <omgdi:waypoint x="1300.0" y="860.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9k" id="Flow_GW1_9k_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="940.0" />
+            <omgdi:waypoint x="1300.0" y="940.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9l" id="Flow_GW1_9l_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="1020.0" />
+            <omgdi:waypoint x="1300.0" y="1020.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW1_9m" id="Flow_GW1_9m_gui">
+            <omgdi:waypoint x="1185.0" y="645.0" />
+            <omgdi:waypoint x="1185.0" y="1100.0" />
+            <omgdi:waypoint x="1300.0" y="1100.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Gateway Join Flows -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_9a_GW2" id="Flow_9a_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="140.0" />
+            <omgdi:waypoint x="1485.0" y="140.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9b_GW2" id="Flow_9b_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="220.0" />
+            <omgdi:waypoint x="1485.0" y="220.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9c_GW2" id="Flow_9c_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="300.0" />
+            <omgdi:waypoint x="1485.0" y="300.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9d_GW2" id="Flow_9d_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="380.0" />
+            <omgdi:waypoint x="1485.0" y="380.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9e_GW2" id="Flow_9e_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="460.0" />
+            <omgdi:waypoint x="1485.0" y="460.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9f_GW2" id="Flow_9f_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="540.0" />
+            <omgdi:waypoint x="1485.0" y="540.0" />
+            <omgdi:waypoint x="1485.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9g_GW2" id="Flow_9g_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="620.0" />
+            <omgdi:waypoint x="1460.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9h_GW2" id="Flow_9h_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="700.0" />
+            <omgdi:waypoint x="1485.0" y="700.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9i_GW2" id="Flow_9i_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="780.0" />
+            <omgdi:waypoint x="1485.0" y="780.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9j_GW2" id="Flow_9j_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="860.0" />
+            <omgdi:waypoint x="1485.0" y="860.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9k_GW2" id="Flow_9k_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="940.0" />
+            <omgdi:waypoint x="1485.0" y="940.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9l_GW2" id="Flow_9l_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="1020.0" />
+            <omgdi:waypoint x="1485.0" y="1020.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9m_GW2" id="Flow_9m_GW2_gui">
+            <omgdi:waypoint x="1400.0" y="1100.0" />
+            <omgdi:waypoint x="1485.0" y="1100.0" />
+            <omgdi:waypoint x="1485.0" y="645.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows Rest of Main Process -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_GW2_T10" id="Flow_GW2_T10_gui">
+            <omgdi:waypoint x="1510.0" y="620.0" />
+            <omgdi:waypoint x="1560.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T10_T11" id="Flow_T10_T11_gui">
+            <omgdi:waypoint x="1660.0" y="620.0" />
+            <omgdi:waypoint x="1700.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T11_T12" id="Flow_T11_T12_gui">
+            <omgdi:waypoint x="1800.0" y="620.0" />
+            <omgdi:waypoint x="1840.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T12_T13" id="Flow_T12_T13_gui">
+            <omgdi:waypoint x="1940.0" y="620.0" />
+            <omgdi:waypoint x="1980.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T13_T14" id="Flow_T13_T14_gui">
+            <omgdi:waypoint x="2080.0" y="620.0" />
+            <omgdi:waypoint x="2120.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T14_T15" id="Flow_T14_T15_gui">
+            <omgdi:waypoint x="2220.0" y="620.0" />
+            <omgdi:waypoint x="2260.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T15_T16" id="Flow_T15_T16_gui">
+            <omgdi:waypoint x="2360.0" y="620.0" />
+            <omgdi:waypoint x="2400.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T16_End" id="Flow_T16_End_gui">
+            <omgdi:waypoint x="2500.0" y="620.0" />
+            <omgdi:waypoint x="2560.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
