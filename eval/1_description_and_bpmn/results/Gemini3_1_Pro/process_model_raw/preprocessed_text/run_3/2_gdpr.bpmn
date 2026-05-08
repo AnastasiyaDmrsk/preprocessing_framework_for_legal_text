@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-data-breach-process"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_GDPR">
+      <participant id="Participant_Controller" name="Controller" processRef="Process_Controller" />
+      <participant id="Participant_Processor" name="Processor" processRef="Process_Processor" />
+      <participant id="Participant_Authority" name="Supervisory Authority" processRef="Process_Authority" />
+
+      <messageFlow id="Flow_Msg_ProcToCtrl" sourceRef="Task_Proc_Notify" targetRef="Start_Ctrl" />
+      <messageFlow id="Flow_Msg_CtrlToAuth" sourceRef="Task_Ctrl_NotifySA" targetRef="Start_Auth" />
+   </collaboration>
+
+   <!-- CONTROLLER PROCESS -->
+   <process id="Process_Controller" isExecutable="false" name="Controller Process">
+      <startEvent id="Start_Ctrl" name="Breach Detected / Notified">
+         <outgoing>Flow_C1</outgoing>
+      </startEvent>
+      <sequenceFlow id="Flow_C1" sourceRef="Start_Ctrl" targetRef="Task_Ctrl_NotifySA" />
+
+      <task id="Task_Ctrl_NotifySA" name="Notify Supervisory Authority (in 72h)">
+         <incoming>Flow_C1</incoming>
+         <outgoing>Flow_C2</outgoing>
+      </task>
+      <sequenceFlow id="Flow_C2" sourceRef="Task_Ctrl_NotifySA" targetRef="Gateway_Split_Info" />
+
+      <parallelGateway id="Gateway_Split_Info" name="Provide Information">
+         <incoming>Flow_C2</incoming>
+         <outgoing>Flow_C_P1</outgoing>
+         <outgoing>Flow_C_P2</outgoing>
+         <outgoing>Flow_C_P3</outgoing>
+         <outgoing>Flow_C_P4</outgoing>
+      </parallelGateway>
+
+      <task id="Task_Ctrl_DescNature" name="Describe nature of breach">
+         <incoming>Flow_C_P1</incoming>
+         <outgoing>Flow_C_J1</outgoing>
+      </task>
+      <task id="Task_Ctrl_CommDPO" name="Communicate DPO details">
+         <incoming>Flow_C_P2</incoming>
+         <outgoing>Flow_C_J2</outgoing>
+      </task>
+      <task id="Task_Ctrl_DescCons" name="Describe consequences">
+         <incoming>Flow_C_P3</incoming>
+         <outgoing>Flow_C_J3</outgoing>
+      </task>
+      <task id="Task_Ctrl_DescMeas" name="Describe measures taken">
+         <incoming>Flow_C_P4</incoming>
+         <outgoing>Flow_C_J4</outgoing>
+      </task>
+
+      <sequenceFlow id="Flow_C_P1" sourceRef="Gateway_Split_Info" targetRef="Task_Ctrl_DescNature" />
+      <sequenceFlow id="Flow_C_P2" sourceRef="Gateway_Split_Info" targetRef="Task_Ctrl_CommDPO" />
+      <sequenceFlow id="Flow_C_P3" sourceRef="Gateway_Split_Info" targetRef="Task_Ctrl_DescCons" />
+      <sequenceFlow id="Flow_C_P4" sourceRef="Gateway_Split_Info" targetRef="Task_Ctrl_DescMeas" />
+
+      <parallelGateway id="Gateway_Join_Info" name="Info Gathered">
+         <incoming>Flow_C_J1</incoming>
+         <incoming>Flow_C_J2</incoming>
+         <incoming>Flow_C_J3</incoming>
+         <incoming>Flow_C_J4</incoming>
+         <outgoing>Flow_C3</outgoing>
+      </parallelGateway>
+
+      <sequenceFlow id="Flow_C_J1" sourceRef="Task_Ctrl_DescNature" targetRef="Gateway_Join_Info" />
+      <sequenceFlow id="Flow_C_J2" sourceRef="Task_Ctrl_CommDPO" targetRef="Gateway_Join_Info" />
+      <sequenceFlow id="Flow_C_J3" sourceRef="Task_Ctrl_DescCons" targetRef="Gateway_Join_Info" />
+      <sequenceFlow id="Flow_C_J4" sourceRef="Task_Ctrl_DescMeas" targetRef="Gateway_Join_Info" />
+
+      <sequenceFlow id="Flow_C3" sourceRef="Gateway_Join_Info" targetRef="Task_Ctrl_DocBreach" />
+
+      <task id="Task_Ctrl_DocBreach" name="Document Breach">
+         <incoming>Flow_C3</incoming>
+         <outgoing>Flow_C4</outgoing>
+      </task>
+
+      <sequenceFlow id="Flow_C4" sourceRef="Task_Ctrl_DocBreach" targetRef="Task_Ctrl_CommDS" />
+
+      <task id="Task_Ctrl_CommDS" name="Communicate to Data Subject (if high risk)">
+         <incoming>Flow_C4</incoming>
+         <outgoing>Flow_C5</outgoing>
+      </task>
+
+      <sequenceFlow id="Flow_C5" sourceRef="Task_Ctrl_CommDS" targetRef="End_Ctrl" />
+
+      <endEvent id="End_Ctrl" name="Controller Process End">
+         <incoming>Flow_C5</incoming>
+      </endEvent>
+   </process>
+
+   <!-- PROCESSOR PROCESS -->
+   <process id="Process_Processor" isExecutable="false" name="Processor Process">
+      <startEvent id="Start_Proc" name="Aware of Breach">
+         <outgoing>Flow_P1</outgoing>
+      </startEvent>
+      <sequenceFlow id="Flow_P1" sourceRef="Start_Proc" targetRef="Task_Proc_Notify" />
+
+      <task id="Task_Proc_Notify" name="Notify Controller">
+         <incoming>Flow_P1</incoming>
+         <outgoing>Flow_P2</outgoing>
+      </task>
+      <sequenceFlow id="Flow_P2" sourceRef="Task_Proc_Notify" targetRef="End_Proc" />
+
+      <endEvent id="End_Proc" name="End Processor">
+         <incoming>Flow_P2</incoming>
+      </endEvent>
+   </process>
+
+   <!-- AUTHORITY PROCESS -->
+   <process id="Process_Authority" isExecutable="false" name="Authority Process">
+      <startEvent id="Start_Auth" name="Receive Notification">
+         <outgoing>Flow_A1</outgoing>
+      </startEvent>
+      <sequenceFlow id="Flow_A1" sourceRef="Start_Auth" targetRef="Task_Auth_Verify" />
+
+      <task id="Task_Auth_Verify" name="Verify Compliance">
+         <incoming>Flow_A1</incoming>
+         <outgoing>Flow_A2</outgoing>
+      </task>
+      <sequenceFlow id="Flow_A2" sourceRef="Task_Auth_Verify" targetRef="Task_Auth_Req" />
+
+      <task id="Task_Auth_Req" name="Require Subject Communication (if needed)">
+         <incoming>Flow_A2</incoming>
+         <outgoing>Flow_A3</outgoing>
+      </task>
+      <sequenceFlow id="Flow_A3" sourceRef="Task_Auth_Req" targetRef="End_Auth" />
+
+      <endEvent id="End_Auth" name="End Authority">
+         <incoming>Flow_A3</incoming>
+      </endEvent>
+   </process>
+
+   <!-- DIAGRAM LAYOUT -->
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_GDPR">
+
+         <!-- Controller Pool -->
+         <bpmndi:BPMNShape id="Shape_Participant_Controller" bpmnElement="Participant_Controller" isHorizontal="true">
+            <omgdc:Bounds x="50" y="50" width="1250" height="400" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="Shape_Start_Ctrl" bpmnElement="Start_Ctrl">
+            <omgdc:Bounds x="100" y="200" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_NotifySA" bpmnElement="Task_Ctrl_NotifySA">
+            <omgdc:Bounds x="180" y="178" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Gateway_Split_Info" bpmnElement="Gateway_Split_Info">
+            <omgdc:Bounds x="320" y="193" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_DescNature" bpmnElement="Task_Ctrl_DescNature">
+            <omgdc:Bounds x="420" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_CommDPO" bpmnElement="Task_Ctrl_CommDPO">
+            <omgdc:Bounds x="420" y="150" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_DescCons" bpmnElement="Task_Ctrl_DescCons">
+            <omgdc:Bounds x="420" y="240" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_DescMeas" bpmnElement="Task_Ctrl_DescMeas">
+            <omgdc:Bounds x="420" y="330" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Gateway_Join_Info" bpmnElement="Gateway_Join_Info">
+            <omgdc:Bounds x="560" y="193" width="50" height="50" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_DocBreach" bpmnElement="Task_Ctrl_DocBreach">
+            <omgdc:Bounds x="650" y="178" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Ctrl_CommDS" bpmnElement="Task_Ctrl_CommDS">
+            <omgdc:Bounds x="800" y="178" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_End_Ctrl" bpmnElement="End_Ctrl">
+            <omgdc:Bounds x="950" y="200" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Edge_Flow_C1" bpmnElement="Flow_C1">
+            <omgdi:waypoint x="136" y="218" />
+            <omgdi:waypoint x="180" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C2" bpmnElement="Flow_C2">
+            <omgdi:waypoint x="280" y="218" />
+            <omgdi:waypoint x="320" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_P1" bpmnElement="Flow_C_P1">
+            <omgdi:waypoint x="345" y="193" />
+            <omgdi:waypoint x="345" y="100" />
+            <omgdi:waypoint x="420" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_P2" bpmnElement="Flow_C_P2">
+            <omgdi:waypoint x="370" y="218" />
+            <omgdi:waypoint x="395" y="218" />
+            <omgdi:waypoint x="395" y="190" />
+            <omgdi:waypoint x="420" y="190" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_P3" bpmnElement="Flow_C_P3">
+            <omgdi:waypoint x="370" y="218" />
+            <omgdi:waypoint x="395" y="218" />
+            <omgdi:waypoint x="395" y="280" />
+            <omgdi:waypoint x="420" y="280" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_P4" bpmnElement="Flow_C_P4">
+            <omgdi:waypoint x="345" y="243" />
+            <omgdi:waypoint x="345" y="370" />
+            <omgdi:waypoint x="420" y="370" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge id="Edge_Flow_C_J1" bpmnElement="Flow_C_J1">
+            <omgdi:waypoint x="520" y="100" />
+            <omgdi:waypoint x="585" y="100" />
+            <omgdi:waypoint x="585" y="193" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_J2" bpmnElement="Flow_C_J2">
+            <omgdi:waypoint x="520" y="190" />
+            <omgdi:waypoint x="560" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_J3" bpmnElement="Flow_C_J3">
+            <omgdi:waypoint x="520" y="280" />
+            <omgdi:waypoint x="560" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C_J4" bpmnElement="Flow_C_J4">
+            <omgdi:waypoint x="520" y="370" />
+            <omgdi:waypoint x="585" y="370" />
+            <omgdi:waypoint x="585" y="243" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C3" bpmnElement="Flow_C3">
+            <omgdi:waypoint x="610" y="218" />
+            <omgdi:waypoint x="650" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C4" bpmnElement="Flow_C4">
+            <omgdi:waypoint x="750" y="218" />
+            <omgdi:waypoint x="800" y="218" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_C5" bpmnElement="Flow_C5">
+            <omgdi:waypoint x="900" y="218" />
+            <omgdi:waypoint x="950" y="218" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Processor Pool -->
+         <bpmndi:BPMNShape id="Shape_Participant_Processor" bpmnElement="Participant_Processor" isHorizontal="true">
+            <omgdc:Bounds x="50" y="500" width="1250" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Start_Proc" bpmnElement="Start_Proc">
+            <omgdc:Bounds x="100" y="582" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Proc_Notify" bpmnElement="Task_Proc_Notify">
+            <omgdc:Bounds x="180" y="560" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_End_Proc" bpmnElement="End_Proc">
+            <omgdc:Bounds x="320" y="582" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Edge_Flow_P1" bpmnElement="Flow_P1">
+            <omgdi:waypoint x="136" y="600" />
+            <omgdi:waypoint x="180" y="600" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_P2" bpmnElement="Flow_P2">
+            <omgdi:waypoint x="280" y="600" />
+            <omgdi:waypoint x="320" y="600" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Authority Pool -->
+         <bpmndi:BPMNShape id="Shape_Participant_Authority" bpmnElement="Participant_Authority" isHorizontal="true">
+            <omgdc:Bounds x="50" y="750" width="1250" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Start_Auth" bpmnElement="Start_Auth">
+            <omgdc:Bounds x="180" y="832" width="36" height="36" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Auth_Verify" bpmnElement="Task_Auth_Verify">
+            <omgdc:Bounds x="260" y="810" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_Auth_Req" bpmnElement="Task_Auth_Req">
+            <omgdc:Bounds x="400" y="810" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_End_Auth" bpmnElement="End_Auth">
+            <omgdc:Bounds x="540" y="832" width="36" height="36" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="Edge_Flow_A1" bpmnElement="Flow_A1">
+            <omgdi:waypoint x="216" y="850" />
+            <omgdi:waypoint x="260" y="850" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_A2" bpmnElement="Flow_A2">
+            <omgdi:waypoint x="360" y="850" />
+            <omgdi:waypoint x="400" y="850" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_A3" bpmnElement="Flow_A3">
+            <omgdi:waypoint x="500" y="850" />
+            <omgdi:waypoint x="540" y="850" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge id="Edge_Flow_Msg_ProcToCtrl" bpmnElement="Flow_Msg_ProcToCtrl">
+            <omgdi:waypoint x="230" y="560" />
+            <omgdi:waypoint x="230" y="400" />
+            <omgdi:waypoint x="118" y="400" />
+            <omgdi:waypoint x="118" y="236" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Flow_Msg_CtrlToAuth" bpmnElement="Flow_Msg_CtrlToAuth">
+            <omgdi:waypoint x="230" y="258" />
+            <omgdi:waypoint x="230" y="480" />
+            <omgdi:waypoint x="198" y="480" />
+            <omgdi:waypoint x="198" y="832" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

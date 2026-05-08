@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-AI-Regulation-Process"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="part_member_states" name="Member States" processRef="proc_member_states"/>
+      <participant id="part_ai_office" name="AI Office" processRef="proc_ai_office"/>
+   </collaboration>
+
+   <process id="proc_member_states" isExecutable="true" name="Member States Process">
+      <startEvent id="start_ms" name="Start">
+         <outgoing>seq_ms_start_gw</outgoing>
+      </startEvent>
+
+      <parallelGateway id="gw_ms_split">
+         <incoming>seq_ms_start_gw</incoming>
+         <outgoing>seq_gw_t1a</outgoing>
+         <outgoing>seq_gw_t1b</outgoing>
+         <outgoing>seq_gw_t1c</outgoing>
+         <outgoing>seq_gw_t1d</outgoing>
+      </parallelGateway>
+
+      <task id="task_ms_1a" name="Provide priority access to AI regulatory sandboxes">
+         <incoming>seq_gw_t1a</incoming>
+         <outgoing>seq_t1a_gwj</outgoing>
+      </task>
+
+      <task id="task_ms_1b" name="Organise awareness raising and training activities">
+         <incoming>seq_gw_t1b</incoming>
+         <outgoing>seq_t1b_gwj</outgoing>
+      </task>
+
+      <task id="task_ms_1c" name="Utilise existing and establish new communication channels">
+         <incoming>seq_gw_t1c</incoming>
+         <outgoing>seq_t1c_gwj</outgoing>
+      </task>
+
+      <task id="task_ms_1d" name="Facilitate participation in standardisation development">
+         <incoming>seq_gw_t1d</incoming>
+         <outgoing>seq_t1d_gwj</outgoing>
+      </task>
+
+      <parallelGateway id="gw_ms_join">
+         <incoming>seq_t1a_gwj</incoming>
+         <incoming>seq_t1b_gwj</incoming>
+         <incoming>seq_t1c_gwj</incoming>
+         <incoming>seq_t1d_gwj</incoming>
+         <outgoing>seq_gwj_t2</outgoing>
+      </parallelGateway>
+
+      <task id="task_ms_2" name="Take into account SME needs when setting fees">
+         <incoming>seq_gwj_t2</incoming>
+         <outgoing>seq_t2_end</outgoing>
+      </task>
+
+      <endEvent id="end_ms" name="End">
+         <incoming>seq_t2_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_ms_start_gw" sourceRef="start_ms" targetRef="gw_ms_split"/>
+      <sequenceFlow id="seq_gw_t1a" sourceRef="gw_ms_split" targetRef="task_ms_1a"/>
+      <sequenceFlow id="seq_gw_t1b" sourceRef="gw_ms_split" targetRef="task_ms_1b"/>
+      <sequenceFlow id="seq_gw_t1c" sourceRef="gw_ms_split" targetRef="task_ms_1c"/>
+      <sequenceFlow id="seq_gw_t1d" sourceRef="gw_ms_split" targetRef="task_ms_1d"/>
+      <sequenceFlow id="seq_t1a_gwj" sourceRef="task_ms_1a" targetRef="gw_ms_join"/>
+      <sequenceFlow id="seq_t1b_gwj" sourceRef="task_ms_1b" targetRef="gw_ms_join"/>
+      <sequenceFlow id="seq_t1c_gwj" sourceRef="task_ms_1c" targetRef="gw_ms_join"/>
+      <sequenceFlow id="seq_t1d_gwj" sourceRef="task_ms_1d" targetRef="gw_ms_join"/>
+      <sequenceFlow id="seq_gwj_t2" sourceRef="gw_ms_join" targetRef="task_ms_2"/>
+      <sequenceFlow id="seq_t2_end" sourceRef="task_ms_2" targetRef="end_ms"/>
+   </process>
+
+   <process id="proc_ai_office" isExecutable="true" name="AI Office Process">
+      <startEvent id="start_ai" name="Start">
+         <outgoing>seq_ai_start_gw</outgoing>
+      </startEvent>
+
+      <parallelGateway id="gw_ai_split">
+         <incoming>seq_ai_start_gw</incoming>
+         <outgoing>seq_gw_t3a</outgoing>
+         <outgoing>seq_gw_t3b</outgoing>
+         <outgoing>seq_gw_t3c</outgoing>
+         <outgoing>seq_gw_t3d</outgoing>
+      </parallelGateway>
+
+      <task id="task_ai_3a" name="Provide standardised templates">
+         <incoming>seq_gw_t3a</incoming>
+         <outgoing>seq_t3a_gwj</outgoing>
+      </task>
+
+      <task id="task_ai_3b" name="Develop and maintain information platform">
+         <incoming>seq_gw_t3b</incoming>
+         <outgoing>seq_t3b_gwj</outgoing>
+      </task>
+
+      <task id="task_ai_3c" name="Organise communication campaigns">
+         <incoming>seq_gw_t3c</incoming>
+         <outgoing>seq_t3c_gwj</outgoing>
+      </task>
+
+      <task id="task_ai_3d" name="Evaluate and promote best practices in public procurement">
+         <incoming>seq_gw_t3d</incoming>
+         <outgoing>seq_t3d_gwj</outgoing>
+      </task>
+
+      <parallelGateway id="gw_ai_join">
+         <incoming>seq_t3a_gwj</incoming>
+         <incoming>seq_t3b_gwj</incoming>
+         <incoming>seq_t3c_gwj</incoming>
+         <incoming>seq_t3d_gwj</incoming>
+         <outgoing>seq_gwj_endai</outgoing>
+      </parallelGateway>
+
+      <endEvent id="end_ai" name="End">
+         <incoming>seq_gwj_endai</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_ai_start_gw" sourceRef="start_ai" targetRef="gw_ai_split"/>
+      <sequenceFlow id="seq_gw_t3a" sourceRef="gw_ai_split" targetRef="task_ai_3a"/>
+      <sequenceFlow id="seq_gw_t3b" sourceRef="gw_ai_split" targetRef="task_ai_3b"/>
+      <sequenceFlow id="seq_gw_t3c" sourceRef="gw_ai_split" targetRef="task_ai_3c"/>
+      <sequenceFlow id="seq_gw_t3d" sourceRef="gw_ai_split" targetRef="task_ai_3d"/>
+      <sequenceFlow id="seq_t3a_gwj" sourceRef="task_ai_3a" targetRef="gw_ai_join"/>
+      <sequenceFlow id="seq_t3b_gwj" sourceRef="task_ai_3b" targetRef="gw_ai_join"/>
+      <sequenceFlow id="seq_t3c_gwj" sourceRef="task_ai_3c" targetRef="gw_ai_join"/>
+      <sequenceFlow id="seq_t3d_gwj" sourceRef="task_ai_3d" targetRef="gw_ai_join"/>
+      <sequenceFlow id="seq_gwj_endai" sourceRef="gw_ai_join" targetRef="end_ai"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+
+         <!-- Pools -->
+         <bpmndi:BPMNShape bpmnElement="part_member_states" id="part_member_states_gui" isHorizontal="true">
+            <omgdc:Bounds height="450.0" width="900.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_ai_office" id="part_ai_office_gui" isHorizontal="true">
+            <omgdc:Bounds height="450.0" width="900.0" x="50.0" y="530.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Member States Elements -->
+         <bpmndi:BPMNShape bpmnElement="start_ms" id="start_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="gw_ms_split" id="gw_ms_split_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="200.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ms_1a" id="task_ms_1a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ms_1b" id="task_ms_1b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="170.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ms_1c" id="task_ms_1c_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ms_1d" id="task_ms_1d_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="370.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="gw_ms_join" id="gw_ms_join_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="450.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ms_2" id="task_ms_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="end_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="700.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AI Office Elements -->
+         <bpmndi:BPMNShape bpmnElement="start_ai" id="start_ai_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="gw_ai_split" id="gw_ai_split_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="200.0" y="730.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ai_3a" id="task_ai_3a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="550.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ai_3b" id="task_ai_3b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ai_3c" id="task_ai_3c_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ai_3d" id="task_ai_3d_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="gw_ai_join" id="gw_ai_join_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="450.0" y="730.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_ai" id="end_ai_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="550.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence Flows: Member States -->
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_start_gw" id="seq_ms_start_gw_gui">
+            <omgdi:waypoint x="150.0" y="275.0"/>
+            <omgdi:waypoint x="200.0" y="275.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t1a" id="seq_gw_t1a_gui">
+            <omgdi:waypoint x="225.0" y="250.0"/>
+            <omgdi:waypoint x="225.0" y="110.0"/>
+            <omgdi:waypoint x="300.0" y="110.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t1b" id="seq_gw_t1b_gui">
+            <omgdi:waypoint x="225.0" y="250.0"/>
+            <omgdi:waypoint x="225.0" y="210.0"/>
+            <omgdi:waypoint x="300.0" y="210.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t1c" id="seq_gw_t1c_gui">
+            <omgdi:waypoint x="225.0" y="300.0"/>
+            <omgdi:waypoint x="225.0" y="310.0"/>
+            <omgdi:waypoint x="300.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t1d" id="seq_gw_t1d_gui">
+            <omgdi:waypoint x="225.0" y="300.0"/>
+            <omgdi:waypoint x="225.0" y="410.0"/>
+            <omgdi:waypoint x="300.0" y="410.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t1a_gwj" id="seq_t1a_gwj_gui">
+            <omgdi:waypoint x="400.0" y="110.0"/>
+            <omgdi:waypoint x="475.0" y="110.0"/>
+            <omgdi:waypoint x="475.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t1b_gwj" id="seq_t1b_gwj_gui">
+            <omgdi:waypoint x="400.0" y="210.0"/>
+            <omgdi:waypoint x="475.0" y="210.0"/>
+            <omgdi:waypoint x="475.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t1c_gwj" id="seq_t1c_gwj_gui">
+            <omgdi:waypoint x="400.0" y="310.0"/>
+            <omgdi:waypoint x="475.0" y="310.0"/>
+            <omgdi:waypoint x="475.0" y="300.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t1d_gwj" id="seq_t1d_gwj_gui">
+            <omgdi:waypoint x="400.0" y="410.0"/>
+            <omgdi:waypoint x="475.0" y="410.0"/>
+            <omgdi:waypoint x="475.0" y="300.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gwj_t2" id="seq_gwj_t2_gui">
+            <omgdi:waypoint x="500.0" y="275.0"/>
+            <omgdi:waypoint x="550.0" y="275.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t2_end" id="seq_t2_end_gui">
+            <omgdi:waypoint x="650.0" y="275.0"/>
+            <omgdi:waypoint x="700.0" y="275.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows: AI Office -->
+         <bpmndi:BPMNEdge bpmnElement="seq_ai_start_gw" id="seq_ai_start_gw_gui">
+            <omgdi:waypoint x="150.0" y="755.0"/>
+            <omgdi:waypoint x="200.0" y="755.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t3a" id="seq_gw_t3a_gui">
+            <omgdi:waypoint x="225.0" y="730.0"/>
+            <omgdi:waypoint x="225.0" y="590.0"/>
+            <omgdi:waypoint x="300.0" y="590.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t3b" id="seq_gw_t3b_gui">
+            <omgdi:waypoint x="225.0" y="730.0"/>
+            <omgdi:waypoint x="225.0" y="690.0"/>
+            <omgdi:waypoint x="300.0" y="690.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t3c" id="seq_gw_t3c_gui">
+            <omgdi:waypoint x="225.0" y="780.0"/>
+            <omgdi:waypoint x="225.0" y="790.0"/>
+            <omgdi:waypoint x="300.0" y="790.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gw_t3d" id="seq_gw_t3d_gui">
+            <omgdi:waypoint x="225.0" y="780.0"/>
+            <omgdi:waypoint x="225.0" y="890.0"/>
+            <omgdi:waypoint x="300.0" y="890.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t3a_gwj" id="seq_t3a_gwj_gui">
+            <omgdi:waypoint x="400.0" y="590.0"/>
+            <omgdi:waypoint x="475.0" y="590.0"/>
+            <omgdi:waypoint x="475.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t3b_gwj" id="seq_t3b_gwj_gui">
+            <omgdi:waypoint x="400.0" y="690.0"/>
+            <omgdi:waypoint x="475.0" y="690.0"/>
+            <omgdi:waypoint x="475.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t3c_gwj" id="seq_t3c_gwj_gui">
+            <omgdi:waypoint x="400.0" y="790.0"/>
+            <omgdi:waypoint x="475.0" y="790.0"/>
+            <omgdi:waypoint x="475.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_t3d_gwj" id="seq_t3d_gwj_gui">
+            <omgdi:waypoint x="400.0" y="890.0"/>
+            <omgdi:waypoint x="475.0" y="890.0"/>
+            <omgdi:waypoint x="475.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_gwj_endai" id="seq_gwj_endai_gui">
+            <omgdi:waypoint x="500.0" y="755.0"/>
+            <omgdi:waypoint x="550.0" y="755.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

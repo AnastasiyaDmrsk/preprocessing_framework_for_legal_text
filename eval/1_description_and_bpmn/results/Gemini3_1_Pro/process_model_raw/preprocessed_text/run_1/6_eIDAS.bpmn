@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-regulation-model"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Main" name="Regulation Process" processRef="Process_Main" />
+   </collaboration>
+
+   <process id="Process_Main" isExecutable="true" name="Main Process">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_MS" name="Member States">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Task_1</flowNodeRef>
+            <flowNodeRef>Task_3</flowNodeRef>
+            <flowNodeRef>Task_6</flowNodeRef>
+            <flowNodeRef>Task_15</flowNodeRef>
+            <flowNodeRef>Task_16</flowNodeRef>
+         </lane>
+         <lane id="Lane_SB" name="Supervisory body">
+            <flowNodeRef>Task_2</flowNodeRef>
+            <flowNodeRef>Gateway_Split1</flowNodeRef>
+            <flowNodeRef>Task_4a</flowNodeRef>
+            <flowNodeRef>Task_4b</flowNodeRef>
+            <flowNodeRef>Gateway_Join1</flowNodeRef>
+            <flowNodeRef>Gateway_Split2</flowNodeRef>
+            <flowNodeRef>Task_5a</flowNodeRef>
+            <flowNodeRef>Task_5b</flowNodeRef>
+            <flowNodeRef>Task_5c</flowNodeRef>
+            <flowNodeRef>Task_5d</flowNodeRef>
+            <flowNodeRef>Task_5e</flowNodeRef>
+            <flowNodeRef>Task_5f</flowNodeRef>
+            <flowNodeRef>Task_5g</flowNodeRef>
+            <flowNodeRef>Task_5h</flowNodeRef>
+            <flowNodeRef>Task_5i</flowNodeRef>
+            <flowNodeRef>Task_5j</flowNodeRef>
+            <flowNodeRef>Gateway_Join2</flowNodeRef>
+            <flowNodeRef>Task_7</flowNodeRef>
+            <flowNodeRef>Task_11</flowNodeRef>
+            <flowNodeRef>Task_12</flowNodeRef>
+            <flowNodeRef>Task_13</flowNodeRef>
+            <flowNodeRef>Gateway_Split3</flowNodeRef>
+            <flowNodeRef>Task_14a</flowNodeRef>
+            <flowNodeRef>Task_14b</flowNodeRef>
+            <flowNodeRef>Task_14c</flowNodeRef>
+            <flowNodeRef>Gateway_Join3</flowNodeRef>
+            <flowNodeRef>Task_22</flowNodeRef>
+            <flowNodeRef>Task_23</flowNodeRef>
+            <flowNodeRef>Task_24</flowNodeRef>
+         </lane>
+         <lane id="Lane_COM" name="Commission">
+            <flowNodeRef>Task_8</flowNodeRef>
+            <flowNodeRef>Task_9</flowNodeRef>
+            <flowNodeRef>Task_10</flowNodeRef>
+            <flowNodeRef>Gateway_Split4</flowNodeRef>
+            <flowNodeRef>Task_25a</flowNodeRef>
+            <flowNodeRef>Task_25b</flowNodeRef>
+            <flowNodeRef>Gateway_Join4</flowNodeRef>
+            <flowNodeRef>Task_26</flowNodeRef>
+            <flowNodeRef>EndEvent_1</flowNodeRef>
+         </lane>
+         <lane id="Lane_TSP" name="Trust service providers">
+            <flowNodeRef>Task_17</flowNodeRef>
+            <flowNodeRef>Task_18</flowNodeRef>
+            <flowNodeRef>Task_19</flowNodeRef>
+            <flowNodeRef>Task_20</flowNodeRef>
+            <flowNodeRef>Task_21</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- Member States Tasks -->
+      <startEvent id="StartEvent_1" name="Start Process">
+         <outgoing>Flow_Start_1</outgoing>
+      </startEvent>
+      <task id="Task_1" name="designate a supervisory body">
+         <incoming>Flow_Start_1</incoming>
+         <outgoing>Flow_1_2</outgoing>
+      </task>
+      <task id="Task_3" name="notify to the Commission names and addresses">
+         <incoming>Flow_2_3</incoming>
+         <outgoing>Flow_3_Split1</outgoing>
+      </task>
+      <task id="Task_6" name="require supervisory body to establish trust infra">
+         <incoming>Flow_Join2_6</incoming>
+         <outgoing>Flow_6_7</outgoing>
+      </task>
+      <task id="Task_15" name="authorise joint investigations">
+         <incoming>Flow_Join3_15</incoming>
+         <outgoing>Flow_15_16</outgoing>
+      </task>
+      <task id="Task_16" name="agree upon and establish arrangements">
+         <incoming>Flow_15_16</incoming>
+         <outgoing>Flow_16_17</outgoing>
+      </task>
+
+      <!-- Supervisory body Tasks -->
+      <task id="Task_2" name="give necessary powers">
+         <incoming>Flow_1_2</incoming>
+         <outgoing>Flow_2_3</outgoing>
+      </task>
+      <parallelGateway id="Gateway_Split1">
+         <incoming>Flow_3_Split1</incoming>
+         <outgoing>Flow_Split1_4a</outgoing>
+         <outgoing>Flow_Split1_4b</outgoing>
+      </parallelGateway>
+      <task id="Task_4a" name="supervise qualified providers">
+         <incoming>Flow_Split1_4a</incoming>
+         <outgoing>Flow_4a_Join1</outgoing>
+      </task>
+      <task id="Task_4b" name="take action non-qualified">
+         <incoming>Flow_Split1_4b</incoming>
+         <outgoing>Flow_4b_Join1</outgoing>
+      </task>
+      <parallelGateway id="Gateway_Join1">
+         <incoming>Flow_4a_Join1</incoming>
+         <incoming>Flow_4b_Join1</incoming>
+         <outgoing>Flow_Join1_Split2</outgoing>
+      </parallelGateway>
+      <parallelGateway id="Gateway_Split2">
+         <incoming>Flow_Join1_Split2</incoming>
+         <outgoing>Flow_Split2_5a</outgoing>
+         <outgoing>Flow_Split2_5b</outgoing>
+         <outgoing>Flow_Split2_5c</outgoing>
+         <outgoing>Flow_Split2_5d</outgoing>
+         <outgoing>Flow_Split2_5e</outgoing>
+         <outgoing>Flow_Split2_5f</outgoing>
+         <outgoing>Flow_Split2_5g</outgoing>
+         <outgoing>Flow_Split2_5h</outgoing>
+         <outgoing>Flow_Split2_5i</outgoing>
+         <outgoing>Flow_Split2_5j</outgoing>
+      </parallelGateway>
+      <task id="Task_5a" name="cooperate and assist"><incoming>Flow_Split2_5a</incoming><outgoing>Flow_5a_Join2</outgoing></task>
+      <task id="Task_5b" name="analyse conformity reports"><incoming>Flow_Split2_5b</incoming><outgoing>Flow_5b_Join2</outgoing></task>
+      <task id="Task_5c" name="inform about breaches"><incoming>Flow_Split2_5c</incoming><outgoing>Flow_5c_Join2</outgoing></task>
+      <task id="Task_5d" name="report to Commission"><incoming>Flow_Split2_5d</incoming><outgoing>Flow_5d_Join2</outgoing></task>
+      <task id="Task_5e" name="carry out audits"><incoming>Flow_Split2_5e</incoming><outgoing>Flow_5e_Join2</outgoing></task>
+      <task id="Task_5f" name="cooperate with DPA"><incoming>Flow_Split2_5f</incoming><outgoing>Flow_5f_Join2</outgoing></task>
+      <task id="Task_5g" name="grant/withdraw qualified status"><incoming>Flow_Split2_5g</incoming><outgoing>Flow_5g_Join2</outgoing></task>
+      <task id="Task_5h" name="inform trusted list body"><incoming>Flow_Split2_5h</incoming><outgoing>Flow_5h_Join2</outgoing></task>
+      <task id="Task_5i" name="verify termination plans"><incoming>Flow_Split2_5i</incoming><outgoing>Flow_5i_Join2</outgoing></task>
+      <task id="Task_5j" name="require remedy"><incoming>Flow_Split2_5j</incoming><outgoing>Flow_5j_Join2</outgoing></task>
+      <parallelGateway id="Gateway_Join2">
+         <incoming>Flow_5a_Join2</incoming><incoming>Flow_5b_Join2</incoming><incoming>Flow_5c_Join2</incoming>
+         <incoming>Flow_5d_Join2</incoming><incoming>Flow_5e_Join2</incoming><incoming>Flow_5f_Join2</incoming>
+         <incoming>Flow_5g_Join2</incoming><incoming>Flow_5h_Join2</incoming><incoming>Flow_5i_Join2</incoming>
+         <incoming>Flow_5j_Join2</incoming>
+         <outgoing>Flow_Join2_6</outgoing>
+      </parallelGateway>
+      <task id="Task_7" name="submit report to Commission">
+         <incoming>Flow_6_7</incoming>
+         <outgoing>Flow_7_8</outgoing>
+      </task>
+      <task id="Task_11" name="cooperate exchange practice">
+         <incoming>Flow_10_11</incoming>
+         <outgoing>Flow_11_12</outgoing>
+      </task>
+      <task id="Task_12" name="provide assistance">
+         <incoming>Flow_11_12</incoming>
+         <outgoing>Flow_12_13</outgoing>
+      </task>
+      <task id="Task_13" name="carry out consistently">
+         <incoming>Flow_12_13</incoming>
+         <outgoing>Flow_13_Split3</outgoing>
+      </task>
+      <parallelGateway id="Gateway_Split3">
+         <incoming>Flow_13_Split3</incoming>
+         <outgoing>Flow_Split3_14a</outgoing>
+         <outgoing>Flow_Split3_14b</outgoing>
+         <outgoing>Flow_Split3_14c</outgoing>
+      </parallelGateway>
+      <task id="Task_14a" name="refuse (not competent)"><incoming>Flow_Split3_14a</incoming><outgoing>Flow_14a_Join3</outgoing></task>
+      <task id="Task_14b" name="refuse (proportionate)"><incoming>Flow_Split3_14b</incoming><outgoing>Flow_14b_Join3</outgoing></task>
+      <task id="Task_14c" name="refuse (incompatible)"><incoming>Flow_Split3_14c</incoming><outgoing>Flow_14c_Join3</outgoing></task>
+      <parallelGateway id="Gateway_Join3">
+         <incoming>Flow_14a_Join3</incoming>
+         <incoming>Flow_14b_Join3</incoming>
+         <incoming>Flow_14c_Join3</incoming>
+         <outgoing>Flow_Join3_15</outgoing>
+      </parallelGateway>
+      <task id="Task_22" name="inform supervisory bodies and ENISA">
+         <incoming>Flow_21_22</incoming>
+         <outgoing>Flow_22_23</outgoing>
+      </task>
+      <task id="Task_23" name="inform public">
+         <incoming>Flow_22_23</incoming>
+         <outgoing>Flow_23_24</outgoing>
+      </task>
+      <task id="Task_24" name="provide ENISA summary">
+         <incoming>Flow_23_24</incoming>
+         <outgoing>Flow_24_Split4</outgoing>
+      </task>
+
+      <!-- Commission Tasks -->
+      <task id="Task_8" name="make annual report available">
+         <incoming>Flow_7_8</incoming>
+         <outgoing>Flow_8_9</outgoing>
+      </task>
+      <task id="Task_9" name="define formats procedures">
+         <incoming>Flow_8_9</incoming>
+         <outgoing>Flow_9_10</outgoing>
+      </task>
+      <task id="Task_10" name="adopt acts">
+         <incoming>Flow_9_10</incoming>
+         <outgoing>Flow_10_11</outgoing>
+      </task>
+      <parallelGateway id="Gateway_Split4">
+         <incoming>Flow_24_Split4</incoming>
+         <outgoing>Flow_Split4_25a</outgoing>
+         <outgoing>Flow_Split4_25b</outgoing>
+      </parallelGateway>
+      <task id="Task_25a" name="specify measures"><incoming>Flow_Split4_25a</incoming><outgoing>Flow_25a_Join4</outgoing></task>
+      <task id="Task_25b" name="define formats"><incoming>Flow_Split4_25b</incoming><outgoing>Flow_25b_Join4</outgoing></task>
+      <parallelGateway id="Gateway_Join4">
+         <incoming>Flow_25a_Join4</incoming>
+         <incoming>Flow_25b_Join4</incoming>
+         <outgoing>Flow_Join4_26</outgoing>
+      </parallelGateway>
+      <task id="Task_26" name="adopt implementing acts">
+         <incoming>Flow_Join4_26</incoming>
+         <outgoing>Flow_26_End</outgoing>
+      </task>
+      <endEvent id="EndEvent_1" name="End">
+         <incoming>Flow_26_End</incoming>
+      </endEvent>
+
+      <!-- Trust service providers Tasks -->
+      <task id="Task_17" name="take technical measures">
+         <incoming>Flow_16_17</incoming>
+         <outgoing>Flow_17_18</outgoing>
+      </task>
+      <task id="Task_18" name="prevent impact">
+         <incoming>Flow_17_18</incoming>
+         <outgoing>Flow_18_19</outgoing>
+      </task>
+      <task id="Task_19" name="notify breach">
+         <incoming>Flow_18_19</incoming>
+         <outgoing>Flow_19_20</outgoing>
+      </task>
+      <task id="Task_20" name="provide trusted service">
+         <incoming>Flow_19_20</incoming>
+         <outgoing>Flow_20_21</outgoing>
+      </task>
+      <task id="Task_21" name="notify natural person">
+         <incoming>Flow_20_21</incoming>
+         <outgoing>Flow_21_22</outgoing>
+      </task>
+
+      <!-- Sequence Flows -->
+      <sequenceFlow id="Flow_Start_1" sourceRef="StartEvent_1" targetRef="Task_1" />
+      <sequenceFlow id="Flow_1_2" sourceRef="Task_1" targetRef="Task_2" />
+      <sequenceFlow id="Flow_2_3" sourceRef="Task_2" targetRef="Task_3" />
+      <sequenceFlow id="Flow_3_Split1" sourceRef="Task_3" targetRef="Gateway_Split1" />
+      <sequenceFlow id="Flow_Split1_4a" sourceRef="Gateway_Split1" targetRef="Task_4a" />
+      <sequenceFlow id="Flow_Split1_4b" sourceRef="Gateway_Split1" targetRef="Task_4b" />
+      <sequenceFlow id="Flow_4a_Join1" sourceRef="Task_4a" targetRef="Gateway_Join1" />
+      <sequenceFlow id="Flow_4b_Join1" sourceRef="Task_4b" targetRef="Gateway_Join1" />
+      <sequenceFlow id="Flow_Join1_Split2" sourceRef="Gateway_Join1" targetRef="Gateway_Split2" />
+      <sequenceFlow id="Flow_Split2_5a" sourceRef="Gateway_Split2" targetRef="Task_5a" />
+      <sequenceFlow id="Flow_Split2_5b" sourceRef="Gateway_Split2" targetRef="Task_5b" />
+      <sequenceFlow id="Flow_Split2_5c" sourceRef="Gateway_Split2" targetRef="Task_5c" />
+      <sequenceFlow id="Flow_Split2_5d" sourceRef="Gateway_Split2" targetRef="Task_5d" />
+      <sequenceFlow id="Flow_Split2_5e" sourceRef="Gateway_Split2" targetRef="Task_5e" />
+      <sequenceFlow id="Flow_Split2_5f" sourceRef="Gateway_Split2" targetRef="Task_5f" />
+      <sequenceFlow id="Flow_Split2_5g" sourceRef="Gateway_Split2" targetRef="Task_5g" />
+      <sequenceFlow id="Flow_Split2_5h" sourceRef="Gateway_Split2" targetRef="Task_5h" />
+      <sequenceFlow id="Flow_Split2_5i" sourceRef="Gateway_Split2" targetRef="Task_5i" />
+      <sequenceFlow id="Flow_Split2_5j" sourceRef="Gateway_Split2" targetRef="Task_5j" />
+      <sequenceFlow id="Flow_5a_Join2" sourceRef="Task_5a" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5b_Join2" sourceRef="Task_5b" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5c_Join2" sourceRef="Task_5c" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5d_Join2" sourceRef="Task_5d" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5e_Join2" sourceRef="Task_5e" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5f_Join2" sourceRef="Task_5f" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5g_Join2" sourceRef="Task_5g" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5h_Join2" sourceRef="Task_5h" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5i_Join2" sourceRef="Task_5i" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_5j_Join2" sourceRef="Task_5j" targetRef="Gateway_Join2" />
+      <sequenceFlow id="Flow_Join2_6" sourceRef="Gateway_Join2" targetRef="Task_6" />
+      <sequenceFlow id="Flow_6_7" sourceRef="Task_6" targetRef="Task_7" />
+      <sequenceFlow id="Flow_7_8" sourceRef="Task_7" targetRef="Task_8" />
+      <sequenceFlow id="Flow_8_9" sourceRef="Task_8" targetRef="Task_9" />
+      <sequenceFlow id="Flow_9_10" sourceRef="Task_9" targetRef="Task_10" />
+      <sequenceFlow id="Flow_10_11" sourceRef="Task_10" targetRef="Task_11" />
+      <sequenceFlow id="Flow_11_12" sourceRef="Task_11" targetRef="Task_12" />
+      <sequenceFlow id="Flow_12_13" sourceRef="Task_12" targetRef="Task_13" />
+      <sequenceFlow id="Flow_13_Split3" sourceRef="Task_13" targetRef="Gateway_Split3" />
+      <sequenceFlow id="Flow_Split3_14a" sourceRef="Gateway_Split3" targetRef="Task_14a" />
+      <sequenceFlow id="Flow_Split3_14b" sourceRef="Gateway_Split3" targetRef="Task_14b" />
+      <sequenceFlow id="Flow_Split3_14c" sourceRef="Gateway_Split3" targetRef="Task_14c" />
+      <sequenceFlow id="Flow_14a_Join3" sourceRef="Task_14a" targetRef="Gateway_Join3" />
+      <sequenceFlow id="Flow_14b_Join3" sourceRef="Task_14b" targetRef="Gateway_Join3" />
+      <sequenceFlow id="Flow_14c_Join3" sourceRef="Task_14c" targetRef="Gateway_Join3" />
+      <sequenceFlow id="Flow_Join3_15" sourceRef="Gateway_Join3" targetRef="Task_15" />
+      <sequenceFlow id="Flow_15_16" sourceRef="Task_15" targetRef="Task_16" />
+      <sequenceFlow id="Flow_16_17" sourceRef="Task_16" targetRef="Task_17" />
+      <sequenceFlow id="Flow_17_18" sourceRef="Task_17" targetRef="Task_18" />
+      <sequenceFlow id="Flow_18_19" sourceRef="Task_18" targetRef="Task_19" />
+      <sequenceFlow id="Flow_19_20" sourceRef="Task_19" targetRef="Task_20" />
+      <sequenceFlow id="Flow_20_21" sourceRef="Task_20" targetRef="Task_21" />
+      <sequenceFlow id="Flow_21_22" sourceRef="Task_21" targetRef="Task_22" />
+      <sequenceFlow id="Flow_22_23" sourceRef="Task_22" targetRef="Task_23" />
+      <sequenceFlow id="Flow_23_24" sourceRef="Task_23" targetRef="Task_24" />
+      <sequenceFlow id="Flow_24_Split4" sourceRef="Task_24" targetRef="Gateway_Split4" />
+      <sequenceFlow id="Flow_Split4_25a" sourceRef="Gateway_Split4" targetRef="Task_25a" />
+      <sequenceFlow id="Flow_Split4_25b" sourceRef="Gateway_Split4" targetRef="Task_25b" />
+      <sequenceFlow id="Flow_25a_Join4" sourceRef="Task_25a" targetRef="Gateway_Join4" />
+      <sequenceFlow id="Flow_25b_Join4" sourceRef="Task_25b" targetRef="Gateway_Join4" />
+      <sequenceFlow id="Flow_Join4_26" sourceRef="Gateway_Join4" targetRef="Task_26" />
+      <sequenceFlow id="Flow_26_End" sourceRef="Task_26" targetRef="EndEvent_1" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_Main">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_Main">
+         <bpmndi:BPMNShape bpmnElement="Participant_Main" id="Participant_Main_di" isHorizontal="true">
+            <omgdc:Bounds height="2000" width="5100" x="50" y="0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Lane_MS" id="Lane_MS_di" isHorizontal="true">
+            <omgdc:Bounds height="200" width="5070" x="80" y="0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_SB" id="Lane_SB_di" isHorizontal="true">
+            <omgdc:Bounds height="1200" width="5070" x="80" y="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_COM" id="Lane_COM_di" isHorizontal="true">
+            <omgdc:Bounds height="300" width="5070" x="80" y="1400" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_TSP" id="Lane_TSP_di" isHorizontal="true">
+            <omgdc:Bounds height="300" width="5070" x="80" y="1700" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_di">
+            <omgdc:Bounds height="30" width="30" x="100" y="85" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_1" id="Task_1_di">
+            <omgdc:Bounds height="80" width="100" x="200" y="60" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_2" id="Task_2_di">
+            <omgdc:Bounds height="80" width="100" x="350" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_3" id="Task_3_di">
+            <omgdc:Bounds height="80" width="100" x="500" y="60" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Split1" id="Gateway_Split1_di">
+            <omgdc:Bounds height="50" width="50" x="650" y="775" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_4a" id="Task_4a_di">
+            <omgdc:Bounds height="80" width="100" x="750" y="660" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_4b" id="Task_4b_di">
+            <omgdc:Bounds height="80" width="100" x="750" y="860" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Join1" id="Gateway_Join1_di">
+            <omgdc:Bounds height="50" width="50" x="900" y="775" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Split2" id="Gateway_Split2_di">
+            <omgdc:Bounds height="50" width="50" x="1000" y="775" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_5a" id="Task_5a_di"><omgdc:Bounds height="80" width="100" x="1100" y="250" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5b" id="Task_5b_di"><omgdc:Bounds height="80" width="100" x="1100" y="350" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5c" id="Task_5c_di"><omgdc:Bounds height="80" width="100" x="1100" y="450" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5d" id="Task_5d_di"><omgdc:Bounds height="80" width="100" x="1100" y="550" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5e" id="Task_5e_di"><omgdc:Bounds height="80" width="100" x="1100" y="650" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5f" id="Task_5f_di"><omgdc:Bounds height="80" width="100" x="1100" y="750" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5g" id="Task_5g_di"><omgdc:Bounds height="80" width="100" x="1100" y="850" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5h" id="Task_5h_di"><omgdc:Bounds height="80" width="100" x="1100" y="950" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5i" id="Task_5i_di"><omgdc:Bounds height="80" width="100" x="1100" y="1050" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_5j" id="Task_5j_di"><omgdc:Bounds height="80" width="100" x="1100" y="1150" /></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_Join2" id="Gateway_Join2_di">
+            <omgdc:Bounds height="50" width="50" x="1250" y="775" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_6" id="Task_6_di">
+            <omgdc:Bounds height="80" width="100" x="1400" y="60" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_7" id="Task_7_di">
+            <omgdc:Bounds height="80" width="100" x="1550" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_8" id="Task_8_di">
+            <omgdc:Bounds height="80" width="100" x="1700" y="1510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_9" id="Task_9_di">
+            <omgdc:Bounds height="80" width="100" x="1850" y="1510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_10" id="Task_10_di">
+            <omgdc:Bounds height="80" width="100" x="2000" y="1510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_11" id="Task_11_di">
+            <omgdc:Bounds height="80" width="100" x="2150" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_12" id="Task_12_di">
+            <omgdc:Bounds height="80" width="100" x="2300" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_13" id="Task_13_di">
+            <omgdc:Bounds height="80" width="100" x="2450" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Split3" id="Gateway_Split3_di">
+            <omgdc:Bounds height="50" width="50" x="2600" y="775" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_14a" id="Task_14a_di">
+            <omgdc:Bounds height="80" width="100" x="2700" y="600" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_14b" id="Task_14b_di">
+            <omgdc:Bounds height="80" width="100" x="2700" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_14c" id="Task_14c_di">
+            <omgdc:Bounds height="80" width="100" x="2700" y="920" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Join3" id="Gateway_Join3_di">
+            <omgdc:Bounds height="50" width="50" x="2850" y="775" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_15" id="Task_15_di">
+            <omgdc:Bounds height="80" width="100" x="3000" y="60" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_16" id="Task_16_di">
+            <omgdc:Bounds height="80" width="100" x="3150" y="60" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_17" id="Task_17_di">
+            <omgdc:Bounds height="80" width="100" x="3300" y="1810" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_18" id="Task_18_di">
+            <omgdc:Bounds height="80" width="100" x="3450" y="1810" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_19" id="Task_19_di">
+            <omgdc:Bounds height="80" width="100" x="3600" y="1810" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_20" id="Task_20_di">
+            <omgdc:Bounds height="80" width="100" x="3750" y="1810" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_21" id="Task_21_di">
+            <omgdc:Bounds height="80" width="100" x="3900" y="1810" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_22" id="Task_22_di">
+            <omgdc:Bounds height="80" width="100" x="4050" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_23" id="Task_23_di">
+            <omgdc:Bounds height="80" width="100" x="4200" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_24" id="Task_24_di">
+            <omgdc:Bounds height="80" width="100" x="4350" y="760" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Split4" id="Gateway_Split4_di">
+            <omgdc:Bounds height="50" width="50" x="4500" y="1525" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_25a" id="Task_25a_di">
+            <omgdc:Bounds height="80" width="100" x="4600" y="1410" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_25b" id="Task_25b_di">
+            <omgdc:Bounds height="80" width="100" x="4600" y="1610" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Join4" id="Gateway_Join4_di">
+            <omgdc:Bounds height="50" width="50" x="4750" y="1525" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_26" id="Task_26_di">
+            <omgdc:Bounds height="80" width="100" x="4850" y="1510" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_1" id="EndEvent_1_di">
+            <omgdc:Bounds height="30" width="30" x="5000" y="1535" />
+         </bpmndi:BPMNShape>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

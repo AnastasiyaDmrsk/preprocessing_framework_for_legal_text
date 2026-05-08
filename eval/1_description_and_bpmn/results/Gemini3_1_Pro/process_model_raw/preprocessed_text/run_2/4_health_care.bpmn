@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="definitions_1"
+             exporter="BPMN Modeler"
+             exporterVersion="1.0">
+   <collaboration id="collaboration_1">
+      <participant id="participant_1" name="Health Data Exchange" processRef="process_1" />
+   </collaboration>
+   <process id="process_1" isExecutable="true">
+      <laneSet id="laneset_1">
+         <lane id="lane_commission" name="Commission">
+            <flowNodeRef>start</flowNodeRef>
+            <flowNodeRef>t1</flowNodeRef>
+            <flowNodeRef>t2</flowNodeRef>
+            <flowNodeRef>t3</flowNodeRef>
+            <flowNodeRef>t4</flowNodeRef>
+            <flowNodeRef>t5</flowNodeRef>
+            <flowNodeRef>t6</flowNodeRef>
+            <flowNodeRef>end</flowNodeRef>
+         </lane>
+         <lane id="lane_transferring" name="Transferring Member State">
+            <flowNodeRef>t7</flowNodeRef>
+            <flowNodeRef>t8</flowNodeRef>
+         </lane>
+         <lane id="lane_authority" name="Corresponding Authority">
+            <flowNodeRef>t9</flowNodeRef>
+            <flowNodeRef>t10</flowNodeRef>
+         </lane>
+         <lane id="lane_health" name="Health Professional">
+            <flowNodeRef>t11</flowNodeRef>
+            <flowNodeRef>t12</flowNodeRef>
+         </lane>
+         <lane id="lane_member_state" name="Member State">
+            <flowNodeRef>t13</flowNodeRef>
+            <flowNodeRef>t14</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start" name="Start">
+         <outgoing>sf1</outgoing>
+      </startEvent>
+      <task id="t1" name="draw up common health certificate">
+         <incoming>sf1</incoming>
+         <outgoing>sf2</outgoing>
+      </task>
+      <task id="t2" name="adopt implementing acts">
+         <incoming>sf2</incoming>
+         <outgoing>sf3</outgoing>
+      </task>
+      <task id="t3" name="adopt uniform conditions and practical arrangements">
+         <incoming>sf3</incoming>
+         <outgoing>sf4</outgoing>
+      </task>
+      <task id="t4" name="adopt implementing acts">
+         <incoming>sf4</incoming>
+         <outgoing>sf5</outgoing>
+      </task>
+      <task id="t7" name="obtain explicit consent">
+         <incoming>sf5</incoming>
+         <outgoing>sf6</outgoing>
+      </task>
+      <task id="t8" name="transmit information">
+         <incoming>sf6</incoming>
+         <outgoing>sf7</outgoing>
+      </task>
+      <task id="t9" name="transmit information on special needs">
+         <incoming>sf7</incoming>
+         <outgoing>sf8</outgoing>
+      </task>
+      <task id="t10" name="transfer information in common health certificate">
+         <incoming>sf8</incoming>
+         <outgoing>sf9</outgoing>
+      </task>
+      <task id="t11" name="process personal health data">
+         <incoming>sf9</incoming>
+         <outgoing>sf10</outgoing>
+      </task>
+      <task id="t12" name="exchange information">
+         <incoming>sf10</incoming>
+         <outgoing>sf11</outgoing>
+      </task>
+      <task id="t13" name="address special needs">
+         <incoming>sf11</incoming>
+         <outgoing>sf12</outgoing>
+      </task>
+      <task id="t14" name="require essential medical care">
+         <incoming>sf12</incoming>
+         <outgoing>sf13</outgoing>
+      </task>
+      <task id="t5" name="use information">
+         <incoming>sf13</incoming>
+         <outgoing>sf14</outgoing>
+      </task>
+      <task id="t6" name="not further process information">
+         <incoming>sf14</incoming>
+         <outgoing>sf15</outgoing>
+      </task>
+      <endEvent id="end" name="End">
+         <incoming>sf15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf1" sourceRef="start" targetRef="t1" />
+      <sequenceFlow id="sf2" sourceRef="t1" targetRef="t2" />
+      <sequenceFlow id="sf3" sourceRef="t2" targetRef="t3" />
+      <sequenceFlow id="sf4" sourceRef="t3" targetRef="t4" />
+      <sequenceFlow id="sf5" sourceRef="t4" targetRef="t7" />
+      <sequenceFlow id="sf6" sourceRef="t7" targetRef="t8" />
+      <sequenceFlow id="sf7" sourceRef="t8" targetRef="t9" />
+      <sequenceFlow id="sf8" sourceRef="t9" targetRef="t10" />
+      <sequenceFlow id="sf9" sourceRef="t10" targetRef="t11" />
+      <sequenceFlow id="sf10" sourceRef="t11" targetRef="t12" />
+      <sequenceFlow id="sf11" sourceRef="t12" targetRef="t13" />
+      <sequenceFlow id="sf12" sourceRef="t13" targetRef="t14" />
+      <sequenceFlow id="sf13" sourceRef="t14" targetRef="t5" />
+      <sequenceFlow id="sf14" sourceRef="t5" targetRef="t6" />
+      <sequenceFlow id="sf15" sourceRef="t6" targetRef="end" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane id="plane_1" bpmnElement="collaboration_1">
+         <bpmndi:BPMNShape id="shape_participant_1" bpmnElement="participant_1" isHorizontal="true">
+            <omgdc:Bounds x="30" y="0" width="2350" height="1000" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_commission" bpmnElement="lane_commission" isHorizontal="true">
+            <omgdc:Bounds x="60" y="0" width="2320" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_transferring" bpmnElement="lane_transferring" isHorizontal="true">
+            <omgdc:Bounds x="60" y="200" width="2320" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_authority" bpmnElement="lane_authority" isHorizontal="true">
+            <omgdc:Bounds x="60" y="400" width="2320" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_health" bpmnElement="lane_health" isHorizontal="true">
+            <omgdc:Bounds x="60" y="600" width="2320" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_lane_member_state" bpmnElement="lane_member_state" isHorizontal="true">
+            <omgdc:Bounds x="60" y="800" width="2320" height="200" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="shape_start" bpmnElement="start">
+            <omgdc:Bounds x="100" y="85" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t1" bpmnElement="t1">
+            <omgdc:Bounds x="200" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t2" bpmnElement="t2">
+            <omgdc:Bounds x="350" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t3" bpmnElement="t3">
+            <omgdc:Bounds x="500" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t4" bpmnElement="t4">
+            <omgdc:Bounds x="650" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t7" bpmnElement="t7">
+            <omgdc:Bounds x="800" y="260" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t8" bpmnElement="t8">
+            <omgdc:Bounds x="950" y="260" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t9" bpmnElement="t9">
+            <omgdc:Bounds x="1100" y="460" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t10" bpmnElement="t10">
+            <omgdc:Bounds x="1250" y="460" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t11" bpmnElement="t11">
+            <omgdc:Bounds x="1400" y="660" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t12" bpmnElement="t12">
+            <omgdc:Bounds x="1550" y="660" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t13" bpmnElement="t13">
+            <omgdc:Bounds x="1700" y="860" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t14" bpmnElement="t14">
+            <omgdc:Bounds x="1850" y="860" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t5" bpmnElement="t5">
+            <omgdc:Bounds x="2000" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t6" bpmnElement="t6">
+            <omgdc:Bounds x="2150" y="60" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_end" bpmnElement="end">
+            <omgdc:Bounds x="2300" y="85" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="edge_sf1" bpmnElement="sf1">
+            <omgdi:waypoint x="130" y="100" />
+            <omgdi:waypoint x="200" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf2" bpmnElement="sf2">
+            <omgdi:waypoint x="300" y="100" />
+            <omgdi:waypoint x="350" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf3" bpmnElement="sf3">
+            <omgdi:waypoint x="450" y="100" />
+            <omgdi:waypoint x="500" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf4" bpmnElement="sf4">
+            <omgdi:waypoint x="600" y="100" />
+            <omgdi:waypoint x="650" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf5" bpmnElement="sf5">
+            <omgdi:waypoint x="750" y="100" />
+            <omgdi:waypoint x="775" y="100" />
+            <omgdi:waypoint x="775" y="300" />
+            <omgdi:waypoint x="800" y="300" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf6" bpmnElement="sf6">
+            <omgdi:waypoint x="900" y="300" />
+            <omgdi:waypoint x="950" y="300" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf7" bpmnElement="sf7">
+            <omgdi:waypoint x="1050" y="300" />
+            <omgdi:waypoint x="1075" y="300" />
+            <omgdi:waypoint x="1075" y="500" />
+            <omgdi:waypoint x="1100" y="500" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf8" bpmnElement="sf8">
+            <omgdi:waypoint x="1200" y="500" />
+            <omgdi:waypoint x="1250" y="500" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf9" bpmnElement="sf9">
+            <omgdi:waypoint x="1350" y="500" />
+            <omgdi:waypoint x="1375" y="500" />
+            <omgdi:waypoint x="1375" y="700" />
+            <omgdi:waypoint x="1400" y="700" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf10" bpmnElement="sf10">
+            <omgdi:waypoint x="1500" y="700" />
+            <omgdi:waypoint x="1550" y="700" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf11" bpmnElement="sf11">
+            <omgdi:waypoint x="1650" y="700" />
+            <omgdi:waypoint x="1675" y="700" />
+            <omgdi:waypoint x="1675" y="900" />
+            <omgdi:waypoint x="1700" y="900" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf12" bpmnElement="sf12">
+            <omgdi:waypoint x="1800" y="900" />
+            <omgdi:waypoint x="1850" y="900" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf13" bpmnElement="sf13">
+            <omgdi:waypoint x="1950" y="900" />
+            <omgdi:waypoint x="1975" y="900" />
+            <omgdi:waypoint x="1975" y="100" />
+            <omgdi:waypoint x="2000" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf14" bpmnElement="sf14">
+            <omgdi:waypoint x="2100" y="100" />
+            <omgdi:waypoint x="2150" y="100" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf15" bpmnElement="sf15">
+            <omgdi:waypoint x="2250" y="100" />
+            <omgdi:waypoint x="2300" y="100" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

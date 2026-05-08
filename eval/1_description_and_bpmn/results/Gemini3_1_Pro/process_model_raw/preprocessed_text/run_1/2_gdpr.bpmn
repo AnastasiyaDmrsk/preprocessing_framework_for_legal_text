@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-gdpr-breach"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Processor" name="Processor" processRef="Process_Processor" />
+      <participant id="Participant_Controller" name="Controller" processRef="Process_Controller" />
+      <participant id="Participant_SA" name="Supervisory Authority" processRef="Process_SA" />
+      <participant id="Participant_DS" name="Data Subject" processRef="Process_DS" />
+      <messageFlow id="MessageFlow_1" sourceRef="Task_P1" targetRef="StartEvent_C" />
+      <messageFlow id="MessageFlow_2" sourceRef="Task_C1" targetRef="StartEvent_SA" />
+      <messageFlow id="MessageFlow_3" sourceRef="Task_C4" targetRef="StartEvent_DS" />
+   </collaboration>
+
+   <process id="Process_Processor" isExecutable="false">
+      <startEvent id="StartEvent_P" name="Become aware of breach">
+         <outgoing>SF_P1</outgoing>
+      </startEvent>
+      <task id="Task_P1" name="Notify controller">
+         <incoming>SF_P1</incoming>
+         <outgoing>SF_P2</outgoing>
+      </task>
+      <endEvent id="EndEvent_P" name="End">
+         <incoming>SF_P2</incoming>
+      </endEvent>
+      <sequenceFlow id="SF_P1" sourceRef="StartEvent_P" targetRef="Task_P1" />
+      <sequenceFlow id="SF_P2" sourceRef="Task_P1" targetRef="EndEvent_P" />
+   </process>
+
+   <process id="Process_Controller" isExecutable="false">
+      <startEvent id="StartEvent_C" name="Receive notification">
+         <outgoing>SF_C1</outgoing>
+         <messageEventDefinition id="msg_def_1"/>
+      </startEvent>
+      <task id="Task_C1" name="Notify supervisory authority">
+         <incoming>SF_C1</incoming>
+         <outgoing>SF_C2</outgoing>
+      </task>
+      <parallelGateway id="Gateway_C_Split">
+         <incoming>SF_C2</incoming>
+         <outgoing>SF_C3a</outgoing>
+         <outgoing>SF_C3b</outgoing>
+         <outgoing>SF_C3c</outgoing>
+         <outgoing>SF_C3d</outgoing>
+      </parallelGateway>
+      <task id="Task_C2a" name="Describe nature of breach">
+         <incoming>SF_C3a</incoming>
+         <outgoing>SF_C4a</outgoing>
+      </task>
+      <task id="Task_C2b" name="Communicate DPO contact">
+         <incoming>SF_C3b</incoming>
+         <outgoing>SF_C4b</outgoing>
+      </task>
+      <task id="Task_C2c" name="Describe likely consequences">
+         <incoming>SF_C3c</incoming>
+         <outgoing>SF_C4c</outgoing>
+      </task>
+      <task id="Task_C2d" name="Describe measures taken">
+         <incoming>SF_C3d</incoming>
+         <outgoing>SF_C4d</outgoing>
+      </task>
+      <parallelGateway id="Gateway_C_Join">
+         <incoming>SF_C4a</incoming>
+         <incoming>SF_C4b</incoming>
+         <incoming>SF_C4c</incoming>
+         <incoming>SF_C4d</incoming>
+         <outgoing>SF_C5</outgoing>
+      </parallelGateway>
+      <task id="Task_C3" name="Document data breaches">
+         <incoming>SF_C5</incoming>
+         <outgoing>SF_C6</outgoing>
+      </task>
+      <task id="Task_C4" name="Communicate to data subject">
+         <incoming>SF_C6</incoming>
+         <outgoing>SF_C7</outgoing>
+      </task>
+      <endEvent id="EndEvent_C" name="End">
+         <incoming>SF_C7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="SF_C1" sourceRef="StartEvent_C" targetRef="Task_C1" />
+      <sequenceFlow id="SF_C2" sourceRef="Task_C1" targetRef="Gateway_C_Split" />
+      <sequenceFlow id="SF_C3a" sourceRef="Gateway_C_Split" targetRef="Task_C2a" />
+      <sequenceFlow id="SF_C3b" sourceRef="Gateway_C_Split" targetRef="Task_C2b" />
+      <sequenceFlow id="SF_C3c" sourceRef="Gateway_C_Split" targetRef="Task_C2c" />
+      <sequenceFlow id="SF_C3d" sourceRef="Gateway_C_Split" targetRef="Task_C2d" />
+      <sequenceFlow id="SF_C4a" sourceRef="Task_C2a" targetRef="Gateway_C_Join" />
+      <sequenceFlow id="SF_C4b" sourceRef="Task_C2b" targetRef="Gateway_C_Join" />
+      <sequenceFlow id="SF_C4c" sourceRef="Task_C2c" targetRef="Gateway_C_Join" />
+      <sequenceFlow id="SF_C4d" sourceRef="Task_C2d" targetRef="Gateway_C_Join" />
+      <sequenceFlow id="SF_C5" sourceRef="Gateway_C_Join" targetRef="Task_C3" />
+      <sequenceFlow id="SF_C6" sourceRef="Task_C3" targetRef="Task_C4" />
+      <sequenceFlow id="SF_C7" sourceRef="Task_C4" targetRef="EndEvent_C" />
+   </process>
+
+   <process id="Process_SA" isExecutable="false">
+      <startEvent id="StartEvent_SA" name="Receive notification">
+         <outgoing>SF_SA1</outgoing>
+         <messageEventDefinition id="msg_def_2"/>
+      </startEvent>
+      <task id="Task_SA1" name="Verify compliance">
+         <incoming>SF_SA1</incoming>
+         <outgoing>SF_SA2</outgoing>
+      </task>
+      <task id="Task_SA2" name="Require communication">
+         <incoming>SF_SA2</incoming>
+         <outgoing>SF_SA3</outgoing>
+      </task>
+      <endEvent id="EndEvent_SA" name="End">
+         <incoming>SF_SA3</incoming>
+      </endEvent>
+      <sequenceFlow id="SF_SA1" sourceRef="StartEvent_SA" targetRef="Task_SA1" />
+      <sequenceFlow id="SF_SA2" sourceRef="Task_SA1" targetRef="Task_SA2" />
+      <sequenceFlow id="SF_SA3" sourceRef="Task_SA2" targetRef="EndEvent_SA" />
+   </process>
+
+   <process id="Process_DS" isExecutable="false">
+      <startEvent id="StartEvent_DS" name="Receive communication">
+         <outgoing>SF_DS1</outgoing>
+         <messageEventDefinition id="msg_def_3"/>
+      </startEvent>
+      <endEvent id="EndEvent_DS" name="End">
+         <incoming>SF_DS1</incoming>
+      </endEvent>
+      <sequenceFlow id="SF_DS1" sourceRef="StartEvent_DS" targetRef="EndEvent_DS" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+
+         <!-- Participant Bounds -->
+         <bpmndi:BPMNShape bpmnElement="Participant_Processor" id="Shape_Participant_Processor" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1100.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Controller" id="Shape_Participant_Controller" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1100.0" x="50.0" y="220.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_SA" id="Shape_Participant_SA" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1100.0" x="50.0" y="640.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_DS" id="Shape_Participant_DS" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1100.0" x="50.0" y="810.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Processor Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_P" id="Shape_StartEvent_P">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_P1" id="Shape_Task_P1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="75.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_P" id="Shape_EndEvent_P">
+            <omgdc:Bounds height="30.0" width="30.0" x="330.0" y="100.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Controller Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_C" id="Shape_StartEvent_C">
+            <omgdc:Bounds height="30.0" width="30.0" x="180.0" y="385.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C1" id="Shape_Task_C1">
+            <omgdc:Bounds height="80.0" width="100.0" x="260.0" y="360.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_C_Split" id="Shape_Gateway_C_Split">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="380.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C2a" id="Shape_Task_C2a">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="240.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C2b" id="Shape_Task_C2b">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C2c" id="Shape_Task_C2c">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="440.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C2d" id="Shape_Task_C2d">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="520.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_C_Join" id="Shape_Gateway_C_Join">
+            <omgdc:Bounds height="40.0" width="40.0" x="620.0" y="380.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C3" id="Shape_Task_C3">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="360.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C4" id="Shape_Task_C4">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="360.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_C" id="Shape_EndEvent_C">
+            <omgdc:Bounds height="30.0" width="30.0" x="1000.0" y="385.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Supervisory Authority Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_SA" id="Shape_StartEvent_SA">
+            <omgdc:Bounds height="30.0" width="30.0" x="260.0" y="695.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA1" id="Shape_Task_SA1">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="670.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA2" id="Shape_Task_SA2">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="670.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_SA" id="Shape_EndEvent_SA">
+            <omgdc:Bounds height="30.0" width="30.0" x="1000.0" y="695.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Data Subject Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_DS" id="Shape_StartEvent_DS">
+            <omgdc:Bounds height="30.0" width="30.0" x="850.0" y="865.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_DS" id="Shape_EndEvent_DS">
+            <omgdc:Bounds height="30.0" width="30.0" x="950.0" y="865.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence Flows: Processor -->
+         <bpmndi:BPMNEdge bpmnElement="SF_P1" id="Edge_SF_P1">
+            <omgdi:waypoint x="130.0" y="115.0" />
+            <omgdi:waypoint x="180.0" y="115.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_P2" id="Edge_SF_P2">
+            <omgdi:waypoint x="280.0" y="115.0" />
+            <omgdi:waypoint x="330.0" y="115.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows: Controller -->
+         <bpmndi:BPMNEdge bpmnElement="SF_C1" id="Edge_SF_C1">
+            <omgdi:waypoint x="210.0" y="400.0" />
+            <omgdi:waypoint x="260.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C2" id="Edge_SF_C2">
+            <omgdi:waypoint x="360.0" y="400.0" />
+            <omgdi:waypoint x="400.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C3a" id="Edge_SF_C3a">
+            <omgdi:waypoint x="420.0" y="380.0" />
+            <omgdi:waypoint x="420.0" y="280.0" />
+            <omgdi:waypoint x="480.0" y="280.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C3b" id="Edge_SF_C3b">
+            <omgdi:waypoint x="440.0" y="400.0" />
+            <omgdi:waypoint x="480.0" y="380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C3c" id="Edge_SF_C3c">
+            <omgdi:waypoint x="420.0" y="420.0" />
+            <omgdi:waypoint x="420.0" y="480.0" />
+            <omgdi:waypoint x="480.0" y="480.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C3d" id="Edge_SF_C3d">
+            <omgdi:waypoint x="420.0" y="420.0" />
+            <omgdi:waypoint x="420.0" y="560.0" />
+            <omgdi:waypoint x="480.0" y="560.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C4a" id="Edge_SF_C4a">
+            <omgdi:waypoint x="580.0" y="280.0" />
+            <omgdi:waypoint x="640.0" y="280.0" />
+            <omgdi:waypoint x="640.0" y="380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C4b" id="Edge_SF_C4b">
+            <omgdi:waypoint x="580.0" y="380.0" />
+            <omgdi:waypoint x="620.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C4c" id="Edge_SF_C4c">
+            <omgdi:waypoint x="580.0" y="480.0" />
+            <omgdi:waypoint x="640.0" y="480.0" />
+            <omgdi:waypoint x="640.0" y="420.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C4d" id="Edge_SF_C4d">
+            <omgdi:waypoint x="580.0" y="560.0" />
+            <omgdi:waypoint x="640.0" y="560.0" />
+            <omgdi:waypoint x="640.0" y="420.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C5" id="Edge_SF_C5">
+            <omgdi:waypoint x="660.0" y="400.0" />
+            <omgdi:waypoint x="700.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C6" id="Edge_SF_C6">
+            <omgdi:waypoint x="800.0" y="400.0" />
+            <omgdi:waypoint x="850.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_C7" id="Edge_SF_C7">
+            <omgdi:waypoint x="950.0" y="400.0" />
+            <omgdi:waypoint x="1000.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows: SA -->
+         <bpmndi:BPMNEdge bpmnElement="SF_SA1" id="Edge_SF_SA1">
+            <omgdi:waypoint x="290.0" y="710.0" />
+            <omgdi:waypoint x="700.0" y="710.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_SA2" id="Edge_SF_SA2">
+            <omgdi:waypoint x="800.0" y="710.0" />
+            <omgdi:waypoint x="850.0" y="710.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="SF_SA3" id="Edge_SF_SA3">
+            <omgdi:waypoint x="950.0" y="710.0" />
+            <omgdi:waypoint x="1000.0" y="710.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows: DS -->
+         <bpmndi:BPMNEdge bpmnElement="SF_DS1" id="Edge_SF_DS1">
+            <omgdi:waypoint x="880.0" y="880.0" />
+            <omgdi:waypoint x="950.0" y="880.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_1" id="Edge_MessageFlow_1">
+            <omgdi:waypoint x="195.0" y="155.0" />
+            <omgdi:waypoint x="195.0" y="385.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_2" id="Edge_MessageFlow_2">
+            <omgdi:waypoint x="275.0" y="440.0" />
+            <omgdi:waypoint x="275.0" y="695.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_3" id="Edge_MessageFlow_3">
+            <omgdi:waypoint x="865.0" y="440.0" />
+            <omgdi:waypoint x="865.0" y="865.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

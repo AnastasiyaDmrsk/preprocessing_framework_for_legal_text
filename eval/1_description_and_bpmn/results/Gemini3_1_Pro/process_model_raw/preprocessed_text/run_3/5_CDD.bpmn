@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-aml-process"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="col_1">
+      <participant id="p_ms" name="Member States" processRef="proc_ms" />
+      <participant id="p_cu" name="Customer" processRef="proc_cu" />
+      <participant id="p_oe" name="Obliged Entity" processRef="proc_oe" />
+      <participant id="p_lp" name="Legal Professionals" processRef="proc_lp" />
+      <messageFlow id="mf_1" sourceRef="t_ms_1" targetRef="t_oe_1" />
+      <messageFlow id="mf_2" sourceRef="t_ms_4" targetRef="t_cu_1" />
+   </collaboration>
+
+   <!-- Member States Process -->
+   <process id="proc_ms" isExecutable="false" name="Member States">
+      <startEvent id="s_ms" name="Start">
+         <outgoing>sf_ms_1</outgoing>
+      </startEvent>
+      <task id="t_ms_1" name="require verification of identity">
+         <incoming>sf_ms_1</incoming>
+         <outgoing>sf_ms_2</outgoing>
+      </task>
+      <task id="t_ms_2" name="allow verification">
+         <incoming>sf_ms_2</incoming>
+         <outgoing>sf_ms_3</outgoing>
+      </task>
+      <task id="t_ms_3" name="complete procedures">
+         <incoming>sf_ms_3</incoming>
+         <outgoing>sf_ms_4</outgoing>
+      </task>
+      <task id="t_ms_4" name="allow opening of an account">
+         <incoming>sf_ms_4</incoming>
+         <outgoing>sf_ms_5</outgoing>
+      </task>
+      <task id="t_ms_5" name="obtain full compliance">
+         <incoming>sf_ms_5</incoming>
+         <outgoing>sf_ms_6</outgoing>
+      </task>
+      <task id="t_ms_6" name="terminate business relationship">
+         <incoming>sf_ms_6</incoming>
+         <outgoing>sf_ms_7</outgoing>
+      </task>
+      <task id="t_ms_7" name="consider making a suspicious transaction report">
+         <incoming>sf_ms_7</incoming>
+         <outgoing>sf_ms_8</outgoing>
+      </task>
+      <endEvent id="e_ms" name="End">
+         <incoming>sf_ms_8</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_ms_1" sourceRef="s_ms" targetRef="t_ms_1" />
+      <sequenceFlow id="sf_ms_2" sourceRef="t_ms_1" targetRef="t_ms_2" />
+      <sequenceFlow id="sf_ms_3" sourceRef="t_ms_2" targetRef="t_ms_3" />
+      <sequenceFlow id="sf_ms_4" sourceRef="t_ms_3" targetRef="t_ms_4" />
+      <sequenceFlow id="sf_ms_5" sourceRef="t_ms_4" targetRef="t_ms_5" />
+      <sequenceFlow id="sf_ms_6" sourceRef="t_ms_5" targetRef="t_ms_6" />
+      <sequenceFlow id="sf_ms_7" sourceRef="t_ms_6" targetRef="t_ms_7" />
+      <sequenceFlow id="sf_ms_8" sourceRef="t_ms_7" targetRef="e_ms" />
+   </process>
+
+   <!-- Customer Process -->
+   <process id="proc_cu" isExecutable="false" name="Customer">
+      <startEvent id="s_cu" name="Start">
+         <outgoing>sf_cu_1</outgoing>
+      </startEvent>
+      <task id="t_cu_1" name="carry out transactions">
+         <incoming>sf_cu_1</incoming>
+         <outgoing>sf_cu_2</outgoing>
+      </task>
+      <endEvent id="e_cu" name="End">
+         <incoming>sf_cu_2</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_cu_1" sourceRef="s_cu" targetRef="t_cu_1" />
+      <sequenceFlow id="sf_cu_2" sourceRef="t_cu_1" targetRef="e_cu" />
+   </process>
+
+   <!-- Obliged Entity Process -->
+   <process id="proc_oe" isExecutable="false" name="Obliged Entity">
+      <startEvent id="s_oe" name="Start">
+         <outgoing>sf_oe_1</outgoing>
+      </startEvent>
+      <task id="t_oe_1" name="comply with due diligence">
+         <incoming>sf_oe_1</incoming>
+         <outgoing>sf_oe_2</outgoing>
+      </task>
+      <task id="t_oe_2" name="apply customer due diligence measures">
+         <incoming>sf_oe_2</incoming>
+         <outgoing>sf_oe_3</outgoing>
+      </task>
+      <endEvent id="e_oe" name="End">
+         <incoming>sf_oe_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_oe_1" sourceRef="s_oe" targetRef="t_oe_1" />
+      <sequenceFlow id="sf_oe_2" sourceRef="t_oe_1" targetRef="t_oe_2" />
+      <sequenceFlow id="sf_oe_3" sourceRef="t_oe_2" targetRef="e_oe" />
+   </process>
+
+   <!-- Legal Professionals Process -->
+   <process id="proc_lp" isExecutable="false" name="Legal Professionals">
+      <startEvent id="s_lp" name="Start">
+         <outgoing>sf_lp_1</outgoing>
+      </startEvent>
+      <task id="t_lp_1" name="ascertain legal position">
+         <incoming>sf_lp_1</incoming>
+         <outgoing>sf_lp_2</outgoing>
+      </task>
+      <endEvent id="e_lp" name="End">
+         <incoming>sf_lp_2</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_lp_1" sourceRef="s_lp" targetRef="t_lp_1" />
+      <sequenceFlow id="sf_lp_2" sourceRef="t_lp_1" targetRef="e_lp" />
+   </process>
+
+   <!-- BPMN Diagram (Layout Info) -->
+   <bpmndi:BPMNDiagram id="diag_1">
+      <bpmndi:BPMNPlane id="plane_1" bpmnElement="col_1">
+
+         <!-- Participant Pools -->
+         <bpmndi:BPMNShape id="shape_p_ms" bpmnElement="p_ms" isHorizontal="true">
+            <omgdc:Bounds x="50" y="50" width="1300" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_p_cu" bpmnElement="p_cu" isHorizontal="true">
+            <omgdc:Bounds x="50" y="300" width="1300" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_p_oe" bpmnElement="p_oe" isHorizontal="true">
+            <omgdc:Bounds x="50" y="550" width="1300" height="200" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_p_lp" bpmnElement="p_lp" isHorizontal="true">
+            <omgdc:Bounds x="50" y="800" width="1300" height="200" />
+         </bpmndi:BPMNShape>
+
+         <!-- Member States Elements -->
+         <bpmndi:BPMNShape id="shape_s_ms" bpmnElement="s_ms">
+            <omgdc:Bounds x="100" y="135" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_1" bpmnElement="t_ms_1">
+            <omgdc:Bounds x="180" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_2" bpmnElement="t_ms_2">
+            <omgdc:Bounds x="320" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_3" bpmnElement="t_ms_3">
+            <omgdc:Bounds x="460" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_4" bpmnElement="t_ms_4">
+            <omgdc:Bounds x="600" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_5" bpmnElement="t_ms_5">
+            <omgdc:Bounds x="740" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_6" bpmnElement="t_ms_6">
+            <omgdc:Bounds x="880" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_ms_7" bpmnElement="t_ms_7">
+            <omgdc:Bounds x="1020" y="110" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_e_ms" bpmnElement="e_ms">
+            <omgdc:Bounds x="1170" y="135" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Customer Elements -->
+         <bpmndi:BPMNShape id="shape_s_cu" bpmnElement="s_cu">
+            <omgdc:Bounds x="100" y="385" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_cu_1" bpmnElement="t_cu_1">
+            <omgdc:Bounds x="600" y="360" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_e_cu" bpmnElement="e_cu">
+            <omgdc:Bounds x="1170" y="385" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Obliged Entity Elements -->
+         <bpmndi:BPMNShape id="shape_s_oe" bpmnElement="s_oe">
+            <omgdc:Bounds x="100" y="635" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_oe_1" bpmnElement="t_oe_1">
+            <omgdc:Bounds x="180" y="610" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_oe_2" bpmnElement="t_oe_2">
+            <omgdc:Bounds x="320" y="610" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_e_oe" bpmnElement="e_oe">
+            <omgdc:Bounds x="1170" y="635" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Legal Professionals Elements -->
+         <bpmndi:BPMNShape id="shape_s_lp" bpmnElement="s_lp">
+            <omgdc:Bounds x="100" y="885" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_t_lp_1" bpmnElement="t_lp_1">
+            <omgdc:Bounds x="1020" y="860" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="shape_e_lp" bpmnElement="e_lp">
+            <omgdc:Bounds x="1170" y="885" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence Flows for Member States -->
+         <bpmndi:BPMNEdge id="edge_sf_ms_1" bpmnElement="sf_ms_1">
+            <omgdi:waypoint x="130" y="150" />
+            <omgdi:waypoint x="180" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_2" bpmnElement="sf_ms_2">
+            <omgdi:waypoint x="280" y="150" />
+            <omgdi:waypoint x="320" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_3" bpmnElement="sf_ms_3">
+            <omgdi:waypoint x="420" y="150" />
+            <omgdi:waypoint x="460" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_4" bpmnElement="sf_ms_4">
+            <omgdi:waypoint x="560" y="150" />
+            <omgdi:waypoint x="600" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_5" bpmnElement="sf_ms_5">
+            <omgdi:waypoint x="700" y="150" />
+            <omgdi:waypoint x="740" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_6" bpmnElement="sf_ms_6">
+            <omgdi:waypoint x="840" y="150" />
+            <omgdi:waypoint x="880" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_7" bpmnElement="sf_ms_7">
+            <omgdi:waypoint x="980" y="150" />
+            <omgdi:waypoint x="1020" y="150" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_ms_8" bpmnElement="sf_ms_8">
+            <omgdi:waypoint x="1120" y="150" />
+            <omgdi:waypoint x="1170" y="150" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows for Customer -->
+         <bpmndi:BPMNEdge id="edge_sf_cu_1" bpmnElement="sf_cu_1">
+            <omgdi:waypoint x="130" y="400" />
+            <omgdi:waypoint x="600" y="400" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_cu_2" bpmnElement="sf_cu_2">
+            <omgdi:waypoint x="700" y="400" />
+            <omgdi:waypoint x="1170" y="400" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows for Obliged Entity -->
+         <bpmndi:BPMNEdge id="edge_sf_oe_1" bpmnElement="sf_oe_1">
+            <omgdi:waypoint x="130" y="650" />
+            <omgdi:waypoint x="180" y="650" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_oe_2" bpmnElement="sf_oe_2">
+            <omgdi:waypoint x="280" y="650" />
+            <omgdi:waypoint x="320" y="650" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_oe_3" bpmnElement="sf_oe_3">
+            <omgdi:waypoint x="420" y="650" />
+            <omgdi:waypoint x="1170" y="650" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Sequence Flows for Legal Professionals -->
+         <bpmndi:BPMNEdge id="edge_sf_lp_1" bpmnElement="sf_lp_1">
+            <omgdi:waypoint x="130" y="900" />
+            <omgdi:waypoint x="1020" y="900" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_sf_lp_2" bpmnElement="sf_lp_2">
+            <omgdi:waypoint x="1120" y="900" />
+            <omgdi:waypoint x="1170" y="900" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge id="edge_mf_1" bpmnElement="mf_1">
+            <omgdi:waypoint x="230" y="190" />
+            <omgdi:waypoint x="230" y="610" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="edge_mf_2" bpmnElement="mf_2">
+            <omgdi:waypoint x="650" y="190" />
+            <omgdi:waypoint x="650" y="360" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

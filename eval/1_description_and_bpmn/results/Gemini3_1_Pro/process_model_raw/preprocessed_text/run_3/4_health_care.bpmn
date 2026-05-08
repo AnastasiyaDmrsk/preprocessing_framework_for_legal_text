@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="BPMN Modeler"
+             exporterVersion="1.0">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Part1" name="Commission" processRef="Proc1"/>
+      <participant id="Part2" name="Transferring Member State" processRef="Proc2"/>
+      <participant id="Part3" name="Corresponding Authority" processRef="Proc3"/>
+      <participant id="Part4" name="Member State Responsible" processRef="Proc4"/>
+      <participant id="Part5" name="Health Professional" processRef="Proc5"/>
+   </collaboration>
+
+   <process id="Proc1" isExecutable="false">
+      <startEvent id="S_1" name="Start">
+         <outgoing>F_1_1</outgoing>
+      </startEvent>
+      <task id="T_1_1" name="draw up the common health certificate">
+         <incoming>F_1_1</incoming>
+         <outgoing>F_1_2</outgoing>
+      </task>
+      <task id="T_1_2" name="adopt implementing acts">
+         <incoming>F_1_2</incoming>
+         <outgoing>F_1_3</outgoing>
+      </task>
+      <task id="T_1_3" name="adopt uniform conditions and practical arrangements">
+         <incoming>F_1_3</incoming>
+         <outgoing>F_1_4</outgoing>
+      </task>
+      <task id="T_1_4" name="use information">
+         <incoming>F_1_4</incoming>
+         <outgoing>F_1_5</outgoing>
+      </task>
+      <endEvent id="E_1" name="End">
+         <incoming>F_1_5</incoming>
+      </endEvent>
+      <sequenceFlow id="F_1_1" sourceRef="S_1" targetRef="T_1_1"/>
+      <sequenceFlow id="F_1_2" sourceRef="T_1_1" targetRef="T_1_2"/>
+      <sequenceFlow id="F_1_3" sourceRef="T_1_2" targetRef="T_1_3"/>
+      <sequenceFlow id="F_1_4" sourceRef="T_1_3" targetRef="T_1_4"/>
+      <sequenceFlow id="F_1_5" sourceRef="T_1_4" targetRef="E_1"/>
+   </process>
+
+   <process id="Proc2" isExecutable="false">
+      <startEvent id="S_2" name="Start">
+         <outgoing>F_2_1</outgoing>
+      </startEvent>
+      <task id="T_2_1" name="obtain explicit consent">
+         <incoming>F_2_1</incoming>
+         <outgoing>F_2_2</outgoing>
+      </task>
+      <task id="T_2_2" name="transmit information on any special needs">
+         <incoming>F_2_2</incoming>
+         <outgoing>F_2_3</outgoing>
+      </task>
+      <endEvent id="E_2" name="End">
+         <incoming>F_2_3</incoming>
+      </endEvent>
+      <sequenceFlow id="F_2_1" sourceRef="S_2" targetRef="T_2_1"/>
+      <sequenceFlow id="F_2_2" sourceRef="T_2_1" targetRef="T_2_2"/>
+      <sequenceFlow id="F_2_3" sourceRef="T_2_2" targetRef="E_2"/>
+   </process>
+
+   <process id="Proc3" isExecutable="false">
+      <startEvent id="S_3" name="Start">
+         <outgoing>F_3_1</outgoing>
+      </startEvent>
+      <task id="T_3_1" name="transfer information in a common health certificate">
+         <incoming>F_3_1</incoming>
+         <outgoing>F_3_2</outgoing>
+      </task>
+      <endEvent id="E_3" name="End">
+         <incoming>F_3_2</incoming>
+      </endEvent>
+      <sequenceFlow id="F_3_1" sourceRef="S_3" targetRef="T_3_1"/>
+      <sequenceFlow id="F_3_2" sourceRef="T_3_1" targetRef="E_3"/>
+   </process>
+
+   <process id="Proc4" isExecutable="false">
+      <startEvent id="S_4" name="Start">
+         <outgoing>F_4_1</outgoing>
+      </startEvent>
+      <task id="T_4_1" name="address special needs">
+         <incoming>F_4_1</incoming>
+         <outgoing>F_4_2</outgoing>
+      </task>
+      <endEvent id="E_4" name="End">
+         <incoming>F_4_2</incoming>
+      </endEvent>
+      <sequenceFlow id="F_4_1" sourceRef="S_4" targetRef="T_4_1"/>
+      <sequenceFlow id="F_4_2" sourceRef="T_4_1" targetRef="E_4"/>
+   </process>
+
+   <process id="Proc5" isExecutable="false">
+      <startEvent id="S_5" name="Start">
+         <outgoing>F_5_1</outgoing>
+      </startEvent>
+      <task id="T_5_1" name="process personal health data">
+         <incoming>F_5_1</incoming>
+         <outgoing>F_5_2</outgoing>
+      </task>
+      <endEvent id="E_5" name="End">
+         <incoming>F_5_2</incoming>
+      </endEvent>
+      <sequenceFlow id="F_5_1" sourceRef="S_5" targetRef="T_5_1"/>
+      <sequenceFlow id="F_5_2" sourceRef="T_5_1" targetRef="E_5"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+
+         <!-- Commission Pool -->
+         <bpmndi:BPMNShape id="Part1_gui" bpmnElement="Part1" isHorizontal="true">
+            <omgdc:Bounds x="100" y="100" width="850" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="S_1_gui" bpmnElement="S_1">
+            <omgdc:Bounds x="150" y="160" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_1_1_gui" bpmnElement="T_1_1">
+            <omgdc:Bounds x="230" y="135" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_1_2_gui" bpmnElement="T_1_2">
+            <omgdc:Bounds x="380" y="135" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_1_3_gui" bpmnElement="T_1_3">
+            <omgdc:Bounds x="530" y="135" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_1_4_gui" bpmnElement="T_1_4">
+            <omgdc:Bounds x="680" y="135" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="E_1_gui" bpmnElement="E_1">
+            <omgdc:Bounds x="830" y="160" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="F_1_1_gui" bpmnElement="F_1_1">
+            <omgdi:waypoint x="180" y="175"/>
+            <omgdi:waypoint x="230" y="175"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_1_2_gui" bpmnElement="F_1_2">
+            <omgdi:waypoint x="330" y="175"/>
+            <omgdi:waypoint x="380" y="175"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_1_3_gui" bpmnElement="F_1_3">
+            <omgdi:waypoint x="480" y="175"/>
+            <omgdi:waypoint x="530" y="175"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_1_4_gui" bpmnElement="F_1_4">
+            <omgdi:waypoint x="630" y="175"/>
+            <omgdi:waypoint x="680" y="175"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_1_5_gui" bpmnElement="F_1_5">
+            <omgdi:waypoint x="780" y="175"/>
+            <omgdi:waypoint x="830" y="175"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Transferring Member State Pool -->
+         <bpmndi:BPMNShape id="Part2_gui" bpmnElement="Part2" isHorizontal="true">
+            <omgdc:Bounds x="100" y="300" width="850" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="S_2_gui" bpmnElement="S_2">
+            <omgdc:Bounds x="150" y="360" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_2_1_gui" bpmnElement="T_2_1">
+            <omgdc:Bounds x="230" y="335" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_2_2_gui" bpmnElement="T_2_2">
+            <omgdc:Bounds x="380" y="335" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="E_2_gui" bpmnElement="E_2">
+            <omgdc:Bounds x="530" y="360" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="F_2_1_gui" bpmnElement="F_2_1">
+            <omgdi:waypoint x="180" y="375"/>
+            <omgdi:waypoint x="230" y="375"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_2_2_gui" bpmnElement="F_2_2">
+            <omgdi:waypoint x="330" y="375"/>
+            <omgdi:waypoint x="380" y="375"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_2_3_gui" bpmnElement="F_2_3">
+            <omgdi:waypoint x="480" y="375"/>
+            <omgdi:waypoint x="530" y="375"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Corresponding Authority Pool -->
+         <bpmndi:BPMNShape id="Part3_gui" bpmnElement="Part3" isHorizontal="true">
+            <omgdc:Bounds x="100" y="500" width="850" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="S_3_gui" bpmnElement="S_3">
+            <omgdc:Bounds x="150" y="560" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_3_1_gui" bpmnElement="T_3_1">
+            <omgdc:Bounds x="230" y="535" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="E_3_gui" bpmnElement="E_3">
+            <omgdc:Bounds x="380" y="560" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="F_3_1_gui" bpmnElement="F_3_1">
+            <omgdi:waypoint x="180" y="575"/>
+            <omgdi:waypoint x="230" y="575"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_3_2_gui" bpmnElement="F_3_2">
+            <omgdi:waypoint x="330" y="575"/>
+            <omgdi:waypoint x="380" y="575"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Member State Responsible Pool -->
+         <bpmndi:BPMNShape id="Part4_gui" bpmnElement="Part4" isHorizontal="true">
+            <omgdc:Bounds x="100" y="700" width="850" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="S_4_gui" bpmnElement="S_4">
+            <omgdc:Bounds x="150" y="760" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_4_1_gui" bpmnElement="T_4_1">
+            <omgdc:Bounds x="230" y="735" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="E_4_gui" bpmnElement="E_4">
+            <omgdc:Bounds x="380" y="760" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="F_4_1_gui" bpmnElement="F_4_1">
+            <omgdi:waypoint x="180" y="775"/>
+            <omgdi:waypoint x="230" y="775"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_4_2_gui" bpmnElement="F_4_2">
+            <omgdi:waypoint x="330" y="775"/>
+            <omgdi:waypoint x="380" y="775"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Health Professional Pool -->
+         <bpmndi:BPMNShape id="Part5_gui" bpmnElement="Part5" isHorizontal="true">
+            <omgdc:Bounds x="100" y="900" width="850" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="S_5_gui" bpmnElement="S_5">
+            <omgdc:Bounds x="150" y="960" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="T_5_1_gui" bpmnElement="T_5_1">
+            <omgdc:Bounds x="230" y="935" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="E_5_gui" bpmnElement="E_5">
+            <omgdc:Bounds x="380" y="960" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="F_5_1_gui" bpmnElement="F_5_1">
+            <omgdi:waypoint x="180" y="975"/>
+            <omgdi:waypoint x="230" y="975"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="F_5_2_gui" bpmnElement="F_5_2">
+            <omgdi:waypoint x="330" y="975"/>
+            <omgdi:waypoint x="380" y="975"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

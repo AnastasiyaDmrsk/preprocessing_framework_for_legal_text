@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-definition-id"
+             targetNamespace="http://www.signavio.com"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/TR/XPath">
+
+    <collaboration id="Collaboration_1">
+        <participant id="Participant_Applicant" name="Applicant or Holder" processRef="Process_Applicant" />
+        <participant id="Participant_MemberStates" name="Member States" processRef="Process_MemberStates" />
+        <participant id="Participant_Commission" name="Commission" processRef="Process_Commission" />
+        <messageFlow id="MessageFlow_1" sourceRef="Task_SubmitApp" targetRef="Start_MS" />
+        <messageFlow id="MessageFlow_2" sourceRef="Task_InformComm" targetRef="Start_Comm" />
+    </collaboration>
+
+    <process id="Process_Applicant" isExecutable="false">
+        <startEvent id="Start_App" name="Start">
+            <outgoing>Flow_A1</outgoing>
+        </startEvent>
+        <task id="Task_SubmitApp" name="apply for issuance or renewal">
+            <incoming>Flow_A1</incoming>
+            <outgoing>Flow_A2</outgoing>
+        </task>
+        <parallelGateway id="Gateway_AppSplit">
+            <incoming>Flow_A2</incoming>
+            <outgoing>Flow_A3</outgoing>
+            <outgoing>Flow_A4</outgoing>
+        </parallelGateway>
+        <task id="Task_UndergoMed" name="undergo medical examination">
+            <incoming>Flow_A3</incoming>
+            <outgoing>Flow_A5</outgoing>
+        </task>
+        <task id="Task_FillForm" name="fill in self-assessment form">
+            <incoming>Flow_A4</incoming>
+            <outgoing>Flow_A6</outgoing>
+        </task>
+        <parallelGateway id="Gateway_AppJoin">
+            <incoming>Flow_A5</incoming>
+            <incoming>Flow_A6</incoming>
+            <outgoing>Flow_A7</outgoing>
+        </parallelGateway>
+        <endEvent id="End_App" name="End">
+            <incoming>Flow_A7</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_A1" sourceRef="Start_App" targetRef="Task_SubmitApp" />
+        <sequenceFlow id="Flow_A2" sourceRef="Task_SubmitApp" targetRef="Gateway_AppSplit" />
+        <sequenceFlow id="Flow_A3" sourceRef="Gateway_AppSplit" targetRef="Task_UndergoMed" />
+        <sequenceFlow id="Flow_A4" sourceRef="Gateway_AppSplit" targetRef="Task_FillForm" />
+        <sequenceFlow id="Flow_A5" sourceRef="Task_UndergoMed" targetRef="Gateway_AppJoin" />
+        <sequenceFlow id="Flow_A6" sourceRef="Task_FillForm" targetRef="Gateway_AppJoin" />
+        <sequenceFlow id="Flow_A7" sourceRef="Gateway_AppJoin" targetRef="End_App" />
+    </process>
+
+    <process id="Process_MemberStates" isExecutable="false">
+        <startEvent id="Start_MS" name="receive application">
+            <outgoing>Flow_M1</outgoing>
+            <messageEventDefinition />
+        </startEvent>
+        <task id="Task_ApplyStds" name="apply minimum standards">
+            <incoming>Flow_M1</incoming>
+            <outgoing>Flow_M2</outgoing>
+        </task>
+        <parallelGateway id="Gateway_MSSplit">
+            <incoming>Flow_M2</incoming>
+            <outgoing>Flow_M3</outgoing>
+            <outgoing>Flow_M4</outgoing>
+        </parallelGateway>
+        <task id="Task_RequireMed" name="require medical examination">
+            <incoming>Flow_M3</incoming>
+            <outgoing>Flow_M5</outgoing>
+        </task>
+        <task id="Task_EstSys" name="establish national system">
+            <incoming>Flow_M4</incoming>
+            <outgoing>Flow_M6</outgoing>
+        </task>
+        <parallelGateway id="Gateway_MSJoin">
+            <incoming>Flow_M5</incoming>
+            <incoming>Flow_M6</incoming>
+            <outgoing>Flow_M7</outgoing>
+        </parallelGateway>
+        <task id="Task_IssueLic" name="issue or renew driving licence">
+            <incoming>Flow_M7</incoming>
+            <outgoing>Flow_M8</outgoing>
+        </task>
+        <task id="Task_AdoptGuide" name="adopt guidelines or develop campaigns">
+            <incoming>Flow_M8</incoming>
+            <outgoing>Flow_M9</outgoing>
+        </task>
+        <task id="Task_InformComm" name="inform the Commission">
+            <incoming>Flow_M9</incoming>
+            <outgoing>Flow_M10</outgoing>
+        </task>
+        <endEvent id="End_MS" name="End">
+            <incoming>Flow_M10</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_M1" sourceRef="Start_MS" targetRef="Task_ApplyStds" />
+        <sequenceFlow id="Flow_M2" sourceRef="Task_ApplyStds" targetRef="Gateway_MSSplit" />
+        <sequenceFlow id="Flow_M3" sourceRef="Gateway_MSSplit" targetRef="Task_RequireMed" />
+        <sequenceFlow id="Flow_M4" sourceRef="Gateway_MSSplit" targetRef="Task_EstSys" />
+        <sequenceFlow id="Flow_M5" sourceRef="Task_RequireMed" targetRef="Gateway_MSJoin" />
+        <sequenceFlow id="Flow_M6" sourceRef="Task_EstSys" targetRef="Gateway_MSJoin" />
+        <sequenceFlow id="Flow_M7" sourceRef="Gateway_MSJoin" targetRef="Task_IssueLic" />
+        <sequenceFlow id="Flow_M8" sourceRef="Task_IssueLic" targetRef="Task_AdoptGuide" />
+        <sequenceFlow id="Flow_M9" sourceRef="Task_AdoptGuide" targetRef="Task_InformComm" />
+        <sequenceFlow id="Flow_M10" sourceRef="Task_InformComm" targetRef="End_MS" />
+    </process>
+
+    <process id="Process_Commission" isExecutable="false">
+        <startEvent id="Start_Comm" name="receive information">
+            <outgoing>Flow_C1</outgoing>
+            <messageEventDefinition />
+        </startEvent>
+        <task id="Task_MakeAvail" name="make information and guidelines available">
+            <incoming>Flow_C1</incoming>
+            <outgoing>Flow_C2</outgoing>
+        </task>
+        <endEvent id="End_Comm" name="End">
+            <incoming>Flow_C2</incoming>
+        </endEvent>
+        <sequenceFlow id="Flow_C1" sourceRef="Start_Comm" targetRef="Task_MakeAvail" />
+        <sequenceFlow id="Flow_C2" sourceRef="Task_MakeAvail" targetRef="End_Comm" />
+    </process>
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+            <bpmndi:BPMNShape id="Shape_Participant_Applicant" bpmnElement="Participant_Applicant" isHorizontal="true">
+                <omgdc:Bounds x="100" y="100" width="1600" height="200" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Participant_MemberStates" bpmnElement="Participant_MemberStates" isHorizontal="true">
+                <omgdc:Bounds x="100" y="350" width="1600" height="300" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Participant_Commission" bpmnElement="Participant_Commission" isHorizontal="true">
+                <omgdc:Bounds x="100" y="700" width="1600" height="200" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape id="Shape_Start_App" bpmnElement="Start_App">
+                <omgdc:Bounds x="150" y="180" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_SubmitApp" bpmnElement="Task_SubmitApp">
+                <omgdc:Bounds x="220" y="155" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Gateway_AppSplit" bpmnElement="Gateway_AppSplit">
+                <omgdc:Bounds x="360" y="175" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_UndergoMed" bpmnElement="Task_UndergoMed">
+                <omgdc:Bounds x="450" y="110" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_FillForm" bpmnElement="Task_FillForm">
+                <omgdc:Bounds x="450" y="210" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Gateway_AppJoin" bpmnElement="Gateway_AppJoin">
+                <omgdc:Bounds x="600" y="175" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_App" bpmnElement="End_App">
+                <omgdc:Bounds x="700" y="180" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_A1" bpmnElement="Flow_A1">
+                <omgdi:waypoint x="180" y="195" />
+                <omgdi:waypoint x="220" y="195" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A2" bpmnElement="Flow_A2">
+                <omgdi:waypoint x="320" y="195" />
+                <omgdi:waypoint x="360" y="195" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A3" bpmnElement="Flow_A3">
+                <omgdi:waypoint x="380" y="175" />
+                <omgdi:waypoint x="380" y="150" />
+                <omgdi:waypoint x="450" y="150" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A4" bpmnElement="Flow_A4">
+                <omgdi:waypoint x="380" y="215" />
+                <omgdi:waypoint x="380" y="250" />
+                <omgdi:waypoint x="450" y="250" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A5" bpmnElement="Flow_A5">
+                <omgdi:waypoint x="550" y="150" />
+                <omgdi:waypoint x="620" y="150" />
+                <omgdi:waypoint x="620" y="175" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A6" bpmnElement="Flow_A6">
+                <omgdi:waypoint x="550" y="250" />
+                <omgdi:waypoint x="620" y="250" />
+                <omgdi:waypoint x="620" y="215" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_A7" bpmnElement="Flow_A7">
+                <omgdi:waypoint x="640" y="195" />
+                <omgdi:waypoint x="700" y="195" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNShape id="Shape_Start_MS" bpmnElement="Start_MS">
+                <omgdc:Bounds x="255" y="460" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_ApplyStds" bpmnElement="Task_ApplyStds">
+                <omgdc:Bounds x="330" y="435" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Gateway_MSSplit" bpmnElement="Gateway_MSSplit">
+                <omgdc:Bounds x="480" y="455" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_RequireMed" bpmnElement="Task_RequireMed">
+                <omgdc:Bounds x="570" y="380" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_EstSys" bpmnElement="Task_EstSys">
+                <omgdc:Bounds x="570" y="490" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Gateway_MSJoin" bpmnElement="Gateway_MSJoin">
+                <omgdc:Bounds x="720" y="455" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_IssueLic" bpmnElement="Task_IssueLic">
+                <omgdc:Bounds x="810" y="435" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_AdoptGuide" bpmnElement="Task_AdoptGuide">
+                <omgdc:Bounds x="960" y="435" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_InformComm" bpmnElement="Task_InformComm">
+                <omgdc:Bounds x="1110" y="435" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_MS" bpmnElement="End_MS">
+                <omgdc:Bounds x="1260" y="460" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_M1" bpmnElement="Flow_M1">
+                <omgdi:waypoint x="285" y="475" />
+                <omgdi:waypoint x="330" y="475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M2" bpmnElement="Flow_M2">
+                <omgdi:waypoint x="430" y="475" />
+                <omgdi:waypoint x="480" y="475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M3" bpmnElement="Flow_M3">
+                <omgdi:waypoint x="500" y="455" />
+                <omgdi:waypoint x="500" y="420" />
+                <omgdi:waypoint x="570" y="420" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M4" bpmnElement="Flow_M4">
+                <omgdi:waypoint x="500" y="495" />
+                <omgdi:waypoint x="500" y="530" />
+                <omgdi:waypoint x="570" y="530" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M5" bpmnElement="Flow_M5">
+                <omgdi:waypoint x="670" y="420" />
+                <omgdi:waypoint x="740" y="420" />
+                <omgdi:waypoint x="740" y="455" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M6" bpmnElement="Flow_M6">
+                <omgdi:waypoint x="670" y="530" />
+                <omgdi:waypoint x="740" y="530" />
+                <omgdi:waypoint x="740" y="495" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M7" bpmnElement="Flow_M7">
+                <omgdi:waypoint x="760" y="475" />
+                <omgdi:waypoint x="810" y="475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M8" bpmnElement="Flow_M8">
+                <omgdi:waypoint x="910" y="475" />
+                <omgdi:waypoint x="960" y="475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M9" bpmnElement="Flow_M9">
+                <omgdi:waypoint x="1060" y="475" />
+                <omgdi:waypoint x="1110" y="475" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_M10" bpmnElement="Flow_M10">
+                <omgdi:waypoint x="1210" y="475" />
+                <omgdi:waypoint x="1260" y="475" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNShape id="Shape_Start_Comm" bpmnElement="Start_Comm">
+                <omgdc:Bounds x="1145" y="780" width="30" height="30" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_Task_MakeAvail" bpmnElement="Task_MakeAvail">
+                <omgdc:Bounds x="1240" y="755" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Shape_End_Comm" bpmnElement="End_Comm">
+                <omgdc:Bounds x="1400" y="780" width="30" height="30" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNEdge id="Edge_Flow_C1" bpmnElement="Flow_C1">
+                <omgdi:waypoint x="1175" y="795" />
+                <omgdi:waypoint x="1240" y="795" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_Flow_C2" bpmnElement="Flow_C2">
+                <omgdi:waypoint x="1340" y="795" />
+                <omgdi:waypoint x="1400" y="795" />
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Edge_MessageFlow_1" bpmnElement="MessageFlow_1">
+                <omgdi:waypoint x="270" y="235" />
+                <omgdi:waypoint x="270" y="460" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Edge_MessageFlow_2" bpmnElement="MessageFlow_2">
+                <omgdi:waypoint x="1160" y="515" />
+                <omgdi:waypoint x="1160" y="780" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

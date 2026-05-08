@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-ai-act-art-62"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_Article62">
+      <participant id="Participant_MemberStates" name="Member States" processRef="Process_MemberStates" />
+      <participant id="Participant_AIOffice" name="The AI Office" processRef="Process_AIOffice" />
+   </collaboration>
+
+   <process id="Process_MemberStates" isExecutable="false" name="Member States">
+      <laneSet id="LaneSet_MemberStates">
+         <lane id="Lane_MemberStates">
+            <flowNodeRef>Start_MS</flowNodeRef>
+            <flowNodeRef>GW1_MS</flowNodeRef>
+            <flowNodeRef>Task_1a</flowNodeRef>
+            <flowNodeRef>Task_1b</flowNodeRef>
+            <flowNodeRef>Task_1c</flowNodeRef>
+            <flowNodeRef>Task_1d</flowNodeRef>
+            <flowNodeRef>GW2_MS</flowNodeRef>
+            <flowNodeRef>Task_2</flowNodeRef>
+            <flowNodeRef>End_MS</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_MS" name="Start">
+         <outgoing>Flow_MS_Start_GW1</outgoing>
+      </startEvent>
+
+      <parallelGateway id="GW1_MS">
+         <incoming>Flow_MS_Start_GW1</incoming>
+         <outgoing>Flow_GW1_1a</outgoing>
+         <outgoing>Flow_GW1_1b</outgoing>
+         <outgoing>Flow_GW1_1c</outgoing>
+         <outgoing>Flow_GW1_1d</outgoing>
+      </parallelGateway>
+
+      <task id="Task_1a" name="Provide priority access to AI regulatory sandboxes">
+         <incoming>Flow_GW1_1a</incoming>
+         <outgoing>Flow_1a_GW2</outgoing>
+      </task>
+
+      <task id="Task_1b" name="Organise awareness raising and training activities">
+         <incoming>Flow_GW1_1b</incoming>
+         <outgoing>Flow_1b_GW2</outgoing>
+      </task>
+
+      <task id="Task_1c" name="Utilise and establish communication channels">
+         <incoming>Flow_GW1_1c</incoming>
+         <outgoing>Flow_1c_GW2</outgoing>
+      </task>
+
+      <task id="Task_1d" name="Facilitate participation in standardisation process">
+         <incoming>Flow_GW1_1d</incoming>
+         <outgoing>Flow_1d_GW2</outgoing>
+      </task>
+
+      <parallelGateway id="GW2_MS">
+         <incoming>Flow_1a_GW2</incoming>
+         <incoming>Flow_1b_GW2</incoming>
+         <incoming>Flow_1c_GW2</incoming>
+         <incoming>Flow_1d_GW2</incoming>
+         <outgoing>Flow_GW2_Task2</outgoing>
+      </parallelGateway>
+
+      <task id="Task_2" name="Set fees for conformity assessment (considering SME needs)">
+         <incoming>Flow_GW2_Task2</incoming>
+         <outgoing>Flow_Task2_End</outgoing>
+      </task>
+
+      <endEvent id="End_MS" name="End">
+         <incoming>Flow_Task2_End</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_MS_Start_GW1" sourceRef="Start_MS" targetRef="GW1_MS" />
+      <sequenceFlow id="Flow_GW1_1a" sourceRef="GW1_MS" targetRef="Task_1a" />
+      <sequenceFlow id="Flow_GW1_1b" sourceRef="GW1_MS" targetRef="Task_1b" />
+      <sequenceFlow id="Flow_GW1_1c" sourceRef="GW1_MS" targetRef="Task_1c" />
+      <sequenceFlow id="Flow_GW1_1d" sourceRef="GW1_MS" targetRef="Task_1d" />
+      <sequenceFlow id="Flow_1a_GW2" sourceRef="Task_1a" targetRef="GW2_MS" />
+      <sequenceFlow id="Flow_1b_GW2" sourceRef="Task_1b" targetRef="GW2_MS" />
+      <sequenceFlow id="Flow_1c_GW2" sourceRef="Task_1c" targetRef="GW2_MS" />
+      <sequenceFlow id="Flow_1d_GW2" sourceRef="Task_1d" targetRef="GW2_MS" />
+      <sequenceFlow id="Flow_GW2_Task2" sourceRef="GW2_MS" targetRef="Task_2" />
+      <sequenceFlow id="Flow_Task2_End" sourceRef="Task_2" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_AIOffice" isExecutable="false" name="The AI Office">
+      <laneSet id="LaneSet_AIOffice">
+         <lane id="Lane_AIOffice">
+            <flowNodeRef>Start_AIO</flowNodeRef>
+            <flowNodeRef>GW1_AIO</flowNodeRef>
+            <flowNodeRef>Task_3a</flowNodeRef>
+            <flowNodeRef>Task_3b</flowNodeRef>
+            <flowNodeRef>Task_3c</flowNodeRef>
+            <flowNodeRef>Task_3d</flowNodeRef>
+            <flowNodeRef>GW2_AIO</flowNodeRef>
+            <flowNodeRef>End_AIO</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_AIO" name="Start">
+         <outgoing>Flow_AIO_Start_GW1</outgoing>
+      </startEvent>
+
+      <parallelGateway id="GW1_AIO">
+         <incoming>Flow_AIO_Start_GW1</incoming>
+         <outgoing>Flow_GW1_3a</outgoing>
+         <outgoing>Flow_GW1_3b</outgoing>
+         <outgoing>Flow_GW1_3c</outgoing>
+         <outgoing>Flow_GW1_3d</outgoing>
+      </parallelGateway>
+
+      <task id="Task_3a" name="Provide standardised templates">
+         <incoming>Flow_GW1_3a</incoming>
+         <outgoing>Flow_3a_GW2</outgoing>
+      </task>
+
+      <task id="Task_3b" name="Develop and maintain single information platform">
+         <incoming>Flow_GW1_3b</incoming>
+         <outgoing>Flow_3b_GW2</outgoing>
+      </task>
+
+      <task id="Task_3c" name="Organise communication campaigns">
+         <incoming>Flow_GW1_3c</incoming>
+         <outgoing>Flow_3c_GW2</outgoing>
+      </task>
+
+      <task id="Task_3d" name="Evaluate and promote best practices convergence">
+         <incoming>Flow_GW1_3d</incoming>
+         <outgoing>Flow_3d_GW2</outgoing>
+      </task>
+
+      <parallelGateway id="GW2_AIO">
+         <incoming>Flow_3a_GW2</incoming>
+         <incoming>Flow_3b_GW2</incoming>
+         <incoming>Flow_3c_GW2</incoming>
+         <incoming>Flow_3d_GW2</incoming>
+         <outgoing>Flow_GW2_End</outgoing>
+      </parallelGateway>
+
+      <endEvent id="End_AIO" name="End">
+         <incoming>Flow_GW2_End</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_AIO_Start_GW1" sourceRef="Start_AIO" targetRef="GW1_AIO" />
+      <sequenceFlow id="Flow_GW1_3a" sourceRef="GW1_AIO" targetRef="Task_3a" />
+      <sequenceFlow id="Flow_GW1_3b" sourceRef="GW1_AIO" targetRef="Task_3b" />
+      <sequenceFlow id="Flow_GW1_3c" sourceRef="GW1_AIO" targetRef="Task_3c" />
+      <sequenceFlow id="Flow_GW1_3d" sourceRef="GW1_AIO" targetRef="Task_3d" />
+      <sequenceFlow id="Flow_3a_GW2" sourceRef="Task_3a" targetRef="GW2_AIO" />
+      <sequenceFlow id="Flow_3b_GW2" sourceRef="Task_3b" targetRef="GW2_AIO" />
+      <sequenceFlow id="Flow_3c_GW2" sourceRef="Task_3c" targetRef="GW2_AIO" />
+      <sequenceFlow id="Flow_3d_GW2" sourceRef="Task_3d" targetRef="GW2_AIO" />
+      <sequenceFlow id="Flow_GW2_End" sourceRef="GW2_AIO" targetRef="End_AIO" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="Diagram_Article62">
+      <bpmndi:BPMNPlane id="Plane_Article62" bpmnElement="Collaboration_Article62">
+         <!-- Pool and Lane Member States -->
+         <bpmndi:BPMNShape id="Shape_Participant_MS" bpmnElement="Participant_MemberStates" isHorizontal="true">
+            <omgdc:Bounds x="100" y="100" width="800" height="500" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Lane_MS" bpmnElement="Lane_MemberStates" isHorizontal="true">
+            <omgdc:Bounds x="130" y="100" width="770" height="500" />
+         </bpmndi:BPMNShape>
+
+         <!-- Elements Member States -->
+         <bpmndi:BPMNShape id="Shape_Start_MS" bpmnElement="Start_MS">
+            <omgdc:Bounds x="180" y="335" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_GW1_MS" bpmnElement="GW1_MS">
+            <omgdc:Bounds x="250" y="330" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_1a" bpmnElement="Task_1a">
+            <omgdc:Bounds x="350" y="120" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_1b" bpmnElement="Task_1b">
+            <omgdc:Bounds x="350" y="230" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_1c" bpmnElement="Task_1c">
+            <omgdc:Bounds x="350" y="340" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_1d" bpmnElement="Task_1d">
+            <omgdc:Bounds x="350" y="450" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_GW2_MS" bpmnElement="GW2_MS">
+            <omgdc:Bounds x="500" y="330" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_2" bpmnElement="Task_2">
+            <omgdc:Bounds x="600" y="310" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_End_MS" bpmnElement="End_MS">
+            <omgdc:Bounds x="750" y="335" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence Flows Member States -->
+         <bpmndi:BPMNEdge id="Edge_MS_Start_GW1" bpmnElement="Flow_MS_Start_GW1">
+            <omgdi:waypoint x="210" y="350" />
+            <omgdi:waypoint x="250" y="350" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_1a" bpmnElement="Flow_GW1_1a">
+            <omgdi:waypoint x="270" y="330" />
+            <omgdi:waypoint x="270" y="160" />
+            <omgdi:waypoint x="350" y="160" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_1b" bpmnElement="Flow_GW1_1b">
+            <omgdi:waypoint x="270" y="330" />
+            <omgdi:waypoint x="270" y="270" />
+            <omgdi:waypoint x="350" y="270" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_1c" bpmnElement="Flow_GW1_1c">
+            <omgdi:waypoint x="290" y="350" />
+            <omgdi:waypoint x="350" y="380" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_1d" bpmnElement="Flow_GW1_1d">
+            <omgdi:waypoint x="270" y="370" />
+            <omgdi:waypoint x="270" y="490" />
+            <omgdi:waypoint x="350" y="490" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_1a_GW2" bpmnElement="Flow_1a_GW2">
+            <omgdi:waypoint x="450" y="160" />
+            <omgdi:waypoint x="520" y="160" />
+            <omgdi:waypoint x="520" y="330" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_1b_GW2" bpmnElement="Flow_1b_GW2">
+            <omgdi:waypoint x="450" y="270" />
+            <omgdi:waypoint x="520" y="270" />
+            <omgdi:waypoint x="520" y="330" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_1c_GW2" bpmnElement="Flow_1c_GW2">
+            <omgdi:waypoint x="450" y="380" />
+            <omgdi:waypoint x="520" y="350" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_1d_GW2" bpmnElement="Flow_1d_GW2">
+            <omgdi:waypoint x="450" y="490" />
+            <omgdi:waypoint x="520" y="490" />
+            <omgdi:waypoint x="520" y="370" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW2_Task2" bpmnElement="Flow_GW2_Task2">
+            <omgdi:waypoint x="540" y="350" />
+            <omgdi:waypoint x="600" y="350" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_Task2_End" bpmnElement="Flow_Task2_End">
+            <omgdi:waypoint x="700" y="350" />
+            <omgdi:waypoint x="750" y="350" />
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool and Lane AI Office -->
+         <bpmndi:BPMNShape id="Shape_Participant_AIO" bpmnElement="Participant_AIOffice" isHorizontal="true">
+            <omgdc:Bounds x="100" y="650" width="800" height="500" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Lane_AIO" bpmnElement="Lane_AIOffice" isHorizontal="true">
+            <omgdc:Bounds x="130" y="650" width="770" height="500" />
+         </bpmndi:BPMNShape>
+
+         <!-- Elements AI Office -->
+         <bpmndi:BPMNShape id="Shape_Start_AIO" bpmnElement="Start_AIO">
+            <omgdc:Bounds x="180" y="885" width="30" height="30" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_GW1_AIO" bpmnElement="GW1_AIO">
+            <omgdc:Bounds x="250" y="880" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_3a" bpmnElement="Task_3a">
+            <omgdc:Bounds x="350" y="670" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_3b" bpmnElement="Task_3b">
+            <omgdc:Bounds x="350" y="780" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_3c" bpmnElement="Task_3c">
+            <omgdc:Bounds x="350" y="890" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_Task_3d" bpmnElement="Task_3d">
+            <omgdc:Bounds x="350" y="1000" width="100" height="80" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_GW2_AIO" bpmnElement="GW2_AIO">
+            <omgdc:Bounds x="500" y="880" width="40" height="40" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Shape_End_AIO" bpmnElement="End_AIO">
+            <omgdc:Bounds x="600" y="885" width="30" height="30" />
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence Flows AI Office -->
+         <bpmndi:BPMNEdge id="Edge_AIO_Start_GW1" bpmnElement="Flow_AIO_Start_GW1">
+            <omgdi:waypoint x="210" y="900" />
+            <omgdi:waypoint x="250" y="900" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_3a" bpmnElement="Flow_GW1_3a">
+            <omgdi:waypoint x="270" y="880" />
+            <omgdi:waypoint x="270" y="710" />
+            <omgdi:waypoint x="350" y="710" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_3b" bpmnElement="Flow_GW1_3b">
+            <omgdi:waypoint x="270" y="880" />
+            <omgdi:waypoint x="270" y="820" />
+            <omgdi:waypoint x="350" y="820" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_3c" bpmnElement="Flow_GW1_3c">
+            <omgdi:waypoint x="290" y="900" />
+            <omgdi:waypoint x="350" y="930" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW1_3d" bpmnElement="Flow_GW1_3d">
+            <omgdi:waypoint x="270" y="920" />
+            <omgdi:waypoint x="270" y="1040" />
+            <omgdi:waypoint x="350" y="1040" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_3a_GW2" bpmnElement="Flow_3a_GW2">
+            <omgdi:waypoint x="450" y="710" />
+            <omgdi:waypoint x="520" y="710" />
+            <omgdi:waypoint x="520" y="880" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_3b_GW2" bpmnElement="Flow_3b_GW2">
+            <omgdi:waypoint x="450" y="820" />
+            <omgdi:waypoint x="520" y="820" />
+            <omgdi:waypoint x="520" y="880" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_3c_GW2" bpmnElement="Flow_3c_GW2">
+            <omgdi:waypoint x="450" y="930" />
+            <omgdi:waypoint x="520" y="900" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_3d_GW2" bpmnElement="Flow_3d_GW2">
+            <omgdi:waypoint x="450" y="1040" />
+            <omgdi:waypoint x="520" y="1040" />
+            <omgdi:waypoint x="520" y="920" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Edge_GW2_End" bpmnElement="Flow_GW2_End">
+            <omgdi:waypoint x="540" y="900" />
+            <omgdi:waypoint x="600" y="900" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

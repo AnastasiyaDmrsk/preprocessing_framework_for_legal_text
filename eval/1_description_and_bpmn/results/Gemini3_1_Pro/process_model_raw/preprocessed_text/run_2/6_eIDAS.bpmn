@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-regulation-process"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Regulation" name="Trust Services Regulation Process" processRef="Process_Regulation" />
+   </collaboration>
+
+   <process id="Process_Regulation" isClosed="false" isExecutable="true" name="Regulation Process" processType="None">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_MS" name="Member States">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Task_MS_1</flowNodeRef>
+            <flowNodeRef>Task_MS_2</flowNodeRef>
+            <flowNodeRef>GW_Split_3</flowNodeRef>
+         </lane>
+         <lane id="Lane_SB" name="Supervisory Body">
+            <flowNodeRef>Task_SB_3a</flowNodeRef>
+            <flowNodeRef>Task_SB_3b</flowNodeRef>
+            <flowNodeRef>GW_Join_3</flowNodeRef>
+            <flowNodeRef>GW_Split_4</flowNodeRef>
+            <flowNodeRef>Task_SB_4a</flowNodeRef>
+            <flowNodeRef>Task_SB_4b</flowNodeRef>
+            <flowNodeRef>Task_SB_4c</flowNodeRef>
+            <flowNodeRef>Task_SB_4d</flowNodeRef>
+            <flowNodeRef>Task_SB_4e</flowNodeRef>
+            <flowNodeRef>Task_SB_4f</flowNodeRef>
+            <flowNodeRef>Task_SB_4g</flowNodeRef>
+            <flowNodeRef>Task_SB_4h</flowNodeRef>
+            <flowNodeRef>Task_SB_4i</flowNodeRef>
+            <flowNodeRef>Task_SB_4j</flowNodeRef>
+            <flowNodeRef>GW_Join_4</flowNodeRef>
+            <flowNodeRef>GW_Split_18</flowNodeRef>
+            <flowNodeRef>Task_SB_18a</flowNodeRef>
+            <flowNodeRef>Task_SB_18b</flowNodeRef>
+            <flowNodeRef>Task_SB_18c</flowNodeRef>
+            <flowNodeRef>GW_Join_18</flowNodeRef>
+            <flowNodeRef>Task_SB_17_6</flowNodeRef>
+            <flowNodeRef>Task_SB_19_3</flowNodeRef>
+         </lane>
+         <lane id="Lane_Com" name="Commission">
+            <flowNodeRef>Task_Com_17_7</flowNodeRef>
+            <flowNodeRef>GW_Split_19</flowNodeRef>
+            <flowNodeRef>Task_Com_19_4a</flowNodeRef>
+            <flowNodeRef>Task_Com_19_4b</flowNodeRef>
+            <flowNodeRef>GW_Join_19</flowNodeRef>
+            <flowNodeRef>EndEvent_1</flowNodeRef>
+         </lane>
+         <lane id="Lane_TSP" name="Trust Service Providers">
+            <flowNodeRef>Task_TSP_19_1</flowNodeRef>
+            <flowNodeRef>Task_TSP_19_2</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- Member States Elements -->
+      <startEvent id="StartEvent_1" name="Regulation Active">
+         <outgoing>Flow_S_T1</outgoing>
+      </startEvent>
+      <task id="Task_MS_1" name="Designate supervisory body">
+         <incoming>Flow_S_T1</incoming>
+         <outgoing>Flow_T1_T2</outgoing>
+      </task>
+      <task id="Task_MS_2" name="Notify to Commission names and addresses">
+         <incoming>Flow_T1_T2</incoming>
+         <outgoing>Flow_T2_G1</outgoing>
+      </task>
+      <parallelGateway id="GW_Split_3" name="Split 3">
+         <incoming>Flow_T2_G1</incoming>
+         <outgoing>Flow_G1_3a</outgoing>
+         <outgoing>Flow_G1_3b</outgoing>
+      </parallelGateway>
+
+      <!-- Supervisory Body Elements -->
+      <task id="Task_SB_3a" name="Supervise qualified trust service providers">
+         <incoming>Flow_G1_3a</incoming>
+         <outgoing>Flow_3a_G2</outgoing>
+      </task>
+      <task id="Task_SB_3b" name="Take action on non-qualified trust service providers">
+         <incoming>Flow_G1_3b</incoming>
+         <outgoing>Flow_3b_G2</outgoing>
+      </task>
+      <parallelGateway id="GW_Join_3" name="Join 3">
+         <incoming>Flow_3a_G2</incoming>
+         <incoming>Flow_3b_G2</incoming>
+         <outgoing>Flow_G2_G3</outgoing>
+      </parallelGateway>
+
+      <parallelGateway id="GW_Split_4" name="Split 4">
+         <incoming>Flow_G2_G3</incoming>
+         <outgoing>Flow_G3_4a</outgoing>
+         <outgoing>Flow_G3_4b</outgoing>
+         <outgoing>Flow_G3_4c</outgoing>
+         <outgoing>Flow_G3_4d</outgoing>
+         <outgoing>Flow_G3_4e</outgoing>
+         <outgoing>Flow_G3_4f</outgoing>
+         <outgoing>Flow_G3_4g</outgoing>
+         <outgoing>Flow_G3_4h</outgoing>
+         <outgoing>Flow_G3_4i</outgoing>
+         <outgoing>Flow_G3_4j</outgoing>
+      </parallelGateway>
+
+      <task id="Task_SB_4a" name="Cooperate with other supervisory bodies"><incoming>Flow_G3_4a</incoming><outgoing>Flow_4a_G4</outgoing></task>
+      <task id="Task_SB_4b" name="Analyse conformity assessment reports"><incoming>Flow_G3_4b</incoming><outgoing>Flow_4b_G4</outgoing></task>
+      <task id="Task_SB_4c" name="Inform about breaches of security"><incoming>Flow_G3_4c</incoming><outgoing>Flow_4c_G4</outgoing></task>
+      <task id="Task_SB_4d" name="Report to the Commission"><incoming>Flow_G3_4d</incoming><outgoing>Flow_4d_G4</outgoing></task>
+      <task id="Task_SB_4e" name="Carry out audits"><incoming>Flow_G3_4e</incoming><outgoing>Flow_4e_G4</outgoing></task>
+      <task id="Task_SB_4f" name="Cooperate with data protection authorities"><incoming>Flow_G3_4f</incoming><outgoing>Flow_4f_G4</outgoing></task>
+      <task id="Task_SB_4g" name="Grant and withdraw qualified status"><incoming>Flow_G3_4g</incoming><outgoing>Flow_4g_G4</outgoing></task>
+      <task id="Task_SB_4h" name="Inform body responsible for national trusted list"><incoming>Flow_G3_4h</incoming><outgoing>Flow_4h_G4</outgoing></task>
+      <task id="Task_SB_4i" name="Verify termination plans"><incoming>Flow_G3_4i</incoming><outgoing>Flow_4i_G4</outgoing></task>
+      <task id="Task_SB_4j" name="Require remedy of failure"><incoming>Flow_G3_4j</incoming><outgoing>Flow_4j_G4</outgoing></task>
+
+      <parallelGateway id="GW_Join_4" name="Join 4">
+         <incoming>Flow_4a_G4</incoming><incoming>Flow_4b_G4</incoming><incoming>Flow_4c_G4</incoming><incoming>Flow_4d_G4</incoming><incoming>Flow_4e_G4</incoming>
+         <incoming>Flow_4f_G4</incoming><incoming>Flow_4g_G4</incoming><incoming>Flow_4h_G4</incoming><incoming>Flow_4i_G4</incoming><incoming>Flow_4j_G4</incoming>
+         <outgoing>Flow_G4_G5</outgoing>
+      </parallelGateway>
+
+      <parallelGateway id="GW_Split_18" name="Split 18">
+         <incoming>Flow_G4_G5</incoming>
+         <outgoing>Flow_G5_18a</outgoing>
+         <outgoing>Flow_G5_18b</outgoing>
+         <outgoing>Flow_G5_18c</outgoing>
+      </parallelGateway>
+
+      <task id="Task_SB_18a" name="Refuse request: not competent"><incoming>Flow_G5_18a</incoming><outgoing>Flow_18a_G6</outgoing></task>
+      <task id="Task_SB_18b" name="Refuse request: not proportionate"><incoming>Flow_G5_18b</incoming><outgoing>Flow_18b_G6</outgoing></task>
+      <task id="Task_SB_18c" name="Refuse request: incompatible"><incoming>Flow_G5_18c</incoming><outgoing>Flow_18c_G6</outgoing></task>
+
+      <parallelGateway id="GW_Join_18" name="Join 18">
+         <incoming>Flow_18a_G6</incoming><incoming>Flow_18b_G6</incoming><incoming>Flow_18c_G6</incoming>
+         <outgoing>Flow_G6_176</outgoing>
+      </parallelGateway>
+
+      <task id="Task_SB_17_6" name="Submit report to Commission">
+         <incoming>Flow_G6_176</incoming>
+         <outgoing>Flow_176_177</outgoing>
+      </task>
+
+      <!-- Commission Elements -->
+      <task id="Task_Com_17_7" name="Make annual report available">
+         <incoming>Flow_176_177</incoming>
+         <outgoing>Flow_177_191</outgoing>
+      </task>
+
+      <!-- TSP Elements -->
+      <task id="Task_TSP_19_1" name="Take technical and organisational measures">
+         <incoming>Flow_177_191</incoming>
+         <outgoing>Flow_191_192</outgoing>
+      </task>
+      <task id="Task_TSP_19_2" name="Notify breach of security">
+         <incoming>Flow_191_192</incoming>
+         <outgoing>Flow_192_193</outgoing>
+      </task>
+
+      <!-- Back to SB Elements -->
+      <task id="Task_SB_19_3" name="Provide ENISA with summary of notifications">
+         <incoming>Flow_192_193</incoming>
+         <outgoing>Flow_193_G7</outgoing>
+      </task>
+
+      <!-- Back to Commission Elements -->
+      <parallelGateway id="GW_Split_19" name="Split 19">
+         <incoming>Flow_193_G7</incoming>
+         <outgoing>Flow_G7_194a</outgoing>
+         <outgoing>Flow_G7_194b</outgoing>
+      </parallelGateway>
+
+      <task id="Task_Com_19_4a" name="Specify measures"><incoming>Flow_G7_194a</incoming><outgoing>Flow_194a_G8</outgoing></task>
+      <task id="Task_Com_19_4b" name="Define formats and procedures"><incoming>Flow_G7_194b</incoming><outgoing>Flow_194b_G8</outgoing></task>
+
+      <parallelGateway id="GW_Join_19" name="Join 19">
+         <incoming>Flow_194a_G8</incoming>
+         <incoming>Flow_194b_G8</incoming>
+         <outgoing>Flow_G8_End</outgoing>
+      </parallelGateway>
+
+      <endEvent id="EndEvent_1" name="Process Complete">
+         <incoming>Flow_G8_End</incoming>
+      </endEvent>
+
+      <!-- Sequence Flows -->
+      <sequenceFlow id="Flow_S_T1" sourceRef="StartEvent_1" targetRef="Task_MS_1" />
+      <sequenceFlow id="Flow_T1_T2" sourceRef="Task_MS_1" targetRef="Task_MS_2" />
+      <sequenceFlow id="Flow_T2_G1" sourceRef="Task_MS_2" targetRef="GW_Split_3" />
+      <sequenceFlow id="Flow_G1_3a" sourceRef="GW_Split_3" targetRef="Task_SB_3a" />
+      <sequenceFlow id="Flow_G1_3b" sourceRef="GW_Split_3" targetRef="Task_SB_3b" />
+      <sequenceFlow id="Flow_3a_G2" sourceRef="Task_SB_3a" targetRef="GW_Join_3" />
+      <sequenceFlow id="Flow_3b_G2" sourceRef="Task_SB_3b" targetRef="GW_Join_3" />
+      <sequenceFlow id="Flow_G2_G3" sourceRef="GW_Join_3" targetRef="GW_Split_4" />
+      <sequenceFlow id="Flow_G3_4a" sourceRef="GW_Split_4" targetRef="Task_SB_4a" />
+      <sequenceFlow id="Flow_G3_4b" sourceRef="GW_Split_4" targetRef="Task_SB_4b" />
+      <sequenceFlow id="Flow_G3_4c" sourceRef="GW_Split_4" targetRef="Task_SB_4c" />
+      <sequenceFlow id="Flow_G3_4d" sourceRef="GW_Split_4" targetRef="Task_SB_4d" />
+      <sequenceFlow id="Flow_G3_4e" sourceRef="GW_Split_4" targetRef="Task_SB_4e" />
+      <sequenceFlow id="Flow_G3_4f" sourceRef="GW_Split_4" targetRef="Task_SB_4f" />
+      <sequenceFlow id="Flow_G3_4g" sourceRef="GW_Split_4" targetRef="Task_SB_4g" />
+      <sequenceFlow id="Flow_G3_4h" sourceRef="GW_Split_4" targetRef="Task_SB_4h" />
+      <sequenceFlow id="Flow_G3_4i" sourceRef="GW_Split_4" targetRef="Task_SB_4i" />
+      <sequenceFlow id="Flow_G3_4j" sourceRef="GW_Split_4" targetRef="Task_SB_4j" />
+      <sequenceFlow id="Flow_4a_G4" sourceRef="Task_SB_4a" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4b_G4" sourceRef="Task_SB_4b" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4c_G4" sourceRef="Task_SB_4c" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4d_G4" sourceRef="Task_SB_4d" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4e_G4" sourceRef="Task_SB_4e" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4f_G4" sourceRef="Task_SB_4f" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4g_G4" sourceRef="Task_SB_4g" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4h_G4" sourceRef="Task_SB_4h" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4i_G4" sourceRef="Task_SB_4i" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_4j_G4" sourceRef="Task_SB_4j" targetRef="GW_Join_4" />
+      <sequenceFlow id="Flow_G4_G5" sourceRef="GW_Join_4" targetRef="GW_Split_18" />
+      <sequenceFlow id="Flow_G5_18a" sourceRef="GW_Split_18" targetRef="Task_SB_18a" />
+      <sequenceFlow id="Flow_G5_18b" sourceRef="GW_Split_18" targetRef="Task_SB_18b" />
+      <sequenceFlow id="Flow_G5_18c" sourceRef="GW_Split_18" targetRef="Task_SB_18c" />
+      <sequenceFlow id="Flow_18a_G6" sourceRef="Task_SB_18a" targetRef="GW_Join_18" />
+      <sequenceFlow id="Flow_18b_G6" sourceRef="Task_SB_18b" targetRef="GW_Join_18" />
+      <sequenceFlow id="Flow_18c_G6" sourceRef="Task_SB_18c" targetRef="GW_Join_18" />
+      <sequenceFlow id="Flow_G6_176" sourceRef="GW_Join_18" targetRef="Task_SB_17_6" />
+      <sequenceFlow id="Flow_176_177" sourceRef="Task_SB_17_6" targetRef="Task_Com_17_7" />
+      <sequenceFlow id="Flow_177_191" sourceRef="Task_Com_17_7" targetRef="Task_TSP_19_1" />
+      <sequenceFlow id="Flow_191_192" sourceRef="Task_TSP_19_1" targetRef="Task_TSP_19_2" />
+      <sequenceFlow id="Flow_192_193" sourceRef="Task_TSP_19_2" targetRef="Task_SB_19_3" />
+      <sequenceFlow id="Flow_193_G7" sourceRef="Task_SB_19_3" targetRef="GW_Split_19" />
+      <sequenceFlow id="Flow_G7_194a" sourceRef="GW_Split_19" targetRef="Task_Com_19_4a" />
+      <sequenceFlow id="Flow_G7_194b" sourceRef="GW_Split_19" targetRef="Task_Com_19_4b" />
+      <sequenceFlow id="Flow_194a_G8" sourceRef="Task_Com_19_4a" targetRef="GW_Join_19" />
+      <sequenceFlow id="Flow_194b_G8" sourceRef="Task_Com_19_4b" targetRef="GW_Join_19" />
+      <sequenceFlow id="Flow_G8_End" sourceRef="GW_Join_19" targetRef="EndEvent_1" />
+
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_Regulation">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_Regulation">
+         <bpmndi:BPMNShape bpmnElement="Participant_Regulation" id="Participant_Regulation_gui" isHorizontal="true">
+            <omgdc:Bounds height="1450.0" width="2200.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Lane_MS" id="Lane_MS_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2170.0" x="80.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_SB" id="Lane_SB_gui" isHorizontal="true">
+            <omgdc:Bounds height="900.0" width="2170.0" x="80.0" y="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Com" id="Lane_Com_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2170.0" x="80.0" y="1100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_TSP" id="Lane_TSP_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2170.0" x="80.0" y="1300.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Nodes -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_gui">
+            <omgdc:Bounds height="36.0" width="36.0" x="100.0" y="100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1" id="Task_MS_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_2" id="Task_MS_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Split_3" id="GW_Split_3_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="460.0" y="95.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_SB_3a" id="Task_SB_3a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="540.0" y="250.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_3b" id="Task_SB_3b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="540.0" y="350.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Join_3" id="GW_Join_3_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="680.0" y="315.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Split_4" id="GW_Split_4_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="760.0" y="595.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4a" id="Task_SB_4a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="220.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4b" id="Task_SB_4b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4c" id="Task_SB_4c_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="380.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4d" id="Task_SB_4d_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="460.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4e" id="Task_SB_4e_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="540.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4f" id="Task_SB_4f_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="620.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4g" id="Task_SB_4g_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4h" id="Task_SB_4h_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="780.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4i" id="Task_SB_4i_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="860.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_4j" id="Task_SB_4j_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="860.0" y="940.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="GW_Join_4" id="GW_Join_4_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1000.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Split_18" id="GW_Split_18_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1080.0" y="595.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_SB_18a" id="Task_SB_18a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1160.0" y="500.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_18b" id="Task_SB_18b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1160.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_18c" id="Task_SB_18c_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1160.0" y="660.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="GW_Join_18" id="GW_Join_18_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1300.0" y="595.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_SB_17_6" id="Task_SB_17_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="560.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Com_17_7" id="Task_Com_17_7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="1140.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TSP_19_1" id="Task_TSP_19_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1540.0" y="1340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TSP_19_2" id="Task_TSP_19_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1680.0" y="1340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SB_19_3" id="Task_SB_19_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1820.0" y="560.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="GW_Split_19" id="GW_Split_19_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="1820.0" y="1165.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_Com_19_4a" id="Task_Com_19_4a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1900.0" y="1100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Com_19_4b" id="Task_Com_19_4b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1900.0" y="1200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Join_19" id="GW_Join_19_gui">
+            <omgdc:Bounds height="50.0" width="50.0" x="2020.0" y="1165.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_1" id="EndEvent_1_gui">
+            <omgdc:Bounds height="36.0" width="36.0" x="2100.0" y="1172.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Edges -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_S_T1" id="Flow_S_T1_gui">
+            <omgdi:waypoint x="136.0" y="118.0" /><omgdi:waypoint x="180.0" y="120.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T1_T2" id="Flow_T1_T2_gui">
+            <omgdi:waypoint x="280.0" y="120.0" /><omgdi:waypoint x="320.0" y="120.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_T2_G1" id="Flow_T2_G1_gui">
+            <omgdi:waypoint x="420.0" y="120.0" /><omgdi:waypoint x="460.0" y="120.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G1_3a" id="Flow_G1_3a_gui">
+            <omgdi:waypoint x="485.0" y="145.0" /><omgdi:waypoint x="485.0" y="290.0" /><omgdi:waypoint x="540.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G1_3b" id="Flow_G1_3b_gui">
+            <omgdi:waypoint x="485.0" y="145.0" /><omgdi:waypoint x="485.0" y="390.0" /><omgdi:waypoint x="540.0" y="390.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_3a_G2" id="Flow_3a_G2_gui">
+            <omgdi:waypoint x="640.0" y="290.0" /><omgdi:waypoint x="705.0" y="290.0" /><omgdi:waypoint x="705.0" y="315.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_3b_G2" id="Flow_3b_G2_gui">
+            <omgdi:waypoint x="640.0" y="390.0" /><omgdi:waypoint x="705.0" y="390.0" /><omgdi:waypoint x="705.0" y="365.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G2_G3" id="Flow_G2_G3_gui">
+            <omgdi:waypoint x="730.0" y="340.0" /><omgdi:waypoint x="785.0" y="340.0" /><omgdi:waypoint x="785.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4a" id="Flow_G3_4a_gui"><omgdi:waypoint x="785.0" y="595.0" /><omgdi:waypoint x="785.0" y="260.0" /><omgdi:waypoint x="860.0" y="260.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4b" id="Flow_G3_4b_gui"><omgdi:waypoint x="785.0" y="595.0" /><omgdi:waypoint x="785.0" y="340.0" /><omgdi:waypoint x="860.0" y="340.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4c" id="Flow_G3_4c_gui"><omgdi:waypoint x="785.0" y="595.0" /><omgdi:waypoint x="785.0" y="420.0" /><omgdi:waypoint x="860.0" y="420.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4d" id="Flow_G3_4d_gui"><omgdi:waypoint x="785.0" y="595.0" /><omgdi:waypoint x="785.0" y="500.0" /><omgdi:waypoint x="860.0" y="500.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4e" id="Flow_G3_4e_gui"><omgdi:waypoint x="810.0" y="620.0" /><omgdi:waypoint x="860.0" y="620.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4f" id="Flow_G3_4f_gui"><omgdi:waypoint x="785.0" y="645.0" /><omgdi:waypoint x="785.0" y="660.0" /><omgdi:waypoint x="860.0" y="660.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4g" id="Flow_G3_4g_gui"><omgdi:waypoint x="785.0" y="645.0" /><omgdi:waypoint x="785.0" y="740.0" /><omgdi:waypoint x="860.0" y="740.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4h" id="Flow_G3_4h_gui"><omgdi:waypoint x="785.0" y="645.0" /><omgdi:waypoint x="785.0" y="820.0" /><omgdi:waypoint x="860.0" y="820.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4i" id="Flow_G3_4i_gui"><omgdi:waypoint x="785.0" y="645.0" /><omgdi:waypoint x="785.0" y="900.0" /><omgdi:waypoint x="860.0" y="900.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G3_4j" id="Flow_G3_4j_gui"><omgdi:waypoint x="785.0" y="645.0" /><omgdi:waypoint x="785.0" y="980.0" /><omgdi:waypoint x="860.0" y="980.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_4a_G4" id="Flow_4a_G4_gui"><omgdi:waypoint x="960.0" y="260.0" /><omgdi:waypoint x="1025.0" y="260.0" /><omgdi:waypoint x="1025.0" y="595.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4b_G4" id="Flow_4b_G4_gui"><omgdi:waypoint x="960.0" y="340.0" /><omgdi:waypoint x="1025.0" y="340.0" /><omgdi:waypoint x="1025.0" y="595.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4c_G4" id="Flow_4c_G4_gui"><omgdi:waypoint x="960.0" y="420.0" /><omgdi:waypoint x="1025.0" y="420.0" /><omgdi:waypoint x="1025.0" y="595.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4d_G4" id="Flow_4d_G4_gui"><omgdi:waypoint x="960.0" y="500.0" /><omgdi:waypoint x="1025.0" y="500.0" /><omgdi:waypoint x="1025.0" y="595.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4e_G4" id="Flow_4e_G4_gui"><omgdi:waypoint x="960.0" y="620.0" /><omgdi:waypoint x="1000.0" y="620.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4f_G4" id="Flow_4f_G4_gui"><omgdi:waypoint x="960.0" y="660.0" /><omgdi:waypoint x="1025.0" y="660.0" /><omgdi:waypoint x="1025.0" y="645.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4g_G4" id="Flow_4g_G4_gui"><omgdi:waypoint x="960.0" y="740.0" /><omgdi:waypoint x="1025.0" y="740.0" /><omgdi:waypoint x="1025.0" y="645.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4h_G4" id="Flow_4h_G4_gui"><omgdi:waypoint x="960.0" y="820.0" /><omgdi:waypoint x="1025.0" y="820.0" /><omgdi:waypoint x="1025.0" y="645.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4i_G4" id="Flow_4i_G4_gui"><omgdi:waypoint x="960.0" y="900.0" /><omgdi:waypoint x="1025.0" y="900.0" /><omgdi:waypoint x="1025.0" y="645.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4j_G4" id="Flow_4j_G4_gui"><omgdi:waypoint x="960.0" y="980.0" /><omgdi:waypoint x="1025.0" y="980.0" /><omgdi:waypoint x="1025.0" y="645.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_G4_G5" id="Flow_G4_G5_gui">
+            <omgdi:waypoint x="1050.0" y="620.0" /><omgdi:waypoint x="1080.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_G5_18a" id="Flow_G5_18a_gui"><omgdi:waypoint x="1105.0" y="595.0" /><omgdi:waypoint x="1105.0" y="540.0" /><omgdi:waypoint x="1160.0" y="540.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G5_18b" id="Flow_G5_18b_gui"><omgdi:waypoint x="1130.0" y="620.0" /><omgdi:waypoint x="1160.0" y="620.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G5_18c" id="Flow_G5_18c_gui"><omgdi:waypoint x="1105.0" y="645.0" /><omgdi:waypoint x="1105.0" y="700.0" /><omgdi:waypoint x="1160.0" y="700.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_18a_G6" id="Flow_18a_G6_gui"><omgdi:waypoint x="1260.0" y="540.0" /><omgdi:waypoint x="1325.0" y="540.0" /><omgdi:waypoint x="1325.0" y="595.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_18b_G6" id="Flow_18b_G6_gui"><omgdi:waypoint x="1260.0" y="620.0" /><omgdi:waypoint x="1300.0" y="620.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_18c_G6" id="Flow_18c_G6_gui"><omgdi:waypoint x="1260.0" y="700.0" /><omgdi:waypoint x="1325.0" y="700.0" /><omgdi:waypoint x="1325.0" y="645.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_G6_176" id="Flow_G6_176_gui">
+            <omgdi:waypoint x="1350.0" y="620.0" /><omgdi:waypoint x="1400.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_176_177" id="Flow_176_177_gui">
+            <omgdi:waypoint x="1450.0" y="640.0" /><omgdi:waypoint x="1450.0" y="1140.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_177_191" id="Flow_177_191_gui">
+            <omgdi:waypoint x="1450.0" y="1220.0" /><omgdi:waypoint x="1450.0" y="1380.0" /><omgdi:waypoint x="1540.0" y="1380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_191_192" id="Flow_191_192_gui">
+            <omgdi:waypoint x="1640.0" y="1380.0" /><omgdi:waypoint x="1680.0" y="1380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_192_193" id="Flow_192_193_gui">
+            <omgdi:waypoint x="1780.0" y="1380.0" /><omgdi:waypoint x="1870.0" y="1380.0" /><omgdi:waypoint x="1870.0" y="640.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_193_G7" id="Flow_193_G7_gui">
+            <omgdi:waypoint x="1870.0" y="640.0" /><omgdi:waypoint x="1870.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_G7_194a" id="Flow_G7_194a_gui">
+            <omgdi:waypoint x="1845.0" y="1165.0" /><omgdi:waypoint x="1845.0" y="1140.0" /><omgdi:waypoint x="1900.0" y="1140.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G7_194b" id="Flow_G7_194b_gui">
+            <omgdi:waypoint x="1845.0" y="1215.0" /><omgdi:waypoint x="1845.0" y="1240.0" /><omgdi:waypoint x="1900.0" y="1240.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_194a_G8" id="Flow_194a_G8_gui">
+            <omgdi:waypoint x="2000.0" y="1140.0" /><omgdi:waypoint x="2045.0" y="1140.0" /><omgdi:waypoint x="2045.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_194b_G8" id="Flow_194b_G8_gui">
+            <omgdi:waypoint x="2000.0" y="1240.0" /><omgdi:waypoint x="2045.0" y="1240.0" /><omgdi:waypoint x="2045.0" y="1215.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_G8_End" id="Flow_G8_End_gui">
+            <omgdi:waypoint x="2070.0" y="1190.0" /><omgdi:waypoint x="2100.0" y="1190.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

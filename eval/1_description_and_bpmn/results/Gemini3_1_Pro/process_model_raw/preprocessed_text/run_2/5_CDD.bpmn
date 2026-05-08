@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-aml-directive"
+             targetNamespace="http://signavio.com">
+   <collaboration id="collab1">
+      <participant id="pool1" name="AML Directive Process" processRef="process1"/>
+   </collaboration>
+   <process id="process1" isExecutable="false" name="AML Directive Process">
+      <laneSet id="laneSet1">
+         <lane id="lane_ms" name="Member States">
+            <flowNodeRef>start1</flowNodeRef>
+            <flowNodeRef>t1</flowNodeRef>
+            <flowNodeRef>t2</flowNodeRef>
+            <flowNodeRef>t3</flowNodeRef>
+            <flowNodeRef>t4</flowNodeRef>
+            <flowNodeRef>t6</flowNodeRef>
+            <flowNodeRef>t8</flowNodeRef>
+            <flowNodeRef>t9</flowNodeRef>
+            <flowNodeRef>t10</flowNodeRef>
+            <flowNodeRef>t11</flowNodeRef>
+            <flowNodeRef>t12</flowNodeRef>
+            <flowNodeRef>t16</flowNodeRef>
+         </lane>
+         <lane id="lane_c" name="Customer">
+            <flowNodeRef>t5</flowNodeRef>
+         </lane>
+         <lane id="lane_oe" name="Obliged Entity">
+            <flowNodeRef>t7</flowNodeRef>
+            <flowNodeRef>t17</flowNodeRef>
+            <flowNodeRef>end1</flowNodeRef>
+         </lane>
+         <lane id="lane_lp" name="Legal Professionals">
+            <flowNodeRef>t13</flowNodeRef>
+            <flowNodeRef>t14</flowNodeRef>
+            <flowNodeRef>t15</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start1" name="Start">
+         <outgoing>sf1</outgoing>
+      </startEvent>
+      <task id="t1" name="require verification">
+         <incoming>sf1</incoming>
+         <outgoing>sf2</outgoing>
+      </task>
+      <task id="t2" name="allow verification">
+         <incoming>sf2</incoming>
+         <outgoing>sf3</outgoing>
+      </task>
+      <task id="t3" name="complete procedures">
+         <incoming>sf3</incoming>
+         <outgoing>sf4</outgoing>
+      </task>
+      <task id="t4" name="allow account opening">
+         <incoming>sf4</incoming>
+         <outgoing>sf5</outgoing>
+      </task>
+      <task id="t5" name="carry out transactions">
+         <incoming>sf5</incoming>
+         <outgoing>sf6</outgoing>
+      </task>
+      <task id="t6" name="obtain compliance">
+         <incoming>sf6</incoming>
+         <outgoing>sf7</outgoing>
+      </task>
+      <task id="t7" name="comply with requirements">
+         <incoming>sf7</incoming>
+         <outgoing>sf8</outgoing>
+      </task>
+      <task id="t8" name="carry out transaction">
+         <incoming>sf8</incoming>
+         <outgoing>sf9</outgoing>
+      </task>
+      <task id="t9" name="establish business relationship">
+         <incoming>sf9</incoming>
+         <outgoing>sf10</outgoing>
+      </task>
+      <task id="t10" name="terminate relationship">
+         <incoming>sf10</incoming>
+         <outgoing>sf11</outgoing>
+      </task>
+      <task id="t11" name="consider making report">
+         <incoming>sf11</incoming>
+         <outgoing>sf12</outgoing>
+      </task>
+      <task id="t12" name="apply subparagraph">
+         <incoming>sf12</incoming>
+         <outgoing>sf13</outgoing>
+      </task>
+      <task id="t13" name="ascertain legal position">
+         <incoming>sf13</incoming>
+         <outgoing>sf14</outgoing>
+      </task>
+      <task id="t14" name="perform task">
+         <incoming>sf14</incoming>
+         <outgoing>sf15</outgoing>
+      </task>
+      <task id="t15" name="provide advice">
+         <incoming>sf15</incoming>
+         <outgoing>sf16</outgoing>
+      </task>
+      <task id="t16" name="require measures">
+         <incoming>sf16</incoming>
+         <outgoing>sf17</outgoing>
+      </task>
+      <task id="t17" name="apply due diligence measures">
+         <incoming>sf17</incoming>
+         <outgoing>sf18</outgoing>
+      </task>
+      <endEvent id="end1" name="End">
+         <incoming>sf18</incoming>
+      </endEvent>
+      <sequenceFlow id="sf1" sourceRef="start1" targetRef="t1"/>
+      <sequenceFlow id="sf2" sourceRef="t1" targetRef="t2"/>
+      <sequenceFlow id="sf3" sourceRef="t2" targetRef="t3"/>
+      <sequenceFlow id="sf4" sourceRef="t3" targetRef="t4"/>
+      <sequenceFlow id="sf5" sourceRef="t4" targetRef="t5"/>
+      <sequenceFlow id="sf6" sourceRef="t5" targetRef="t6"/>
+      <sequenceFlow id="sf7" sourceRef="t6" targetRef="t7"/>
+      <sequenceFlow id="sf8" sourceRef="t7" targetRef="t8"/>
+      <sequenceFlow id="sf9" sourceRef="t8" targetRef="t9"/>
+      <sequenceFlow id="sf10" sourceRef="t9" targetRef="t10"/>
+      <sequenceFlow id="sf11" sourceRef="t10" targetRef="t11"/>
+      <sequenceFlow id="sf12" sourceRef="t11" targetRef="t12"/>
+      <sequenceFlow id="sf13" sourceRef="t12" targetRef="t13"/>
+      <sequenceFlow id="sf14" sourceRef="t13" targetRef="t14"/>
+      <sequenceFlow id="sf15" sourceRef="t14" targetRef="t15"/>
+      <sequenceFlow id="sf16" sourceRef="t15" targetRef="t16"/>
+      <sequenceFlow id="sf17" sourceRef="t16" targetRef="t17"/>
+      <sequenceFlow id="sf18" sourceRef="t17" targetRef="end1"/>
+   </process>
+   <bpmndi:BPMNDiagram id="diag1">
+      <bpmndi:BPMNPlane id="plane1" bpmnElement="collab1">
+         <bpmndi:BPMNShape id="pool1_gui" bpmnElement="pool1" isHorizontal="true">
+            <omgdc:Bounds x="50" y="0" width="2850" height="800"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane_ms_gui" bpmnElement="lane_ms" isHorizontal="true">
+            <omgdc:Bounds x="80" y="0" width="2820" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane_c_gui" bpmnElement="lane_c" isHorizontal="true">
+            <omgdc:Bounds x="80" y="200" width="2820" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane_oe_gui" bpmnElement="lane_oe" isHorizontal="true">
+            <omgdc:Bounds x="80" y="400" width="2820" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane_lp_gui" bpmnElement="lane_lp" isHorizontal="true">
+            <omgdc:Bounds x="80" y="600" width="2820" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="start1_gui" bpmnElement="start1">
+            <omgdc:Bounds x="100" y="85" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t1_gui" bpmnElement="t1">
+            <omgdc:Bounds x="200" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t2_gui" bpmnElement="t2">
+            <omgdc:Bounds x="350" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t3_gui" bpmnElement="t3">
+            <omgdc:Bounds x="500" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t4_gui" bpmnElement="t4">
+            <omgdc:Bounds x="650" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t5_gui" bpmnElement="t5">
+            <omgdc:Bounds x="800" y="260" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t6_gui" bpmnElement="t6">
+            <omgdc:Bounds x="950" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t7_gui" bpmnElement="t7">
+            <omgdc:Bounds x="1100" y="460" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t8_gui" bpmnElement="t8">
+            <omgdc:Bounds x="1250" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t9_gui" bpmnElement="t9">
+            <omgdc:Bounds x="1400" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t10_gui" bpmnElement="t10">
+            <omgdc:Bounds x="1550" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t11_gui" bpmnElement="t11">
+            <omgdc:Bounds x="1700" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t12_gui" bpmnElement="t12">
+            <omgdc:Bounds x="1850" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t13_gui" bpmnElement="t13">
+            <omgdc:Bounds x="2000" y="660" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t14_gui" bpmnElement="t14">
+            <omgdc:Bounds x="2150" y="660" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t15_gui" bpmnElement="t15">
+            <omgdc:Bounds x="2300" y="660" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t16_gui" bpmnElement="t16">
+            <omgdc:Bounds x="2450" y="60" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="t17_gui" bpmnElement="t17">
+            <omgdc:Bounds x="2600" y="460" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="end1_gui" bpmnElement="end1">
+            <omgdc:Bounds x="2750" y="485" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="sf1_gui" bpmnElement="sf1">
+            <omgdi:waypoint x="130" y="100"/>
+            <omgdi:waypoint x="200" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf2_gui" bpmnElement="sf2">
+            <omgdi:waypoint x="300" y="100"/>
+            <omgdi:waypoint x="350" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf3_gui" bpmnElement="sf3">
+            <omgdi:waypoint x="450" y="100"/>
+            <omgdi:waypoint x="500" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf4_gui" bpmnElement="sf4">
+            <omgdi:waypoint x="600" y="100"/>
+            <omgdi:waypoint x="650" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf5_gui" bpmnElement="sf5">
+            <omgdi:waypoint x="750" y="100"/>
+            <omgdi:waypoint x="775" y="100"/>
+            <omgdi:waypoint x="775" y="300"/>
+            <omgdi:waypoint x="800" y="300"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf6_gui" bpmnElement="sf6">
+            <omgdi:waypoint x="900" y="300"/>
+            <omgdi:waypoint x="925" y="300"/>
+            <omgdi:waypoint x="925" y="100"/>
+            <omgdi:waypoint x="950" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf7_gui" bpmnElement="sf7">
+            <omgdi:waypoint x="1050" y="100"/>
+            <omgdi:waypoint x="1075" y="100"/>
+            <omgdi:waypoint x="1075" y="500"/>
+            <omgdi:waypoint x="1100" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf8_gui" bpmnElement="sf8">
+            <omgdi:waypoint x="1200" y="500"/>
+            <omgdi:waypoint x="1225" y="500"/>
+            <omgdi:waypoint x="1225" y="100"/>
+            <omgdi:waypoint x="1250" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf9_gui" bpmnElement="sf9">
+            <omgdi:waypoint x="1350" y="100"/>
+            <omgdi:waypoint x="1400" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf10_gui" bpmnElement="sf10">
+            <omgdi:waypoint x="1500" y="100"/>
+            <omgdi:waypoint x="1550" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf11_gui" bpmnElement="sf11">
+            <omgdi:waypoint x="1650" y="100"/>
+            <omgdi:waypoint x="1700" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf12_gui" bpmnElement="sf12">
+            <omgdi:waypoint x="1800" y="100"/>
+            <omgdi:waypoint x="1850" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf13_gui" bpmnElement="sf13">
+            <omgdi:waypoint x="1950" y="100"/>
+            <omgdi:waypoint x="1975" y="100"/>
+            <omgdi:waypoint x="1975" y="700"/>
+            <omgdi:waypoint x="2000" y="700"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf14_gui" bpmnElement="sf14">
+            <omgdi:waypoint x="2100" y="700"/>
+            <omgdi:waypoint x="2150" y="700"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf15_gui" bpmnElement="sf15">
+            <omgdi:waypoint x="2250" y="700"/>
+            <omgdi:waypoint x="2300" y="700"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf16_gui" bpmnElement="sf16">
+            <omgdi:waypoint x="2400" y="700"/>
+            <omgdi:waypoint x="2425" y="700"/>
+            <omgdi:waypoint x="2425" y="100"/>
+            <omgdi:waypoint x="2450" y="100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf17_gui" bpmnElement="sf17">
+            <omgdi:waypoint x="2550" y="100"/>
+            <omgdi:waypoint x="2575" y="100"/>
+            <omgdi:waypoint x="2575" y="500"/>
+            <omgdi:waypoint x="2600" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf18_gui" bpmnElement="sf18">
+            <omgdi:waypoint x="2700" y="500"/>
+            <omgdi:waypoint x="2750" y="500"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

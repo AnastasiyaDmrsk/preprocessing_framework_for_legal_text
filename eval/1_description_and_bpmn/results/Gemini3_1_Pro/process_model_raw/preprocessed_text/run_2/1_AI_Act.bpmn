@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_MemberStates" name="Member States" processRef="Process_MemberStates" />
+      <participant id="Participant_AIOffice" name="The AI Office" processRef="Process_AIOffice" />
+   </collaboration>
+
+   <process id="Process_MemberStates" isClosed="false" isExecutable="false" name="Member States" processType="None">
+      <laneSet id="LaneSet_MS">
+         <lane id="Lane_MS" name="Member States">
+            <flowNodeRef>Start_MS</flowNodeRef>
+            <flowNodeRef>Split_MS</flowNodeRef>
+            <flowNodeRef>Task_MS_1a</flowNodeRef>
+            <flowNodeRef>Task_MS_1b</flowNodeRef>
+            <flowNodeRef>Task_MS_1c</flowNodeRef>
+            <flowNodeRef>Task_MS_1d</flowNodeRef>
+            <flowNodeRef>Join_MS</flowNodeRef>
+            <flowNodeRef>Task_MS_2</flowNodeRef>
+            <flowNodeRef>End_MS</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_MS" name="Start">
+         <outgoing>Flow_MS_Start_Split</outgoing>
+      </startEvent>
+
+      <parallelGateway id="Split_MS" name="Parallel Tasks">
+         <incoming>Flow_MS_Start_Split</incoming>
+         <outgoing>Flow_MS_Split_1a</outgoing>
+         <outgoing>Flow_MS_Split_1b</outgoing>
+         <outgoing>Flow_MS_Split_1c</outgoing>
+         <outgoing>Flow_MS_Split_1d</outgoing>
+      </parallelGateway>
+
+      <task id="Task_MS_1a" name="Provide SMEs priority access to AI regulatory sandboxes">
+         <incoming>Flow_MS_Split_1a</incoming>
+         <outgoing>Flow_MS_1a_Join</outgoing>
+      </task>
+
+      <task id="Task_MS_1b" name="Organise awareness raising and training activities">
+         <incoming>Flow_MS_Split_1b</incoming>
+         <outgoing>Flow_MS_1b_Join</outgoing>
+      </task>
+
+      <task id="Task_MS_1c" name="Utilise and establish communication channels">
+         <incoming>Flow_MS_Split_1c</incoming>
+         <outgoing>Flow_MS_1c_Join</outgoing>
+      </task>
+
+      <task id="Task_MS_1d" name="Facilitate SME participation in standardisation">
+         <incoming>Flow_MS_Split_1d</incoming>
+         <outgoing>Flow_MS_1d_Join</outgoing>
+      </task>
+
+      <parallelGateway id="Join_MS" name="End Parallel Tasks">
+         <incoming>Flow_MS_1a_Join</incoming>
+         <incoming>Flow_MS_1b_Join</incoming>
+         <incoming>Flow_MS_1c_Join</incoming>
+         <incoming>Flow_MS_1d_Join</incoming>
+         <outgoing>Flow_MS_Join_2</outgoing>
+      </parallelGateway>
+
+      <task id="Task_MS_2" name="Take into account SME interests when setting fees">
+         <incoming>Flow_MS_Join_2</incoming>
+         <outgoing>Flow_MS_2_End</outgoing>
+      </task>
+
+      <endEvent id="End_MS" name="End">
+         <incoming>Flow_MS_2_End</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_MS_Start_Split" sourceRef="Start_MS" targetRef="Split_MS" />
+      <sequenceFlow id="Flow_MS_Split_1a" sourceRef="Split_MS" targetRef="Task_MS_1a" />
+      <sequenceFlow id="Flow_MS_Split_1b" sourceRef="Split_MS" targetRef="Task_MS_1b" />
+      <sequenceFlow id="Flow_MS_Split_1c" sourceRef="Split_MS" targetRef="Task_MS_1c" />
+      <sequenceFlow id="Flow_MS_Split_1d" sourceRef="Split_MS" targetRef="Task_MS_1d" />
+      <sequenceFlow id="Flow_MS_1a_Join" sourceRef="Task_MS_1a" targetRef="Join_MS" />
+      <sequenceFlow id="Flow_MS_1b_Join" sourceRef="Task_MS_1b" targetRef="Join_MS" />
+      <sequenceFlow id="Flow_MS_1c_Join" sourceRef="Task_MS_1c" targetRef="Join_MS" />
+      <sequenceFlow id="Flow_MS_1d_Join" sourceRef="Task_MS_1d" targetRef="Join_MS" />
+      <sequenceFlow id="Flow_MS_Join_2" sourceRef="Join_MS" targetRef="Task_MS_2" />
+      <sequenceFlow id="Flow_MS_2_End" sourceRef="Task_MS_2" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_AIOffice" isClosed="false" isExecutable="false" name="The AI Office" processType="None">
+      <laneSet id="LaneSet_AI">
+         <lane id="Lane_AI" name="The AI Office">
+            <flowNodeRef>Start_AI</flowNodeRef>
+            <flowNodeRef>Split_AI</flowNodeRef>
+            <flowNodeRef>Task_AI_3a</flowNodeRef>
+            <flowNodeRef>Task_AI_3b</flowNodeRef>
+            <flowNodeRef>Task_AI_3c</flowNodeRef>
+            <flowNodeRef>Task_AI_3d</flowNodeRef>
+            <flowNodeRef>Join_AI</flowNodeRef>
+            <flowNodeRef>End_AI</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_AI" name="Start">
+         <outgoing>Flow_AI_Start_Split</outgoing>
+      </startEvent>
+
+      <parallelGateway id="Split_AI" name="Parallel Tasks">
+         <incoming>Flow_AI_Start_Split</incoming>
+         <outgoing>Flow_AI_Split_3a</outgoing>
+         <outgoing>Flow_AI_Split_3b</outgoing>
+         <outgoing>Flow_AI_Split_3c</outgoing>
+         <outgoing>Flow_AI_Split_3d</outgoing>
+      </parallelGateway>
+
+      <task id="Task_AI_3a" name="Provide standardised templates">
+         <incoming>Flow_AI_Split_3a</incoming>
+         <outgoing>Flow_AI_3a_Join</outgoing>
+      </task>
+
+      <task id="Task_AI_3b" name="Develop single information platform">
+         <incoming>Flow_AI_Split_3b</incoming>
+         <outgoing>Flow_AI_3b_Join</outgoing>
+      </task>
+
+      <task id="Task_AI_3c" name="Organise communication campaigns">
+         <incoming>Flow_AI_Split_3c</incoming>
+         <outgoing>Flow_AI_3c_Join</outgoing>
+      </task>
+
+      <task id="Task_AI_3d" name="Evaluate and promote best practices">
+         <incoming>Flow_AI_Split_3d</incoming>
+         <outgoing>Flow_AI_3d_Join</outgoing>
+      </task>
+
+      <parallelGateway id="Join_AI" name="End Parallel Tasks">
+         <incoming>Flow_AI_3a_Join</incoming>
+         <incoming>Flow_AI_3b_Join</incoming>
+         <incoming>Flow_AI_3c_Join</incoming>
+         <incoming>Flow_AI_3d_Join</incoming>
+         <outgoing>Flow_AI_Join_End</outgoing>
+      </parallelGateway>
+
+      <endEvent id="End_AI" name="End">
+         <incoming>Flow_AI_Join_End</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_AI_Start_Split" sourceRef="Start_AI" targetRef="Split_AI" />
+      <sequenceFlow id="Flow_AI_Split_3a" sourceRef="Split_AI" targetRef="Task_AI_3a" />
+      <sequenceFlow id="Flow_AI_Split_3b" sourceRef="Split_AI" targetRef="Task_AI_3b" />
+      <sequenceFlow id="Flow_AI_Split_3c" sourceRef="Split_AI" targetRef="Task_AI_3c" />
+      <sequenceFlow id="Flow_AI_Split_3d" sourceRef="Split_AI" targetRef="Task_AI_3d" />
+      <sequenceFlow id="Flow_AI_3a_Join" sourceRef="Task_AI_3a" targetRef="Join_AI" />
+      <sequenceFlow id="Flow_AI_3b_Join" sourceRef="Task_AI_3b" targetRef="Join_AI" />
+      <sequenceFlow id="Flow_AI_3c_Join" sourceRef="Task_AI_3c" targetRef="Join_AI" />
+      <sequenceFlow id="Flow_AI_3d_Join" sourceRef="Task_AI_3d" targetRef="Join_AI" />
+      <sequenceFlow id="Flow_AI_Join_End" sourceRef="Join_AI" targetRef="End_AI" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+
+         <!-- Member States Pool & Lane -->
+         <bpmndi:BPMNShape bpmnElement="Participant_MemberStates" id="Shape_Participant_MS" isHorizontal="true">
+            <omgdc:Bounds height="480.0" width="1050.0" x="100.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MS" id="Shape_Lane_MS" isHorizontal="true">
+            <omgdc:Bounds height="480.0" width="1020.0" x="130.0" y="50.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Shape_Start_MS">
+            <omgdc:Bounds height="36.0" width="36.0" x="180.0" y="272.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Split_MS" id="Shape_Split_MS">
+            <omgdc:Bounds height="50.0" width="50.0" x="260.0" y="265.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1a" id="Shape_Task_MS_1a">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="70.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1b" id="Shape_Task_MS_1b">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="170.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1c" id="Shape_Task_MS_1c">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="270.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1d" id="Shape_Task_MS_1d">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="370.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Join_MS" id="Shape_Join_MS">
+            <omgdc:Bounds height="50.0" width="50.0" x="550.0" y="265.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_MS_2" id="Shape_Task_MS_2">
+            <omgdc:Bounds height="80.0" width="120.0" x="660.0" y="250.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="Shape_End_MS">
+            <omgdc:Bounds height="36.0" width="36.0" x="840.0" y="272.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Start_Split" id="Edge_Flow_MS_Start_Split">
+            <omgdi:waypoint x="216.0" y="290.0" />
+            <omgdi:waypoint x="260.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Split_1a" id="Edge_Flow_MS_Split_1a">
+            <omgdi:waypoint x="285.0" y="265.0" />
+            <omgdi:waypoint x="285.0" y="110.0" />
+            <omgdi:waypoint x="380.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Split_1b" id="Edge_Flow_MS_Split_1b">
+            <omgdi:waypoint x="310.0" y="290.0" />
+            <omgdi:waypoint x="345.0" y="290.0" />
+            <omgdi:waypoint x="345.0" y="210.0" />
+            <omgdi:waypoint x="380.0" y="210.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Split_1c" id="Edge_Flow_MS_Split_1c">
+            <omgdi:waypoint x="310.0" y="290.0" />
+            <omgdi:waypoint x="345.0" y="290.0" />
+            <omgdi:waypoint x="345.0" y="310.0" />
+            <omgdi:waypoint x="380.0" y="310.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Split_1d" id="Edge_Flow_MS_Split_1d">
+            <omgdi:waypoint x="285.0" y="315.0" />
+            <omgdi:waypoint x="285.0" y="410.0" />
+            <omgdi:waypoint x="380.0" y="410.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1a_Join" id="Edge_Flow_MS_1a_Join">
+            <omgdi:waypoint x="500.0" y="110.0" />
+            <omgdi:waypoint x="575.0" y="110.0" />
+            <omgdi:waypoint x="575.0" y="265.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1b_Join" id="Edge_Flow_MS_1b_Join">
+            <omgdi:waypoint x="500.0" y="210.0" />
+            <omgdi:waypoint x="525.0" y="210.0" />
+            <omgdi:waypoint x="525.0" y="290.0" />
+            <omgdi:waypoint x="550.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1c_Join" id="Edge_Flow_MS_1c_Join">
+            <omgdi:waypoint x="500.0" y="310.0" />
+            <omgdi:waypoint x="525.0" y="310.0" />
+            <omgdi:waypoint x="525.0" y="290.0" />
+            <omgdi:waypoint x="550.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1d_Join" id="Edge_Flow_MS_1d_Join">
+            <omgdi:waypoint x="500.0" y="410.0" />
+            <omgdi:waypoint x="575.0" y="410.0" />
+            <omgdi:waypoint x="575.0" y="315.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_Join_2" id="Edge_Flow_MS_Join_2">
+            <omgdi:waypoint x="600.0" y="290.0" />
+            <omgdi:waypoint x="660.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_2_End" id="Edge_Flow_MS_2_End">
+            <omgdi:waypoint x="780.0" y="290.0" />
+            <omgdi:waypoint x="840.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- The AI Office Pool & Lane -->
+         <bpmndi:BPMNShape bpmnElement="Participant_AIOffice" id="Shape_Participant_AI" isHorizontal="true">
+            <omgdc:Bounds height="480.0" width="1050.0" x="100.0" y="560.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_AI" id="Shape_Lane_AI" isHorizontal="true">
+            <omgdc:Bounds height="480.0" width="1020.0" x="130.0" y="560.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Start_AI" id="Shape_Start_AI">
+            <omgdc:Bounds height="36.0" width="36.0" x="180.0" y="782.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Split_AI" id="Shape_Split_AI">
+            <omgdc:Bounds height="50.0" width="50.0" x="260.0" y="775.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_AI_3a" id="Shape_Task_AI_3a">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="580.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_3b" id="Shape_Task_AI_3b">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="680.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_3c" id="Shape_Task_AI_3c">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="780.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_3d" id="Shape_Task_AI_3d">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="880.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Join_AI" id="Shape_Join_AI">
+            <omgdc:Bounds height="50.0" width="50.0" x="550.0" y="775.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="End_AI" id="Shape_End_AI">
+            <omgdc:Bounds height="36.0" width="36.0" x="660.0" y="782.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Start_Split" id="Edge_Flow_AI_Start_Split">
+            <omgdi:waypoint x="216.0" y="800.0" />
+            <omgdi:waypoint x="260.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Split_3a" id="Edge_Flow_AI_Split_3a">
+            <omgdi:waypoint x="285.0" y="775.0" />
+            <omgdi:waypoint x="285.0" y="620.0" />
+            <omgdi:waypoint x="380.0" y="620.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Split_3b" id="Edge_Flow_AI_Split_3b">
+            <omgdi:waypoint x="310.0" y="800.0" />
+            <omgdi:waypoint x="345.0" y="800.0" />
+            <omgdi:waypoint x="345.0" y="720.0" />
+            <omgdi:waypoint x="380.0" y="720.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Split_3c" id="Edge_Flow_AI_Split_3c">
+            <omgdi:waypoint x="310.0" y="800.0" />
+            <omgdi:waypoint x="345.0" y="800.0" />
+            <omgdi:waypoint x="345.0" y="820.0" />
+            <omgdi:waypoint x="380.0" y="820.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Split_3d" id="Edge_Flow_AI_Split_3d">
+            <omgdi:waypoint x="285.0" y="825.0" />
+            <omgdi:waypoint x="285.0" y="920.0" />
+            <omgdi:waypoint x="380.0" y="920.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_3a_Join" id="Edge_Flow_AI_3a_Join">
+            <omgdi:waypoint x="500.0" y="620.0" />
+            <omgdi:waypoint x="575.0" y="620.0" />
+            <omgdi:waypoint x="575.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_3b_Join" id="Edge_Flow_AI_3b_Join">
+            <omgdi:waypoint x="500.0" y="720.0" />
+            <omgdi:waypoint x="525.0" y="720.0" />
+            <omgdi:waypoint x="525.0" y="800.0" />
+            <omgdi:waypoint x="550.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_3c_Join" id="Edge_Flow_AI_3c_Join">
+            <omgdi:waypoint x="500.0" y="820.0" />
+            <omgdi:waypoint x="525.0" y="820.0" />
+            <omgdi:waypoint x="525.0" y="800.0" />
+            <omgdi:waypoint x="550.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_3d_Join" id="Edge_Flow_AI_3d_Join">
+            <omgdi:waypoint x="500.0" y="920.0" />
+            <omgdi:waypoint x="575.0" y="920.0" />
+            <omgdi:waypoint x="575.0" y="825.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_Join_End" id="Edge_Flow_AI_Join_End">
+            <omgdi:waypoint x="600.0" y="800.0" />
+            <omgdi:waypoint x="660.0" y="800.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
