@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             exporter="Claude"
+             exporterVersion="1.0"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="part_processor" name="Processor" processRef="proc_processor"/>
+      <participant id="part_controller" name="Controller" processRef="proc_controller"/>
+      <participant id="part_sa" name="Supervisory Authority" processRef="proc_sa"/>
+
+      <messageFlow id="mf_proc_to_ctrl" name="" sourceRef="task_proc_notify_controller" targetRef="start_ctrl_msg"/>
+      <messageFlow id="mf_ctrl_to_sa" name="" sourceRef="task_ctrl_notify_sa" targetRef="start_sa_msg"/>
+      <messageFlow id="mf_sa_require" name="" sourceRef="task_sa_require_communication" targetRef="catch_sa_requirement"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESSOR PROCESS                                             -->
+   <!-- ============================================================ -->
+   <process id="proc_processor" name="Processor" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_processor">
+         <lane id="lane_processor">
+            <flowNodeRef>start_proc</flowNodeRef>
+            <flowNodeRef>task_proc_become_aware</flowNodeRef>
+            <flowNodeRef>task_proc_notify_controller</flowNodeRef>
+            <flowNodeRef>end_proc</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_proc" name="Personal data breach occurs">
+         <outgoing>sf_proc_1</outgoing>
+      </startEvent>
+      <task id="task_proc_become_aware" name="Become aware of personal data breach" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_proc_1</incoming>
+         <outgoing>sf_proc_2</outgoing>
+      </task>
+      <task id="task_proc_notify_controller" name="Notify controller without undue delay" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_proc_2</incoming>
+         <outgoing>sf_proc_3</outgoing>
+      </task>
+      <endEvent id="end_proc" name="End">
+         <incoming>sf_proc_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_proc_1" sourceRef="start_proc" targetRef="task_proc_become_aware"/>
+      <sequenceFlow id="sf_proc_2" sourceRef="task_proc_become_aware" targetRef="task_proc_notify_controller"/>
+      <sequenceFlow id="sf_proc_3" sourceRef="task_proc_notify_controller" targetRef="end_proc"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- CONTROLLER PROCESS                                            -->
+   <!-- ============================================================ -->
+   <process id="proc_controller" name="Controller" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_controller">
+         <lane id="lane_controller">
+            <flowNodeRef>start_ctrl_msg</flowNodeRef>
+            <flowNodeRef>task_ctrl_assess_risk</flowNodeRef>
+            <flowNodeRef>gw_risk_split</flowNodeRef>
+            <flowNodeRef>task_ctrl_notify_sa</flowNodeRef>
+            <flowNodeRef>gw_risk_merge</flowNodeRef>
+            <flowNodeRef>task_ctrl_assess_high_risk</flowNodeRef>
+            <flowNodeRef>gw_high_risk_split</flowNodeRef>
+            <flowNodeRef>task_ctrl_check_exemption</flowNodeRef>
+            <flowNodeRef>gw_exemption_split</flowNodeRef>
+            <flowNodeRef>task_ctrl_communicate_ds</flowNodeRef>
+            <flowNodeRef>gw_exemption_merge</flowNodeRef>
+            <flowNodeRef>gw_high_risk_merge</flowNodeRef>
+            <flowNodeRef>catch_sa_requirement</flowNodeRef>
+            <flowNodeRef>task_ctrl_communicate_ds_required</flowNodeRef>
+            <flowNodeRef>gw_before_doc</flowNodeRef>
+            <flowNodeRef>task_ctrl_document</flowNodeRef>
+            <flowNodeRef>end_ctrl</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ctrl_msg" name="Receive breach notification from processor" isInterrupting="true">
+         <outgoing>sf_ctrl_1</outgoing>
+         <messageEventDefinition id="med_ctrl_start"/>
+      </startEvent>
+
+      <task id="task_ctrl_assess_risk" name="Assess risk to rights and freedoms" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_1</incoming>
+         <outgoing>sf_ctrl_2</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_risk_split" name="Risk to rights and freedoms?" gatewayDirection="Diverging">
+         <incoming>sf_ctrl_2</incoming>
+         <outgoing>sf_ctrl_3</outgoing>
+         <outgoing>sf_ctrl_4</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ctrl_notify_sa" name="Notify personal data breach to supervisory authority" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_3</incoming>
+         <outgoing>sf_ctrl_5</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_risk_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_ctrl_5</incoming>
+         <incoming>sf_ctrl_4</incoming>
+         <outgoing>sf_ctrl_6</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ctrl_assess_high_risk" name="Assess if high risk to rights and freedoms" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_6</incoming>
+         <outgoing>sf_ctrl_7</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_high_risk_split" name="High risk?" gatewayDirection="Diverging">
+         <incoming>sf_ctrl_7</incoming>
+         <outgoing>sf_ctrl_8</outgoing>
+         <outgoing>sf_ctrl_9</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ctrl_check_exemption" name="Check exemption conditions (Art. 34(3))" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_8</incoming>
+         <outgoing>sf_ctrl_10</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_exemption_split" name="Exemption applies?" gatewayDirection="Diverging">
+         <incoming>sf_ctrl_10</incoming>
+         <outgoing>sf_ctrl_11</outgoing>
+         <outgoing>sf_ctrl_12</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ctrl_communicate_ds" name="Communicate personal data breach to data subject" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_11</incoming>
+         <outgoing>sf_ctrl_13</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_exemption_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_ctrl_13</incoming>
+         <incoming>sf_ctrl_12</incoming>
+         <outgoing>sf_ctrl_14</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway id="gw_high_risk_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_ctrl_14</incoming>
+         <incoming>sf_ctrl_9</incoming>
+         <outgoing>sf_ctrl_15</outgoing>
+      </exclusiveGateway>
+
+      <intermediateCatchEvent id="catch_sa_requirement" name="SA requires communication to data subject">
+         <incoming>sf_ctrl_15</incoming>
+         <outgoing>sf_ctrl_15b</outgoing>
+         <messageEventDefinition id="med_catch_sa"/>
+      </intermediateCatchEvent>
+
+      <task id="task_ctrl_communicate_ds_required" name="Communicate breach to data subject (required by SA)" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_15b</incoming>
+         <outgoing>sf_ctrl_16</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_before_doc" name="" gatewayDirection="Converging">
+         <incoming>sf_ctrl_16</incoming>
+         <outgoing>sf_ctrl_17</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ctrl_document" name="Document personal data breach" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ctrl_17</incoming>
+         <outgoing>sf_ctrl_18</outgoing>
+      </task>
+
+      <endEvent id="end_ctrl" name="End">
+         <incoming>sf_ctrl_18</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ctrl_1" sourceRef="start_ctrl_msg" targetRef="task_ctrl_assess_risk"/>
+      <sequenceFlow id="sf_ctrl_2" sourceRef="task_ctrl_assess_risk" targetRef="gw_risk_split"/>
+      <sequenceFlow id="sf_ctrl_3" name="Risk likely" sourceRef="gw_risk_split" targetRef="task_ctrl_notify_sa"/>
+      <sequenceFlow id="sf_ctrl_4" name="Risk unlikely" sourceRef="gw_risk_split" targetRef="gw_risk_merge"/>
+      <sequenceFlow id="sf_ctrl_5" sourceRef="task_ctrl_notify_sa" targetRef="gw_risk_merge"/>
+      <sequenceFlow id="sf_ctrl_6" sourceRef="gw_risk_merge" targetRef="task_ctrl_assess_high_risk"/>
+      <sequenceFlow id="sf_ctrl_7" sourceRef="task_ctrl_assess_high_risk" targetRef="gw_high_risk_split"/>
+      <sequenceFlow id="sf_ctrl_8" name="Yes" sourceRef="gw_high_risk_split" targetRef="task_ctrl_check_exemption"/>
+      <sequenceFlow id="sf_ctrl_9" name="No" sourceRef="gw_high_risk_split" targetRef="gw_high_risk_merge"/>
+      <sequenceFlow id="sf_ctrl_10" sourceRef="task_ctrl_check_exemption" targetRef="gw_exemption_split"/>
+      <sequenceFlow id="sf_ctrl_11" name="No exemption" sourceRef="gw_exemption_split" targetRef="task_ctrl_communicate_ds"/>
+      <sequenceFlow id="sf_ctrl_12" name="Exemption applies" sourceRef="gw_exemption_split" targetRef="gw_exemption_merge"/>
+      <sequenceFlow id="sf_ctrl_13" sourceRef="task_ctrl_communicate_ds" targetRef="gw_exemption_merge"/>
+      <sequenceFlow id="sf_ctrl_14" sourceRef="gw_exemption_merge" targetRef="gw_high_risk_merge"/>
+      <sequenceFlow id="sf_ctrl_15" sourceRef="gw_high_risk_merge" targetRef="catch_sa_requirement"/>
+      <sequenceFlow id="sf_ctrl_15b" sourceRef="catch_sa_requirement" targetRef="task_ctrl_communicate_ds_required"/>
+      <sequenceFlow id="sf_ctrl_16" sourceRef="task_ctrl_communicate_ds_required" targetRef="gw_before_doc"/>
+      <sequenceFlow id="sf_ctrl_17" sourceRef="gw_before_doc" targetRef="task_ctrl_document"/>
+      <sequenceFlow id="sf_ctrl_18" sourceRef="task_ctrl_document" targetRef="end_ctrl"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- SUPERVISORY AUTHORITY PROCESS                                 -->
+   <!-- ============================================================ -->
+   <process id="proc_sa" name="Supervisory Authority" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_sa">
+         <lane id="lane_sa">
+            <flowNodeRef>start_sa_msg</flowNodeRef>
+            <flowNodeRef>task_sa_verify</flowNodeRef>
+            <flowNodeRef>task_sa_assess</flowNodeRef>
+            <flowNodeRef>gw_sa_split</flowNodeRef>
+            <flowNodeRef>task_sa_require_communication</flowNodeRef>
+            <flowNodeRef>gw_sa_merge</flowNodeRef>
+            <flowNodeRef>end_sa</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_sa_msg" name="Receive breach notification" isInterrupting="true">
+         <outgoing>sf_sa_1</outgoing>
+         <messageEventDefinition id="med_sa_start"/>
+      </startEvent>
+
+      <task id="task_sa_verify" name="Verify compliance with Art. 33" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_sa_1</incoming>
+         <outgoing>sf_sa_2</outgoing>
+      </task>
+
+      <task id="task_sa_assess" name="Assess if controller communicated to data subject" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_sa_2</incoming>
+         <outgoing>sf_sa_3</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_sa_split" name="Communication required?" gatewayDirection="Diverging">
+         <incoming>sf_sa_3</incoming>
+         <outgoing>sf_sa_4</outgoing>
+         <outgoing>sf_sa_5</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_sa_require_communication" name="Require controller to communicate breach to data subject" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_sa_4</incoming>
+         <outgoing>sf_sa_6</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_sa_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_sa_6</incoming>
+         <incoming>sf_sa_5</incoming>
+         <outgoing>sf_sa_7</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="end_sa" name="End">
+         <incoming>sf_sa_7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_sa_1" sourceRef="start_sa_msg" targetRef="task_sa_verify"/>
+      <sequenceFlow id="sf_sa_2" sourceRef="task_sa_verify" targetRef="task_sa_assess"/>
+      <sequenceFlow id="sf_sa_3" sourceRef="task_sa_assess" targetRef="gw_sa_split"/>
+      <sequenceFlow id="sf_sa_4" name="Yes" sourceRef="gw_sa_split" targetRef="task_sa_require_communication"/>
+      <sequenceFlow id="sf_sa_5" name="No" sourceRef="gw_sa_split" targetRef="gw_sa_merge"/>
+      <sequenceFlow id="sf_sa_6" sourceRef="task_sa_require_communication" targetRef="gw_sa_merge"/>
+      <sequenceFlow id="sf_sa_7" sourceRef="gw_sa_merge" targetRef="end_sa"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- BPMN DIAGRAM (DI)                                             -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- PROCESSOR POOL -->
+         <bpmndi:BPMNShape bpmnElement="part_processor" id="part_processor_gui" isHorizontal="true">
+            <omgdc:Bounds height="140.0" width="750.0" x="120.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_processor" id="lane_processor_gui" isHorizontal="true">
+            <omgdc:Bounds height="140.0" width="720.0" x="150.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_proc" id="start_proc_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="115.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_proc_become_aware" id="task_proc_become_aware_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="280.0" y="90.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_proc_notify_controller" id="task_proc_notify_controller_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="470.0" y="90.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_proc" id="end_proc_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="670.0" y="116.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_proc_1" id="sf_proc_1_gui">
+            <omgdi:waypoint x="230.0" y="130.0"/>
+            <omgdi:waypoint x="280.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_proc_2" id="sf_proc_2_gui">
+            <omgdi:waypoint x="420.0" y="130.0"/>
+            <omgdi:waypoint x="470.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_proc_3" id="sf_proc_3_gui">
+            <omgdi:waypoint x="610.0" y="130.0"/>
+            <omgdi:waypoint x="670.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- CONTROLLER POOL -->
+         <bpmndi:BPMNShape bpmnElement="part_controller" id="part_controller_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="1700.0" x="120.0" y="240.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_controller" id="lane_controller_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="1670.0" x="150.0" y="240.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_ctrl_msg" id="start_ctrl_msg_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_assess_risk" id="task_ctrl_assess_risk_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="270.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_risk_split" id="gw_risk_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_notify_sa" id="task_ctrl_notify_sa_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="490.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_risk_merge" id="gw_risk_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_assess_high_risk" id="task_ctrl_assess_high_risk_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="730.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_high_risk_split" id="gw_high_risk_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="880.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_check_exemption" id="task_ctrl_check_exemption_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="950.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_exemption_split" id="gw_exemption_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1110.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_communicate_ds" id="task_ctrl_communicate_ds_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1090.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_exemption_merge" id="gw_exemption_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1250.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_high_risk_merge" id="gw_high_risk_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1310.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_sa_requirement" id="catch_sa_requirement_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1380.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_communicate_ds_required" id="task_ctrl_communicate_ds_required_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1430.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_before_doc" id="gw_before_doc_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1590.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ctrl_document" id="task_ctrl_document_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1650.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ctrl" id="end_ctrl_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1790.0" y="381.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Controller edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_1" id="sf_ctrl_1_gui">
+            <omgdi:waypoint x="230.0" y="395.0"/>
+            <omgdi:waypoint x="270.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_2" id="sf_ctrl_2_gui">
+            <omgdi:waypoint x="390.0" y="395.0"/>
+            <omgdi:waypoint x="420.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_3" id="sf_ctrl_3_gui">
+            <omgdi:waypoint x="440.0" y="375.0"/>
+            <omgdi:waypoint x="440.0" y="320.0"/>
+            <omgdi:waypoint x="490.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_4" id="sf_ctrl_4_gui">
+            <omgdi:waypoint x="440.0" y="415.0"/>
+            <omgdi:waypoint x="440.0" y="480.0"/>
+            <omgdi:waypoint x="680.0" y="480.0"/>
+            <omgdi:waypoint x="680.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_5" id="sf_ctrl_5_gui">
+            <omgdi:waypoint x="630.0" y="320.0"/>
+            <omgdi:waypoint x="680.0" y="320.0"/>
+            <omgdi:waypoint x="680.0" y="375.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_6" id="sf_ctrl_6_gui">
+            <omgdi:waypoint x="700.0" y="395.0"/>
+            <omgdi:waypoint x="730.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_7" id="sf_ctrl_7_gui">
+            <omgdi:waypoint x="850.0" y="395.0"/>
+            <omgdi:waypoint x="880.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_8" id="sf_ctrl_8_gui">
+            <omgdi:waypoint x="900.0" y="375.0"/>
+            <omgdi:waypoint x="900.0" y="320.0"/>
+            <omgdi:waypoint x="950.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_9" id="sf_ctrl_9_gui">
+            <omgdi:waypoint x="900.0" y="415.0"/>
+            <omgdi:waypoint x="900.0" y="500.0"/>
+            <omgdi:waypoint x="1330.0" y="500.0"/>
+            <omgdi:waypoint x="1330.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_10" id="sf_ctrl_10_gui">
+            <omgdi:waypoint x="1090.0" y="320.0"/>
+            <omgdi:waypoint x="1110.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_11" id="sf_ctrl_11_gui">
+            <omgdi:waypoint x="1130.0" y="340.0"/>
+            <omgdi:waypoint x="1130.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_12" id="sf_ctrl_12_gui">
+            <omgdi:waypoint x="1150.0" y="320.0"/>
+            <omgdi:waypoint x="1250.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_13" id="sf_ctrl_13_gui">
+            <omgdi:waypoint x="1230.0" y="420.0"/>
+            <omgdi:waypoint x="1270.0" y="420.0"/>
+            <omgdi:waypoint x="1270.0" y="340.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_14" id="sf_ctrl_14_gui">
+            <omgdi:waypoint x="1270.0" y="300.0"/>
+            <omgdi:waypoint x="1270.0" y="260.0"/>
+            <omgdi:waypoint x="1330.0" y="260.0"/>
+            <omgdi:waypoint x="1330.0" y="375.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_15" id="sf_ctrl_15_gui">
+            <omgdi:waypoint x="1350.0" y="395.0"/>
+            <omgdi:waypoint x="1380.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_15b" id="sf_ctrl_15b_gui">
+            <omgdi:waypoint x="1410.0" y="395.0"/>
+            <omgdi:waypoint x="1430.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_16" id="sf_ctrl_16_gui">
+            <omgdi:waypoint x="1570.0" y="395.0"/>
+            <omgdi:waypoint x="1590.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_17" id="sf_ctrl_17_gui">
+            <omgdi:waypoint x="1630.0" y="395.0"/>
+            <omgdi:waypoint x="1650.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ctrl_18" id="sf_ctrl_18_gui">
+            <omgdi:waypoint x="1770.0" y="395.0"/>
+            <omgdi:waypoint x="1790.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- SUPERVISORY AUTHORITY POOL -->
+         <bpmndi:BPMNShape bpmnElement="part_sa" id="part_sa_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1000.0" x="120.0" y="630.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_sa" id="lane_sa_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="970.0" x="150.0" y="630.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_sa_msg" id="start_sa_msg_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="715.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sa_verify" id="task_sa_verify_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="280.0" y="690.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sa_assess" id="task_sa_assess_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="470.0" y="690.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_sa_split" id="gw_sa_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="640.0" y="710.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sa_require_communication" id="task_sa_require_communication_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="720.0" y="660.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_sa_merge" id="gw_sa_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="900.0" y="710.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_sa" id="end_sa_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="980.0" y="716.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- SA edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_1" id="sf_sa_1_gui">
+            <omgdi:waypoint x="230.0" y="730.0"/>
+            <omgdi:waypoint x="280.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_2" id="sf_sa_2_gui">
+            <omgdi:waypoint x="420.0" y="730.0"/>
+            <omgdi:waypoint x="470.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_3" id="sf_sa_3_gui">
+            <omgdi:waypoint x="610.0" y="730.0"/>
+            <omgdi:waypoint x="640.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_4" id="sf_sa_4_gui">
+            <omgdi:waypoint x="660.0" y="710.0"/>
+            <omgdi:waypoint x="660.0" y="700.0"/>
+            <omgdi:waypoint x="720.0" y="700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_5" id="sf_sa_5_gui">
+            <omgdi:waypoint x="660.0" y="750.0"/>
+            <omgdi:waypoint x="660.0" y="780.0"/>
+            <omgdi:waypoint x="920.0" y="780.0"/>
+            <omgdi:waypoint x="920.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_6" id="sf_sa_6_gui">
+            <omgdi:waypoint x="860.0" y="700.0"/>
+            <omgdi:waypoint x="920.0" y="700.0"/>
+            <omgdi:waypoint x="920.0" y="710.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sa_7" id="sf_sa_7_gui">
+            <omgdi:waypoint x="940.0" y="730.0"/>
+            <omgdi:waypoint x="980.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOW EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="mf_proc_to_ctrl" id="mf_proc_to_ctrl_gui">
+            <omgdi:waypoint x="540.0" y="170.0"/>
+            <omgdi:waypoint x="540.0" y="230.0"/>
+            <omgdi:waypoint x="215.0" y="230.0"/>
+            <omgdi:waypoint x="215.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_ctrl_to_sa" id="mf_ctrl_to_sa_gui">
+            <omgdi:waypoint x="560.0" y="360.0"/>
+            <omgdi:waypoint x="560.0" y="620.0"/>
+            <omgdi:waypoint x="215.0" y="620.0"/>
+            <omgdi:waypoint x="215.0" y="715.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sa_require" id="mf_sa_require_gui">
+            <omgdi:waypoint x="790.0" y="660.0"/>
+            <omgdi:waypoint x="790.0" y="620.0"/>
+            <omgdi:waypoint x="1395.0" y="620.0"/>
+            <omgdi:waypoint x="1395.0" y="410.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

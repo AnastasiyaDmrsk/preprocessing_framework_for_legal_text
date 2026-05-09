@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Processor" name="Processor" processRef="Process_Processor"/>
+      <participant id="Participant_Controller" name="Controller" processRef="Process_Controller"/>
+      <participant id="Participant_SA" name="Supervisory Authority" processRef="Process_SA"/>
+
+      <!-- Processor notifies Controller -->
+      <messageFlow id="MF_Processor_to_Controller" name="breach notification" sourceRef="Task_NotifyController" targetRef="StartEvent_Controller"/>
+      <!-- Controller notifies Supervisory Authority -->
+      <messageFlow id="MF_Controller_to_SA" name="breach notification" sourceRef="Task_NotifySA" targetRef="StartEvent_SA"/>
+      <!-- Controller communicates to Data Subject (shown as message leaving pool) -->
+      <!-- SA may require communication -->
+      <messageFlow id="MF_SA_to_Controller" name="requirement to communicate" sourceRef="Task_RequireCommunication" targetRef="Event_ReceiveSARequirement"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESSOR PROCESS                                             -->
+   <!-- ============================================================ -->
+   <process id="Process_Processor" name="Processor" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_Processor">
+         <lane id="Lane_Processor">
+            <flowNodeRef>StartEvent_Processor</flowNodeRef>
+            <flowNodeRef>Task_BecomeAwareProcessor</flowNodeRef>
+            <flowNodeRef>Task_NotifyController</flowNodeRef>
+            <flowNodeRef>EndEvent_Processor</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_Processor" name="Personal data breach detected">
+         <outgoing>Flow_P1</outgoing>
+      </startEvent>
+      <task id="Task_BecomeAwareProcessor" name="Become aware of personal data breach">
+         <incoming>Flow_P1</incoming>
+         <outgoing>Flow_P2</outgoing>
+      </task>
+      <task id="Task_NotifyController" name="Notify controller of breach without undue delay">
+         <incoming>Flow_P2</incoming>
+         <outgoing>Flow_P3</outgoing>
+      </task>
+      <endEvent id="EndEvent_Processor" name="End">
+         <incoming>Flow_P3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_P1" sourceRef="StartEvent_Processor" targetRef="Task_BecomeAwareProcessor"/>
+      <sequenceFlow id="Flow_P2" sourceRef="Task_BecomeAwareProcessor" targetRef="Task_NotifyController"/>
+      <sequenceFlow id="Flow_P3" sourceRef="Task_NotifyController" targetRef="EndEvent_Processor"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- CONTROLLER PROCESS                                            -->
+   <!-- ============================================================ -->
+   <process id="Process_Controller" name="Controller" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_Controller">
+         <lane id="Lane_Controller">
+            <flowNodeRef>StartEvent_Controller</flowNodeRef>
+            <flowNodeRef>Gateway_RiskAssessment</flowNodeRef>
+            <flowNodeRef>Task_NotifySA</flowNodeRef>
+            <flowNodeRef>EndEvent_Controller_NoRisk</flowNodeRef>
+            <flowNodeRef>Task_DocumentBreach</flowNodeRef>
+            <flowNodeRef>Gateway_HighRisk</flowNodeRef>
+            <flowNodeRef>Task_CommunicateDataSubject</flowNodeRef>
+            <flowNodeRef>Gateway_Exemption</flowNodeRef>
+            <flowNodeRef>EndEvent_Controller_Done</flowNodeRef>
+            <flowNodeRef>EndEvent_Controller_Exempt</flowNodeRef>
+            <flowNodeRef>Event_ReceiveSARequirement</flowNodeRef>
+            <flowNodeRef>Gateway_Merge_Communicate</flowNodeRef>
+            <flowNodeRef>Task_DocumentBreachNoRisk</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_Controller" name="Receive breach notification">
+         <outgoing>Flow_C1</outgoing>
+         <messageEventDefinition id="MsgDef_StartController"/>
+      </startEvent>
+
+      <!-- Assess whether breach is likely to result in risk -->
+      <exclusiveGateway id="Gateway_RiskAssessment" name="Breach likely to result in risk to rights and freedoms?">
+         <incoming>Flow_C1</incoming>
+         <outgoing>Flow_C2_Risk</outgoing>
+         <outgoing>Flow_C2_NoRisk</outgoing>
+      </exclusiveGateway>
+
+      <!-- No risk path: only document -->
+      <endEvent id="EndEvent_Controller_NoRisk" name="End (no significant risk)">
+         <incoming>Flow_C_DocNoRisk</incoming>
+      </endEvent>
+
+      <!-- Risk path: notify SA -->
+      <task id="Task_NotifySA" name="Notify supervisory authority within 72 hours">
+         <incoming>Flow_C2_Risk</incoming>
+         <outgoing>Flow_C3</outgoing>
+      </task>
+
+      <task id="Task_DocumentBreach" name="Document personal data breach">
+         <incoming>Flow_C3</incoming>
+         <outgoing>Flow_C4</outgoing>
+      </task>
+
+      <!-- Assess high risk for data subject communication -->
+      <exclusiveGateway id="Gateway_HighRisk" name="High risk to rights and freedoms of data subjects?">
+         <incoming>Flow_C4</incoming>
+         <outgoing>Flow_C5_HighRisk</outgoing>
+         <outgoing>Flow_C5_NotHigh</outgoing>
+      </exclusiveGateway>
+
+      <!-- Check exemptions (Art 34.3) -->
+      <exclusiveGateway id="Gateway_Exemption" name="Exemption conditions met? (Art 34.3)">
+         <incoming>Flow_C5_HighRisk</incoming>
+         <outgoing>Flow_C6_NoExemption</outgoing>
+         <outgoing>Flow_C6_Exempt</outgoing>
+      </exclusiveGateway>
+
+      <!-- Intermediate message event: SA requires communication -->
+      <intermediateCatchEvent id="Event_ReceiveSARequirement" name="Receive SA requirement to communicate">
+         <outgoing>Flow_C_SAReq</outgoing>
+         <messageEventDefinition id="MsgDef_SAReq"/>
+      </intermediateCatchEvent>
+
+      <!-- Merge: either no exemption or SA requires it -->
+      <exclusiveGateway id="Gateway_Merge_Communicate" name="">
+         <incoming>Flow_C6_NoExemption</incoming>
+         <incoming>Flow_C_SAReq</incoming>
+         <outgoing>Flow_C7</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_CommunicateDataSubject" name="Communicate breach to data subject without undue delay">
+         <incoming>Flow_C7</incoming>
+         <outgoing>Flow_C8</outgoing>
+      </task>
+
+      <endEvent id="EndEvent_Controller_Done" name="End">
+         <incoming>Flow_C8</incoming>
+         <incoming>Flow_C5_NotHigh</incoming>
+      </endEvent>
+
+      <endEvent id="EndEvent_Controller_Exempt" name="End (exemption applies)">
+         <incoming>Flow_C6_Exempt</incoming>
+      </endEvent>
+
+      <!-- No risk path: just document -->
+      <task id="Task_DocumentBreachNoRisk" name="Document personal data breach">
+         <incoming>Flow_C2_NoRisk</incoming>
+         <outgoing>Flow_C_DocNoRisk</outgoing>
+      </task>
+
+      <sequenceFlow id="Flow_C1" sourceRef="StartEvent_Controller" targetRef="Gateway_RiskAssessment"/>
+      <sequenceFlow id="Flow_C2_Risk" name="Yes" sourceRef="Gateway_RiskAssessment" targetRef="Task_NotifySA"/>
+      <sequenceFlow id="Flow_C2_NoRisk" name="No (unlikely risk)" sourceRef="Gateway_RiskAssessment" targetRef="Task_DocumentBreachNoRisk"/>
+      <sequenceFlow id="Flow_C_DocNoRisk" sourceRef="Task_DocumentBreachNoRisk" targetRef="EndEvent_Controller_NoRisk"/>
+      <sequenceFlow id="Flow_C3" sourceRef="Task_NotifySA" targetRef="Task_DocumentBreach"/>
+      <sequenceFlow id="Flow_C4" sourceRef="Task_DocumentBreach" targetRef="Gateway_HighRisk"/>
+      <sequenceFlow id="Flow_C5_HighRisk" name="Yes" sourceRef="Gateway_HighRisk" targetRef="Gateway_Exemption"/>
+      <sequenceFlow id="Flow_C5_NotHigh" name="No" sourceRef="Gateway_HighRisk" targetRef="EndEvent_Controller_Done"/>
+      <sequenceFlow id="Flow_C6_NoExemption" name="No" sourceRef="Gateway_Exemption" targetRef="Gateway_Merge_Communicate"/>
+      <sequenceFlow id="Flow_C6_Exempt" name="Yes" sourceRef="Gateway_Exemption" targetRef="EndEvent_Controller_Exempt"/>
+      <sequenceFlow id="Flow_C_SAReq" sourceRef="Event_ReceiveSARequirement" targetRef="Gateway_Merge_Communicate"/>
+      <sequenceFlow id="Flow_C7" sourceRef="Gateway_Merge_Communicate" targetRef="Task_CommunicateDataSubject"/>
+      <sequenceFlow id="Flow_C8" sourceRef="Task_CommunicateDataSubject" targetRef="EndEvent_Controller_Done"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- SUPERVISORY AUTHORITY PROCESS                                 -->
+   <!-- ============================================================ -->
+   <process id="Process_SA" name="Supervisory Authority" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_SA">
+         <lane id="Lane_SA">
+            <flowNodeRef>StartEvent_SA</flowNodeRef>
+            <flowNodeRef>Task_VerifyCompliance</flowNodeRef>
+            <flowNodeRef>Gateway_RequireCommunication</flowNodeRef>
+            <flowNodeRef>Task_RequireCommunication</flowNodeRef>
+            <flowNodeRef>EndEvent_SA</flowNodeRef>
+            <flowNodeRef>EndEvent_SA_NoAction</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_SA" name="Receive breach notification from controller">
+         <outgoing>Flow_SA1</outgoing>
+         <messageEventDefinition id="MsgDef_StartSA"/>
+      </startEvent>
+
+      <task id="Task_VerifyCompliance" name="Verify compliance with Article 33">
+         <incoming>Flow_SA1</incoming>
+         <outgoing>Flow_SA2</outgoing>
+      </task>
+
+      <exclusiveGateway id="Gateway_RequireCommunication" name="Require controller to communicate to data subject?">
+         <incoming>Flow_SA2</incoming>
+         <outgoing>Flow_SA3_Yes</outgoing>
+         <outgoing>Flow_SA3_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_RequireCommunication" name="Require controller to communicate breach to data subject">
+         <incoming>Flow_SA3_Yes</incoming>
+         <outgoing>Flow_SA4</outgoing>
+      </task>
+
+      <endEvent id="EndEvent_SA" name="End">
+         <incoming>Flow_SA4</incoming>
+      </endEvent>
+
+      <endEvent id="EndEvent_SA_NoAction" name="End (no further action)">
+         <incoming>Flow_SA3_No</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_SA1" sourceRef="StartEvent_SA" targetRef="Task_VerifyCompliance"/>
+      <sequenceFlow id="Flow_SA2" sourceRef="Task_VerifyCompliance" targetRef="Gateway_RequireCommunication"/>
+      <sequenceFlow id="Flow_SA3_Yes" name="Yes" sourceRef="Gateway_RequireCommunication" targetRef="Task_RequireCommunication"/>
+      <sequenceFlow id="Flow_SA3_No" name="No" sourceRef="Gateway_RequireCommunication" targetRef="EndEvent_SA_NoAction"/>
+      <sequenceFlow id="Flow_SA4" sourceRef="Task_RequireCommunication" targetRef="EndEvent_SA"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+
+         <!-- ====== PROCESSOR POOL ====== -->
+         <bpmndi:BPMNShape bpmnElement="Participant_Processor" id="Shape_Participant_Processor" isHorizontal="true">
+            <omgdc:Bounds x="120" y="60" width="700" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Processor" id="Shape_Lane_Processor" isHorizontal="true">
+            <omgdc:Bounds x="150" y="60" width="670" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Processor" id="Shape_StartEvent_Processor">
+            <omgdc:Bounds x="192" y="120" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_BecomeAwareProcessor" id="Shape_Task_BecomeAwareProcessor">
+            <omgdc:Bounds x="280" y="98" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_NotifyController" id="Shape_Task_NotifyController">
+            <omgdc:Bounds x="500" y="98" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Processor" id="Shape_EndEvent_Processor">
+            <omgdc:Bounds x="722" y="120" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_P1" id="Edge_Flow_P1">
+            <omgdi:waypoint x="228" y="138"/>
+            <omgdi:waypoint x="280" y="138"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_P2" id="Edge_Flow_P2">
+            <omgdi:waypoint x="440" y="138"/>
+            <omgdi:waypoint x="500" y="138"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_P3" id="Edge_Flow_P3">
+            <omgdi:waypoint x="660" y="138"/>
+            <omgdi:waypoint x="722" y="138"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== CONTROLLER POOL ====== -->
+         <bpmndi:BPMNShape bpmnElement="Participant_Controller" id="Shape_Participant_Controller" isHorizontal="true">
+            <omgdc:Bounds x="120" y="260" width="1300" height="340"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Controller" id="Shape_Lane_Controller" isHorizontal="true">
+            <omgdc:Bounds x="150" y="260" width="1270" height="340"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Controller" id="Shape_StartEvent_Controller">
+            <omgdc:Bounds x="192" y="362" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_RiskAssessment" id="Shape_Gateway_RiskAssessment" isMarkerVisible="true">
+            <omgdc:Bounds x="275" y="355" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_NotifySA" id="Shape_Task_NotifySA">
+            <omgdc:Bounds x="380" y="340" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DocumentBreach" id="Shape_Task_DocumentBreach">
+            <omgdc:Bounds x="590" y="340" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_HighRisk" id="Shape_Gateway_HighRisk" isMarkerVisible="true">
+            <omgdc:Bounds x="795" y="355" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Exemption" id="Shape_Gateway_Exemption" isMarkerVisible="true">
+            <omgdc:Bounds x="895" y="355" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Merge_Communicate" id="Shape_Gateway_Merge_Communicate" isMarkerVisible="true">
+            <omgdc:Bounds x="995" y="355" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_CommunicateDataSubject" id="Shape_Task_CommunicateDataSubject">
+            <omgdc:Bounds x="1090" y="340" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller_Done" id="Shape_EndEvent_Controller_Done">
+            <omgdc:Bounds x="1310" y="362" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller_Exempt" id="Shape_EndEvent_Controller_Exempt">
+            <omgdc:Bounds x="1000" y="282" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Controller_NoRisk" id="Shape_EndEvent_Controller_NoRisk">
+            <omgdc:Bounds x="542" y="522" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DocumentBreachNoRisk" id="Shape_Task_DocumentBreachNoRisk">
+            <omgdc:Bounds x="370" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Event_ReceiveSARequirement" id="Shape_Event_ReceiveSARequirement">
+            <omgdc:Bounds x="910" y="462" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Controller sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_C1" id="Edge_Flow_C1">
+            <omgdi:waypoint x="228" y="380"/>
+            <omgdi:waypoint x="275" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C2_Risk" id="Edge_Flow_C2_Risk">
+            <omgdi:waypoint x="325" y="380"/>
+            <omgdi:waypoint x="380" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C2_NoRisk" id="Edge_Flow_C2_NoRisk">
+            <omgdi:waypoint x="300" y="405"/>
+            <omgdi:waypoint x="300" y="540"/>
+            <omgdi:waypoint x="370" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C_DocNoRisk" id="Edge_Flow_C_DocNoRisk">
+            <omgdi:waypoint x="530" y="540"/>
+            <omgdi:waypoint x="542" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C3" id="Edge_Flow_C3">
+            <omgdi:waypoint x="540" y="380"/>
+            <omgdi:waypoint x="590" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C4" id="Edge_Flow_C4">
+            <omgdi:waypoint x="750" y="380"/>
+            <omgdi:waypoint x="795" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C5_HighRisk" id="Edge_Flow_C5_HighRisk">
+            <omgdi:waypoint x="845" y="380"/>
+            <omgdi:waypoint x="895" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C5_NotHigh" id="Edge_Flow_C5_NotHigh">
+            <omgdi:waypoint x="820" y="405"/>
+            <omgdi:waypoint x="820" y="450"/>
+            <omgdi:waypoint x="1328" y="450"/>
+            <omgdi:waypoint x="1328" y="398"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C6_NoExemption" id="Edge_Flow_C6_NoExemption">
+            <omgdi:waypoint x="945" y="380"/>
+            <omgdi:waypoint x="995" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C6_Exempt" id="Edge_Flow_C6_Exempt">
+            <omgdi:waypoint x="920" y="355"/>
+            <omgdi:waypoint x="920" y="300"/>
+            <omgdi:waypoint x="1000" y="300"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C_SAReq" id="Edge_Flow_C_SAReq">
+            <omgdi:waypoint x="946" y="480"/>
+            <omgdi:waypoint x="1020" y="480"/>
+            <omgdi:waypoint x="1020" y="405"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C7" id="Edge_Flow_C7">
+            <omgdi:waypoint x="1045" y="380"/>
+            <omgdi:waypoint x="1090" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C8" id="Edge_Flow_C8">
+            <omgdi:waypoint x="1250" y="380"/>
+            <omgdi:waypoint x="1310" y="380"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== SUPERVISORY AUTHORITY POOL ====== -->
+         <bpmndi:BPMNShape bpmnElement="Participant_SA" id="Shape_Participant_SA" isHorizontal="true">
+            <omgdc:Bounds x="120" y="650" width="1000" height="180"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_SA" id="Shape_Lane_SA" isHorizontal="true">
+            <omgdc:Bounds x="150" y="650" width="970" height="180"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_SA" id="Shape_StartEvent_SA">
+            <omgdc:Bounds x="192" y="722" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_VerifyCompliance" id="Shape_Task_VerifyCompliance">
+            <omgdc:Bounds x="300" y="700" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_RequireCommunication" id="Shape_Gateway_RequireCommunication" isMarkerVisible="true">
+            <omgdc:Bounds x="520" y="715" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_RequireCommunication" id="Shape_Task_RequireCommunication">
+            <omgdc:Bounds x="630" y="700" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_SA" id="Shape_EndEvent_SA">
+            <omgdc:Bounds x="900" y="722" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_SA_NoAction" id="Shape_EndEvent_SA_NoAction">
+            <omgdc:Bounds x="640" y="672" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA1" id="Edge_Flow_SA1">
+            <omgdi:waypoint x="228" y="740"/>
+            <omgdi:waypoint x="300" y="740"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA2" id="Edge_Flow_SA2">
+            <omgdi:waypoint x="460" y="740"/>
+            <omgdi:waypoint x="520" y="740"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA3_Yes" id="Edge_Flow_SA3_Yes">
+            <omgdi:waypoint x="570" y="740"/>
+            <omgdi:waypoint x="630" y="740"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA3_No" id="Edge_Flow_SA3_No">
+            <omgdi:waypoint x="545" y="715"/>
+            <omgdi:waypoint x="545" y="690"/>
+            <omgdi:waypoint x="640" y="690"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA4" id="Edge_Flow_SA4">
+            <omgdi:waypoint x="830" y="740"/>
+            <omgdi:waypoint x="900" y="740"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== MESSAGE FLOW EDGES ====== -->
+         <bpmndi:BPMNEdge bpmnElement="MF_Processor_to_Controller" id="Edge_MF_Processor_to_Controller">
+            <omgdi:waypoint x="580" y="178"/>
+            <omgdi:waypoint x="580" y="270"/>
+            <omgdi:waypoint x="210" y="270"/>
+            <omgdi:waypoint x="210" y="362"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF_Controller_to_SA" id="Edge_MF_Controller_to_SA">
+            <omgdi:waypoint x="460" y="420"/>
+            <omgdi:waypoint x="460" y="630"/>
+            <omgdi:waypoint x="210" y="630"/>
+            <omgdi:waypoint x="210" y="722"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF_SA_to_Controller" id="Edge_MF_SA_to_Controller">
+            <omgdi:waypoint x="730" y="700"/>
+            <omgdi:waypoint x="730" y="630"/>
+            <omgdi:waypoint x="928" y="630"/>
+            <omgdi:waypoint x="928" y="498"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

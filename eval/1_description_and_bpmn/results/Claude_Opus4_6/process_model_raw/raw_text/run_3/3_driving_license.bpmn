@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="part_applicant" name="Applicant / Holder" processRef="proc_applicant"/>
+      <participant id="part_memberstate" name="Member State" processRef="proc_memberstate"/>
+      <participant id="part_commission" name="Commission" processRef="proc_commission"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_application" name="Application" sourceRef="task_apply" targetRef="start_ms_receive"/>
+      <messageFlow id="mf_exam_request" name="Examination request" sourceRef="task_ensure_exam" targetRef="event_receive_exam_req"/>
+      <messageFlow id="mf_selfassess_request" name="Self-assessment request" sourceRef="task_require_selfassess" targetRef="event_receive_sa_req"/>
+      <messageFlow id="mf_exam_result" name="Examination result" sourceRef="task_undergo_exam" targetRef="event_receive_exam_result"/>
+      <messageFlow id="mf_sa_result" name="Self-assessment result" sourceRef="task_fill_selfassess" targetRef="event_receive_sa_result"/>
+      <messageFlow id="mf_licence" name="Driving licence" sourceRef="task_issue_licence" targetRef="event_receive_licence"/>
+      <messageFlow id="mf_reexam_request" name="Re-examination request" sourceRef="task_require_reexam" targetRef="event_receive_reexam_req"/>
+      <messageFlow id="mf_reexam_result" name="Re-examination result" sourceRef="task_undergo_reexam" targetRef="event_receive_reexam_result"/>
+      <messageFlow id="mf_inform_comm" name="Information" sourceRef="task_inform_commission" targetRef="start_comm_receive"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Applicant / Holder                                   -->
+   <!-- ============================================================ -->
+   <process id="proc_applicant" name="Applicant / Holder" isExecutable="false">
+      <laneSet id="ls_applicant">
+         <lane id="lane_applicant" name="Applicant / Holder">
+            <flowNodeRef>start_applicant</flowNodeRef>
+            <flowNodeRef>task_apply</flowNodeRef>
+            <flowNodeRef>gw_app_receive</flowNodeRef>
+            <flowNodeRef>event_receive_exam_req</flowNodeRef>
+            <flowNodeRef>event_receive_sa_req</flowNodeRef>
+            <flowNodeRef>task_undergo_exam</flowNodeRef>
+            <flowNodeRef>task_fill_selfassess</flowNodeRef>
+            <flowNodeRef>gw_app_merge</flowNodeRef>
+            <flowNodeRef>event_receive_licence</flowNodeRef>
+            <flowNodeRef>gw_reexam_check</flowNodeRef>
+            <flowNodeRef>event_receive_reexam_req</flowNodeRef>
+            <flowNodeRef>task_undergo_reexam</flowNodeRef>
+            <flowNodeRef>end_applicant</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_applicant" name="Start">
+         <outgoing>sf_a1</outgoing>
+      </startEvent>
+      <task id="task_apply" name="Apply for driving licence">
+         <incoming>sf_a1</incoming>
+         <outgoing>sf_a2</outgoing>
+      </task>
+      <eventBasedGateway id="gw_app_receive" name="Await requirement">
+         <incoming>sf_a2</incoming>
+         <outgoing>sf_a3</outgoing>
+         <outgoing>sf_a4</outgoing>
+      </eventBasedGateway>
+      <intermediateCatchEvent id="event_receive_exam_req" name="Receive examination request">
+         <incoming>sf_a3</incoming>
+         <outgoing>sf_a5</outgoing>
+         <messageEventDefinition id="med_recv_exam_req"/>
+      </intermediateCatchEvent>
+      <intermediateCatchEvent id="event_receive_sa_req" name="Receive self-assessment request">
+         <incoming>sf_a4</incoming>
+         <outgoing>sf_a6</outgoing>
+         <messageEventDefinition id="med_recv_sa_req"/>
+      </intermediateCatchEvent>
+      <task id="task_undergo_exam" name="Undergo medical examination">
+         <incoming>sf_a5</incoming>
+         <outgoing>sf_a7</outgoing>
+      </task>
+      <task id="task_fill_selfassess" name="Fill in self-assessment form">
+         <incoming>sf_a6</incoming>
+         <outgoing>sf_a8</outgoing>
+      </task>
+      <exclusiveGateway id="gw_app_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_a7</incoming>
+         <incoming>sf_a8</incoming>
+         <outgoing>sf_a9</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="event_receive_licence" name="Receive driving licence">
+         <incoming>sf_a12</incoming>
+         <outgoing>sf_a13</outgoing>
+         <messageEventDefinition id="med_recv_licence"/>
+      </intermediateCatchEvent>
+      <eventBasedGateway id="gw_reexam_check" name="Await decision">
+         <incoming>sf_a9</incoming>
+         <outgoing>sf_a10</outgoing>
+         <outgoing>sf_a12</outgoing>
+      </eventBasedGateway>
+      <intermediateCatchEvent id="event_receive_reexam_req" name="Receive re-examination request">
+         <incoming>sf_a10</incoming>
+         <outgoing>sf_a11</outgoing>
+         <messageEventDefinition id="med_recv_reexam_req"/>
+      </intermediateCatchEvent>
+      <task id="task_undergo_reexam" name="Undergo medical examination (conditions apparent)">
+         <incoming>sf_a11</incoming>
+         <outgoing>sf_a14</outgoing>
+      </task>
+      <endEvent id="end_applicant" name="End">
+         <incoming>sf_a13</incoming>
+         <incoming>sf_a14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_a1" sourceRef="start_applicant" targetRef="task_apply"/>
+      <sequenceFlow id="sf_a2" sourceRef="task_apply" targetRef="gw_app_receive"/>
+      <sequenceFlow id="sf_a3" sourceRef="gw_app_receive" targetRef="event_receive_exam_req"/>
+      <sequenceFlow id="sf_a4" sourceRef="gw_app_receive" targetRef="event_receive_sa_req"/>
+      <sequenceFlow id="sf_a5" sourceRef="event_receive_exam_req" targetRef="task_undergo_exam"/>
+      <sequenceFlow id="sf_a6" sourceRef="event_receive_sa_req" targetRef="task_fill_selfassess"/>
+      <sequenceFlow id="sf_a7" sourceRef="task_undergo_exam" targetRef="gw_app_merge"/>
+      <sequenceFlow id="sf_a8" sourceRef="task_fill_selfassess" targetRef="gw_app_merge"/>
+      <sequenceFlow id="sf_a9" sourceRef="gw_app_merge" targetRef="gw_reexam_check"/>
+      <sequenceFlow id="sf_a10" sourceRef="gw_reexam_check" targetRef="event_receive_reexam_req"/>
+      <sequenceFlow id="sf_a11" sourceRef="event_receive_reexam_req" targetRef="task_undergo_reexam"/>
+      <sequenceFlow id="sf_a12" sourceRef="gw_reexam_check" targetRef="event_receive_licence"/>
+      <sequenceFlow id="sf_a13" sourceRef="event_receive_licence" targetRef="end_applicant"/>
+      <sequenceFlow id="sf_a14" sourceRef="task_undergo_reexam" targetRef="end_applicant"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Member State                                         -->
+   <!-- ============================================================ -->
+   <process id="proc_memberstate" name="Member State" isExecutable="false">
+      <laneSet id="ls_memberstate">
+         <lane id="lane_memberstate" name="Member State">
+            <flowNodeRef>start_ms_receive</flowNodeRef>
+            <flowNodeRef>gw_category</flowNodeRef>
+            <flowNodeRef>task_ensure_exam</flowNodeRef>
+            <flowNodeRef>task_require_selfassess</flowNodeRef>
+            <flowNodeRef>event_receive_exam_result</flowNodeRef>
+            <flowNodeRef>event_receive_sa_result</flowNodeRef>
+            <flowNodeRef>gw_ms_merge_results</flowNodeRef>
+            <flowNodeRef>task_evaluate_fitness</flowNodeRef>
+            <flowNodeRef>gw_conditions_apparent</flowNodeRef>
+            <flowNodeRef>task_require_reexam</flowNodeRef>
+            <flowNodeRef>event_receive_reexam_result</flowNodeRef>
+            <flowNodeRef>gw_ms_merge_issue</flowNodeRef>
+            <flowNodeRef>task_issue_licence</flowNodeRef>
+            <flowNodeRef>task_address_noncompliance</flowNodeRef>
+            <flowNodeRef>gw_noncompliance</flowNodeRef>
+            <flowNodeRef>gw_ms_merge_final</flowNodeRef>
+            <flowNodeRef>task_inform_commission</flowNodeRef>
+            <flowNodeRef>end_ms</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ms_receive" name="Receive application">
+         <outgoing>sf_m1</outgoing>
+         <messageEventDefinition id="med_start_ms"/>
+      </startEvent>
+      <exclusiveGateway id="gw_category" name="Category requiring medical examination?">
+         <incoming>sf_m1</incoming>
+         <outgoing>sf_m2</outgoing>
+         <outgoing>sf_m3</outgoing>
+      </exclusiveGateway>
+      <task id="task_ensure_exam" name="Ensure medical examination is applied">
+         <incoming>sf_m2</incoming>
+         <outgoing>sf_m4</outgoing>
+      </task>
+      <task id="task_require_selfassess" name="Require self-assessment form">
+         <incoming>sf_m3</incoming>
+         <outgoing>sf_m5</outgoing>
+      </task>
+      <intermediateCatchEvent id="event_receive_exam_result" name="Receive examination result">
+         <incoming>sf_m4</incoming>
+         <outgoing>sf_m6</outgoing>
+         <messageEventDefinition id="med_recv_exam_res"/>
+      </intermediateCatchEvent>
+      <intermediateCatchEvent id="event_receive_sa_result" name="Receive self-assessment result">
+         <incoming>sf_m5</incoming>
+         <outgoing>sf_m7</outgoing>
+         <messageEventDefinition id="med_recv_sa_res"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="gw_ms_merge_results" name="" gatewayDirection="Converging">
+         <incoming>sf_m6</incoming>
+         <incoming>sf_m7</incoming>
+         <outgoing>sf_m8</outgoing>
+      </exclusiveGateway>
+      <task id="task_evaluate_fitness" name="Evaluate fitness information">
+         <incoming>sf_m8</incoming>
+         <outgoing>sf_m9</outgoing>
+      </task>
+      <exclusiveGateway id="gw_conditions_apparent" name="Medical conditions apparent?">
+         <incoming>sf_m9</incoming>
+         <outgoing>sf_m10</outgoing>
+         <outgoing>sf_m11</outgoing>
+      </exclusiveGateway>
+      <task id="task_require_reexam" name="Require medical examination prior to issuance">
+         <incoming>sf_m10</incoming>
+         <outgoing>sf_m12</outgoing>
+      </task>
+      <intermediateCatchEvent id="event_receive_reexam_result" name="Receive re-examination result">
+         <incoming>sf_m12</incoming>
+         <outgoing>sf_m13</outgoing>
+         <messageEventDefinition id="med_recv_reexam_res"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="gw_ms_merge_issue" name="" gatewayDirection="Converging">
+         <incoming>sf_m11</incoming>
+         <incoming>sf_m13</incoming>
+         <outgoing>sf_m14</outgoing>
+      </exclusiveGateway>
+      <task id="task_issue_licence" name="Issue or renew driving licence">
+         <incoming>sf_m14</incoming>
+         <outgoing>sf_m15</outgoing>
+      </task>
+      <exclusiveGateway id="gw_noncompliance" name="Non-compliance detected?">
+         <incoming>sf_m15</incoming>
+         <outgoing>sf_m16</outgoing>
+         <outgoing>sf_m17</outgoing>
+      </exclusiveGateway>
+      <task id="task_address_noncompliance" name="Address non-compliance">
+         <incoming>sf_m16</incoming>
+         <outgoing>sf_m18</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_merge_final" name="" gatewayDirection="Converging">
+         <incoming>sf_m17</incoming>
+         <incoming>sf_m18</incoming>
+         <outgoing>sf_m19</outgoing>
+      </exclusiveGateway>
+      <task id="task_inform_commission" name="Inform Commission of guidelines or campaigns">
+         <incoming>sf_m19</incoming>
+         <outgoing>sf_m20</outgoing>
+      </task>
+      <endEvent id="end_ms" name="End">
+         <incoming>sf_m20</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_m1" sourceRef="start_ms_receive" targetRef="gw_category"/>
+      <sequenceFlow id="sf_m2" name="C, CE, C1, C1E, D, D1, DE, D1E" sourceRef="gw_category" targetRef="task_ensure_exam"/>
+      <sequenceFlow id="sf_m3" name="AM, A, A1, A2, B, B1, BE (alternative)" sourceRef="gw_category" targetRef="task_require_selfassess"/>
+      <sequenceFlow id="sf_m4" sourceRef="task_ensure_exam" targetRef="event_receive_exam_result"/>
+      <sequenceFlow id="sf_m5" sourceRef="task_require_selfassess" targetRef="event_receive_sa_result"/>
+      <sequenceFlow id="sf_m6" sourceRef="event_receive_exam_result" targetRef="gw_ms_merge_results"/>
+      <sequenceFlow id="sf_m7" sourceRef="event_receive_sa_result" targetRef="gw_ms_merge_results"/>
+      <sequenceFlow id="sf_m8" sourceRef="gw_ms_merge_results" targetRef="task_evaluate_fitness"/>
+      <sequenceFlow id="sf_m9" sourceRef="task_evaluate_fitness" targetRef="gw_conditions_apparent"/>
+      <sequenceFlow id="sf_m10" name="Yes" sourceRef="gw_conditions_apparent" targetRef="task_require_reexam"/>
+      <sequenceFlow id="sf_m11" name="No" sourceRef="gw_conditions_apparent" targetRef="gw_ms_merge_issue"/>
+      <sequenceFlow id="sf_m12" sourceRef="task_require_reexam" targetRef="event_receive_reexam_result"/>
+      <sequenceFlow id="sf_m13" sourceRef="event_receive_reexam_result" targetRef="gw_ms_merge_issue"/>
+      <sequenceFlow id="sf_m14" sourceRef="gw_ms_merge_issue" targetRef="task_issue_licence"/>
+      <sequenceFlow id="sf_m15" sourceRef="task_issue_licence" targetRef="gw_noncompliance"/>
+      <sequenceFlow id="sf_m16" name="Yes" sourceRef="gw_noncompliance" targetRef="task_address_noncompliance"/>
+      <sequenceFlow id="sf_m17" name="No" sourceRef="gw_noncompliance" targetRef="gw_ms_merge_final"/>
+      <sequenceFlow id="sf_m18" sourceRef="task_address_noncompliance" targetRef="gw_ms_merge_final"/>
+      <sequenceFlow id="sf_m19" sourceRef="gw_ms_merge_final" targetRef="task_inform_commission"/>
+      <sequenceFlow id="sf_m20" sourceRef="task_inform_commission" targetRef="end_ms"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Commission                                           -->
+   <!-- ============================================================ -->
+   <process id="proc_commission" name="Commission" isExecutable="false">
+      <laneSet id="ls_commission">
+         <lane id="lane_commission" name="Commission">
+            <flowNodeRef>start_comm_receive</flowNodeRef>
+            <flowNodeRef>task_make_available</flowNodeRef>
+            <flowNodeRef>end_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_comm_receive" name="Receive information from Member State">
+         <outgoing>sf_c1</outgoing>
+         <messageEventDefinition id="med_start_comm"/>
+      </startEvent>
+      <task id="task_make_available" name="Make guidelines or information available to other Member States">
+         <incoming>sf_c1</incoming>
+         <outgoing>sf_c2</outgoing>
+      </task>
+      <endEvent id="end_commission" name="End">
+         <incoming>sf_c2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_c1" sourceRef="start_comm_receive" targetRef="task_make_available"/>
+      <sequenceFlow id="sf_c2" sourceRef="task_make_available" targetRef="end_commission"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- ====== POOL: Applicant (y=60, h=250) ====== -->
+         <bpmndi:BPMNShape bpmnElement="part_applicant" id="shape_part_applicant" isHorizontal="true">
+            <omgdc:Bounds x="60" y="60" width="1540" height="250"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_applicant" id="shape_lane_applicant" isHorizontal="true">
+            <omgdc:Bounds x="90" y="60" width="1510" height="250"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Applicant nodes -->
+         <bpmndi:BPMNShape bpmnElement="start_applicant" id="shape_start_applicant">
+            <omgdc:Bounds x="130" y="170" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_apply" id="shape_task_apply">
+            <omgdc:Bounds x="200" y="145" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_receive" id="shape_gw_app_receive">
+            <omgdc:Bounds x="340" y="165" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_exam_req" id="shape_event_receive_exam_req">
+            <omgdc:Bounds x="420" y="115" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_sa_req" id="shape_event_receive_sa_req">
+            <omgdc:Bounds x="420" y="225" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_undergo_exam" id="shape_task_undergo_exam">
+            <omgdc:Bounds x="490" y="90" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_fill_selfassess" id="shape_task_fill_selfassess">
+            <omgdc:Bounds x="490" y="200" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_merge" id="shape_gw_app_merge">
+            <omgdc:Bounds x="640" y="165" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_reexam_check" id="shape_gw_reexam_check">
+            <omgdc:Bounds x="730" y="165" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_reexam_req" id="shape_event_receive_reexam_req">
+            <omgdc:Bounds x="820" y="115" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_undergo_reexam" id="shape_task_undergo_reexam">
+            <omgdc:Bounds x="890" y="90" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_licence" id="shape_event_receive_licence">
+            <omgdc:Bounds x="820" y="225" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_applicant" id="shape_end_applicant">
+            <omgdc:Bounds x="1040" y="171" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Applicant edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_a1" id="edge_sf_a1">
+            <omgdi:waypoint x="160" y="185"/>
+            <omgdi:waypoint x="200" y="185"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a2" id="edge_sf_a2">
+            <omgdi:waypoint x="300" y="185"/>
+            <omgdi:waypoint x="340" y="185"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a3" id="edge_sf_a3">
+            <omgdi:waypoint x="360" y="165"/>
+            <omgdi:waypoint x="360" y="130"/>
+            <omgdi:waypoint x="420" y="130"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a4" id="edge_sf_a4">
+            <omgdi:waypoint x="360" y="205"/>
+            <omgdi:waypoint x="360" y="240"/>
+            <omgdi:waypoint x="420" y="240"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a5" id="edge_sf_a5">
+            <omgdi:waypoint x="450" y="130"/>
+            <omgdi:waypoint x="490" y="130"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a6" id="edge_sf_a6">
+            <omgdi:waypoint x="450" y="240"/>
+            <omgdi:waypoint x="490" y="240"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a7" id="edge_sf_a7">
+            <omgdi:waypoint x="590" y="130"/>
+            <omgdi:waypoint x="660" y="130"/>
+            <omgdi:waypoint x="660" y="165"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a8" id="edge_sf_a8">
+            <omgdi:waypoint x="590" y="240"/>
+            <omgdi:waypoint x="660" y="240"/>
+            <omgdi:waypoint x="660" y="205"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a9" id="edge_sf_a9">
+            <omgdi:waypoint x="680" y="185"/>
+            <omgdi:waypoint x="730" y="185"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a10" id="edge_sf_a10">
+            <omgdi:waypoint x="750" y="165"/>
+            <omgdi:waypoint x="750" y="130"/>
+            <omgdi:waypoint x="820" y="130"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a11" id="edge_sf_a11">
+            <omgdi:waypoint x="850" y="130"/>
+            <omgdi:waypoint x="890" y="130"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a12" id="edge_sf_a12">
+            <omgdi:waypoint x="750" y="205"/>
+            <omgdi:waypoint x="750" y="240"/>
+            <omgdi:waypoint x="820" y="240"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a13" id="edge_sf_a13">
+            <omgdi:waypoint x="850" y="240"/>
+            <omgdi:waypoint x="1054" y="240"/>
+            <omgdi:waypoint x="1054" y="199"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_a14" id="edge_sf_a14">
+            <omgdi:waypoint x="990" y="130"/>
+            <omgdi:waypoint x="1054" y="130"/>
+            <omgdi:waypoint x="1054" y="171"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== POOL: Member State (y=360, h=280) ====== -->
+         <bpmndi:BPMNShape bpmnElement="part_memberstate" id="shape_part_memberstate" isHorizontal="true">
+            <omgdc:Bounds x="60" y="360" width="1540" height="280"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_memberstate" id="shape_lane_memberstate" isHorizontal="true">
+            <omgdc:Bounds x="90" y="360" width="1510" height="280"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Member State nodes -->
+         <bpmndi:BPMNShape bpmnElement="start_ms_receive" id="shape_start_ms_receive">
+            <omgdc:Bounds x="130" y="485" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_category" id="shape_gw_category">
+            <omgdc:Bounds x="200" y="480" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensure_exam" id="shape_task_ensure_exam">
+            <omgdc:Bounds x="290" y="385" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_require_selfassess" id="shape_task_require_selfassess">
+            <omgdc:Bounds x="290" y="530" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_exam_result" id="shape_event_receive_exam_result">
+            <omgdc:Bounds x="430" y="410" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_sa_result" id="shape_event_receive_sa_result">
+            <omgdc:Bounds x="430" y="555" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_merge_results" id="shape_gw_ms_merge_results">
+            <omgdc:Bounds x="500" y="480" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_evaluate_fitness" id="shape_task_evaluate_fitness">
+            <omgdc:Bounds x="580" y="460" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_conditions_apparent" id="shape_gw_conditions_apparent">
+            <omgdc:Bounds x="720" y="480" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_require_reexam" id="shape_task_require_reexam">
+            <omgdc:Bounds x="800" y="385" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_receive_reexam_result" id="shape_event_receive_reexam_result">
+            <omgdc:Bounds x="940" y="410" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_merge_issue" id="shape_gw_ms_merge_issue">
+            <omgdc:Bounds x="1010" y="480" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_issue_licence" id="shape_task_issue_licence">
+            <omgdc:Bounds x="1090" y="460" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_noncompliance" id="shape_gw_noncompliance">
+            <omgdc:Bounds x="1220" y="480" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_address_noncompliance" id="shape_task_address_noncompliance">
+            <omgdc:Bounds x="1290" y="385" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_merge_final" id="shape_gw_ms_merge_final">
+            <omgdc:Bounds x="1310" y="550" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_commission" id="shape_task_inform_commission">
+            <omgdc:Bounds x="1390" y="460" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="shape_end_ms">
+            <omgdc:Bounds x="1530" y="486" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Member State edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_m1" id="edge_sf_m1">
+            <omgdi:waypoint x="160" y="500"/>
+            <omgdi:waypoint x="200" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m2" id="edge_sf_m2">
+            <omgdi:waypoint x="220" y="480"/>
+            <omgdi:waypoint x="220" y="425"/>
+            <omgdi:waypoint x="290" y="425"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m3" id="edge_sf_m3">
+            <omgdi:waypoint x="220" y="520"/>
+            <omgdi:waypoint x="220" y="570"/>
+            <omgdi:waypoint x="290" y="570"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m4" id="edge_sf_m4">
+            <omgdi:waypoint x="390" y="425"/>
+            <omgdi:waypoint x="430" y="425"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m5" id="edge_sf_m5">
+            <omgdi:waypoint x="390" y="570"/>
+            <omgdi:waypoint x="430" y="570"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m6" id="edge_sf_m6">
+            <omgdi:waypoint x="460" y="425"/>
+            <omgdi:waypoint x="520" y="425"/>
+            <omgdi:waypoint x="520" y="480"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m7" id="edge_sf_m7">
+            <omgdi:waypoint x="460" y="570"/>
+            <omgdi:waypoint x="520" y="570"/>
+            <omgdi:waypoint x="520" y="520"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m8" id="edge_sf_m8">
+            <omgdi:waypoint x="540" y="500"/>
+            <omgdi:waypoint x="580" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m9" id="edge_sf_m9">
+            <omgdi:waypoint x="680" y="500"/>
+            <omgdi:waypoint x="720" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m10" id="edge_sf_m10">
+            <omgdi:waypoint x="740" y="480"/>
+            <omgdi:waypoint x="740" y="425"/>
+            <omgdi:waypoint x="800" y="425"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m11" id="edge_sf_m11">
+            <omgdi:waypoint x="760" y="500"/>
+            <omgdi:waypoint x="1010" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m12" id="edge_sf_m12">
+            <omgdi:waypoint x="900" y="425"/>
+            <omgdi:waypoint x="940" y="425"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m13" id="edge_sf_m13">
+            <omgdi:waypoint x="970" y="425"/>
+            <omgdi:waypoint x="1030" y="425"/>
+            <omgdi:waypoint x="1030" y="480"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m14" id="edge_sf_m14">
+            <omgdi:waypoint x="1050" y="500"/>
+            <omgdi:waypoint x="1090" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m15" id="edge_sf_m15">
+            <omgdi:waypoint x="1190" y="500"/>
+            <omgdi:waypoint x="1220" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m16" id="edge_sf_m16">
+            <omgdi:waypoint x="1240" y="480"/>
+            <omgdi:waypoint x="1240" y="425"/>
+            <omgdi:waypoint x="1290" y="425"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m17" id="edge_sf_m17">
+            <omgdi:waypoint x="1240" y="520"/>
+            <omgdi:waypoint x="1240" y="570"/>
+            <omgdi:waypoint x="1310" y="570"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m18" id="edge_sf_m18">
+            <omgdi:waypoint x="1340" y="465"/>
+            <omgdi:waypoint x="1340" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m19" id="edge_sf_m19">
+            <omgdi:waypoint x="1350" y="570"/>
+            <omgdi:waypoint x="1370" y="570"/>
+            <omgdi:waypoint x="1370" y="500"/>
+            <omgdi:waypoint x="1390" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m20" id="edge_sf_m20">
+            <omgdi:waypoint x="1490" y="500"/>
+            <omgdi:waypoint x="1530" y="500"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== POOL: Commission (y=690, h=150) ====== -->
+         <bpmndi:BPMNShape bpmnElement="part_commission" id="shape_part_commission" isHorizontal="true">
+            <omgdc:Bounds x="60" y="690" width="1540" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_commission" id="shape_lane_commission" isHorizontal="true">
+            <omgdc:Bounds x="90" y="690" width="1510" height="150"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission nodes -->
+         <bpmndi:BPMNShape bpmnElement="start_comm_receive" id="shape_start_comm_receive">
+            <omgdc:Bounds x="1410" y="750" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_make_available" id="shape_task_make_available">
+            <omgdc:Bounds x="1470" y="725" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_commission" id="shape_end_commission">
+            <omgdc:Bounds x="1540" y="815" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_c1" id="edge_sf_c1">
+            <omgdi:waypoint x="1440" y="765"/>
+            <omgdi:waypoint x="1470" y="765"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c2" id="edge_sf_c2">
+            <omgdi:waypoint x="1520" y="805"/>
+            <omgdi:waypoint x="1554" y="815"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ====== MESSAGE FLOWS ====== -->
+         <bpmndi:BPMNEdge bpmnElement="mf_application" id="edge_mf_application">
+            <omgdi:waypoint x="250" y="225"/>
+            <omgdi:waypoint x="145" y="225"/>
+            <omgdi:waypoint x="145" y="485"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_exam_request" id="edge_mf_exam_request">
+            <omgdi:waypoint x="340" y="385"/>
+            <omgdi:waypoint x="340" y="310"/>
+            <omgdi:waypoint x="435" y="310"/>
+            <omgdi:waypoint x="435" y="145"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_selfassess_request" id="edge_mf_selfassess_request">
+            <omgdi:waypoint x="340" y="530"/>
+            <omgdi:waypoint x="340" y="320"/>
+            <omgdi:waypoint x="435" y="320"/>
+            <omgdi:waypoint x="435" y="255"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_exam_result" id="edge_mf_exam_result">
+            <omgdi:waypoint x="540" y="170"/>
+            <omgdi:waypoint x="540" y="310"/>
+            <omgdi:waypoint x="445" y="310"/>
+            <omgdi:waypoint x="445" y="410"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sa_result" id="edge_mf_sa_result">
+            <omgdi:waypoint x="540" y="280"/>
+            <omgdi:waypoint x="540" y="320"/>
+            <omgdi:waypoint x="445" y="320"/>
+            <omgdi:waypoint x="445" y="555"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_licence" id="edge_mf_licence">
+            <omgdi:waypoint x="1140" y="460"/>
+            <omgdi:waypoint x="1140" y="320"/>
+            <omgdi:waypoint x="835" y="320"/>
+            <omgdi:waypoint x="835" y="255"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_reexam_request" id="edge_mf_reexam_request">
+            <omgdi:waypoint x="850" y="385"/>
+            <omgdi:waypoint x="835" y="330"/>
+            <omgdi:waypoint x="835" y="145"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_reexam_result" id="edge_mf_reexam_result">
+            <omgdi:waypoint x="940" y="170"/>
+            <omgdi:waypoint x="955" y="320"/>
+            <omgdi:waypoint x="955" y="410"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_inform_comm" id="edge_mf_inform_comm">
+            <omgdi:waypoint x="1440" y="540"/>
+            <omgdi:waypoint x="1425" y="750"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+
+      <bpmndi:BPMNLabelStyle id="labelstyle_small">
+         <omgdc:Font name="Arial" size="11.0" isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false"/>
+      </bpmndi:BPMNLabelStyle>
+      <bpmndi:BPMNLabelStyle id="labelstyle_normal">
+         <omgdc:Font name="Arial" size="12.0" isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false"/>
+      </bpmndi:BPMNLabelStyle>
+   </bpmndi:BPMNDiagram>
+</definitions>
