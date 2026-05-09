@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_1" name="European Cybersecurity Certification Scheme" processRef="Process_1" />
+   </collaboration>
+   <process id="Process_1" isExecutable="false">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_Commission" name="Commission">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Task_1</flowNodeRef>
+            <flowNodeRef>Task_2</flowNodeRef>
+            <flowNodeRef>Task_11</flowNodeRef>
+         </lane>
+         <lane id="Lane_ECCG" name="ECCG">
+            <flowNodeRef>Task_8</flowNodeRef>
+         </lane>
+         <lane id="Lane_ENISA" name="ENISA">
+            <flowNodeRef>Gateway_1</flowNodeRef>
+            <flowNodeRef>Task_4</flowNodeRef>
+            <flowNodeRef>Task_5</flowNodeRef>
+            <flowNodeRef>Task_6</flowNodeRef>
+            <flowNodeRef>Task_7</flowNodeRef>
+            <flowNodeRef>Task_9</flowNodeRef>
+            <flowNodeRef>Task_10</flowNodeRef>
+            <flowNodeRef>Task_12</flowNodeRef>
+            <flowNodeRef>EndEvent_1</flowNodeRef>
+            <flowNodeRef>EndEvent_2</flowNodeRef>
+         </lane>
+         <lane id="Lane_MgmtBoard" name="Management Board">
+            <flowNodeRef>Task_3</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="StartEvent_1" name="Start">
+         <outgoing>SF1</outgoing>
+      </startEvent>
+      <task id="Task_1" name="Request ENISA to prepare scheme">
+         <incoming>SF1</incoming>
+         <outgoing>SF2</outgoing>
+      </task>
+      <task id="Task_2" name="Update rolling work programme">
+         <incoming>SF2</incoming>
+         <outgoing>SF3</outgoing>
+      </task>
+
+      <exclusiveGateway id="Gateway_1" name="Refuse request?">
+         <incoming>SF3</incoming>
+         <outgoing>SF4</outgoing>
+         <outgoing>SF7</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_3" name="Take decision to refuse">
+         <incoming>SF4</incoming>
+         <outgoing>SF5</outgoing>
+      </task>
+      <task id="Task_4" name="Give reasons for refusal">
+         <incoming>SF5</incoming>
+         <outgoing>SF6</outgoing>
+      </task>
+      <endEvent id="EndEvent_1" name="Refused">
+         <incoming>SF6</incoming>
+      </endEvent>
+
+      <task id="Task_5" name="Prepare candidate scheme">
+         <incoming>SF7</incoming>
+         <outgoing>SF8</outgoing>
+      </task>
+      <task id="Task_6" name="Consult relevant stakeholders">
+         <incoming>SF8</incoming>
+         <outgoing>SF9</outgoing>
+      </task>
+      <task id="Task_7" name="Establish ad hoc working group">
+         <incoming>SF9</incoming>
+         <outgoing>SF10</outgoing>
+      </task>
+
+      <task id="Task_8" name="Provide assistance and adopt opinion">
+         <incoming>SF10</incoming>
+         <outgoing>SF11</outgoing>
+      </task>
+
+      <task id="Task_9" name="Take utmost account of opinion">
+         <incoming>SF11</incoming>
+         <outgoing>SF12</outgoing>
+      </task>
+      <task id="Task_10" name="Transmit candidate scheme to Commission">
+         <incoming>SF12</incoming>
+         <outgoing>SF13</outgoing>
+      </task>
+
+      <task id="Task_11" name="Adopt implementing acts">
+         <incoming>SF13</incoming>
+         <outgoing>SF14</outgoing>
+      </task>
+
+      <task id="Task_12" name="Evaluate adopted scheme">
+         <incoming>SF14</incoming>
+         <outgoing>SF15</outgoing>
+      </task>
+      <endEvent id="EndEvent_2" name="End">
+         <incoming>SF15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="SF1" sourceRef="StartEvent_1" targetRef="Task_1" />
+      <sequenceFlow id="SF2" sourceRef="Task_1" targetRef="Task_2" />
+      <sequenceFlow id="SF3" sourceRef="Task_2" targetRef="Gateway_1" />
+      <sequenceFlow id="SF4" name="Yes" sourceRef="Gateway_1" targetRef="Task_3" />
+      <sequenceFlow id="SF5" sourceRef="Task_3" targetRef="Task_4" />
+      <sequenceFlow id="SF6" sourceRef="Task_4" targetRef="EndEvent_1" />
+      <sequenceFlow id="SF7" name="No" sourceRef="Gateway_1" targetRef="Task_5" />
+      <sequenceFlow id="SF8" sourceRef="Task_5" targetRef="Task_6" />
+      <sequenceFlow id="SF9" sourceRef="Task_6" targetRef="Task_7" />
+      <sequenceFlow id="SF10" sourceRef="Task_7" targetRef="Task_8" />
+      <sequenceFlow id="SF11" sourceRef="Task_8" targetRef="Task_9" />
+      <sequenceFlow id="SF12" sourceRef="Task_9" targetRef="Task_10" />
+      <sequenceFlow id="SF13" sourceRef="Task_10" targetRef="Task_11" />
+      <sequenceFlow id="SF14" sourceRef="Task_11" targetRef="Task_12" />
+      <sequenceFlow id="SF15" sourceRef="Task_12" targetRef="EndEvent_2" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+         <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true">
+            <omgdc:Bounds x="30.0" y="0.0" width="1650.0" height="800.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_Commission_di" bpmnElement="Lane_Commission" isHorizontal="true">
+            <omgdc:Bounds x="60.0" y="0.0" width="1620.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_ECCG_di" bpmnElement="Lane_ECCG" isHorizontal="true">
+            <omgdc:Bounds x="60.0" y="200.0" width="1620.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_ENISA_di" bpmnElement="Lane_ENISA" isHorizontal="true">
+            <omgdc:Bounds x="60.0" y="400.0" width="1620.0" height="200.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_MgmtBoard_di" bpmnElement="Lane_MgmtBoard" isHorizontal="true">
+            <omgdc:Bounds x="60.0" y="600.0" width="1620.0" height="200.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+            <omgdc:Bounds x="80.0" y="85.0" width="30.0" height="30.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_1_di" bpmnElement="Task_1">
+            <omgdc:Bounds x="150.0" y="60.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_2_di" bpmnElement="Task_2">
+            <omgdc:Bounds x="280.0" y="60.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_1_di" bpmnElement="Gateway_1">
+            <omgdc:Bounds x="410.0" y="480.0" width="40.0" height="40.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_3_di" bpmnElement="Task_3">
+            <omgdc:Bounds x="500.0" y="660.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_4_di" bpmnElement="Task_4">
+            <omgdc:Bounds x="630.0" y="500.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+            <omgdc:Bounds x="760.0" y="525.0" width="30.0" height="30.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_5_di" bpmnElement="Task_5">
+            <omgdc:Bounds x="500.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_6_di" bpmnElement="Task_6">
+            <omgdc:Bounds x="630.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_7_di" bpmnElement="Task_7">
+            <omgdc:Bounds x="760.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_8_di" bpmnElement="Task_8">
+            <omgdc:Bounds x="890.0" y="260.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_9_di" bpmnElement="Task_9">
+            <omgdc:Bounds x="1020.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_10_di" bpmnElement="Task_10">
+            <omgdc:Bounds x="1150.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_11_di" bpmnElement="Task_11">
+            <omgdc:Bounds x="1280.0" y="60.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_12_di" bpmnElement="Task_12">
+            <omgdc:Bounds x="1410.0" y="400.0" width="100.0" height="80.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_2_di" bpmnElement="EndEvent_2">
+            <omgdc:Bounds x="1540.0" y="425.0" width="30.0" height="30.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge id="SF1_di" bpmnElement="SF1">
+            <omgdi:waypoint x="110.0" y="100.0" />
+            <omgdi:waypoint x="150.0" y="100.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF2_di" bpmnElement="SF2">
+            <omgdi:waypoint x="250.0" y="100.0" />
+            <omgdi:waypoint x="280.0" y="100.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF3_di" bpmnElement="SF3">
+            <omgdi:waypoint x="380.0" y="100.0" />
+            <omgdi:waypoint x="430.0" y="100.0" />
+            <omgdi:waypoint x="430.0" y="480.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF4_di" bpmnElement="SF4">
+            <omgdi:waypoint x="430.0" y="520.0" />
+            <omgdi:waypoint x="430.0" y="700.0" />
+            <omgdi:waypoint x="500.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF5_di" bpmnElement="SF5">
+            <omgdi:waypoint x="600.0" y="700.0" />
+            <omgdi:waypoint x="615.0" y="700.0" />
+            <omgdi:waypoint x="615.0" y="540.0" />
+            <omgdi:waypoint x="630.0" y="540.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF6_di" bpmnElement="SF6">
+            <omgdi:waypoint x="730.0" y="540.0" />
+            <omgdi:waypoint x="760.0" y="540.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF7_di" bpmnElement="SF7">
+            <omgdi:waypoint x="450.0" y="500.0" />
+            <omgdi:waypoint x="475.0" y="500.0" />
+            <omgdi:waypoint x="475.0" y="440.0" />
+            <omgdi:waypoint x="500.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF8_di" bpmnElement="SF8">
+            <omgdi:waypoint x="600.0" y="440.0" />
+            <omgdi:waypoint x="630.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF9_di" bpmnElement="SF9">
+            <omgdi:waypoint x="730.0" y="440.0" />
+            <omgdi:waypoint x="760.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF10_di" bpmnElement="SF10">
+            <omgdi:waypoint x="860.0" y="440.0" />
+            <omgdi:waypoint x="875.0" y="440.0" />
+            <omgdi:waypoint x="875.0" y="300.0" />
+            <omgdi:waypoint x="890.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF11_di" bpmnElement="SF11">
+            <omgdi:waypoint x="990.0" y="300.0" />
+            <omgdi:waypoint x="1005.0" y="300.0" />
+            <omgdi:waypoint x="1005.0" y="440.0" />
+            <omgdi:waypoint x="1020.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF12_di" bpmnElement="SF12">
+            <omgdi:waypoint x="1120.0" y="440.0" />
+            <omgdi:waypoint x="1150.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF13_di" bpmnElement="SF13">
+            <omgdi:waypoint x="1250.0" y="440.0" />
+            <omgdi:waypoint x="1265.0" y="440.0" />
+            <omgdi:waypoint x="1265.0" y="100.0" />
+            <omgdi:waypoint x="1280.0" y="100.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF14_di" bpmnElement="SF14">
+            <omgdi:waypoint x="1380.0" y="100.0" />
+            <omgdi:waypoint x="1395.0" y="100.0" />
+            <omgdi:waypoint x="1395.0" y="440.0" />
+            <omgdi:waypoint x="1410.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="SF15_di" bpmnElement="SF15">
+            <omgdi:waypoint x="1510.0" y="440.0" />
+            <omgdi:waypoint x="1540.0" y="440.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

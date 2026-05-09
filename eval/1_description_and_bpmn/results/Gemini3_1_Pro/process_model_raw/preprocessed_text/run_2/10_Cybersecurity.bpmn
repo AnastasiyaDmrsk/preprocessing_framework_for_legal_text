@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             id="sid-b8a7f5a9-e0d8-4d5c-9c7d-8e6f1a8e9d3b"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab-1">
+      <participant id="part-commission" name="Commission" processRef="proc-commission"/>
+      <participant id="part-eccg" name="ECCG" processRef="proc-eccg"/>
+      <participant id="part-enisa" name="ENISA" processRef="proc-enisa"/>
+      <participant id="part-mb" name="Management Board" processRef="proc-mb"/>
+
+      <messageFlow id="mf1" sourceRef="task-comm-req" targetRef="task-enisa-prep"/>
+      <messageFlow id="mf2" sourceRef="task-eccg-req" targetRef="task-enisa-prep"/>
+      <messageFlow id="mf3" sourceRef="task-enisa-refuse" targetRef="task-mb-decide"/>
+      <messageFlow id="mf4" sourceRef="task-enisa-trans" targetRef="task-comm-adopt"/>
+   </collaboration>
+
+   <process id="proc-commission" isExecutable="false">
+      <laneSet id="ls-comm">
+         <lane id="lane-comm">
+            <flowNodeRef>start-comm</flowNodeRef>
+            <flowNodeRef>task-comm-req</flowNodeRef>
+            <flowNodeRef>task-comm-upd</flowNodeRef>
+            <flowNodeRef>task-comm-adopt</flowNodeRef>
+            <flowNodeRef>task-comm-req-rev</flowNodeRef>
+            <flowNodeRef>end-comm</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start-comm" name="Start"/>
+      <task id="task-comm-req" name="request ENISA to prepare or review scheme"/>
+      <task id="task-comm-upd" name="update Union rolling work programme"/>
+      <task id="task-comm-adopt" name="adopt implementing acts"/>
+      <task id="task-comm-req-rev" name="request ENISA to develop revised scheme"/>
+      <endEvent id="end-comm" name="End"/>
+
+      <sequenceFlow id="sf-c1" sourceRef="start-comm" targetRef="task-comm-req"/>
+      <sequenceFlow id="sf-c2" sourceRef="task-comm-req" targetRef="task-comm-upd"/>
+      <sequenceFlow id="sf-c3" sourceRef="task-comm-upd" targetRef="task-comm-adopt"/>
+      <sequenceFlow id="sf-c4" sourceRef="task-comm-adopt" targetRef="task-comm-req-rev"/>
+      <sequenceFlow id="sf-c5" sourceRef="task-comm-req-rev" targetRef="end-comm"/>
+   </process>
+
+   <process id="proc-eccg" isExecutable="false">
+      <laneSet id="ls-eccg">
+         <lane id="lane-eccg">
+            <flowNodeRef>start-eccg</flowNodeRef>
+            <flowNodeRef>task-eccg-req</flowNodeRef>
+            <flowNodeRef>task-eccg-upd</flowNodeRef>
+            <flowNodeRef>task-eccg-adv</flowNodeRef>
+            <flowNodeRef>task-eccg-opi</flowNodeRef>
+            <flowNodeRef>task-eccg-req-rev</flowNodeRef>
+            <flowNodeRef>end-eccg</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start-eccg" name="Start"/>
+      <task id="task-eccg-req" name="request ENISA to prepare or review scheme"/>
+      <task id="task-eccg-upd" name="update Union rolling work programme"/>
+      <task id="task-eccg-adv" name="provide assistance and expert advice"/>
+      <task id="task-eccg-opi" name="adopt opinion on candidate scheme"/>
+      <task id="task-eccg-req-rev" name="request ENISA to develop revised scheme"/>
+      <endEvent id="end-eccg" name="End"/>
+
+      <sequenceFlow id="sf-e1" sourceRef="start-eccg" targetRef="task-eccg-req"/>
+      <sequenceFlow id="sf-e2" sourceRef="task-eccg-req" targetRef="task-eccg-upd"/>
+      <sequenceFlow id="sf-e3" sourceRef="task-eccg-upd" targetRef="task-eccg-adv"/>
+      <sequenceFlow id="sf-e4" sourceRef="task-eccg-adv" targetRef="task-eccg-opi"/>
+      <sequenceFlow id="sf-e5" sourceRef="task-eccg-opi" targetRef="task-eccg-req-rev"/>
+      <sequenceFlow id="sf-e6" sourceRef="task-eccg-req-rev" targetRef="end-eccg"/>
+   </process>
+
+   <process id="proc-enisa" isExecutable="false">
+      <laneSet id="ls-enisa">
+         <lane id="lane-enisa">
+            <flowNodeRef>start-enisa</flowNodeRef>
+            <flowNodeRef>task-enisa-prep</flowNodeRef>
+            <flowNodeRef>task-enisa-refuse</flowNodeRef>
+            <flowNodeRef>task-enisa-consult</flowNodeRef>
+            <flowNodeRef>task-enisa-wg</flowNodeRef>
+            <flowNodeRef>task-enisa-coop</flowNodeRef>
+            <flowNodeRef>task-enisa-trans</flowNodeRef>
+            <flowNodeRef>task-enisa-eval</flowNodeRef>
+            <flowNodeRef>end-enisa</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start-enisa" name="Start"/>
+      <task id="task-enisa-prep" name="prepare or review scheme"/>
+      <task id="task-enisa-refuse" name="give reasons for refusal"/>
+      <task id="task-enisa-consult" name="consult stakeholders"/>
+      <task id="task-enisa-wg" name="establish ad hoc working group"/>
+      <task id="task-enisa-coop" name="cooperate with ECCG"/>
+      <task id="task-enisa-trans" name="transmit candidate scheme to Commission"/>
+      <task id="task-enisa-eval" name="evaluate adopted scheme"/>
+      <endEvent id="end-enisa" name="End"/>
+
+      <sequenceFlow id="sf-en1" sourceRef="start-enisa" targetRef="task-enisa-prep"/>
+      <sequenceFlow id="sf-en2" sourceRef="task-enisa-prep" targetRef="task-enisa-refuse"/>
+      <sequenceFlow id="sf-en3" sourceRef="task-enisa-refuse" targetRef="task-enisa-consult"/>
+      <sequenceFlow id="sf-en4" sourceRef="task-enisa-consult" targetRef="task-enisa-wg"/>
+      <sequenceFlow id="sf-en5" sourceRef="task-enisa-wg" targetRef="task-enisa-coop"/>
+      <sequenceFlow id="sf-en6" sourceRef="task-enisa-coop" targetRef="task-enisa-trans"/>
+      <sequenceFlow id="sf-en7" sourceRef="task-enisa-trans" targetRef="task-enisa-eval"/>
+      <sequenceFlow id="sf-en8" sourceRef="task-enisa-eval" targetRef="end-enisa"/>
+   </process>
+
+   <process id="proc-mb" isExecutable="false">
+      <laneSet id="ls-mb">
+         <lane id="lane-mb">
+            <flowNodeRef>start-mb</flowNodeRef>
+            <flowNodeRef>task-mb-decide</flowNodeRef>
+            <flowNodeRef>end-mb</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start-mb" name="Start"/>
+      <task id="task-mb-decide" name="take decision to refuse request"/>
+      <endEvent id="end-mb" name="End"/>
+
+      <sequenceFlow id="sf-m1" sourceRef="start-mb" targetRef="task-mb-decide"/>
+      <sequenceFlow id="sf-m2" sourceRef="task-mb-decide" targetRef="end-mb"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="Diagram_1">
+      <bpmndi:BPMNPlane id="Plane_1" bpmnElement="collab-1">
+
+         <!-- Commission Pool -->
+         <bpmndi:BPMNShape id="part-commission_gui" bpmnElement="part-commission" isHorizontal="true">
+            <omgdc:Bounds x="100" y="50" width="1300" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane-comm_gui" bpmnElement="lane-comm" isHorizontal="true">
+            <omgdc:Bounds x="130" y="50" width="1270" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="start-comm_gui" bpmnElement="start-comm">
+            <omgdc:Bounds x="150" y="135" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-comm-req_gui" bpmnElement="task-comm-req">
+            <omgdc:Bounds x="250" y="110" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-comm-upd_gui" bpmnElement="task-comm-upd">
+            <omgdc:Bounds x="400" y="110" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-comm-adopt_gui" bpmnElement="task-comm-adopt">
+            <omgdc:Bounds x="550" y="110" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-comm-req-rev_gui" bpmnElement="task-comm-req-rev">
+            <omgdc:Bounds x="700" y="110" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="end-comm_gui" bpmnElement="end-comm">
+            <omgdc:Bounds x="850" y="135" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ECCG Pool -->
+         <bpmndi:BPMNShape id="part-eccg_gui" bpmnElement="part-eccg" isHorizontal="true">
+            <omgdc:Bounds x="100" y="250" width="1300" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane-eccg_gui" bpmnElement="lane-eccg" isHorizontal="true">
+            <omgdc:Bounds x="130" y="250" width="1270" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="start-eccg_gui" bpmnElement="start-eccg">
+            <omgdc:Bounds x="150" y="335" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-eccg-req_gui" bpmnElement="task-eccg-req">
+            <omgdc:Bounds x="250" y="310" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-eccg-upd_gui" bpmnElement="task-eccg-upd">
+            <omgdc:Bounds x="400" y="310" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-eccg-adv_gui" bpmnElement="task-eccg-adv">
+            <omgdc:Bounds x="550" y="310" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-eccg-opi_gui" bpmnElement="task-eccg-opi">
+            <omgdc:Bounds x="700" y="310" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-eccg-req-rev_gui" bpmnElement="task-eccg-req-rev">
+            <omgdc:Bounds x="850" y="310" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="end-eccg_gui" bpmnElement="end-eccg">
+            <omgdc:Bounds x="1000" y="335" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ENISA Pool -->
+         <bpmndi:BPMNShape id="part-enisa_gui" bpmnElement="part-enisa" isHorizontal="true">
+            <omgdc:Bounds x="100" y="450" width="1300" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane-enisa_gui" bpmnElement="lane-enisa" isHorizontal="true">
+            <omgdc:Bounds x="130" y="450" width="1270" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="start-enisa_gui" bpmnElement="start-enisa">
+            <omgdc:Bounds x="150" y="535" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-prep_gui" bpmnElement="task-enisa-prep">
+            <omgdc:Bounds x="250" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-refuse_gui" bpmnElement="task-enisa-refuse">
+            <omgdc:Bounds x="400" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-consult_gui" bpmnElement="task-enisa-consult">
+            <omgdc:Bounds x="550" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-wg_gui" bpmnElement="task-enisa-wg">
+            <omgdc:Bounds x="700" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-coop_gui" bpmnElement="task-enisa-coop">
+            <omgdc:Bounds x="850" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-trans_gui" bpmnElement="task-enisa-trans">
+            <omgdc:Bounds x="1000" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-enisa-eval_gui" bpmnElement="task-enisa-eval">
+            <omgdc:Bounds x="1150" y="510" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="end-enisa_gui" bpmnElement="end-enisa">
+            <omgdc:Bounds x="1300" y="535" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Management Board Pool -->
+         <bpmndi:BPMNShape id="part-mb_gui" bpmnElement="part-mb" isHorizontal="true">
+            <omgdc:Bounds x="100" y="650" width="1300" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="lane-mb_gui" bpmnElement="lane-mb" isHorizontal="true">
+            <omgdc:Bounds x="130" y="650" width="1270" height="200"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="start-mb_gui" bpmnElement="start-mb">
+            <omgdc:Bounds x="300" y="735" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="task-mb-decide_gui" bpmnElement="task-mb-decide">
+            <omgdc:Bounds x="400" y="710" width="100" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="end-mb_gui" bpmnElement="end-mb">
+            <omgdc:Bounds x="550" y="735" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Flows -->
+         <bpmndi:BPMNEdge id="sf-c1_gui" bpmnElement="sf-c1">
+            <omgdi:waypoint x="180" y="150"/>
+            <omgdi:waypoint x="250" y="150"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-c2_gui" bpmnElement="sf-c2">
+            <omgdi:waypoint x="350" y="150"/>
+            <omgdi:waypoint x="400" y="150"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-c3_gui" bpmnElement="sf-c3">
+            <omgdi:waypoint x="500" y="150"/>
+            <omgdi:waypoint x="550" y="150"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-c4_gui" bpmnElement="sf-c4">
+            <omgdi:waypoint x="650" y="150"/>
+            <omgdi:waypoint x="700" y="150"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-c5_gui" bpmnElement="sf-c5">
+            <omgdi:waypoint x="800" y="150"/>
+            <omgdi:waypoint x="850" y="150"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ECCG Flows -->
+         <bpmndi:BPMNEdge id="sf-e1_gui" bpmnElement="sf-e1">
+            <omgdi:waypoint x="180" y="350"/>
+            <omgdi:waypoint x="250" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-e2_gui" bpmnElement="sf-e2">
+            <omgdi:waypoint x="350" y="350"/>
+            <omgdi:waypoint x="400" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-e3_gui" bpmnElement="sf-e3">
+            <omgdi:waypoint x="500" y="350"/>
+            <omgdi:waypoint x="550" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-e4_gui" bpmnElement="sf-e4">
+            <omgdi:waypoint x="650" y="350"/>
+            <omgdi:waypoint x="700" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-e5_gui" bpmnElement="sf-e5">
+            <omgdi:waypoint x="800" y="350"/>
+            <omgdi:waypoint x="850" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-e6_gui" bpmnElement="sf-e6">
+            <omgdi:waypoint x="950" y="350"/>
+            <omgdi:waypoint x="1000" y="350"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ENISA Flows -->
+         <bpmndi:BPMNEdge id="sf-en1_gui" bpmnElement="sf-en1">
+            <omgdi:waypoint x="180" y="550"/>
+            <omgdi:waypoint x="250" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en2_gui" bpmnElement="sf-en2">
+            <omgdi:waypoint x="350" y="550"/>
+            <omgdi:waypoint x="400" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en3_gui" bpmnElement="sf-en3">
+            <omgdi:waypoint x="500" y="550"/>
+            <omgdi:waypoint x="550" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en4_gui" bpmnElement="sf-en4">
+            <omgdi:waypoint x="650" y="550"/>
+            <omgdi:waypoint x="700" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en5_gui" bpmnElement="sf-en5">
+            <omgdi:waypoint x="800" y="550"/>
+            <omgdi:waypoint x="850" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en6_gui" bpmnElement="sf-en6">
+            <omgdi:waypoint x="950" y="550"/>
+            <omgdi:waypoint x="1000" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en7_gui" bpmnElement="sf-en7">
+            <omgdi:waypoint x="1100" y="550"/>
+            <omgdi:waypoint x="1150" y="550"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-en8_gui" bpmnElement="sf-en8">
+            <omgdi:waypoint x="1250" y="550"/>
+            <omgdi:waypoint x="1300" y="550"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Management Board Flows -->
+         <bpmndi:BPMNEdge id="sf-m1_gui" bpmnElement="sf-m1">
+            <omgdi:waypoint x="330" y="750"/>
+            <omgdi:waypoint x="400" y="750"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="sf-m2_gui" bpmnElement="sf-m2">
+            <omgdi:waypoint x="500" y="750"/>
+            <omgdi:waypoint x="550" y="750"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge id="mf1_gui" bpmnElement="mf1">
+            <omgdi:waypoint x="300" y="190"/>
+            <omgdi:waypoint x="300" y="510"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="mf2_gui" bpmnElement="mf2">
+            <omgdi:waypoint x="300" y="390"/>
+            <omgdi:waypoint x="300" y="510"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="mf3_gui" bpmnElement="mf3">
+            <omgdi:waypoint x="450" y="590"/>
+            <omgdi:waypoint x="450" y="710"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="mf4_gui" bpmnElement="mf4">
+            <omgdi:waypoint x="1050" y="510"/>
+            <omgdi:waypoint x="600" y="190"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

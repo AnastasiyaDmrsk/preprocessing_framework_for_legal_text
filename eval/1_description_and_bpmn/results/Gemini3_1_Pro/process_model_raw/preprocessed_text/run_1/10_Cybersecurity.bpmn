@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_1" name="European Cybersecurity Certification" processRef="Process_1" />
+   </collaboration>
+   <process id="Process_1" isClosed="false" isExecutable="false" name="Cybersecurity Certification Process" processType="None">
+      <laneSet id="LaneSet_1">
+         <lane id="Lane_Comm" name="Commission">
+            <flowNodeRef>StartEvent_1</flowNodeRef>
+            <flowNodeRef>Gateway_Start</flowNodeRef>
+            <flowNodeRef>Task_Req_C</flowNodeRef>
+            <flowNodeRef>Gateway_1</flowNodeRef>
+            <flowNodeRef>Task_Upd</flowNodeRef>
+            <flowNodeRef>Task_Adopt</flowNodeRef>
+         </lane>
+         <lane id="Lane_ECCG" name="ECCG">
+            <flowNodeRef>Task_Req_E</flowNodeRef>
+            <flowNodeRef>Task_Adv</flowNodeRef>
+            <flowNodeRef>Task_Opi</flowNodeRef>
+         </lane>
+         <lane id="Lane_ENISA" name="ENISA">
+            <flowNodeRef>Gateway_Ref</flowNodeRef>
+            <flowNodeRef>Task_Prep</flowNodeRef>
+            <flowNodeRef>Task_Cons</flowNodeRef>
+            <flowNodeRef>Task_WG</flowNodeRef>
+            <flowNodeRef>Task_Reas</flowNodeRef>
+            <flowNodeRef>Task_Trans</flowNodeRef>
+            <flowNodeRef>Task_Eval</flowNodeRef>
+            <flowNodeRef>EndEvent_1</flowNodeRef>
+            <flowNodeRef>EndEvent_Ref</flowNodeRef>
+         </lane>
+         <lane id="Lane_MB" name="Management Board">
+            <flowNodeRef>Task_Ref_MB</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_1" name="Start">
+         <outgoing>Flow_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="Gateway_Start" name="Request Source">
+         <incoming>Flow_1</incoming>
+         <outgoing>Flow_2</outgoing>
+         <outgoing>Flow_3</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Req_C" name="request preparation or review of scheme">
+         <incoming>Flow_2</incoming>
+         <outgoing>Flow_4</outgoing>
+      </task>
+      <task id="Task_Req_E" name="request preparation or review of scheme">
+         <incoming>Flow_3</incoming>
+         <outgoing>Flow_5</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_1" name="Merge Requests">
+         <incoming>Flow_4</incoming>
+         <incoming>Flow_5</incoming>
+         <outgoing>Flow_6</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Upd" name="update work programme">
+         <incoming>Flow_6</incoming>
+         <outgoing>Flow_7</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_Ref" name="ENISA Accepted?">
+         <incoming>Flow_7</incoming>
+         <outgoing>Flow_8</outgoing>
+         <outgoing>Flow_17</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Ref_MB" name="take decision to refuse">
+         <incoming>Flow_17</incoming>
+         <outgoing>Flow_18</outgoing>
+      </task>
+      <task id="Task_Reas" name="give reasons for refusal">
+         <incoming>Flow_18</incoming>
+         <outgoing>Flow_19</outgoing>
+      </task>
+      <endEvent id="EndEvent_Ref" name="End (Refused)">
+         <incoming>Flow_19</incoming>
+      </endEvent>
+      <task id="Task_Prep" name="prepare candidate scheme">
+         <incoming>Flow_8</incoming>
+         <outgoing>Flow_9</outgoing>
+      </task>
+      <task id="Task_Cons" name="consult all relevant stakeholders">
+         <incoming>Flow_9</incoming>
+         <outgoing>Flow_10</outgoing>
+      </task>
+      <task id="Task_WG" name="establish ad hoc working group">
+         <incoming>Flow_10</incoming>
+         <outgoing>Flow_11</outgoing>
+      </task>
+      <task id="Task_Adv" name="provide assistance and expert advice">
+         <incoming>Flow_11</incoming>
+         <outgoing>Flow_12</outgoing>
+      </task>
+      <task id="Task_Opi" name="adopt an opinion">
+         <incoming>Flow_12</incoming>
+         <outgoing>Flow_13</outgoing>
+      </task>
+      <task id="Task_Trans" name="transmit candidate scheme">
+         <incoming>Flow_13</incoming>
+         <outgoing>Flow_14</outgoing>
+      </task>
+      <task id="Task_Adopt" name="adopt implementing acts">
+         <incoming>Flow_14</incoming>
+         <outgoing>Flow_15</outgoing>
+      </task>
+      <task id="Task_Eval" name="evaluate adopted scheme">
+         <incoming>Flow_15</incoming>
+         <outgoing>Flow_16</outgoing>
+      </task>
+      <endEvent id="EndEvent_1" name="End (Evaluated)">
+         <incoming>Flow_16</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Gateway_Start" />
+      <sequenceFlow id="Flow_2" sourceRef="Gateway_Start" targetRef="Task_Req_C" />
+      <sequenceFlow id="Flow_3" sourceRef="Gateway_Start" targetRef="Task_Req_E" />
+      <sequenceFlow id="Flow_4" sourceRef="Task_Req_C" targetRef="Gateway_1" />
+      <sequenceFlow id="Flow_5" sourceRef="Task_Req_E" targetRef="Gateway_1" />
+      <sequenceFlow id="Flow_6" sourceRef="Gateway_1" targetRef="Task_Upd" />
+      <sequenceFlow id="Flow_7" sourceRef="Task_Upd" targetRef="Gateway_Ref" />
+      <sequenceFlow id="Flow_8" sourceRef="Gateway_Ref" targetRef="Task_Prep" />
+      <sequenceFlow id="Flow_9" sourceRef="Task_Prep" targetRef="Task_Cons" />
+      <sequenceFlow id="Flow_10" sourceRef="Task_Cons" targetRef="Task_WG" />
+      <sequenceFlow id="Flow_11" sourceRef="Task_WG" targetRef="Task_Adv" />
+      <sequenceFlow id="Flow_12" sourceRef="Task_Adv" targetRef="Task_Opi" />
+      <sequenceFlow id="Flow_13" sourceRef="Task_Opi" targetRef="Task_Trans" />
+      <sequenceFlow id="Flow_14" sourceRef="Task_Trans" targetRef="Task_Adopt" />
+      <sequenceFlow id="Flow_15" sourceRef="Task_Adopt" targetRef="Task_Eval" />
+      <sequenceFlow id="Flow_16" sourceRef="Task_Eval" targetRef="EndEvent_1" />
+      <sequenceFlow id="Flow_17" sourceRef="Gateway_Ref" targetRef="Task_Ref_MB" />
+      <sequenceFlow id="Flow_18" sourceRef="Task_Ref_MB" targetRef="Task_Reas" />
+      <sequenceFlow id="Flow_19" sourceRef="Task_Reas" targetRef="EndEvent_Ref" />
+   </process>
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+         <bpmndi:BPMNShape bpmnElement="Participant_1" id="Participant_1_di" isHorizontal="true">
+            <omgdc:Bounds height="600.0" width="1850.0" x="50.0" y="0.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Comm" id="Lane_Comm_di" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1820.0" x="80.0" y="0.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_ECCG" id="Lane_ECCG_di" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1820.0" x="80.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_ENISA" id="Lane_ENISA_di" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1820.0" x="80.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MB" id="Lane_MB_di" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1820.0" x="80.0" y="450.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_di">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Start" id="Gateway_Start_di" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="160.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Req_C" id="Task_Req_C_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="240.0" y="35.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Req_E" id="Task_Req_E_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="240.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_1" id="Gateway_1_di" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="380.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Upd" id="Task_Upd_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="460.0" y="35.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Ref" id="Gateway_Ref_di" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Ref_MB" id="Task_Ref_MB_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="680.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Reas" id="Task_Reas_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Ref" id="EndEvent_Ref_di">
+            <omgdc:Bounds height="30.0" width="30.0" x="960.0" y="425.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Prep" id="Task_Prep_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="680.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Cons" id="Task_Cons_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_WG" id="Task_WG_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="960.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Adv" id="Task_Adv_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Opi" id="Task_Opi_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="1240.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Trans" id="Task_Trans_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="1380.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Adopt" id="Task_Adopt_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="1520.0" y="35.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Eval" id="Task_Eval_di">
+            <omgdc:Bounds height="80.0" width="100.0" x="1660.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_1" id="EndEvent_1_di">
+            <omgdc:Bounds height="30.0" width="30.0" x="1800.0" y="335.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_1" id="Flow_1_di">
+            <omgdi:waypoint x="130.0" y="75.0"/>
+            <omgdi:waypoint x="160.0" y="75.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_2" id="Flow_2_di">
+            <omgdi:waypoint x="200.0" y="75.0"/>
+            <omgdi:waypoint x="240.0" y="75.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_3" id="Flow_3_di">
+            <omgdi:waypoint x="180.0" y="95.0"/>
+            <omgdi:waypoint x="180.0" y="225.0"/>
+            <omgdi:waypoint x="240.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_4" id="Flow_4_di">
+            <omgdi:waypoint x="340.0" y="75.0"/>
+            <omgdi:waypoint x="380.0" y="75.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_5" id="Flow_5_di">
+            <omgdi:waypoint x="340.0" y="225.0"/>
+            <omgdi:waypoint x="400.0" y="225.0"/>
+            <omgdi:waypoint x="400.0" y="95.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_6" id="Flow_6_di">
+            <omgdi:waypoint x="420.0" y="75.0"/>
+            <omgdi:waypoint x="460.0" y="75.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_7" id="Flow_7_di">
+            <omgdi:waypoint x="560.0" y="75.0"/>
+            <omgdi:waypoint x="620.0" y="75.0"/>
+            <omgdi:waypoint x="620.0" y="355.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_8" id="Flow_8_di">
+            <omgdi:waypoint x="640.0" y="375.0"/>
+            <omgdi:waypoint x="660.0" y="375.0"/>
+            <omgdi:waypoint x="660.0" y="350.0"/>
+            <omgdi:waypoint x="680.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_9" id="Flow_9_di">
+            <omgdi:waypoint x="780.0" y="350.0"/>
+            <omgdi:waypoint x="820.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_10" id="Flow_10_di">
+            <omgdi:waypoint x="920.0" y="350.0"/>
+            <omgdi:waypoint x="960.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_11" id="Flow_11_di">
+            <omgdi:waypoint x="1060.0" y="350.0"/>
+            <omgdi:waypoint x="1150.0" y="350.0"/>
+            <omgdi:waypoint x="1150.0" y="265.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_12" id="Flow_12_di">
+            <omgdi:waypoint x="1200.0" y="225.0"/>
+            <omgdi:waypoint x="1240.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_13" id="Flow_13_di">
+            <omgdi:waypoint x="1340.0" y="225.0"/>
+            <omgdi:waypoint x="1430.0" y="225.0"/>
+            <omgdi:waypoint x="1430.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_14" id="Flow_14_di">
+            <omgdi:waypoint x="1480.0" y="350.0"/>
+            <omgdi:waypoint x="1570.0" y="350.0"/>
+            <omgdi:waypoint x="1570.0" y="115.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_15" id="Flow_15_di">
+            <omgdi:waypoint x="1620.0" y="75.0"/>
+            <omgdi:waypoint x="1710.0" y="75.0"/>
+            <omgdi:waypoint x="1710.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_16" id="Flow_16_di">
+            <omgdi:waypoint x="1760.0" y="350.0"/>
+            <omgdi:waypoint x="1800.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_17" id="Flow_17_di">
+            <omgdi:waypoint x="620.0" y="395.0"/>
+            <omgdi:waypoint x="620.0" y="525.0"/>
+            <omgdi:waypoint x="680.0" y="525.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_18" id="Flow_18_di">
+            <omgdi:waypoint x="780.0" y="525.0"/>
+            <omgdi:waypoint x="870.0" y="525.0"/>
+            <omgdi:waypoint x="870.0" y="480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_19" id="Flow_19_di">
+            <omgdi:waypoint x="920.0" y="440.0"/>
+            <omgdi:waypoint x="960.0" y="440.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
