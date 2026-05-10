@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="Definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_MemberStates" name="Member States" processRef="Process_MemberStates"/>
+      <participant id="Participant_ObligedEntity" name="Obliged Entity" processRef="Process_ObligedEntity"/>
+      <participant id="Participant_FIU" name="FIU" processRef="Process_FIU"/>
+      <messageFlow id="MsgFlow_RequireVerification" name="" sourceRef="Task_MS_RequireVerification" targetRef="StartEvent_OE"/>
+      <messageFlow id="MsgFlow_STR" name="" sourceRef="Task_OE_ConsiderSTR" targetRef="StartEvent_FIU"/>
+      <messageFlow id="MsgFlow_RequireCDD" name="" sourceRef="Task_MS_RequireCDDExisting" targetRef="Task_OE_ApplyCDD"/>
+   </collaboration>
+
+   <!-- ==================== MEMBER STATES PROCESS ==================== -->
+   <process id="Process_MemberStates" name="Member States" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_MS">
+         <lane id="Lane_MS">
+            <flowNodeRef>StartEvent_MS</flowNodeRef>
+            <flowNodeRef>Task_MS_RequireVerification</flowNodeRef>
+            <flowNodeRef>Task_MS_AllowDerogation</flowNodeRef>
+            <flowNodeRef>Task_MS_AllowAccountOpening</flowNodeRef>
+            <flowNodeRef>Task_MS_RequireNonCompliance</flowNodeRef>
+            <flowNodeRef>Task_MS_RequireCDDExisting</flowNodeRef>
+            <flowNodeRef>EndEvent_MS</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_MS" name="Start">
+         <outgoing>Flow_MS_1</outgoing>
+      </startEvent>
+      <task id="Task_MS_RequireVerification" name="Require verification of identity before business relationship or transaction">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_2</outgoing>
+      </task>
+      <task id="Task_MS_AllowDerogation" name="Allow verification during establishment of business relationship">
+         <incoming>Flow_MS_2</incoming>
+         <outgoing>Flow_MS_3</outgoing>
+      </task>
+      <task id="Task_MS_AllowAccountOpening" name="Allow account opening with adequate safeguards">
+         <incoming>Flow_MS_3</incoming>
+         <outgoing>Flow_MS_4</outgoing>
+      </task>
+      <task id="Task_MS_RequireNonCompliance" name="Require obliged entity to not transact and terminate if CDD non-compliant">
+         <incoming>Flow_MS_4</incoming>
+         <outgoing>Flow_MS_5</outgoing>
+      </task>
+      <task id="Task_MS_RequireCDDExisting" name="Require CDD measures on existing customers on risk-sensitive basis">
+         <incoming>Flow_MS_5</incoming>
+         <outgoing>Flow_MS_6</outgoing>
+      </task>
+      <endEvent id="EndEvent_MS" name="End">
+         <incoming>Flow_MS_6</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_MS_1" sourceRef="StartEvent_MS" targetRef="Task_MS_RequireVerification"/>
+      <sequenceFlow id="Flow_MS_2" sourceRef="Task_MS_RequireVerification" targetRef="Task_MS_AllowDerogation"/>
+      <sequenceFlow id="Flow_MS_3" sourceRef="Task_MS_AllowDerogation" targetRef="Task_MS_AllowAccountOpening"/>
+      <sequenceFlow id="Flow_MS_4" sourceRef="Task_MS_AllowAccountOpening" targetRef="Task_MS_RequireNonCompliance"/>
+      <sequenceFlow id="Flow_MS_5" sourceRef="Task_MS_RequireNonCompliance" targetRef="Task_MS_RequireCDDExisting"/>
+      <sequenceFlow id="Flow_MS_6" sourceRef="Task_MS_RequireCDDExisting" targetRef="EndEvent_MS"/>
+   </process>
+
+   <!-- ==================== OBLIGED ENTITY PROCESS ==================== -->
+   <process id="Process_ObligedEntity" name="Obliged Entity" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_OE">
+         <lane id="Lane_OE">
+            <flowNodeRef>StartEvent_OE</flowNodeRef>
+            <flowNodeRef>Task_OE_VerifyIdentity</flowNodeRef>
+            <flowNodeRef>Gateway_CDD</flowNodeRef>
+            <flowNodeRef>Task_OE_EstablishRelationship</flowNodeRef>
+            <flowNodeRef>Task_OE_ApplyCDD</flowNodeRef>
+            <flowNodeRef>EndEvent_OE_Success</flowNodeRef>
+            <flowNodeRef>Task_OE_NotCarryOut</flowNodeRef>
+            <flowNodeRef>Task_OE_TerminateRelationship</flowNodeRef>
+            <flowNodeRef>Task_OE_ConsiderSTR</flowNodeRef>
+            <flowNodeRef>EndEvent_OE_Fail</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_OE" name="Receive verification requirement">
+         <outgoing>Flow_OE_1</outgoing>
+         <messageEventDefinition id="MsgEvtDef_OE_Start"/>
+      </startEvent>
+      <task id="Task_OE_VerifyIdentity" name="Verify identity of customer and beneficial owner">
+         <incoming>Flow_OE_1</incoming>
+         <outgoing>Flow_OE_2</outgoing>
+      </task>
+      <exclusiveGateway id="Gateway_CDD" name="CDD requirements met?" gatewayDirection="Diverging">
+         <incoming>Flow_OE_2</incoming>
+         <outgoing>Flow_OE_Yes</outgoing>
+         <outgoing>Flow_OE_No</outgoing>
+      </exclusiveGateway>
+      <task id="Task_OE_EstablishRelationship" name="Establish business relationship or carry out transaction">
+         <incoming>Flow_OE_Yes</incoming>
+         <outgoing>Flow_OE_3</outgoing>
+      </task>
+      <task id="Task_OE_ApplyCDD" name="Apply CDD measures to existing customers on risk-sensitive basis">
+         <incoming>Flow_OE_3</incoming>
+         <outgoing>Flow_OE_4</outgoing>
+      </task>
+      <endEvent id="EndEvent_OE_Success" name="End">
+         <incoming>Flow_OE_4</incoming>
+      </endEvent>
+      <task id="Task_OE_NotCarryOut" name="Not carry out transaction through bank account">
+         <incoming>Flow_OE_No</incoming>
+         <outgoing>Flow_OE_5</outgoing>
+      </task>
+      <task id="Task_OE_TerminateRelationship" name="Terminate business relationship">
+         <incoming>Flow_OE_5</incoming>
+         <outgoing>Flow_OE_6</outgoing>
+      </task>
+      <task id="Task_OE_ConsiderSTR" name="Consider making suspicious transaction report to FIU">
+         <incoming>Flow_OE_6</incoming>
+         <outgoing>Flow_OE_7</outgoing>
+      </task>
+      <endEvent id="EndEvent_OE_Fail" name="End">
+         <incoming>Flow_OE_7</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_OE_1" sourceRef="StartEvent_OE" targetRef="Task_OE_VerifyIdentity"/>
+      <sequenceFlow id="Flow_OE_2" sourceRef="Task_OE_VerifyIdentity" targetRef="Gateway_CDD"/>
+      <sequenceFlow id="Flow_OE_Yes" name="Yes" sourceRef="Gateway_CDD" targetRef="Task_OE_EstablishRelationship"/>
+      <sequenceFlow id="Flow_OE_No" name="No" sourceRef="Gateway_CDD" targetRef="Task_OE_NotCarryOut"/>
+      <sequenceFlow id="Flow_OE_3" sourceRef="Task_OE_EstablishRelationship" targetRef="Task_OE_ApplyCDD"/>
+      <sequenceFlow id="Flow_OE_4" sourceRef="Task_OE_ApplyCDD" targetRef="EndEvent_OE_Success"/>
+      <sequenceFlow id="Flow_OE_5" sourceRef="Task_OE_NotCarryOut" targetRef="Task_OE_TerminateRelationship"/>
+      <sequenceFlow id="Flow_OE_6" sourceRef="Task_OE_TerminateRelationship" targetRef="Task_OE_ConsiderSTR"/>
+      <sequenceFlow id="Flow_OE_7" sourceRef="Task_OE_ConsiderSTR" targetRef="EndEvent_OE_Fail"/>
+   </process>
+
+   <!-- ==================== FIU PROCESS ==================== -->
+   <process id="Process_FIU" name="FIU" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="LaneSet_FIU">
+         <lane id="Lane_FIU">
+            <flowNodeRef>StartEvent_FIU</flowNodeRef>
+            <flowNodeRef>Task_FIU_ReceiveSTR</flowNodeRef>
+            <flowNodeRef>EndEvent_FIU</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="StartEvent_FIU" name="Receive STR">
+         <outgoing>Flow_FIU_1</outgoing>
+         <messageEventDefinition id="MsgEvtDef_FIU_Start"/>
+      </startEvent>
+      <task id="Task_FIU_ReceiveSTR" name="Receive suspicious transaction report">
+         <incoming>Flow_FIU_1</incoming>
+         <outgoing>Flow_FIU_2</outgoing>
+      </task>
+      <endEvent id="EndEvent_FIU" name="End">
+         <incoming>Flow_FIU_2</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_FIU_1" sourceRef="StartEvent_FIU" targetRef="Task_FIU_ReceiveSTR"/>
+      <sequenceFlow id="Flow_FIU_2" sourceRef="Task_FIU_ReceiveSTR" targetRef="EndEvent_FIU"/>
+   </process>
+
+   <!-- ==================== DIAGRAM (DI) ==================== -->
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+
+         <!-- Member States Pool -->
+         <bpmndi:BPMNShape id="Participant_MemberStates_di" bpmnElement="Participant_MemberStates" isHorizontal="true">
+            <omgdc:Bounds x="120" y="60" width="1150" height="160"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_MS_di" bpmnElement="Lane_MS" isHorizontal="true">
+            <omgdc:Bounds x="150" y="60" width="1120" height="160"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="StartEvent_MS_di" bpmnElement="StartEvent_MS">
+            <omgdc:Bounds x="182" y="122" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_RequireVerification_di" bpmnElement="Task_MS_RequireVerification">
+            <omgdc:Bounds x="260" y="100" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_AllowDerogation_di" bpmnElement="Task_MS_AllowDerogation">
+            <omgdc:Bounds x="430" y="100" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_AllowAccountOpening_di" bpmnElement="Task_MS_AllowAccountOpening">
+            <omgdc:Bounds x="600" y="100" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_RequireNonCompliance_di" bpmnElement="Task_MS_RequireNonCompliance">
+            <omgdc:Bounds x="770" y="100" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_MS_RequireCDDExisting_di" bpmnElement="Task_MS_RequireCDDExisting">
+            <omgdc:Bounds x="940" y="100" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_MS_di" bpmnElement="EndEvent_MS">
+            <omgdc:Bounds x="1112" y="122" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="Flow_MS_1_di" bpmnElement="Flow_MS_1">
+            <omgdi:waypoint x="218" y="140"/>
+            <omgdi:waypoint x="260" y="140"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_2_di" bpmnElement="Flow_MS_2">
+            <omgdi:waypoint x="400" y="140"/>
+            <omgdi:waypoint x="430" y="140"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_3_di" bpmnElement="Flow_MS_3">
+            <omgdi:waypoint x="570" y="140"/>
+            <omgdi:waypoint x="600" y="140"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_4_di" bpmnElement="Flow_MS_4">
+            <omgdi:waypoint x="740" y="140"/>
+            <omgdi:waypoint x="770" y="140"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_5_di" bpmnElement="Flow_MS_5">
+            <omgdi:waypoint x="910" y="140"/>
+            <omgdi:waypoint x="940" y="140"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_MS_6_di" bpmnElement="Flow_MS_6">
+            <omgdi:waypoint x="1080" y="140"/>
+            <omgdi:waypoint x="1112" y="140"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Obliged Entity Pool -->
+         <bpmndi:BPMNShape id="Participant_ObligedEntity_di" bpmnElement="Participant_ObligedEntity" isHorizontal="true">
+            <omgdc:Bounds x="120" y="280" width="1150" height="310"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_OE_di" bpmnElement="Lane_OE" isHorizontal="true">
+            <omgdc:Bounds x="150" y="280" width="1120" height="310"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="StartEvent_OE_di" bpmnElement="StartEvent_OE">
+            <omgdc:Bounds x="182" y="362" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_VerifyIdentity_di" bpmnElement="Task_OE_VerifyIdentity">
+            <omgdc:Bounds x="270" y="340" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Gateway_CDD_di" bpmnElement="Gateway_CDD" isMarkerVisible="true">
+            <omgdc:Bounds x="460" y="355" width="50" height="50"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_EstablishRelationship_di" bpmnElement="Task_OE_EstablishRelationship">
+            <omgdc:Bounds x="570" y="300" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_ApplyCDD_di" bpmnElement="Task_OE_ApplyCDD">
+            <omgdc:Bounds x="770" y="300" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_OE_Success_di" bpmnElement="EndEvent_OE_Success">
+            <omgdc:Bounds x="962" y="322" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_NotCarryOut_di" bpmnElement="Task_OE_NotCarryOut">
+            <omgdc:Bounds x="570" y="440" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_TerminateRelationship_di" bpmnElement="Task_OE_TerminateRelationship">
+            <omgdc:Bounds x="770" y="440" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_OE_ConsiderSTR_di" bpmnElement="Task_OE_ConsiderSTR">
+            <omgdc:Bounds x="940" y="440" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_OE_Fail_di" bpmnElement="EndEvent_OE_Fail">
+            <omgdc:Bounds x="1112" y="462" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="Flow_OE_1_di" bpmnElement="Flow_OE_1">
+            <omgdi:waypoint x="218" y="380"/>
+            <omgdi:waypoint x="270" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_2_di" bpmnElement="Flow_OE_2">
+            <omgdi:waypoint x="410" y="380"/>
+            <omgdi:waypoint x="460" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_Yes_di" bpmnElement="Flow_OE_Yes">
+            <omgdi:waypoint x="485" y="355"/>
+            <omgdi:waypoint x="485" y="340"/>
+            <omgdi:waypoint x="570" y="340"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_No_di" bpmnElement="Flow_OE_No">
+            <omgdi:waypoint x="485" y="405"/>
+            <omgdi:waypoint x="485" y="480"/>
+            <omgdi:waypoint x="570" y="480"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_3_di" bpmnElement="Flow_OE_3">
+            <omgdi:waypoint x="710" y="340"/>
+            <omgdi:waypoint x="770" y="340"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_4_di" bpmnElement="Flow_OE_4">
+            <omgdi:waypoint x="910" y="340"/>
+            <omgdi:waypoint x="962" y="340"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_5_di" bpmnElement="Flow_OE_5">
+            <omgdi:waypoint x="710" y="480"/>
+            <omgdi:waypoint x="770" y="480"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_6_di" bpmnElement="Flow_OE_6">
+            <omgdi:waypoint x="910" y="480"/>
+            <omgdi:waypoint x="940" y="480"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_OE_7_di" bpmnElement="Flow_OE_7">
+            <omgdi:waypoint x="1080" y="480"/>
+            <omgdi:waypoint x="1112" y="480"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- FIU Pool -->
+         <bpmndi:BPMNShape id="Participant_FIU_di" bpmnElement="Participant_FIU" isHorizontal="true">
+            <omgdc:Bounds x="120" y="650" width="1150" height="140"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Lane_FIU_di" bpmnElement="Lane_FIU" isHorizontal="true">
+            <omgdc:Bounds x="150" y="650" width="1120" height="140"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="StartEvent_FIU_di" bpmnElement="StartEvent_FIU">
+            <omgdc:Bounds x="882" y="702" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="Task_FIU_ReceiveSTR_di" bpmnElement="Task_FIU_ReceiveSTR">
+            <omgdc:Bounds x="960" y="680" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape id="EndEvent_FIU_di" bpmnElement="EndEvent_FIU">
+            <omgdc:Bounds x="1142" y="702" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge id="Flow_FIU_1_di" bpmnElement="Flow_FIU_1">
+            <omgdi:waypoint x="918" y="720"/>
+            <omgdi:waypoint x="960" y="720"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="Flow_FIU_2_di" bpmnElement="Flow_FIU_2">
+            <omgdi:waypoint x="1100" y="720"/>
+            <omgdi:waypoint x="1142" y="720"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge id="MsgFlow_RequireVerification_di" bpmnElement="MsgFlow_RequireVerification">
+            <omgdi:waypoint x="330" y="180"/>
+            <omgdi:waypoint x="200" y="362"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="MsgFlow_STR_di" bpmnElement="MsgFlow_STR">
+            <omgdi:waypoint x="1010" y="520"/>
+            <omgdi:waypoint x="900" y="702"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge id="MsgFlow_RequireCDD_di" bpmnElement="MsgFlow_RequireCDD">
+            <omgdi:waypoint x="1010" y="180"/>
+            <omgdi:waypoint x="840" y="300"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

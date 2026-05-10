@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="pool_transferringMS" name="Transferring Member State" processRef="proc_transferringMS"/>
+      <participant id="pool_responsibleMS" name="Member State Responsible" processRef="proc_responsibleMS"/>
+      <participant id="pool_commission" name="The Commission" processRef="proc_commission"/>
+      <participant id="pool_healthProf" name="Health Professional" processRef="proc_healthProf"/>
+
+      <!-- Transferring MS transmits info to Responsible MS -->
+      <messageFlow id="msgFlow_transmit" name="" sourceRef="task_transmitInfo" targetRef="startEvent_responsibleMS"/>
+      <!-- Responsible MS forwards to Health Professional for processing -->
+      <messageFlow id="msgFlow_toHP" name="" sourceRef="task_ensureNeeds" targetRef="startEvent_healthProf"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Transferring Member State                            -->
+   <!-- ============================================================ -->
+   <process id="proc_transferringMS" name="Transferring Member State" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneSet_transferringMS">
+         <lane id="lane_transferringMS">
+            <flowNodeRef>startEvent_transferringMS</flowNodeRef>
+            <flowNodeRef>task_obtainConsent</flowNodeRef>
+            <flowNodeRef>task_transmitInfo</flowNodeRef>
+            <flowNodeRef>endEvent_transferringMS</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="startEvent_transferringMS" name="Start">
+         <outgoing>sf_tms_1</outgoing>
+      </startEvent>
+      <task id="task_obtainConsent" name="obtain explicit consent of the applicant" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_tms_1</incoming>
+         <outgoing>sf_tms_2</outgoing>
+      </task>
+      <task id="task_transmitInfo" name="transmit information on special needs in a common health certificate" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_tms_2</incoming>
+         <outgoing>sf_tms_3</outgoing>
+      </task>
+      <endEvent id="endEvent_transferringMS" name="End">
+         <incoming>sf_tms_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_tms_1" name="" sourceRef="startEvent_transferringMS" targetRef="task_obtainConsent"/>
+      <sequenceFlow id="sf_tms_2" name="" sourceRef="task_obtainConsent" targetRef="task_transmitInfo"/>
+      <sequenceFlow id="sf_tms_3" name="" sourceRef="task_transmitInfo" targetRef="endEvent_transferringMS"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Member State Responsible                             -->
+   <!-- ============================================================ -->
+   <process id="proc_responsibleMS" name="Member State Responsible" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneSet_responsibleMS">
+         <lane id="lane_responsibleMS">
+            <flowNodeRef>startEvent_responsibleMS</flowNodeRef>
+            <flowNodeRef>task_ensureNeeds</flowNodeRef>
+            <flowNodeRef>endEvent_responsibleMS</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="startEvent_responsibleMS" name="Receive health information" isInterrupting="true">
+         <outgoing>sf_rms_1</outgoing>
+         <messageEventDefinition id="msgEvtDef_rms"/>
+      </startEvent>
+      <task id="task_ensureNeeds" name="ensure special needs are adequately addressed" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_rms_1</incoming>
+         <outgoing>sf_rms_2</outgoing>
+      </task>
+      <endEvent id="endEvent_responsibleMS" name="End">
+         <incoming>sf_rms_2</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_rms_1" name="" sourceRef="startEvent_responsibleMS" targetRef="task_ensureNeeds"/>
+      <sequenceFlow id="sf_rms_2" name="" sourceRef="task_ensureNeeds" targetRef="endEvent_responsibleMS"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: The Commission                                       -->
+   <!-- ============================================================ -->
+   <process id="proc_commission" name="The Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneSet_commission">
+         <lane id="lane_commission">
+            <flowNodeRef>startEvent_commission</flowNodeRef>
+            <flowNodeRef>task_drawUpCertificate</flowNodeRef>
+            <flowNodeRef>task_adoptConditions</flowNodeRef>
+            <flowNodeRef>endEvent_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="startEvent_commission" name="Start">
+         <outgoing>sf_com_1</outgoing>
+      </startEvent>
+      <task id="task_drawUpCertificate" name="draw up the common health certificate" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_com_1</incoming>
+         <outgoing>sf_com_2</outgoing>
+      </task>
+      <task id="task_adoptConditions" name="adopt uniform conditions and practical arrangements for exchanging information" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_com_2</incoming>
+         <outgoing>sf_com_3</outgoing>
+      </task>
+      <endEvent id="endEvent_commission" name="End">
+         <incoming>sf_com_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_com_1" name="" sourceRef="startEvent_commission" targetRef="task_drawUpCertificate"/>
+      <sequenceFlow id="sf_com_2" name="" sourceRef="task_drawUpCertificate" targetRef="task_adoptConditions"/>
+      <sequenceFlow id="sf_com_3" name="" sourceRef="task_adoptConditions" targetRef="endEvent_commission"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Health Professional                                  -->
+   <!-- ============================================================ -->
+   <process id="proc_healthProf" name="Health Professional" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneSet_healthProf">
+         <lane id="lane_healthProf">
+            <flowNodeRef>startEvent_healthProf</flowNodeRef>
+            <flowNodeRef>task_processData</flowNodeRef>
+            <flowNodeRef>task_exchangeInfo</flowNodeRef>
+            <flowNodeRef>endEvent_healthProf</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="startEvent_healthProf" name="Receive data for processing" isInterrupting="true">
+         <outgoing>sf_hp_1</outgoing>
+         <messageEventDefinition id="msgEvtDef_hp"/>
+      </startEvent>
+      <task id="task_processData" name="process personal health data" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_hp_1</incoming>
+         <outgoing>sf_hp_2</outgoing>
+      </task>
+      <task id="task_exchangeInfo" name="exchange information" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_hp_2</incoming>
+         <outgoing>sf_hp_3</outgoing>
+      </task>
+      <endEvent id="endEvent_healthProf" name="End">
+         <incoming>sf_hp_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_hp_1" name="" sourceRef="startEvent_healthProf" targetRef="task_processData"/>
+      <sequenceFlow id="sf_hp_2" name="" sourceRef="task_processData" targetRef="task_exchangeInfo"/>
+      <sequenceFlow id="sf_hp_3" name="" sourceRef="task_exchangeInfo" targetRef="endEvent_healthProf"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- Pool: Transferring Member State (y=60) -->
+         <bpmndi:BPMNShape bpmnElement="pool_transferringMS" id="shape_pool_tms" isHorizontal="true">
+            <omgdc:Bounds x="120" y="60" width="750" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_transferringMS" id="shape_lane_tms" isHorizontal="true">
+            <omgdc:Bounds x="150" y="60" width="720" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="startEvent_transferringMS" id="shape_start_tms">
+            <omgdc:Bounds x="200" y="120" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obtainConsent" id="shape_task_obtainConsent">
+            <omgdc:Bounds x="290" y="95" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_transmitInfo" id="shape_task_transmitInfo">
+            <omgdc:Bounds x="510" y="95" width="180" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvent_transferringMS" id="shape_end_tms">
+            <omgdc:Bounds x="750" y="121" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_tms_1" id="edge_sf_tms_1">
+            <omgdi:waypoint x="230" y="135"/>
+            <omgdi:waypoint x="290" y="135"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tms_2" id="edge_sf_tms_2">
+            <omgdi:waypoint x="450" y="135"/>
+            <omgdi:waypoint x="510" y="135"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tms_3" id="edge_sf_tms_3">
+            <omgdi:waypoint x="690" y="135"/>
+            <omgdi:waypoint x="750" y="135"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool: Member State Responsible (y=240) -->
+         <bpmndi:BPMNShape bpmnElement="pool_responsibleMS" id="shape_pool_rms" isHorizontal="true">
+            <omgdc:Bounds x="120" y="240" width="750" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_responsibleMS" id="shape_lane_rms" isHorizontal="true">
+            <omgdc:Bounds x="150" y="240" width="720" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="startEvent_responsibleMS" id="shape_start_rms">
+            <omgdc:Bounds x="585" y="300" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensureNeeds" id="shape_task_ensureNeeds">
+            <omgdc:Bounds x="660" y="275" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvent_responsibleMS" id="shape_end_rms">
+            <omgdc:Bounds x="845" y="301" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_rms_1" id="edge_sf_rms_1">
+            <omgdi:waypoint x="615" y="315"/>
+            <omgdi:waypoint x="660" y="315"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_rms_2" id="edge_sf_rms_2">
+            <omgdi:waypoint x="820" y="315"/>
+            <omgdi:waypoint x="845" y="315"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool: The Commission (y=420) -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="shape_pool_com" isHorizontal="true">
+            <omgdc:Bounds x="120" y="420" width="750" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_commission" id="shape_lane_com" isHorizontal="true">
+            <omgdc:Bounds x="150" y="420" width="720" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="startEvent_commission" id="shape_start_com">
+            <omgdc:Bounds x="200" y="480" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_drawUpCertificate" id="shape_task_drawUp">
+            <omgdc:Bounds x="290" y="455" width="180" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adoptConditions" id="shape_task_adopt">
+            <omgdc:Bounds x="530" y="455" width="180" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvent_commission" id="shape_end_com">
+            <omgdc:Bounds x="770" y="481" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_1" id="edge_sf_com_1">
+            <omgdi:waypoint x="230" y="495"/>
+            <omgdi:waypoint x="290" y="495"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_2" id="edge_sf_com_2">
+            <omgdi:waypoint x="470" y="495"/>
+            <omgdi:waypoint x="530" y="495"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_3" id="edge_sf_com_3">
+            <omgdi:waypoint x="710" y="495"/>
+            <omgdi:waypoint x="770" y="495"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool: Health Professional (y=600) -->
+         <bpmndi:BPMNShape bpmnElement="pool_healthProf" id="shape_pool_hp" isHorizontal="true">
+            <omgdc:Bounds x="120" y="600" width="750" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_healthProf" id="shape_lane_hp" isHorizontal="true">
+            <omgdc:Bounds x="150" y="600" width="720" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="startEvent_healthProf" id="shape_start_hp">
+            <omgdc:Bounds x="200" y="660" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_processData" id="shape_task_processData">
+            <omgdc:Bounds x="290" y="635" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_exchangeInfo" id="shape_task_exchangeInfo">
+            <omgdc:Bounds x="510" y="635" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvent_healthProf" id="shape_end_hp">
+            <omgdc:Bounds x="750" y="661" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_1" id="edge_sf_hp_1">
+            <omgdi:waypoint x="260" y="675"/>
+            <omgdi:waypoint x="290" y="675"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_2" id="edge_sf_hp_2">
+            <omgdi:waypoint x="450" y="675"/>
+            <omgdi:waypoint x="510" y="675"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_3" id="edge_sf_hp_3">
+            <omgdi:waypoint x="670" y="675"/>
+            <omgdi:waypoint x="750" y="675"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="msgFlow_transmit" id="edge_msgFlow_transmit">
+            <omgdi:waypoint x="600" y="175"/>
+            <omgdi:waypoint x="600" y="300"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="msgFlow_toHP" id="edge_msgFlow_toHP">
+            <omgdi:waypoint x="740" y="355"/>
+            <omgdi:waypoint x="215" y="355"/>
+            <omgdi:waypoint x="215" y="660"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

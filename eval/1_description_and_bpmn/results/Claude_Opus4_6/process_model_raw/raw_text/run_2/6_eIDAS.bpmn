@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="pool_ms"  name="Member States"          processRef="proc_ms"/>
+      <participant id="pool_sb"  name="Supervisory Body"       processRef="proc_sb"/>
+      <participant id="pool_tsp" name="Trust Service Provider"  processRef="proc_tsp"/>
+      <participant id="pool_com" name="Commission"              processRef="proc_com"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_ms_notify_com"   name="notify names and addresses"       sourceRef="task_ms_notify"        targetRef="evt_com_receive_notify"/>
+      <messageFlow id="mf_ms_designate_sb" name="designate"                        sourceRef="task_ms_designate"     targetRef="evt_sb_designated"/>
+      <messageFlow id="mf_tsp_notify_sb"   name="breach notification (within 24h)" sourceRef="task_tsp_notify_sb"    targetRef="evt_sb_receive_breach"/>
+      <messageFlow id="mf_sb_report_com"   name="annual report"                    sourceRef="task_sb_submit_report" targetRef="evt_com_receive_report"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Member States                                        -->
+   <!-- ============================================================ -->
+   <process id="proc_ms" name="Member States" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>evt_ms_start</flowNodeRef>
+            <flowNodeRef>task_ms_designate</flowNodeRef>
+            <flowNodeRef>task_ms_notify</flowNodeRef>
+            <flowNodeRef>evt_ms_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="evt_ms_start" name="Start">
+         <outgoing>sf_ms_1</outgoing>
+      </startEvent>
+      <task id="task_ms_designate" name="designate supervisory body">
+         <incoming>sf_ms_1</incoming>
+         <outgoing>sf_ms_2</outgoing>
+      </task>
+      <task id="task_ms_notify" name="notify Commission of names and addresses">
+         <incoming>sf_ms_2</incoming>
+         <outgoing>sf_ms_3</outgoing>
+      </task>
+      <endEvent id="evt_ms_end" name="End">
+         <incoming>sf_ms_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_ms_1" sourceRef="evt_ms_start"      targetRef="task_ms_designate"/>
+      <sequenceFlow id="sf_ms_2" sourceRef="task_ms_designate"  targetRef="task_ms_notify"/>
+      <sequenceFlow id="sf_ms_3" sourceRef="task_ms_notify"     targetRef="evt_ms_end"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Supervisory Body                                     -->
+   <!-- ============================================================ -->
+   <process id="proc_sb" name="Supervisory Body" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_sb">
+         <lane id="lane_sb">
+            <flowNodeRef>evt_sb_designated</flowNodeRef>
+            <flowNodeRef>task_sb_supervise</flowNodeRef>
+            <flowNodeRef>task_sb_analyse</flowNodeRef>
+            <flowNodeRef>task_sb_audit</flowNodeRef>
+            <flowNodeRef>task_sb_grant</flowNodeRef>
+            <flowNodeRef>task_sb_cooperate</flowNodeRef>
+            <flowNodeRef>gw_sb_par1_split</flowNodeRef>
+            <flowNodeRef>gw_sb_par1_join</flowNodeRef>
+            <flowNodeRef>evt_sb_receive_breach</flowNodeRef>
+            <flowNodeRef>gw_sb_xor_cross</flowNodeRef>
+            <flowNodeRef>task_sb_inform_other</flowNodeRef>
+            <flowNodeRef>gw_sb_xor_cross_merge</flowNodeRef>
+            <flowNodeRef>gw_sb_xor_public</flowNodeRef>
+            <flowNodeRef>task_sb_inform_public</flowNodeRef>
+            <flowNodeRef>gw_sb_xor_public_merge</flowNodeRef>
+            <flowNodeRef>task_sb_provide_enisa</flowNodeRef>
+            <flowNodeRef>task_sb_submit_report</flowNodeRef>
+            <flowNodeRef>evt_sb_end</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- Designation trigger -->
+      <startEvent id="evt_sb_designated" name="designated by Member State">
+         <outgoing>sf_sb_0</outgoing>
+         <messageEventDefinition id="med_sb_designated"/>
+      </startEvent>
+
+      <!-- Parallel split: ongoing supervisory duties -->
+      <parallelGateway id="gw_sb_par1_split" name="" gatewayDirection="Diverging">
+         <incoming>sf_sb_0</incoming>
+         <outgoing>sf_sb_1a</outgoing>
+         <outgoing>sf_sb_1b</outgoing>
+         <outgoing>sf_sb_1c</outgoing>
+         <outgoing>sf_sb_1d</outgoing>
+         <outgoing>sf_sb_1e</outgoing>
+      </parallelGateway>
+
+      <task id="task_sb_supervise" name="supervise qualified trust service providers">
+         <incoming>sf_sb_1a</incoming>
+         <outgoing>sf_sb_2a</outgoing>
+      </task>
+      <task id="task_sb_analyse" name="analyse conformity assessment reports">
+         <incoming>sf_sb_1b</incoming>
+         <outgoing>sf_sb_2b</outgoing>
+      </task>
+      <task id="task_sb_audit" name="carry out audits">
+         <incoming>sf_sb_1c</incoming>
+         <outgoing>sf_sb_2c</outgoing>
+      </task>
+      <task id="task_sb_grant" name="grant or withdraw qualified status">
+         <incoming>sf_sb_1d</incoming>
+         <outgoing>sf_sb_2d</outgoing>
+      </task>
+      <task id="task_sb_cooperate" name="cooperate with other supervisory bodies">
+         <incoming>sf_sb_1e</incoming>
+         <outgoing>sf_sb_2e</outgoing>
+      </task>
+
+      <!-- Parallel join -->
+      <parallelGateway id="gw_sb_par1_join" name="" gatewayDirection="Converging">
+         <incoming>sf_sb_2a</incoming>
+         <incoming>sf_sb_2b</incoming>
+         <incoming>sf_sb_2c</incoming>
+         <incoming>sf_sb_2d</incoming>
+         <incoming>sf_sb_2e</incoming>
+         <outgoing>sf_sb_3</outgoing>
+      </parallelGateway>
+
+      <!-- Breach handling sub-flow -->
+      <intermediateCatchEvent id="evt_sb_receive_breach" name="receive breach notification">
+         <incoming>sf_sb_3</incoming>
+         <outgoing>sf_sb_4</outgoing>
+         <messageEventDefinition id="med_sb_breach"/>
+      </intermediateCatchEvent>
+
+      <!-- XOR: cross-border? -->
+      <exclusiveGateway id="gw_sb_xor_cross" name="breach concerns multiple Member States?" gatewayDirection="Diverging">
+         <incoming>sf_sb_4</incoming>
+         <outgoing>sf_sb_5a</outgoing>
+         <outgoing>sf_sb_5b</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_inform_other" name="inform supervisory bodies in other Member States and ENISA">
+         <incoming>sf_sb_5a</incoming>
+         <outgoing>sf_sb_6a</outgoing>
+      </task>
+      <exclusiveGateway id="gw_sb_xor_cross_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_sb_6a</incoming>
+         <incoming>sf_sb_5b</incoming>
+         <outgoing>sf_sb_7</outgoing>
+      </exclusiveGateway>
+
+      <!-- XOR: public interest? -->
+      <exclusiveGateway id="gw_sb_xor_public" name="disclosure in public interest?" gatewayDirection="Diverging">
+         <incoming>sf_sb_7</incoming>
+         <outgoing>sf_sb_8a</outgoing>
+         <outgoing>sf_sb_8b</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_inform_public" name="inform the public about breach">
+         <incoming>sf_sb_8a</incoming>
+         <outgoing>sf_sb_9a</outgoing>
+      </task>
+      <exclusiveGateway id="gw_sb_xor_public_merge" name="" gatewayDirection="Converging">
+         <incoming>sf_sb_9a</incoming>
+         <incoming>sf_sb_8b</incoming>
+         <outgoing>sf_sb_10</outgoing>
+      </exclusiveGateway>
+
+      <!-- Annual duties -->
+      <task id="task_sb_provide_enisa" name="provide ENISA yearly summary of breach notifications">
+         <incoming>sf_sb_10</incoming>
+         <outgoing>sf_sb_11</outgoing>
+      </task>
+      <task id="task_sb_submit_report" name="submit annual report to Commission">
+         <incoming>sf_sb_11</incoming>
+         <outgoing>sf_sb_12</outgoing>
+      </task>
+      <endEvent id="evt_sb_end" name="End">
+         <incoming>sf_sb_12</incoming>
+      </endEvent>
+
+      <!-- Sequence flows -->
+      <sequenceFlow id="sf_sb_0"  sourceRef="evt_sb_designated"       targetRef="gw_sb_par1_split"/>
+      <sequenceFlow id="sf_sb_1a" sourceRef="gw_sb_par1_split"        targetRef="task_sb_supervise"/>
+      <sequenceFlow id="sf_sb_1b" sourceRef="gw_sb_par1_split"        targetRef="task_sb_analyse"/>
+      <sequenceFlow id="sf_sb_1c" sourceRef="gw_sb_par1_split"        targetRef="task_sb_audit"/>
+      <sequenceFlow id="sf_sb_1d" sourceRef="gw_sb_par1_split"        targetRef="task_sb_grant"/>
+      <sequenceFlow id="sf_sb_1e" sourceRef="gw_sb_par1_split"        targetRef="task_sb_cooperate"/>
+      <sequenceFlow id="sf_sb_2a" sourceRef="task_sb_supervise"       targetRef="gw_sb_par1_join"/>
+      <sequenceFlow id="sf_sb_2b" sourceRef="task_sb_analyse"         targetRef="gw_sb_par1_join"/>
+      <sequenceFlow id="sf_sb_2c" sourceRef="task_sb_audit"           targetRef="gw_sb_par1_join"/>
+      <sequenceFlow id="sf_sb_2d" sourceRef="task_sb_grant"           targetRef="gw_sb_par1_join"/>
+      <sequenceFlow id="sf_sb_2e" sourceRef="task_sb_cooperate"       targetRef="gw_sb_par1_join"/>
+      <sequenceFlow id="sf_sb_3"  sourceRef="gw_sb_par1_join"         targetRef="evt_sb_receive_breach"/>
+      <sequenceFlow id="sf_sb_4"  sourceRef="evt_sb_receive_breach"   targetRef="gw_sb_xor_cross"/>
+      <sequenceFlow id="sf_sb_5a" name="yes" sourceRef="gw_sb_xor_cross" targetRef="task_sb_inform_other"/>
+      <sequenceFlow id="sf_sb_5b" name="no"  sourceRef="gw_sb_xor_cross" targetRef="gw_sb_xor_cross_merge"/>
+      <sequenceFlow id="sf_sb_6a" sourceRef="task_sb_inform_other"    targetRef="gw_sb_xor_cross_merge"/>
+      <sequenceFlow id="sf_sb_7"  sourceRef="gw_sb_xor_cross_merge"  targetRef="gw_sb_xor_public"/>
+      <sequenceFlow id="sf_sb_8a" name="yes" sourceRef="gw_sb_xor_public" targetRef="task_sb_inform_public"/>
+      <sequenceFlow id="sf_sb_8b" name="no"  sourceRef="gw_sb_xor_public" targetRef="gw_sb_xor_public_merge"/>
+      <sequenceFlow id="sf_sb_9a" sourceRef="task_sb_inform_public"   targetRef="gw_sb_xor_public_merge"/>
+      <sequenceFlow id="sf_sb_10" sourceRef="gw_sb_xor_public_merge" targetRef="task_sb_provide_enisa"/>
+      <sequenceFlow id="sf_sb_11" sourceRef="task_sb_provide_enisa"   targetRef="task_sb_submit_report"/>
+      <sequenceFlow id="sf_sb_12" sourceRef="task_sb_submit_report"   targetRef="evt_sb_end"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Trust Service Provider                               -->
+   <!-- ============================================================ -->
+   <process id="proc_tsp" name="Trust Service Provider" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_tsp">
+         <lane id="lane_tsp">
+            <flowNodeRef>evt_tsp_start</flowNodeRef>
+            <flowNodeRef>task_tsp_measures</flowNodeRef>
+            <flowNodeRef>evt_tsp_breach</flowNodeRef>
+            <flowNodeRef>task_tsp_notify_sb</flowNodeRef>
+            <flowNodeRef>task_tsp_notify_person</flowNodeRef>
+            <flowNodeRef>evt_tsp_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="evt_tsp_start" name="Start">
+         <outgoing>sf_tsp_1</outgoing>
+      </startEvent>
+      <task id="task_tsp_measures" name="take appropriate technical and organisational measures">
+         <incoming>sf_tsp_1</incoming>
+         <outgoing>sf_tsp_2</outgoing>
+      </task>
+      <intermediateCatchEvent id="evt_tsp_breach" name="breach of security or loss of integrity detected">
+         <incoming>sf_tsp_2</incoming>
+         <outgoing>sf_tsp_3</outgoing>
+         <signalEventDefinition id="sed_breach"/>
+      </intermediateCatchEvent>
+      <task id="task_tsp_notify_sb" name="notify supervisory body of breach">
+         <incoming>sf_tsp_3</incoming>
+         <outgoing>sf_tsp_4</outgoing>
+      </task>
+      <task id="task_tsp_notify_person" name="notify affected natural or legal person of breach">
+         <incoming>sf_tsp_4</incoming>
+         <outgoing>sf_tsp_5</outgoing>
+      </task>
+      <endEvent id="evt_tsp_end" name="End">
+         <incoming>sf_tsp_5</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_tsp_1" sourceRef="evt_tsp_start"         targetRef="task_tsp_measures"/>
+      <sequenceFlow id="sf_tsp_2" sourceRef="task_tsp_measures"     targetRef="evt_tsp_breach"/>
+      <sequenceFlow id="sf_tsp_3" sourceRef="evt_tsp_breach"        targetRef="task_tsp_notify_sb"/>
+      <sequenceFlow id="sf_tsp_4" sourceRef="task_tsp_notify_sb"    targetRef="task_tsp_notify_person"/>
+      <sequenceFlow id="sf_tsp_5" sourceRef="task_tsp_notify_person" targetRef="evt_tsp_end"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Commission                                           -->
+   <!-- ============================================================ -->
+   <process id="proc_com" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_com">
+         <lane id="lane_com">
+            <flowNodeRef>evt_com_receive_notify</flowNodeRef>
+            <flowNodeRef>evt_com_end_notify</flowNodeRef>
+            <flowNodeRef>evt_com_receive_report</flowNodeRef>
+            <flowNodeRef>task_com_make_available</flowNodeRef>
+            <flowNodeRef>task_com_define_formats</flowNodeRef>
+            <flowNodeRef>evt_com_end_report</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- Sub-flow 1: receive notification of supervisory body names -->
+      <startEvent id="evt_com_receive_notify" name="receive notification of supervisory body">
+         <outgoing>sf_com_n1</outgoing>
+         <messageEventDefinition id="med_com_notify"/>
+      </startEvent>
+      <endEvent id="evt_com_end_notify" name="End">
+         <incoming>sf_com_n1</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_com_n1" sourceRef="evt_com_receive_notify" targetRef="evt_com_end_notify"/>
+
+      <!-- Sub-flow 2: receive annual report -->
+      <startEvent id="evt_com_receive_report" name="receive annual report">
+         <outgoing>sf_com_1</outgoing>
+         <messageEventDefinition id="med_com_report"/>
+      </startEvent>
+      <task id="task_com_make_available" name="make annual report available to Member States">
+         <incoming>sf_com_1</incoming>
+         <outgoing>sf_com_2</outgoing>
+      </task>
+      <task id="task_com_define_formats" name="define formats and procedures by implementing acts">
+         <incoming>sf_com_2</incoming>
+         <outgoing>sf_com_3</outgoing>
+      </task>
+      <endEvent id="evt_com_end_report" name="End">
+         <incoming>sf_com_3</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_com_1" sourceRef="evt_com_receive_report"  targetRef="task_com_make_available"/>
+      <sequenceFlow id="sf_com_2" sourceRef="task_com_make_available" targetRef="task_com_define_formats"/>
+      <sequenceFlow id="sf_com_3" sourceRef="task_com_define_formats" targetRef="evt_com_end_report"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- ======== POOL: Member States  y=60  h=130 ======== -->
+         <bpmndi:BPMNShape bpmnElement="pool_ms" id="pool_ms_gui" isHorizontal="true">
+            <omgdc:Bounds x="60" y="60" width="700" height="130"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds x="90" y="60" width="670" height="130"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_ms_start" id="evt_ms_start_gui">
+            <omgdc:Bounds x="140" y="110" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_designate" id="task_ms_designate_gui">
+            <omgdc:Bounds x="220" y="85" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_notify" id="task_ms_notify_gui">
+            <omgdc:Bounds x="430" y="85" width="180" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_ms_end" id="evt_ms_end_gui">
+            <omgdc:Bounds x="670" y="111" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_1" id="sf_ms_1_gui">
+            <omgdi:waypoint x="170" y="125"/>
+            <omgdi:waypoint x="220" y="125"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_2" id="sf_ms_2_gui">
+            <omgdi:waypoint x="380" y="125"/>
+            <omgdi:waypoint x="430" y="125"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_3" id="sf_ms_3_gui">
+            <omgdi:waypoint x="610" y="125"/>
+            <omgdi:waypoint x="670" y="125"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ======== POOL: Supervisory Body  y=230  h=480 ======== -->
+         <bpmndi:BPMNShape bpmnElement="pool_sb" id="pool_sb_gui" isHorizontal="true">
+            <omgdc:Bounds x="60" y="230" width="1400" height="480"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_sb" id="lane_sb_gui" isHorizontal="true">
+            <omgdc:Bounds x="90" y="230" width="1370" height="480"/>
+         </bpmndi:BPMNShape>
+
+         <!-- start -->
+         <bpmndi:BPMNShape bpmnElement="evt_sb_designated" id="evt_sb_designated_gui">
+            <omgdc:Bounds x="130" y="365" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <!-- parallel split -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_par1_split" id="gw_sb_par1_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="200" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- 5 parallel tasks -->
+         <bpmndi:BPMNShape bpmnElement="task_sb_supervise" id="task_sb_supervise_gui">
+            <omgdc:Bounds x="290" y="250" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_analyse" id="task_sb_analyse_gui">
+            <omgdc:Bounds x="290" y="325" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_audit" id="task_sb_audit_gui">
+            <omgdc:Bounds x="290" y="400" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_grant" id="task_sb_grant_gui">
+            <omgdc:Bounds x="290" y="475" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_cooperate" id="task_sb_cooperate_gui">
+            <omgdc:Bounds x="290" y="550" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- parallel join -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_par1_join" id="gw_sb_par1_join_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="500" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- intermediate catch: breach -->
+         <bpmndi:BPMNShape bpmnElement="evt_sb_receive_breach" id="evt_sb_receive_breach_gui">
+            <omgdc:Bounds x="580" y="365" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <!-- XOR cross-border split -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_xor_cross" id="gw_sb_xor_cross_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="650" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_inform_other" id="task_sb_inform_other_gui">
+            <omgdc:Bounds x="730" y="280" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- XOR cross-border merge -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_xor_cross_merge" id="gw_sb_xor_cross_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="930" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- XOR public split -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_xor_public" id="gw_sb_xor_public_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="1000" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_inform_public" id="task_sb_inform_public_gui">
+            <omgdc:Bounds x="1070" y="280" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- XOR public merge -->
+         <bpmndi:BPMNShape bpmnElement="gw_sb_xor_public_merge" id="gw_sb_xor_public_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="1130" y="360" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- ENISA summary -->
+         <bpmndi:BPMNShape bpmnElement="task_sb_provide_enisa" id="task_sb_provide_enisa_gui">
+            <omgdc:Bounds x="1200" y="430" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- annual report -->
+         <bpmndi:BPMNShape bpmnElement="task_sb_submit_report" id="task_sb_submit_report_gui">
+            <omgdc:Bounds x="1200" y="350" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- end -->
+         <bpmndi:BPMNShape bpmnElement="evt_sb_end" id="evt_sb_end_gui">
+            <omgdc:Bounds x="1420" y="366" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- SB sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_0" id="sf_sb_0_gui">
+            <omgdi:waypoint x="160" y="380"/>
+            <omgdi:waypoint x="200" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_1a" id="sf_sb_1a_gui">
+            <omgdi:waypoint x="220" y="360"/>
+            <omgdi:waypoint x="220" y="280"/>
+            <omgdi:waypoint x="290" y="280"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_1b" id="sf_sb_1b_gui">
+            <omgdi:waypoint x="240" y="375"/>
+            <omgdi:waypoint x="265" y="355"/>
+            <omgdi:waypoint x="290" y="355"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_1c" id="sf_sb_1c_gui">
+            <omgdi:waypoint x="240" y="385"/>
+            <omgdi:waypoint x="265" y="430"/>
+            <omgdi:waypoint x="290" y="430"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_1d" id="sf_sb_1d_gui">
+            <omgdi:waypoint x="220" y="400"/>
+            <omgdi:waypoint x="220" y="505"/>
+            <omgdi:waypoint x="290" y="505"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_1e" id="sf_sb_1e_gui">
+            <omgdi:waypoint x="220" y="400"/>
+            <omgdi:waypoint x="220" y="580"/>
+            <omgdi:waypoint x="290" y="580"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_2a" id="sf_sb_2a_gui">
+            <omgdi:waypoint x="450" y="280"/>
+            <omgdi:waypoint x="520" y="280"/>
+            <omgdi:waypoint x="520" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_2b" id="sf_sb_2b_gui">
+            <omgdi:waypoint x="450" y="355"/>
+            <omgdi:waypoint x="500" y="375"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_2c" id="sf_sb_2c_gui">
+            <omgdi:waypoint x="450" y="430"/>
+            <omgdi:waypoint x="520" y="430"/>
+            <omgdi:waypoint x="520" y="400"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_2d" id="sf_sb_2d_gui">
+            <omgdi:waypoint x="450" y="505"/>
+            <omgdi:waypoint x="520" y="505"/>
+            <omgdi:waypoint x="520" y="400"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_2e" id="sf_sb_2e_gui">
+            <omgdi:waypoint x="450" y="580"/>
+            <omgdi:waypoint x="520" y="580"/>
+            <omgdi:waypoint x="520" y="400"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_3" id="sf_sb_3_gui">
+            <omgdi:waypoint x="540" y="380"/>
+            <omgdi:waypoint x="580" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_4" id="sf_sb_4_gui">
+            <omgdi:waypoint x="610" y="380"/>
+            <omgdi:waypoint x="650" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_5a" id="sf_sb_5a_gui">
+            <omgdi:waypoint x="670" y="360"/>
+            <omgdi:waypoint x="670" y="310"/>
+            <omgdi:waypoint x="730" y="310"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_5b" id="sf_sb_5b_gui">
+            <omgdi:waypoint x="690" y="380"/>
+            <omgdi:waypoint x="930" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_6a" id="sf_sb_6a_gui">
+            <omgdi:waypoint x="890" y="310"/>
+            <omgdi:waypoint x="950" y="310"/>
+            <omgdi:waypoint x="950" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_7" id="sf_sb_7_gui">
+            <omgdi:waypoint x="970" y="380"/>
+            <omgdi:waypoint x="1000" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_8a" id="sf_sb_8a_gui">
+            <omgdi:waypoint x="1020" y="360"/>
+            <omgdi:waypoint x="1020" y="310"/>
+            <omgdi:waypoint x="1070" y="310"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_8b" id="sf_sb_8b_gui">
+            <omgdi:waypoint x="1040" y="380"/>
+            <omgdi:waypoint x="1130" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_9a" id="sf_sb_9a_gui">
+            <omgdi:waypoint x="1230" y="310"/>
+            <omgdi:waypoint x="1150" y="310"/>
+            <omgdi:waypoint x="1150" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_10" id="sf_sb_10_gui">
+            <omgdi:waypoint x="1150" y="400"/>
+            <omgdi:waypoint x="1150" y="460"/>
+            <omgdi:waypoint x="1200" y="460"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_11" id="sf_sb_11_gui">
+            <omgdi:waypoint x="1380" y="460"/>
+            <omgdi:waypoint x="1400" y="460"/>
+            <omgdi:waypoint x="1400" y="380"/>
+            <omgdi:waypoint x="1200" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sb_12" id="sf_sb_12_gui">
+            <omgdi:waypoint x="1380" y="380"/>
+            <omgdi:waypoint x="1420" y="380"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ======== POOL: Trust Service Provider  y=750  h=150 ======== -->
+         <bpmndi:BPMNShape bpmnElement="pool_tsp" id="pool_tsp_gui" isHorizontal="true">
+            <omgdc:Bounds x="60" y="750" width="1000" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_tsp" id="lane_tsp_gui" isHorizontal="true">
+            <omgdc:Bounds x="90" y="750" width="970" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_tsp_start" id="evt_tsp_start_gui">
+            <omgdc:Bounds x="130" y="810" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_tsp_measures" id="task_tsp_measures_gui">
+            <omgdc:Bounds x="210" y="790" width="180" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_tsp_breach" id="evt_tsp_breach_gui">
+            <omgdc:Bounds x="440" y="810" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_tsp_notify_sb" id="task_tsp_notify_sb_gui">
+            <omgdc:Bounds x="520" y="790" width="160" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_tsp_notify_person" id="task_tsp_notify_person_gui">
+            <omgdc:Bounds x="730" y="790" width="180" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_tsp_end" id="evt_tsp_end_gui">
+            <omgdc:Bounds x="970" y="811" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_tsp_1" id="sf_tsp_1_gui">
+            <omgdi:waypoint x="160" y="825"/>
+            <omgdi:waypoint x="210" y="825"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tsp_2" id="sf_tsp_2_gui">
+            <omgdi:waypoint x="390" y="825"/>
+            <omgdi:waypoint x="440" y="825"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tsp_3" id="sf_tsp_3_gui">
+            <omgdi:waypoint x="470" y="825"/>
+            <omgdi:waypoint x="520" y="825"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tsp_4" id="sf_tsp_4_gui">
+            <omgdi:waypoint x="680" y="825"/>
+            <omgdi:waypoint x="730" y="825"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tsp_5" id="sf_tsp_5_gui">
+            <omgdi:waypoint x="910" y="825"/>
+            <omgdi:waypoint x="970" y="825"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ======== POOL: Commission  y=940  h=160 ======== -->
+         <bpmndi:BPMNShape bpmnElement="pool_com" id="pool_com_gui" isHorizontal="true">
+            <omgdc:Bounds x="60" y="940" width="1000" height="160"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_com" id="lane_com_gui" isHorizontal="true">
+            <omgdc:Bounds x="90" y="940" width="970" height="160"/>
+         </bpmndi:BPMNShape>
+         <!-- sub-flow 1: receive notification -->
+         <bpmndi:BPMNShape bpmnElement="evt_com_receive_notify" id="evt_com_receive_notify_gui">
+            <omgdc:Bounds x="140" y="960" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_com_end_notify" id="evt_com_end_notify_gui">
+            <omgdc:Bounds x="220" y="961" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <!-- sub-flow 2: annual report -->
+         <bpmndi:BPMNShape bpmnElement="evt_com_receive_report" id="evt_com_receive_report_gui">
+            <omgdc:Bounds x="350" y="1040" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_com_make_available" id="task_com_make_available_gui">
+            <omgdc:Bounds x="430" y="1020" width="200" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_com_define_formats" id="task_com_define_formats_gui">
+            <omgdc:Bounds x="680" y="1020" width="200" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_com_end_report" id="evt_com_end_report_gui">
+            <omgdc:Bounds x="930" y="1041" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_n1" id="sf_com_n1_gui">
+            <omgdi:waypoint x="170" y="975"/>
+            <omgdi:waypoint x="220" y="975"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_1" id="sf_com_1_gui">
+            <omgdi:waypoint x="380" y="1055"/>
+            <omgdi:waypoint x="430" y="1055"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_2" id="sf_com_2_gui">
+            <omgdi:waypoint x="630" y="1055"/>
+            <omgdi:waypoint x="680" y="1055"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_3" id="sf_com_3_gui">
+            <omgdi:waypoint x="880" y="1055"/>
+            <omgdi:waypoint x="930" y="1055"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ======== MESSAGE FLOWS ======== -->
+         <bpmndi:BPMNEdge bpmnElement="mf_ms_designate_sb" id="mf_ms_designate_sb_gui">
+            <omgdi:waypoint x="300" y="165"/>
+            <omgdi:waypoint x="300" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_ms_notify_com" id="mf_ms_notify_com_gui">
+            <omgdi:waypoint x="520" y="165"/>
+            <omgdi:waypoint x="520" y="750"/>
+            <omgdi:waypoint x="155" y="750"/>
+            <omgdi:waypoint x="155" y="960"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_tsp_notify_sb" id="mf_tsp_notify_sb_gui">
+            <omgdi:waypoint x="600" y="790"/>
+            <omgdi:waypoint x="600" y="710"/>
+            <omgdi:waypoint x="595" y="710"/>
+            <omgdi:waypoint x="595" y="395"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sb_report_com" id="mf_sb_report_com_gui">
+            <omgdi:waypoint x="1290" y="410"/>
+            <omgdi:waypoint x="1290" y="730"/>
+            <omgdi:waypoint x="365" y="730"/>
+            <omgdi:waypoint x="365" y="1040"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+
+      <bpmndi:BPMNLabelStyle id="label_style_small">
+         <omgdc:Font name="Arial" size="11.0" isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false"/>
+      </bpmndi:BPMNLabelStyle>
+      <bpmndi:BPMNLabelStyle id="label_style_normal">
+         <omgdc:Font name="Arial" size="12.0" isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false"/>
+      </bpmndi:BPMNLabelStyle>
+   </bpmndi:BPMNDiagram>
+</definitions>
