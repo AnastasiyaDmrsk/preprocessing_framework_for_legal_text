@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-process-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+   <collaboration id="sid-collaboration">
+      <participant id="p_ms" name="Member State" processRef="proc_ms">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="p_cbo" name="Customer or Beneficial Owner" processRef="proc_cbo">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="p_oe" name="Obliged Entity" processRef="proc_oe">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+   </collaboration>
+
+   <!-- Process: Member State -->
+   <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="ls_ms">
+         <lane id="lane_ms">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>ms_start</flowNodeRef>
+            <flowNodeRef>ms_t1</flowNodeRef>
+            <flowNodeRef>ms_t2</flowNodeRef>
+            <flowNodeRef>ms_t3</flowNodeRef>
+            <flowNodeRef>ms_t4</flowNodeRef>
+            <flowNodeRef>ms_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="ms_start" name="intention to establish a business relationship or the carrying out of a transaction">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>sf_ms_1</outgoing>
+      </startEvent>
+      
+      <task id="ms_t1" name="require verification of the identity before the establishment of a business relationship or the carrying out of the transaction, except where Member States may allow verification to be completed during the establishment of a business relationship rather than before it">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_ms_1</incoming>
+         <outgoing>sf_ms_2</outgoing>
+      </task>
+      
+      <task id="ms_t2" name="allow verification of the identity to be completed during the relationship establishment if necessary so as not to interrupt the normal conduct of business and where there is little risk of money laundering or terrorist financing">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_ms_2</incoming>
+         <outgoing>sf_ms_3</outgoing>
+      </task>
+      
+      <task id="ms_t3" name="allow the opening of an account provided that there are adequate safeguards in place, except where by way of derogation from paragraph 1, Member States may allow the opening of an account before full verification has been completed, subject to adequate safeguards">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_ms_3</incoming>
+         <outgoing>sf_ms_4</outgoing>
+      </task>
+      
+      <task id="ms_t4" name="require that obliged entities apply the customer due diligence measures">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_ms_4</incoming>
+         <outgoing>sf_ms_5</outgoing>
+      </task>
+      
+      <endEvent id="ms_end" name="requirements established">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf_ms_5</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sf_ms_1" sourceRef="ms_start" targetRef="ms_t1" isImmediate="true"/>
+      <sequenceFlow id="sf_ms_2" sourceRef="ms_t1" targetRef="ms_t2" isImmediate="true"/>
+      <sequenceFlow id="sf_ms_3" sourceRef="ms_t2" targetRef="ms_t3" isImmediate="true"/>
+      <sequenceFlow id="sf_ms_4" sourceRef="ms_t3" targetRef="ms_t4" isImmediate="true"/>
+      <sequenceFlow id="sf_ms_5" sourceRef="ms_t4" targetRef="ms_end" isImmediate="true"/>
+   </process>
+
+   <!-- Process: Customer or Beneficial Owner -->
+   <process id="proc_cbo" isClosed="false" isExecutable="false" name="Customer or Beneficial Owner" processType="None">
+      <laneSet id="ls_cbo">
+         <lane id="lane_cbo">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>cbo_start</flowNodeRef>
+            <flowNodeRef>cbo_t1</flowNodeRef>
+            <flowNodeRef>cbo_t2</flowNodeRef>
+            <flowNodeRef>cbo_gw_xor1</flowNodeRef>
+            <flowNodeRef>cbo_t3</flowNodeRef>
+            <flowNodeRef>cbo_gw_xor2</flowNodeRef>
+            <flowNodeRef>cbo_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="cbo_start" name="Start">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>sf_cbo_1</outgoing>
+      </startEvent>
+      
+      <task id="cbo_t1" name="verify the identity before the establishment of a business relationship or the carrying out of the transaction">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_cbo_1</incoming>
+         <outgoing>sf_cbo_2</outgoing>
+      </task>
+      
+      <task id="cbo_t2" name="assess whether verification of the identity is allowed to be completed during the establishment of a business relationship">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_cbo_2</incoming>
+         <outgoing>sf_cbo_3</outgoing>
+      </task>
+      
+      <exclusiveGateway id="cbo_gw_xor1" name="verification of the identity is allowed to be completed during the establishment of a business relationship" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf_cbo_3</incoming>
+         <outgoing>sf_cbo_4</outgoing>
+         <outgoing>sf_cbo_5</outgoing>
+      </exclusiveGateway>
+      
+      <task id="cbo_t3" name="complete identity verification procedures as soon as practicable after initial contact">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_cbo_4</incoming>
+         <outgoing>sf_cbo_6</outgoing>
+      </task>
+      
+      <exclusiveGateway id="cbo_gw_xor2" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_cbo_5</incoming>
+         <incoming>sf_cbo_6</incoming>
+         <outgoing>sf_cbo_7</outgoing>
+      </exclusiveGateway>
+      
+      <endEvent id="cbo_end" name="identity verified">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf_cbo_7</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sf_cbo_1" sourceRef="cbo_start" targetRef="cbo_t1" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_2" sourceRef="cbo_t1" targetRef="cbo_t2" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_3" sourceRef="cbo_t2" targetRef="cbo_gw_xor1" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_4" name="yes" sourceRef="cbo_gw_xor1" targetRef="cbo_t3" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_5" name="no" sourceRef="cbo_gw_xor1" targetRef="cbo_gw_xor2" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_6" sourceRef="cbo_t3" targetRef="cbo_gw_xor2" isImmediate="true"/>
+      <sequenceFlow id="sf_cbo_7" sourceRef="cbo_gw_xor2" targetRef="cbo_end" isImmediate="true"/>
+   </process>
+
+   <!-- Process: Obliged Entity -->
+   <process id="proc_oe" isClosed="false" isExecutable="false" name="Obliged Entity" processType="None">
+      <laneSet id="ls_oe">
+         <lane id="lane_oe">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>oe_start</flowNodeRef>
+            <flowNodeRef>oe_t1</flowNodeRef>
+            <flowNodeRef>oe_gw_xor1</flowNodeRef>
+            <flowNodeRef>oe_gw_and1</flowNodeRef>
+            <flowNodeRef>oe_t2_1</flowNodeRef>
+            <flowNodeRef>oe_t2_2</flowNodeRef>
+            <flowNodeRef>oe_t2_3</flowNodeRef>
+            <flowNodeRef>oe_t2_4</flowNodeRef>
+            <flowNodeRef>oe_t2_5</flowNodeRef>
+            <flowNodeRef>oe_gw_and2</flowNodeRef>
+            <flowNodeRef>oe_gw_xor2</flowNodeRef>
+            <flowNodeRef>oe_t3</flowNodeRef>
+            <flowNodeRef>oe_end</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="oe_start" name="Start">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>sf_oe_1</outgoing>
+      </startEvent>
+      
+      <task id="oe_t1" name="assess whether an obliged entity is unable to comply with the customer due diligence requirements">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_1</incoming>
+         <outgoing>sf_oe_2</outgoing>
+      </task>
+      
+      <exclusiveGateway id="oe_gw_xor1" name="unable to comply with the customer due diligence requirements" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf_oe_2</incoming>
+         <outgoing>sf_oe_3</outgoing>
+         <outgoing>sf_oe_4</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway id="oe_gw_and1" name="Parallel Split" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_3</incoming>
+         <outgoing>sf_oe_5_1</outgoing>
+         <outgoing>sf_oe_5_2</outgoing>
+         <outgoing>sf_oe_5_3</outgoing>
+         <outgoing>sf_oe_5_4</outgoing>
+         <outgoing>sf_oe_5_5</outgoing>
+      </parallelGateway>
+
+      <task id="oe_t2_1" name="not carry out a transaction through a bank account, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_5_1</incoming>
+         <outgoing>sf_oe_6_1</outgoing>
+      </task>
+      
+      <task id="oe_t2_2" name="not establish a business relationship, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_5_2</incoming>
+         <outgoing>sf_oe_6_2</outgoing>
+      </task>
+
+      <task id="oe_t2_3" name="not carry out the transaction, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_5_3</incoming>
+         <outgoing>sf_oe_6_3</outgoing>
+      </task>
+
+      <task id="oe_t2_4" name="terminate the business relationship, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_5_4</incoming>
+         <outgoing>sf_oe_6_4</outgoing>
+      </task>
+
+      <task id="oe_t2_5" name="consider making a suspicious transaction report to the FIU, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_5_5</incoming>
+         <outgoing>sf_oe_6_5</outgoing>
+      </task>
+
+      <parallelGateway id="oe_gw_and2" name="Parallel Join" gatewayDirection="Converging">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_6_1</incoming>
+         <incoming>sf_oe_6_2</incoming>
+         <incoming>sf_oe_6_3</incoming>
+         <incoming>sf_oe_6_4</incoming>
+         <incoming>sf_oe_6_5</incoming>
+         <outgoing>sf_oe_7</outgoing>
+      </parallelGateway>
+
+      <exclusiveGateway id="oe_gw_xor2" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_4</incoming>
+         <incoming>sf_oe_7</incoming>
+         <outgoing>sf_oe_8</outgoing>
+      </exclusiveGateway>
+
+      <task id="oe_t3" name="apply the customer due diligence measures">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sf_oe_8</incoming>
+         <outgoing>sf_oe_9</outgoing>
+      </task>
+
+      <endEvent id="oe_end" name="due diligence resolved">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf_oe_9</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_oe_1" sourceRef="oe_start" targetRef="oe_t1" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_2" sourceRef="oe_t1" targetRef="oe_gw_xor1" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_3" name="yes" sourceRef="oe_gw_xor1" targetRef="oe_gw_and1" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_4" name="no" sourceRef="oe_gw_xor1" targetRef="oe_gw_xor2" isImmediate="true"/>
+      
+      <sequenceFlow id="sf_oe_5_1" sourceRef="oe_gw_and1" targetRef="oe_t2_1" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_5_2" sourceRef="oe_gw_and1" targetRef="oe_t2_2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_5_3" sourceRef="oe_gw_and1" targetRef="oe_t2_3" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_5_4" sourceRef="oe_gw_and1" targetRef="oe_t2_4" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_5_5" sourceRef="oe_gw_and1" targetRef="oe_t2_5" isImmediate="true"/>
+
+      <sequenceFlow id="sf_oe_6_1" sourceRef="oe_t2_1" targetRef="oe_gw_and2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_6_2" sourceRef="oe_t2_2" targetRef="oe_gw_and2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_6_3" sourceRef="oe_t2_3" targetRef="oe_gw_and2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_6_4" sourceRef="oe_t2_4" targetRef="oe_gw_and2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_6_5" sourceRef="oe_t2_5" targetRef="oe_gw_and2" isImmediate="true"/>
+
+      <sequenceFlow id="sf_oe_7" sourceRef="oe_gw_and2" targetRef="oe_gw_xor2" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_8" sourceRef="oe_gw_xor2" targetRef="oe_t3" isImmediate="true"/>
+      <sequenceFlow id="sf_oe_9" sourceRef="oe_t3" targetRef="oe_end" isImmediate="true"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="sid-diagram">
+      <bpmndi:BPMNPlane bpmnElement="sid-collaboration" id="sid-plane">
+         
+         <!-- Pool 1: Member State -->
+         <bpmndi:BPMNShape bpmnElement="p_ms" id="p_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1200.0" x="100.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1170.0" x="130.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="ms_start" id="ms_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t1" id="ms_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t2" id="ms_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t3" id="ms_t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t4" id="ms_t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_end" id="ms_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="850.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         
+         <!-- Pool 2: Customer or Beneficial Owner -->
+         <bpmndi:BPMNShape bpmnElement="p_cbo" id="p_cbo_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1200.0" x="100.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_cbo" id="lane_cbo_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1170.0" x="130.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="cbo_start" id="cbo_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_t1" id="cbo_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_t2" id="cbo_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_gw_xor1" id="cbo_gw_xor1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_t3" id="cbo_t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="360.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_gw_xor2" id="cbo_gw_xor2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cbo_end" id="cbo_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="900.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Pool 3: Obliged Entity -->
+         <bpmndi:BPMNShape bpmnElement="p_oe" id="p_oe_gui" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="1200.0" x="100.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_oe" id="lane_oe_gui" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="1170.0" x="130.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="oe_start" id="oe_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="835.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t1" id="oe_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_gw_xor1" id="oe_gw_xor1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_gw_and1" id="oe_gw_and1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="730.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t2_1" id="oe_t2_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t2_2" id="oe_t2_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t2_3" id="oe_t2_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t2_4" id="oe_t2_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t2_5" id="oe_t2_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="950.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_gw_and2" id="oe_gw_and2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="730.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_gw_xor2" id="oe_gw_xor2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_t3" id="oe_t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="oe_end" id="oe_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1100.0" y="835.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Edges (Sequence Flows) -->
+         
+         <!-- Pool 1 flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_1" id="sf_ms_1_gui">
+            <omgdi:waypoint x="180.0" y="200.0"/>
+            <omgdi:waypoint x="250.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_2" id="sf_ms_2_gui">
+            <omgdi:waypoint x="350.0" y="200.0"/>
+            <omgdi:waypoint x="400.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_3" id="sf_ms_3_gui">
+            <omgdi:waypoint x="500.0" y="200.0"/>
+            <omgdi:waypoint x="550.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_4" id="sf_ms_4_gui">
+            <omgdi:waypoint x="650.0" y="200.0"/>
+            <omgdi:waypoint x="700.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_5" id="sf_ms_5_gui">
+            <omgdi:waypoint x="800.0" y="200.0"/>
+            <omgdi:waypoint x="850.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool 2 flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_1" id="sf_cbo_1_gui">
+            <omgdi:waypoint x="180.0" y="450.0"/>
+            <omgdi:waypoint x="250.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_2" id="sf_cbo_2_gui">
+            <omgdi:waypoint x="350.0" y="450.0"/>
+            <omgdi:waypoint x="400.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_3" id="sf_cbo_3_gui">
+            <omgdi:waypoint x="500.0" y="450.0"/>
+            <omgdi:waypoint x="550.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_4" id="sf_cbo_4_gui">
+            <omgdi:waypoint x="570.0" y="430.0"/>
+            <omgdi:waypoint x="570.0" y="400.0"/>
+            <omgdi:waypoint x="650.0" y="400.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_5" id="sf_cbo_5_gui">
+            <omgdi:waypoint x="590.0" y="450.0"/>
+            <omgdi:waypoint x="800.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_6" id="sf_cbo_6_gui">
+            <omgdi:waypoint x="750.0" y="400.0"/>
+            <omgdi:waypoint x="820.0" y="400.0"/>
+            <omgdi:waypoint x="820.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cbo_7" id="sf_cbo_7_gui">
+            <omgdi:waypoint x="840.0" y="450.0"/>
+            <omgdi:waypoint x="900.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Pool 3 flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_1" id="sf_oe_1_gui">
+            <omgdi:waypoint x="180.0" y="850.0"/>
+            <omgdi:waypoint x="250.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_2" id="sf_oe_2_gui">
+            <omgdi:waypoint x="350.0" y="850.0"/>
+            <omgdi:waypoint x="400.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_3" id="sf_oe_3_gui">
+            <omgdi:waypoint x="420.0" y="830.0"/>
+            <omgdi:waypoint x="420.0" y="750.0"/>
+            <omgdi:waypoint x="500.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_4" id="sf_oe_4_gui">
+            <omgdi:waypoint x="440.0" y="850.0"/>
+            <omgdi:waypoint x="850.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_5_1" id="sf_oe_5_1_gui">
+            <omgdi:waypoint x="520.0" y="730.0"/>
+            <omgdi:waypoint x="520.0" y="590.0"/>
+            <omgdi:waypoint x="600.0" y="590.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_5_2" id="sf_oe_5_2_gui">
+            <omgdi:waypoint x="520.0" y="730.0"/>
+            <omgdi:waypoint x="520.0" y="690.0"/>
+            <omgdi:waypoint x="600.0" y="690.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_5_3" id="sf_oe_5_3_gui">
+            <omgdi:waypoint x="540.0" y="750.0"/>
+            <omgdi:waypoint x="600.0" y="790.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_5_4" id="sf_oe_5_4_gui">
+            <omgdi:waypoint x="520.0" y="770.0"/>
+            <omgdi:waypoint x="520.0" y="890.0"/>
+            <omgdi:waypoint x="600.0" y="890.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_5_5" id="sf_oe_5_5_gui">
+            <omgdi:waypoint x="520.0" y="770.0"/>
+            <omgdi:waypoint x="520.0" y="990.0"/>
+            <omgdi:waypoint x="600.0" y="990.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_6_1" id="sf_oe_6_1_gui">
+            <omgdi:waypoint x="700.0" y="590.0"/>
+            <omgdi:waypoint x="770.0" y="590.0"/>
+            <omgdi:waypoint x="770.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_6_2" id="sf_oe_6_2_gui">
+            <omgdi:waypoint x="700.0" y="690.0"/>
+            <omgdi:waypoint x="770.0" y="690.0"/>
+            <omgdi:waypoint x="770.0" y="730.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_6_3" id="sf_oe_6_3_gui">
+            <omgdi:waypoint x="700.0" y="790.0"/>
+            <omgdi:waypoint x="750.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_6_4" id="sf_oe_6_4_gui">
+            <omgdi:waypoint x="700.0" y="890.0"/>
+            <omgdi:waypoint x="770.0" y="890.0"/>
+            <omgdi:waypoint x="770.0" y="770.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_6_5" id="sf_oe_6_5_gui">
+            <omgdi:waypoint x="700.0" y="990.0"/>
+            <omgdi:waypoint x="770.0" y="990.0"/>
+            <omgdi:waypoint x="770.0" y="770.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_7" id="sf_oe_7_gui">
+            <omgdi:waypoint x="790.0" y="750.0"/>
+            <omgdi:waypoint x="870.0" y="750.0"/>
+            <omgdi:waypoint x="870.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_8" id="sf_oe_8_gui">
+            <omgdi:waypoint x="890.0" y="850.0"/>
+            <omgdi:waypoint x="950.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_oe_9" id="sf_oe_9_gui">
+            <omgdi:waypoint x="1050.0" y="850.0"/>
+            <omgdi:waypoint x="1100.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,308 @@
+# TASK DESCRIPTION
+
+You are an expert in Business Process Model and Notation (BPMN 2.0) and Signavio's specific XML structure.
+
+Your task is to transform a structured, text-based **process description** into an executable process model in `.bpmn` format that is valid according to the BPMN 2.0 modeling standard and perfectly compatible with Signavio.
+
+## MAPPING RULES (NARRATIVE TO BPMN)
+
+The input text is a pre-processed, structured narrative with strict conventions. You must accurately translate these textual cues into their corresponding BPMN elements.
+
+**PART 1: SEMANTIC LOGIC**
+
+1. **Pools & Lanes (Actors)**
+* *Input cue*: "The process contains the following actors: [X, Y] (with lanes: A, B)"
+* *Action*: Create a `<participant>` (Pool) and a corresponding `<process>` for each top-level actor. Map any listed subdivisions to `<laneSet>` and `<lane>` elements within that process.
+
+
+2. **Start and End Events**
+* *Input cue*: "The process starts with [trigger]" / "The process for the [Actor] ends with [Event]."
+* *Action*: Add `<startEvent>` and `<endEvent>` nodes in the respective actor's pool.
+
+
+3. **Tasks (Activities)**
+* *Input cue*: "[Actor] shall [activity]..."
+* *Action*: Create a `<task>` element assigned to the correct pool/lane. Connect tasks strictly in the order they are described using `<sequenceFlow>`.
+
+
+4. **Exclusive Gateways (XOR)**
+* *Input cue*: "[Actor] shall assess whether [condition]. If [condition is true]... If [condition is false]..." or "[Actor] may [activity] if..."
+* *Action*: Insert an `<exclusiveGateway>`. Create outgoing `<sequenceFlow>` elements representing the branching logic (the "true", "false", or "except where" paths). Ensure the sequence flows merge back appropriately if the paths reconverge.
+
+
+5. **Parallel Gateways (AND)**
+* *Input cue*: "[Actor] shall carry out the following activities in parallel..."
+* *Action*: Insert a `<parallelGateway>` (diverging), route sequence flows to the parallel tasks, and insert a converging `<parallelGateway>` when the narrative states "All activities shall be completed before...".
+
+
+6. **Message Flows (Inter-actor Communication)**
+* *Input cue*: "[Actor A] shall transmit [info] to [Actor B]" AND "Upon receiving [info], [Actor B]..."
+* *Action*: Create `<messageFlow>` elements connecting the boundary of the sending task/event in Actor A's pool to the receiving task/event in Actor B's pool.
+
+
+
+**PART 2: DIAGRAM INTERCHANGE (VISUAL LAYOUT) - CRITICAL**
+You MUST generate the `<bpmndi:BPMNDiagram>` section. A model without visual coordinates is broken.
+7. **Shapes (Nodes)**
+
+* *Action*: For EVERY Pool, Lane, Task, Event, and Gateway created in Part 1, you MUST create a corresponding `<bpmndi:BPMNShape>` with absolute X/Y `<omgdc:Bounds>`.
+
+8. **Edges (Arrows)**
+* *Action*: For EVERY `<sequenceFlow>` and EVERY `<messageFlow>` created in Part 1, you ABSOLUTELY MUST create a corresponding `<bpmndi:BPMNEdge>` linking to the flow's ID via the `bpmnElement` attribute.
+* Each `<bpmndi:BPMNEdge>` MUST contain at least two `<omgdi:waypoint>` elements (X/Y coordinates connecting the source shape to the target shape). **Do not omit sequence flow edges under any circumstances.**
+
+
+
+## Extraction procedure
+
+Let’s carry out the extraction in three steps.
+
+1. Extract all mentions of activities and actors.
+2. Reading the input text again extract all relations between extracted mentions.
+3. Model the extracted information as a process in BPMN 2.0 Notation. **You must include the complete layout information (DI part), explicitly ensuring no `<sequenceFlow>` is missing its `<bpmndi:BPMNEdge>` counterpart.**
+
+# RESTRICTIONS
+
+## Additional considerations
+
+* If there is no action, there cannot be any actor in the sentence.
+* Use the sentences’ context, but relations must not cross sentence boundaries.
+
+## Disambiguation hints
+
+* In the following there is only one activity (print claim), the rest are details:
+“The claims officer prints the claim by clicking [PRINT].”
+
+## Format instructions
+
+The output should be an executable .bpmn format (XML). Ensure all XML tags are properly closed and valid.
+
+## Other restrictions
+- **Gateway attributes**: Every `<exclusiveGateway>` must include `isMarkerVisible="true"`.
+  Every gateway (both exclusive and parallel) must include `gatewayDirection="Diverging"`
+  or `gatewayDirection="Converging"` as appropriate.
+- **Sequence flow immediacy**: Every `<sequenceFlow>` must include `isImmediate="true"`.
+- **Branch condition labels**: On XOR gateway outgoing flows, set the `name` attribute to
+  the branch condition (e.g., `name="yes"` / `name="no"`).
+- **Intermediate message catch events**: When the process description states "[Actor] shall
+  receive [X]" mid-process (not as the first event), use `<intermediateCatchEvent>` with a
+  `<messageEventDefinition>` child, not a task or start event.
+- **Message flow targeting**: When a message is sent to an actor with no specific receiving
+  element (i.e., the receiving actor has no modeled intermediate event), the `targetRef` of
+  `<messageFlow>` must point to the `<participant>` element of that pool, not a task.
+- **Label positioning**: Include `<signavio:signavioLabel>` with appropriate `align`, `ref`,
+  and coordinate attributes on all gateways, intermediate events, and end events to ensure
+  correct label rendering in Signavio.
+
+## Simplified Example
+### Input Process Description:
+The process contains the following actors: Customer, Claims Officer.
+The process starts with the Customer. The Customer shall submit a claim. The Customer shall transmit the claim to the Claims Officer. The process for the Customer ends.
+The process for the Claims Officer starts upon receiving the claim. The Claims Officer shall examine the claim. The process for the Claims Officer ends with the End event.
+
+### Output (.bpmn Format):
+<?xml version="1.0" encoding="UTF-8"?><definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="19.2.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-2a5d4e96-a02e-4cba-86c8-19fd40a18e9f" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="sid-4777cf43-884d-49c4-a325-9f435a12218a">
+      <extensionElements>
+         <signavio:signavioDiagramMetaData metaKey="revisionid" metaValue="b3dc1b4e1592411f82de7f913634ad06"/>
+      </extensionElements>
+      <participant id="sid-B2B6EA58-DF52-43EC-94FE-1B22C8FD1A46" name="Claims Officer" processRef="sid-ACE8D60B-0F59-400F-A3F5-B62893E8DB49">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-322AF16D-FE70-4452-8C7F-724B98EE0AA1" name="Customer" processRef="sid-CF94AAC3-9459-41E3-80F3-790BF94338E3">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <messageFlow id="sid-BFE3C41A-3C4B-4F9C-AA3C-CA69D40023D3" name="" sourceRef="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF" targetRef="sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+   <process id="sid-ACE8D60B-0F59-400F-A3F5-B62893E8DB49" isClosed="false" isExecutable="false" name="Claims Officer" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-1c12c816-d425-4e1b-a814-92df49f76608">
+         <lane id="sid-B1937EA3-55B5-4049-81FB-213FC0E7D6E4">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1</flowNodeRef>
+            <flowNodeRef>sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30</flowNodeRef>
+            <flowNodeRef>sid-5560DDFB-5A5A-4333-92F6-6458C0D08E80</flowNodeRef>
+         </lane>
+      </laneSet>
+      <task completionQuantity="1" id="sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1" isForCompensation="false" name="examine claim" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-D40D74B8-7983-459A-85CF-ACF1648AA375</incoming>
+         <outgoing>sid-D42745DC-433A-4474-98BF-6E623F7E23D0</outgoing>
+      </task>
+      <startEvent id="sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30" isInterrupting="true" name="Receive claim">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>sid-D40D74B8-7983-459A-85CF-ACF1648AA375</outgoing>
+         <messageEventDefinition id="sid-5b6feddc-f159-4571-83b3-8347ba2d46ce"/>
+      </startEvent>
+      <endEvent id="sid-5560DDFB-5A5A-4333-92F6-6458C0D08E80" name="End">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-D42745DC-433A-4474-98BF-6E623F7E23D0</incoming>
+      </endEvent>
+      <sequenceFlow id="sid-D40D74B8-7983-459A-85CF-ACF1648AA375" name="" sourceRef="sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30" targetRef="sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="sid-D42745DC-433A-4474-98BF-6E623F7E23D0" name="" sourceRef="sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1" targetRef="sid-5560DDFB-5A5A-4333-92F6-6458C0D08E80">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+   </process>
+   <process id="sid-CF94AAC3-9459-41E3-80F3-790BF94338E3" isClosed="false" isExecutable="false" name="Customer" processType="None">
+      <extensionElements/>
+      <laneSet id="sid-ac2acc14-0876-417c-a508-79c4641271bf">
+         <lane id="sid-617B53D5-F03C-40C5-B495-756222F1FEA5">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF</flowNodeRef>
+            <flowNodeRef>sid-18936AFD-782D-4829-A352-D9C21A39C4BF</flowNodeRef>
+            <flowNodeRef>sid-848EF46D-3F52-476E-94F7-0DB1D525B9C3</flowNodeRef>
+         </lane>
+      </laneSet>
+      <task completionQuantity="1" id="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF" isForCompensation="false" name="submit claim" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-71C2C411-8E94-4F14-AC64-B425A973AE39</incoming>
+         <outgoing>sid-6AE1D7F6-3C27-4EE8-86C6-3A73F7B64924</outgoing>
+      </task>
+      <startEvent id="sid-18936AFD-782D-4829-A352-D9C21A39C4BF" name="Start">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <outgoing>sid-71C2C411-8E94-4F14-AC64-B425A973AE39</outgoing>
+      </startEvent>
+      <endEvent id="sid-848EF46D-3F52-476E-94F7-0DB1D525B9C3" name="End">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>sid-6AE1D7F6-3C27-4EE8-86C6-3A73F7B64924</incoming>
+      </endEvent>
+      <sequenceFlow id="sid-6AE1D7F6-3C27-4EE8-86C6-3A73F7B64924" name="" sourceRef="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF" targetRef="sid-848EF46D-3F52-476E-94F7-0DB1D525B9C3">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+      <sequenceFlow id="sid-71C2C411-8E94-4F14-AC64-B425A973AE39" name="" sourceRef="sid-18936AFD-782D-4829-A352-D9C21A39C4BF" targetRef="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </sequenceFlow>
+   </process>
+   <bpmndi:BPMNDiagram id="sid-8314737a-b535-4cb7-af6b-9992f789450d">
+      <bpmndi:BPMNPlane bpmnElement="sid-4777cf43-884d-49c4-a325-9f435a12218a" id="sid-b5a3d800-4fc2-47fe-84a7-2a3dbcf6e02f">
+         <bpmndi:BPMNShape bpmnElement="sid-B2B6EA58-DF52-43EC-94FE-1B22C8FD1A46" id="sid-B2B6EA58-DF52-43EC-94FE-1B22C8FD1A46_gui" isHorizontal="true">
+            <omgdc:Bounds height="159.0" width="600.0" x="120.0" y="100.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-3e81660d-4468-442e-b5d5-11e8d34c43b0">
+               <omgdc:Bounds height="73.28571319580078" width="12.0" x="125.0" y="142.8571434020996"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-322AF16D-FE70-4452-8C7F-724B98EE0AA1" id="sid-322AF16D-FE70-4452-8C7F-724B98EE0AA1_gui" isHorizontal="true">
+            <omgdc:Bounds height="159.0" width="600.0" x="120.0" y="280.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-3e81660d-4468-442e-b5d5-11e8d34c43b0">
+               <omgdc:Bounds height="53.22857666015625" width="12.0" x="125.0" y="332.8857116699219"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-B1937EA3-55B5-4049-81FB-213FC0E7D6E4" id="sid-B1937EA3-55B5-4049-81FB-213FC0E7D6E4_gui" isHorizontal="true">
+            <omgdc:Bounds height="159.0" width="570.0" x="150.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1" id="sid-AF85C918-41BD-4F90-B05E-C2D6A339E6B1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="370.0" y="140.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-3e81660d-4468-442e-b5d5-11e8d34c43b0">
+               <omgdc:Bounds height="12.0" width="74.82857513427734" x="382.5857124328613" y="172.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30" id="sid-9A6C4C69-5DAF-4729-8B16-F34B2435DB30_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="285.0" y="165.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-4f9e567a-a61b-4c20-aeed-2bf0bb2316af">
+               <omgdc:Bounds height="11.0" width="64.3499984741211" x="267.82500076293945" y="146.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-5560DDFB-5A5A-4333-92F6-6458C0D08E80" id="sid-5560DDFB-5A5A-4333-92F6-6458C0D08E80_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="580.0" y="166.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-4f9e567a-a61b-4c20-aeed-2bf0bb2316af">
+               <omgdc:Bounds height="11.0" width="19.092857360839844" x="584.4535713195801" y="196.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-617B53D5-F03C-40C5-B495-756222F1FEA5" id="sid-617B53D5-F03C-40C5-B495-756222F1FEA5_gui" isHorizontal="true">
+            <omgdc:Bounds height="159.0" width="570.0" x="150.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF" id="sid-2DE8F1DC-846F-44AB-A7E8-68E2C84162CF_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="320.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-3e81660d-4468-442e-b5d5-11e8d34c43b0">
+               <omgdc:Bounds height="12.0" width="67.11428833007812" x="266.44285583496094" y="352.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-18936AFD-782D-4829-A352-D9C21A39C4BF" id="sid-18936AFD-782D-4829-A352-D9C21A39C4BF_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="345.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-4f9e567a-a61b-4c20-aeed-2bf0bb2316af">
+               <omgdc:Bounds height="11.0" width="25.45714569091797" x="192.27142715454102" y="377.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-848EF46D-3F52-476E-94F7-0DB1D525B9C3" id="sid-848EF46D-3F52-476E-94F7-0DB1D525B9C3_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="580.0" y="346.0"/>
+            <bpmndi:BPMNLabel labelStyle="sid-4f9e567a-a61b-4c20-aeed-2bf0bb2316af">
+               <omgdc:Bounds height="11.0" width="19.092857360839844" x="584.4535713195801" y="376.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="sid-BFE3C41A-3C4B-4F9C-AA3C-CA69D40023D3" id="sid-BFE3C41A-3C4B-4F9C-AA3C-CA69D40023D3_gui">
+            <omgdi:waypoint x="300.0" y="320.0"/>
+            <omgdi:waypoint x="300.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-D40D74B8-7983-459A-85CF-ACF1648AA375" id="sid-D40D74B8-7983-459A-85CF-ACF1648AA375_gui">
+            <omgdi:waypoint x="315.0" y="180.0"/>
+            <omgdi:waypoint x="370.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-D42745DC-433A-4474-98BF-6E623F7E23D0" id="sid-D42745DC-433A-4474-98BF-6E623F7E23D0_gui">
+            <omgdi:waypoint x="470.0" y="180.0"/>
+            <omgdi:waypoint x="580.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-6AE1D7F6-3C27-4EE8-86C6-3A73F7B64924" id="sid-6AE1D7F6-3C27-4EE8-86C6-3A73F7B64924_gui">
+            <omgdi:waypoint x="350.0" y="360.0"/>
+            <omgdi:waypoint x="580.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-71C2C411-8E94-4F14-AC64-B425A973AE39" id="sid-71C2C411-8E94-4F14-AC64-B425A973AE39_gui">
+            <omgdi:waypoint x="220.0" y="360.0"/>
+            <omgdi:waypoint x="250.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+      <bpmndi:BPMNLabelStyle id="sid-4f9e567a-a61b-4c20-aeed-2bf0bb2316af">
+         <omgdc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="11.0"/>
+      </bpmndi:BPMNLabelStyle>
+      <bpmndi:BPMNLabelStyle id="sid-3e81660d-4468-442e-b5d5-11e8d34c43b0">
+         <omgdc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="12.0"/>
+      </bpmndi:BPMNLabelStyle>
+   </bpmndi:BPMNDiagram>
+</definitions>
+
+# INPUT PROCESS DESCRIPTION TO MODEL
+„[INSERT PROCESS DESCRIPTION]“

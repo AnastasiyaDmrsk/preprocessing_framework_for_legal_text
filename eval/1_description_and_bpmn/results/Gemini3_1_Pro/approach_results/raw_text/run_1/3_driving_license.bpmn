@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:signavio="http://www.signavio.com"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="Signavio Process Editor" exporterVersion="19.2.2"
+             id="sid-main-definition" targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+    <collaboration id="collab_1">
+        <participant id="pool_app" name="Applicant" processRef="proc_app" />
+        <participant id="pool_ms" name="Member State" processRef="proc_ms" />
+        <participant id="pool_com" name="Commission" processRef="proc_com" />
+        <messageFlow id="msg_1" name="" sourceRef="task_ms_11" targetRef="catch_com_1" />
+        <messageFlow id="msg_2" name="" sourceRef="task_ms_13" targetRef="catch_com_2" />
+    </collaboration>
+
+    <!-- Applicant Process -->
+    <process id="proc_app" isClosed="false" isExecutable="false" name="Applicant" processType="None">
+        <laneSet id="laneset_app">
+            <lane id="lane_app">
+                <flowNodeRef>start_app</flowNodeRef>
+                <flowNodeRef>gw_app_s_1</flowNodeRef>
+                <flowNodeRef>task_app_1</flowNodeRef>
+                <flowNodeRef>gw_app_m_1</flowNodeRef>
+                <flowNodeRef>gw_app_s_2</flowNodeRef>
+                <flowNodeRef>task_app_2</flowNodeRef>
+                <flowNodeRef>gw_app_m_2</flowNodeRef>
+                <flowNodeRef>end_app</flowNodeRef>
+            </lane>
+        </laneSet>
+
+        <startEvent id="start_app" name="application for the issuance or renewal of a driving licence">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>seq_app_start</outgoing>
+        </startEvent>
+
+        <exclusiveGateway id="gw_app_s_1" name="" gatewayDirection="Diverging" isMarkerVisible="true">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+            <incoming>seq_app_start</incoming>
+            <outgoing>seq_app_s1_yes</outgoing>
+            <outgoing>seq_app_s1_no</outgoing>
+        </exclusiveGateway>
+
+        <task id="task_app_1" name="undergo a medical examination">
+            <incoming>seq_app_s1_yes</incoming>
+            <outgoing>seq_app_t1_out</outgoing>
+        </task>
+
+        <exclusiveGateway id="gw_app_m_1" name="" gatewayDirection="Converging" isMarkerVisible="true">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+            <incoming>seq_app_t1_out</incoming>
+            <incoming>seq_app_s1_no</incoming>
+            <outgoing>seq_app_m1_out</outgoing>
+        </exclusiveGateway>
+
+        <exclusiveGateway id="gw_app_s_2" name="" gatewayDirection="Diverging" isMarkerVisible="true">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+            <incoming>seq_app_m1_out</incoming>
+            <outgoing>seq_app_s2_yes</outgoing>
+            <outgoing>seq_app_s2_no</outgoing>
+        </exclusiveGateway>
+
+        <task id="task_app_2" name="fill in a self-assessment form">
+            <incoming>seq_app_s2_yes</incoming>
+            <outgoing>seq_app_t2_out</outgoing>
+        </task>
+
+        <exclusiveGateway id="gw_app_m_2" name="" gatewayDirection="Converging" isMarkerVisible="true">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+            <incoming>seq_app_t2_out</incoming>
+            <incoming>seq_app_s2_no</incoming>
+            <outgoing>seq_app_end</outgoing>
+        </exclusiveGateway>
+
+        <endEvent id="end_app" name="End">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>seq_app_end</incoming>
+        </endEvent>
+
+        <sequenceFlow id="seq_app_start" name="" sourceRef="start_app" targetRef="gw_app_s_1" isImmediate="true" />
+        <sequenceFlow id="seq_app_s1_yes" name="yes" sourceRef="gw_app_s_1" targetRef="task_app_1" isImmediate="true" />
+        <sequenceFlow id="seq_app_s1_no" name="no" sourceRef="gw_app_s_1" targetRef="gw_app_m_1" isImmediate="true" />
+        <sequenceFlow id="seq_app_t1_out" name="" sourceRef="task_app_1" targetRef="gw_app_m_1" isImmediate="true" />
+        <sequenceFlow id="seq_app_m1_out" name="" sourceRef="gw_app_m_1" targetRef="gw_app_s_2" isImmediate="true" />
+        <sequenceFlow id="seq_app_s2_yes" name="yes" sourceRef="gw_app_s_2" targetRef="task_app_2" isImmediate="true" />
+        <sequenceFlow id="seq_app_s2_no" name="no" sourceRef="gw_app_s_2" targetRef="gw_app_m_2" isImmediate="true" />
+        <sequenceFlow id="seq_app_t2_out" name="" sourceRef="task_app_2" targetRef="gw_app_m_2" isImmediate="true" />
+        <sequenceFlow id="seq_app_end" name="" sourceRef="gw_app_m_2" targetRef="end_app" isImmediate="true" />
+    </process>
+
+    <!-- Member State Process -->
+    <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+        <laneSet id="laneset_ms">
+            <lane id="lane_ms">
+                <flowNodeRef>start_ms</flowNodeRef>
+                
+                <flowNodeRef>gw_ms_s_1</flowNodeRef>
+                <flowNodeRef>task_ms_1</flowNodeRef>
+                <flowNodeRef>gw_ms_m_1</flowNodeRef>
+                
+                <flowNodeRef>gw_ms_s_2</flowNodeRef>
+                <flowNodeRef>task_ms_2</flowNodeRef>
+                <flowNodeRef>gw_ms_m_2</flowNodeRef>
+                
+                <flowNodeRef>gw_ms_s_3</flowNodeRef>
+                <flowNodeRef>task_ms_3</flowNodeRef>
+                <flowNodeRef>gw_ms_m_3</flowNodeRef>
+                
+                <flowNodeRef>gw_ms_s_4</flowNodeRef>
+                <flowNodeRef>task_ms_4</flowNodeRef>
+                <flowNodeRef>gw_ms_m_4</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_5</flowNodeRef>
+                <flowNodeRef>task_ms_5</flowNodeRef>
+                <flowNodeRef>gw_ms_m_5</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_6</flowNodeRef>
+                <flowNodeRef>task_ms_6</flowNodeRef>
+                <flowNodeRef>gw_ms_m_6</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_7</flowNodeRef>
+                <flowNodeRef>task_ms_7</flowNodeRef>
+                <flowNodeRef>gw_ms_m_7</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_8</flowNodeRef>
+                <flowNodeRef>task_ms_8</flowNodeRef>
+                <flowNodeRef>gw_ms_m_8</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_9</flowNodeRef>
+                <flowNodeRef>task_ms_9</flowNodeRef>
+                <flowNodeRef>gw_ms_m_9</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_10</flowNodeRef>
+                <flowNodeRef>task_ms_10</flowNodeRef>
+                <flowNodeRef>gw_ms_m_10</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_11</flowNodeRef>
+                <flowNodeRef>task_ms_11</flowNodeRef>
+                <flowNodeRef>gw_ms_m_11</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_12</flowNodeRef>
+                <flowNodeRef>task_ms_12</flowNodeRef>
+                <flowNodeRef>gw_ms_m_12</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_13</flowNodeRef>
+                <flowNodeRef>task_ms_13</flowNodeRef>
+                <flowNodeRef>gw_ms_m_13</flowNodeRef>
+
+                <flowNodeRef>gw_ms_s_14</flowNodeRef>
+                <flowNodeRef>task_ms_14</flowNodeRef>
+                <flowNodeRef>gw_ms_m_14</flowNodeRef>
+
+                <flowNodeRef>end_ms</flowNodeRef>
+            </lane>
+        </laneSet>
+
+        <startEvent id="start_ms" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>seq_ms_start</outgoing>
+        </startEvent>
+
+        <!-- Block 1 -->
+        <exclusiveGateway id="gw_ms_s_1" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_start</incoming><outgoing>seq_ms_s1_yes</outgoing><outgoing>seq_ms_s1_no</outgoing></exclusiveGateway>
+        <task id="task_ms_1" name="ensure that applicants undergo a medical examination"><incoming>seq_ms_s1_yes</incoming><outgoing>seq_ms_t1_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_1" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t1_out</incoming><incoming>seq_ms_s1_no</incoming><outgoing>seq_ms_m1_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s1_yes" name="yes" sourceRef="gw_ms_s_1" targetRef="task_ms_1" isImmediate="true" /><sequenceFlow id="seq_ms_s1_no" name="no" sourceRef="gw_ms_s_1" targetRef="gw_ms_m_1" isImmediate="true" /><sequenceFlow id="seq_ms_t1_out" sourceRef="task_ms_1" targetRef="gw_ms_m_1" isImmediate="true" /><sequenceFlow id="seq_ms_m1_out" sourceRef="gw_ms_m_1" targetRef="gw_ms_s_2" isImmediate="true" />
+
+        <!-- Block 2 -->
+        <exclusiveGateway id="gw_ms_s_2" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m1_out</incoming><outgoing>seq_ms_s2_yes</outgoing><outgoing>seq_ms_s2_no</outgoing></exclusiveGateway>
+        <task id="task_ms_2" name="require a medical examination"><incoming>seq_ms_s2_yes</incoming><outgoing>seq_ms_t2_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_2" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t2_out</incoming><incoming>seq_ms_s2_no</incoming><outgoing>seq_ms_m2_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s2_yes" name="yes" sourceRef="gw_ms_s_2" targetRef="task_ms_2" isImmediate="true" /><sequenceFlow id="seq_ms_s2_no" name="no" sourceRef="gw_ms_s_2" targetRef="gw_ms_m_2" isImmediate="true" /><sequenceFlow id="seq_ms_t2_out" sourceRef="task_ms_2" targetRef="gw_ms_m_2" isImmediate="true" /><sequenceFlow id="seq_ms_m2_out" sourceRef="gw_ms_m_2" targetRef="gw_ms_s_3" isImmediate="true" />
+
+        <!-- Block 3 -->
+        <exclusiveGateway id="gw_ms_s_3" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m2_out</incoming><outgoing>seq_ms_s3_yes</outgoing><outgoing>seq_ms_s3_no</outgoing></exclusiveGateway>
+        <task id="task_ms_3" name="require the applicant to fill in a self-assessment form"><incoming>seq_ms_s3_yes</incoming><outgoing>seq_ms_t3_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_3" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t3_out</incoming><incoming>seq_ms_s3_no</incoming><outgoing>seq_ms_m3_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s3_yes" name="yes" sourceRef="gw_ms_s_3" targetRef="task_ms_3" isImmediate="true" /><sequenceFlow id="seq_ms_s3_no" name="no" sourceRef="gw_ms_s_3" targetRef="gw_ms_m_3" isImmediate="true" /><sequenceFlow id="seq_ms_t3_out" sourceRef="task_ms_3" targetRef="gw_ms_m_3" isImmediate="true" /><sequenceFlow id="seq_ms_m3_out" sourceRef="gw_ms_m_3" targetRef="gw_ms_s_4" isImmediate="true" />
+
+        <!-- Block 4 -->
+        <exclusiveGateway id="gw_ms_s_4" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m3_out</incoming><outgoing>seq_ms_s4_yes</outgoing><outgoing>seq_ms_s4_no</outgoing></exclusiveGateway>
+        <task id="task_ms_4" name="establish a national system of assessment of fitness to drive"><incoming>seq_ms_s4_yes</incoming><outgoing>seq_ms_t4_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_4" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t4_out</incoming><incoming>seq_ms_s4_no</incoming><outgoing>seq_ms_m4_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s4_yes" name="yes" sourceRef="gw_ms_s_4" targetRef="task_ms_4" isImmediate="true" /><sequenceFlow id="seq_ms_s4_no" name="no" sourceRef="gw_ms_s_4" targetRef="gw_ms_m_4" isImmediate="true" /><sequenceFlow id="seq_ms_t4_out" sourceRef="task_ms_4" targetRef="gw_ms_m_4" isImmediate="true" /><sequenceFlow id="seq_ms_m4_out" sourceRef="gw_ms_m_4" targetRef="gw_ms_s_5" isImmediate="true" />
+
+        <!-- Block 5 -->
+        <exclusiveGateway id="gw_ms_s_5" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m4_out</incoming><outgoing>seq_ms_s5_yes</outgoing><outgoing>seq_ms_s5_no</outgoing></exclusiveGateway>
+        <task id="task_ms_5" name="provide for appropriate measures to address non-compliance"><incoming>seq_ms_s5_yes</incoming><outgoing>seq_ms_t5_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_5" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t5_out</incoming><incoming>seq_ms_s5_no</incoming><outgoing>seq_ms_m5_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s5_yes" name="yes" sourceRef="gw_ms_s_5" targetRef="task_ms_5" isImmediate="true" /><sequenceFlow id="seq_ms_s5_no" name="no" sourceRef="gw_ms_s_5" targetRef="gw_ms_m_5" isImmediate="true" /><sequenceFlow id="seq_ms_t5_out" sourceRef="task_ms_5" targetRef="gw_ms_m_5" isImmediate="true" /><sequenceFlow id="seq_ms_m5_out" sourceRef="gw_ms_m_5" targetRef="gw_ms_s_6" isImmediate="true" />
+
+        <!-- Block 6 -->
+        <exclusiveGateway id="gw_ms_s_6" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m5_out</incoming><outgoing>seq_ms_s6_yes</outgoing><outgoing>seq_ms_s6_no</outgoing></exclusiveGateway>
+        <task id="task_ms_6" name="apply the national system to monitor"><incoming>seq_ms_s6_yes</incoming><outgoing>seq_ms_t6_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_6" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t6_out</incoming><incoming>seq_ms_s6_no</incoming><outgoing>seq_ms_m6_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s6_yes" name="yes" sourceRef="gw_ms_s_6" targetRef="task_ms_6" isImmediate="true" /><sequenceFlow id="seq_ms_s6_no" name="no" sourceRef="gw_ms_s_6" targetRef="gw_ms_m_6" isImmediate="true" /><sequenceFlow id="seq_ms_t6_out" sourceRef="task_ms_6" targetRef="gw_ms_m_6" isImmediate="true" /><sequenceFlow id="seq_ms_m6_out" sourceRef="gw_ms_m_6" targetRef="gw_ms_s_7" isImmediate="true" />
+
+        <!-- Block 7 -->
+        <exclusiveGateway id="gw_ms_s_7" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m6_out</incoming><outgoing>seq_ms_s7_yes</outgoing><outgoing>seq_ms_s7_no</outgoing></exclusiveGateway>
+        <task id="task_ms_7" name="ensure that the applicant undergoes a medical examination"><incoming>seq_ms_s7_yes</incoming><outgoing>seq_ms_t7_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_7" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t7_out</incoming><incoming>seq_ms_s7_no</incoming><outgoing>seq_ms_m7_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s7_yes" name="yes" sourceRef="gw_ms_s_7" targetRef="task_ms_7" isImmediate="true" /><sequenceFlow id="seq_ms_s7_no" name="no" sourceRef="gw_ms_s_7" targetRef="gw_ms_m_7" isImmediate="true" /><sequenceFlow id="seq_ms_t7_out" sourceRef="task_ms_7" targetRef="gw_ms_m_7" isImmediate="true" /><sequenceFlow id="seq_ms_m7_out" sourceRef="gw_ms_m_7" targetRef="gw_ms_s_8" isImmediate="true" />
+
+        <!-- Block 8 -->
+        <exclusiveGateway id="gw_ms_s_8" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m7_out</incoming><outgoing>seq_ms_s8_yes</outgoing><outgoing>seq_ms_s8_no</outgoing></exclusiveGateway>
+        <task id="task_ms_8" name="take measures to raise awareness"><incoming>seq_ms_s8_yes</incoming><outgoing>seq_ms_t8_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_8" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t8_out</incoming><incoming>seq_ms_s8_no</incoming><outgoing>seq_ms_m8_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s8_yes" name="yes" sourceRef="gw_ms_s_8" targetRef="task_ms_8" isImmediate="true" /><sequenceFlow id="seq_ms_s8_no" name="no" sourceRef="gw_ms_s_8" targetRef="gw_ms_m_8" isImmediate="true" /><sequenceFlow id="seq_ms_t8_out" sourceRef="task_ms_8" targetRef="gw_ms_m_8" isImmediate="true" /><sequenceFlow id="seq_ms_m8_out" sourceRef="gw_ms_m_8" targetRef="gw_ms_s_9" isImmediate="true" />
+
+        <!-- Block 9 -->
+        <exclusiveGateway id="gw_ms_s_9" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m8_out</incoming><outgoing>seq_ms_s9_yes</outgoing><outgoing>seq_ms_s9_no</outgoing></exclusiveGateway>
+        <task id="task_ms_9" name="take measures to improve the knowledge of the health sector"><incoming>seq_ms_s9_yes</incoming><outgoing>seq_ms_t9_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_9" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t9_out</incoming><incoming>seq_ms_s9_no</incoming><outgoing>seq_ms_m9_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s9_yes" name="yes" sourceRef="gw_ms_s_9" targetRef="task_ms_9" isImmediate="true" /><sequenceFlow id="seq_ms_s9_no" name="no" sourceRef="gw_ms_s_9" targetRef="gw_ms_m_9" isImmediate="true" /><sequenceFlow id="seq_ms_t9_out" sourceRef="task_ms_9" targetRef="gw_ms_m_9" isImmediate="true" /><sequenceFlow id="seq_ms_m9_out" sourceRef="gw_ms_m_9" targetRef="gw_ms_s_10" isImmediate="true" />
+
+        <!-- Block 10 -->
+        <exclusiveGateway id="gw_ms_s_10" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m9_out</incoming><outgoing>seq_ms_s10_yes</outgoing><outgoing>seq_ms_s10_no</outgoing></exclusiveGateway>
+        <task id="task_ms_10" name="adopt guidelines for medical practitioners"><incoming>seq_ms_s10_yes</incoming><outgoing>seq_ms_t10_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_10" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t10_out</incoming><incoming>seq_ms_s10_no</incoming><outgoing>seq_ms_m10_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s10_yes" name="yes" sourceRef="gw_ms_s_10" targetRef="task_ms_10" isImmediate="true" /><sequenceFlow id="seq_ms_s10_no" name="no" sourceRef="gw_ms_s_10" targetRef="gw_ms_m_10" isImmediate="true" /><sequenceFlow id="seq_ms_t10_out" sourceRef="task_ms_10" targetRef="gw_ms_m_10" isImmediate="true" /><sequenceFlow id="seq_ms_m10_out" sourceRef="gw_ms_m_10" targetRef="gw_ms_s_11" isImmediate="true" />
+
+        <!-- Block 11 -->
+        <exclusiveGateway id="gw_ms_s_11" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m10_out</incoming><outgoing>seq_ms_s11_yes</outgoing><outgoing>seq_ms_s11_no</outgoing></exclusiveGateway>
+        <task id="task_ms_11" name="notify guidelines adopted to the Commission"><incoming>seq_ms_s11_yes</incoming><outgoing>seq_ms_t11_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_11" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t11_out</incoming><incoming>seq_ms_s11_no</incoming><outgoing>seq_ms_m11_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s11_yes" name="yes" sourceRef="gw_ms_s_11" targetRef="task_ms_11" isImmediate="true" /><sequenceFlow id="seq_ms_s11_no" name="no" sourceRef="gw_ms_s_11" targetRef="gw_ms_m_11" isImmediate="true" /><sequenceFlow id="seq_ms_t11_out" sourceRef="task_ms_11" targetRef="gw_ms_m_11" isImmediate="true" /><sequenceFlow id="seq_ms_m11_out" sourceRef="gw_ms_m_11" targetRef="gw_ms_s_12" isImmediate="true" />
+
+        <!-- Block 12 -->
+        <exclusiveGateway id="gw_ms_s_12" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m11_out</incoming><outgoing>seq_ms_s12_yes</outgoing><outgoing>seq_ms_s12_no</outgoing></exclusiveGateway>
+        <task id="task_ms_12" name="develop public awareness campaigns"><incoming>seq_ms_s12_yes</incoming><outgoing>seq_ms_t12_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_12" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t12_out</incoming><incoming>seq_ms_s12_no</incoming><outgoing>seq_ms_m12_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s12_yes" name="yes" sourceRef="gw_ms_s_12" targetRef="task_ms_12" isImmediate="true" /><sequenceFlow id="seq_ms_s12_no" name="no" sourceRef="gw_ms_s_12" targetRef="gw_ms_m_12" isImmediate="true" /><sequenceFlow id="seq_ms_t12_out" sourceRef="task_ms_12" targetRef="gw_ms_m_12" isImmediate="true" /><sequenceFlow id="seq_ms_m12_out" sourceRef="gw_ms_m_12" targetRef="gw_ms_s_13" isImmediate="true" />
+
+        <!-- Block 13 -->
+        <exclusiveGateway id="gw_ms_s_13" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m12_out</incoming><outgoing>seq_ms_s13_yes</outgoing><outgoing>seq_ms_s13_no</outgoing></exclusiveGateway>
+        <task id="task_ms_13" name="notify any public awareness campaigns developed to the Commission"><incoming>seq_ms_s13_yes</incoming><outgoing>seq_ms_t13_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_13" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t13_out</incoming><incoming>seq_ms_s13_no</incoming><outgoing>seq_ms_m13_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s13_yes" name="yes" sourceRef="gw_ms_s_13" targetRef="task_ms_13" isImmediate="true" /><sequenceFlow id="seq_ms_s13_no" name="no" sourceRef="gw_ms_s_13" targetRef="gw_ms_m_13" isImmediate="true" /><sequenceFlow id="seq_ms_t13_out" sourceRef="task_ms_13" targetRef="gw_ms_m_13" isImmediate="true" /><sequenceFlow id="seq_ms_m13_out" sourceRef="gw_ms_m_13" targetRef="gw_ms_s_14" isImmediate="true" />
+
+        <!-- Block 14 -->
+        <exclusiveGateway id="gw_ms_s_14" gatewayDirection="Diverging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_m13_out</incoming><outgoing>seq_ms_s14_yes</outgoing><outgoing>seq_ms_s14_no</outgoing></exclusiveGateway>
+        <task id="task_ms_14" name="set standards stricter than those set out in Annex III"><incoming>seq_ms_s14_yes</incoming><outgoing>seq_ms_t14_out</outgoing></task>
+        <exclusiveGateway id="gw_ms_m_14" gatewayDirection="Converging" isMarkerVisible="true"><extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements><incoming>seq_ms_t14_out</incoming><incoming>seq_ms_s14_no</incoming><outgoing>seq_ms_m14_out</outgoing></exclusiveGateway>
+        <sequenceFlow id="seq_ms_s14_yes" name="yes" sourceRef="gw_ms_s_14" targetRef="task_ms_14" isImmediate="true" /><sequenceFlow id="seq_ms_s14_no" name="no" sourceRef="gw_ms_s_14" targetRef="gw_ms_m_14" isImmediate="true" /><sequenceFlow id="seq_ms_t14_out" sourceRef="task_ms_14" targetRef="gw_ms_m_14" isImmediate="true" /><sequenceFlow id="seq_ms_m14_out" sourceRef="gw_ms_m_14" targetRef="end_ms" isImmediate="true" />
+
+        <endEvent id="end_ms" name="End">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>seq_ms_m14_out</incoming>
+        </endEvent>
+
+        <sequenceFlow id="seq_ms_start" name="" sourceRef="start_ms" targetRef="gw_ms_s_1" isImmediate="true" />
+    </process>
+
+    <!-- Commission Process -->
+    <process id="proc_com" isClosed="false" isExecutable="false" name="Commission" processType="None">
+        <laneSet id="laneset_com">
+            <lane id="lane_com">
+                <flowNodeRef>start_com</flowNodeRef>
+                <flowNodeRef>catch_com_1</flowNodeRef>
+                <flowNodeRef>task_com_1</flowNodeRef>
+                <flowNodeRef>catch_com_2</flowNodeRef>
+                <flowNodeRef>task_com_2</flowNodeRef>
+                <flowNodeRef>end_com</flowNodeRef>
+            </lane>
+        </laneSet>
+
+        <startEvent id="start_com" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>seq_com_1</outgoing>
+        </startEvent>
+
+        <intermediateCatchEvent id="catch_com_1" name="Receive guidelines adopted">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>seq_com_1</incoming>
+            <outgoing>seq_com_2</outgoing>
+            <messageEventDefinition id="msg_def_1" />
+        </intermediateCatchEvent>
+
+        <task id="task_com_1" name="make available to the other Member States the guidelines adopted">
+            <incoming>seq_com_2</incoming>
+            <outgoing>seq_com_3</outgoing>
+        </task>
+
+        <intermediateCatchEvent id="catch_com_2" name="Receive any public awareness campaigns developed">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>seq_com_3</incoming>
+            <outgoing>seq_com_4</outgoing>
+            <messageEventDefinition id="msg_def_2" />
+        </intermediateCatchEvent>
+
+        <task id="task_com_2" name="make available to the other Member States the information">
+            <incoming>seq_com_4</incoming>
+            <outgoing>seq_com_5</outgoing>
+        </task>
+
+        <endEvent id="end_com" name="End">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>seq_com_5</incoming>
+        </endEvent>
+
+        <sequenceFlow id="seq_com_1" sourceRef="start_com" targetRef="catch_com_1" isImmediate="true" />
+        <sequenceFlow id="seq_com_2" sourceRef="catch_com_1" targetRef="task_com_1" isImmediate="true" />
+        <sequenceFlow id="seq_com_3" sourceRef="task_com_1" targetRef="catch_com_2" isImmediate="true" />
+        <sequenceFlow id="seq_com_4" sourceRef="catch_com_2" targetRef="task_com_2" isImmediate="true" />
+        <sequenceFlow id="seq_com_5" sourceRef="task_com_2" targetRef="end_com" isImmediate="true" />
+    </process>
+
+    <!-- BPMNDiagram (Strict Mapping) -->
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+            <!-- Pools and Lanes -->
+            <bpmndi:BPMNShape bpmnElement="pool_app" id="shape_pool_app" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="4100.0" x="100.0" y="50.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="lane_app" id="shape_lane_app" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="4070.0" x="130.0" y="50.0" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="pool_ms" id="shape_pool_ms" isHorizontal="true">
+                <omgdc:Bounds height="300.0" width="4100.0" x="100.0" y="300.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="lane_ms" id="shape_lane_ms" isHorizontal="true">
+                <omgdc:Bounds height="300.0" width="4070.0" x="130.0" y="300.0" />
+            </bpmndi:BPMNShape>
+
+            <bpmndi:BPMNShape bpmnElement="pool_com" id="shape_pool_com" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="4100.0" x="100.0" y="650.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="lane_com" id="shape_lane_com" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="4070.0" x="130.0" y="650.0" />
+            </bpmndi:BPMNShape>
+
+            <!-- Applicant Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_app" id="shape_start_app">
+                <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="140.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_app_s_1" id="shape_gw_app_s_1">
+                <omgdc:Bounds height="40.0" width="40.0" x="220.0" y="135.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_app_1" id="shape_task_app_1">
+                <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="115.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_app_m_1" id="shape_gw_app_m_1">
+                <omgdc:Bounds height="40.0" width="40.0" x="440.0" y="135.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_app_s_2" id="shape_gw_app_s_2">
+                <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="135.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_app_2" id="shape_task_app_2">
+                <omgdc:Bounds height="80.0" width="100.0" x="580.0" y="115.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_app_m_2" id="shape_gw_app_m_2">
+                <omgdc:Bounds height="40.0" width="40.0" x="720.0" y="135.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_app" id="shape_end_app">
+                <omgdc:Bounds height="28.0" width="28.0" x="780.0" y="141.0" />
+            </bpmndi:BPMNShape>
+
+            <!-- Applicant Edges -->
+            <bpmndi:BPMNEdge bpmnElement="seq_app_start" id="edge_seq_app_start"><omgdi:waypoint x="180.0" y="155.0" /><omgdi:waypoint x="220.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_s1_yes" id="edge_seq_app_s1_yes"><omgdi:waypoint x="260.0" y="155.0" /><omgdi:waypoint x="300.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_s1_no" id="edge_seq_app_s1_no"><omgdi:waypoint x="240.0" y="175.0" /><omgdi:waypoint x="240.0" y="220.0" /><omgdi:waypoint x="460.0" y="220.0" /><omgdi:waypoint x="460.0" y="175.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_t1_out" id="edge_seq_app_t1_out"><omgdi:waypoint x="400.0" y="155.0" /><omgdi:waypoint x="440.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_m1_out" id="edge_seq_app_m1_out"><omgdi:waypoint x="480.0" y="155.0" /><omgdi:waypoint x="500.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_s2_yes" id="edge_seq_app_s2_yes"><omgdi:waypoint x="540.0" y="155.0" /><omgdi:waypoint x="580.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_s2_no" id="edge_seq_app_s2_no"><omgdi:waypoint x="520.0" y="175.0" /><omgdi:waypoint x="520.0" y="220.0" /><omgdi:waypoint x="740.0" y="220.0" /><omgdi:waypoint x="740.0" y="175.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_t2_out" id="edge_seq_app_t2_out"><omgdi:waypoint x="680.0" y="155.0" /><omgdi:waypoint x="720.0" y="155.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_app_end" id="edge_seq_app_end"><omgdi:waypoint x="760.0" y="155.0" /><omgdi:waypoint x="780.0" y="155.0" /></bpmndi:BPMNEdge>
+
+            <!-- Member State Shapes & Edges -->
+            <bpmndi:BPMNShape bpmnElement="start_ms" id="shape_start_ms">
+                <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="410.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_start" id="edge_seq_ms_start"><omgdi:waypoint x="180.0" y="425.0" /><omgdi:waypoint x="220.0" y="425.0" /></bpmndi:BPMNEdge>
+
+            <!-- MS Blocks generator: x_offset = (i-1)*280. GW_S = 220+off, T = 300+off, GW_M = 440+off -->
+            <!-- Block 1 -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_1" id="shape_gw_ms_s_1"><omgdc:Bounds height="40.0" width="40.0" x="220.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_1" id="shape_task_ms_1"><omgdc:Bounds height="80.0" width="100.0" x="300.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_1" id="shape_gw_ms_m_1"><omgdc:Bounds height="40.0" width="40.0" x="440.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s1_yes" id="edge_seq_ms_s1_yes"><omgdi:waypoint x="260.0" y="425.0"/><omgdi:waypoint x="300.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s1_no" id="edge_seq_ms_s1_no"><omgdi:waypoint x="240.0" y="445.0"/><omgdi:waypoint x="240.0" y="500.0"/><omgdi:waypoint x="460.0" y="500.0"/><omgdi:waypoint x="460.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t1_out" id="edge_seq_ms_t1_out"><omgdi:waypoint x="400.0" y="425.0"/><omgdi:waypoint x="440.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m1_out" id="edge_seq_ms_m1_out"><omgdi:waypoint x="480.0" y="425.0"/><omgdi:waypoint x="500.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 2 (offset=280) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_2" id="shape_gw_ms_s_2"><omgdc:Bounds height="40.0" width="40.0" x="500.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_2" id="shape_task_ms_2"><omgdc:Bounds height="80.0" width="100.0" x="580.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_2" id="shape_gw_ms_m_2"><omgdc:Bounds height="40.0" width="40.0" x="720.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s2_yes" id="edge_seq_ms_s2_yes"><omgdi:waypoint x="540.0" y="425.0"/><omgdi:waypoint x="580.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s2_no" id="edge_seq_ms_s2_no"><omgdi:waypoint x="520.0" y="445.0"/><omgdi:waypoint x="520.0" y="500.0"/><omgdi:waypoint x="740.0" y="500.0"/><omgdi:waypoint x="740.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t2_out" id="edge_seq_ms_t2_out"><omgdi:waypoint x="680.0" y="425.0"/><omgdi:waypoint x="720.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m2_out" id="edge_seq_ms_m2_out"><omgdi:waypoint x="760.0" y="425.0"/><omgdi:waypoint x="780.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 3 (offset=560) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_3" id="shape_gw_ms_s_3"><omgdc:Bounds height="40.0" width="40.0" x="780.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_3" id="shape_task_ms_3"><omgdc:Bounds height="80.0" width="100.0" x="860.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_3" id="shape_gw_ms_m_3"><omgdc:Bounds height="40.0" width="40.0" x="1000.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s3_yes" id="edge_seq_ms_s3_yes"><omgdi:waypoint x="820.0" y="425.0"/><omgdi:waypoint x="860.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s3_no" id="edge_seq_ms_s3_no"><omgdi:waypoint x="800.0" y="445.0"/><omgdi:waypoint x="800.0" y="500.0"/><omgdi:waypoint x="1020.0" y="500.0"/><omgdi:waypoint x="1020.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t3_out" id="edge_seq_ms_t3_out"><omgdi:waypoint x="960.0" y="425.0"/><omgdi:waypoint x="1000.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m3_out" id="edge_seq_ms_m3_out"><omgdi:waypoint x="1040.0" y="425.0"/><omgdi:waypoint x="1060.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 4 (offset=840) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_4" id="shape_gw_ms_s_4"><omgdc:Bounds height="40.0" width="40.0" x="1060.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_4" id="shape_task_ms_4"><omgdc:Bounds height="80.0" width="100.0" x="1140.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_4" id="shape_gw_ms_m_4"><omgdc:Bounds height="40.0" width="40.0" x="1280.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s4_yes" id="edge_seq_ms_s4_yes"><omgdi:waypoint x="1100.0" y="425.0"/><omgdi:waypoint x="1140.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s4_no" id="edge_seq_ms_s4_no"><omgdi:waypoint x="1080.0" y="445.0"/><omgdi:waypoint x="1080.0" y="500.0"/><omgdi:waypoint x="1300.0" y="500.0"/><omgdi:waypoint x="1300.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t4_out" id="edge_seq_ms_t4_out"><omgdi:waypoint x="1240.0" y="425.0"/><omgdi:waypoint x="1280.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m4_out" id="edge_seq_ms_m4_out"><omgdi:waypoint x="1320.0" y="425.0"/><omgdi:waypoint x="1340.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 5 (offset=1120) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_5" id="shape_gw_ms_s_5"><omgdc:Bounds height="40.0" width="40.0" x="1340.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_5" id="shape_task_ms_5"><omgdc:Bounds height="80.0" width="100.0" x="1420.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_5" id="shape_gw_ms_m_5"><omgdc:Bounds height="40.0" width="40.0" x="1560.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s5_yes" id="edge_seq_ms_s5_yes"><omgdi:waypoint x="1380.0" y="425.0"/><omgdi:waypoint x="1420.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s5_no" id="edge_seq_ms_s5_no"><omgdi:waypoint x="1360.0" y="445.0"/><omgdi:waypoint x="1360.0" y="500.0"/><omgdi:waypoint x="1580.0" y="500.0"/><omgdi:waypoint x="1580.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t5_out" id="edge_seq_ms_t5_out"><omgdi:waypoint x="1520.0" y="425.0"/><omgdi:waypoint x="1560.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m5_out" id="edge_seq_ms_m5_out"><omgdi:waypoint x="1600.0" y="425.0"/><omgdi:waypoint x="1620.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 6 (offset=1400) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_6" id="shape_gw_ms_s_6"><omgdc:Bounds height="40.0" width="40.0" x="1620.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_6" id="shape_task_ms_6"><omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_6" id="shape_gw_ms_m_6"><omgdc:Bounds height="40.0" width="40.0" x="1840.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s6_yes" id="edge_seq_ms_s6_yes"><omgdi:waypoint x="1660.0" y="425.0"/><omgdi:waypoint x="1700.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s6_no" id="edge_seq_ms_s6_no"><omgdi:waypoint x="1640.0" y="445.0"/><omgdi:waypoint x="1640.0" y="500.0"/><omgdi:waypoint x="1860.0" y="500.0"/><omgdi:waypoint x="1860.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t6_out" id="edge_seq_ms_t6_out"><omgdi:waypoint x="1800.0" y="425.0"/><omgdi:waypoint x="1840.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m6_out" id="edge_seq_ms_m6_out"><omgdi:waypoint x="1880.0" y="425.0"/><omgdi:waypoint x="1900.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 7 (offset=1680) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_7" id="shape_gw_ms_s_7"><omgdc:Bounds height="40.0" width="40.0" x="1900.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_7" id="shape_task_ms_7"><omgdc:Bounds height="80.0" width="100.0" x="1980.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_7" id="shape_gw_ms_m_7"><omgdc:Bounds height="40.0" width="40.0" x="2120.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s7_yes" id="edge_seq_ms_s7_yes"><omgdi:waypoint x="1940.0" y="425.0"/><omgdi:waypoint x="1980.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s7_no" id="edge_seq_ms_s7_no"><omgdi:waypoint x="1920.0" y="445.0"/><omgdi:waypoint x="1920.0" y="500.0"/><omgdi:waypoint x="2140.0" y="500.0"/><omgdi:waypoint x="2140.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t7_out" id="edge_seq_ms_t7_out"><omgdi:waypoint x="2080.0" y="425.0"/><omgdi:waypoint x="2120.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m7_out" id="edge_seq_ms_m7_out"><omgdi:waypoint x="2160.0" y="425.0"/><omgdi:waypoint x="2180.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 8 (offset=1960) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_8" id="shape_gw_ms_s_8"><omgdc:Bounds height="40.0" width="40.0" x="2180.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_8" id="shape_task_ms_8"><omgdc:Bounds height="80.0" width="100.0" x="2260.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_8" id="shape_gw_ms_m_8"><omgdc:Bounds height="40.0" width="40.0" x="2400.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s8_yes" id="edge_seq_ms_s8_yes"><omgdi:waypoint x="2220.0" y="425.0"/><omgdi:waypoint x="2260.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s8_no" id="edge_seq_ms_s8_no"><omgdi:waypoint x="2200.0" y="445.0"/><omgdi:waypoint x="2200.0" y="500.0"/><omgdi:waypoint x="2420.0" y="500.0"/><omgdi:waypoint x="2420.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t8_out" id="edge_seq_ms_t8_out"><omgdi:waypoint x="2360.0" y="425.0"/><omgdi:waypoint x="2400.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m8_out" id="edge_seq_ms_m8_out"><omgdi:waypoint x="2440.0" y="425.0"/><omgdi:waypoint x="2460.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 9 (offset=2240) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_9" id="shape_gw_ms_s_9"><omgdc:Bounds height="40.0" width="40.0" x="2460.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_9" id="shape_task_ms_9"><omgdc:Bounds height="80.0" width="100.0" x="2540.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_9" id="shape_gw_ms_m_9"><omgdc:Bounds height="40.0" width="40.0" x="2680.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s9_yes" id="edge_seq_ms_s9_yes"><omgdi:waypoint x="2500.0" y="425.0"/><omgdi:waypoint x="2540.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s9_no" id="edge_seq_ms_s9_no"><omgdi:waypoint x="2480.0" y="445.0"/><omgdi:waypoint x="2480.0" y="500.0"/><omgdi:waypoint x="2700.0" y="500.0"/><omgdi:waypoint x="2700.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t9_out" id="edge_seq_ms_t9_out"><omgdi:waypoint x="2640.0" y="425.0"/><omgdi:waypoint x="2680.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m9_out" id="edge_seq_ms_m9_out"><omgdi:waypoint x="2720.0" y="425.0"/><omgdi:waypoint x="2740.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 10 (offset=2520) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_10" id="shape_gw_ms_s_10"><omgdc:Bounds height="40.0" width="40.0" x="2740.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_10" id="shape_task_ms_10"><omgdc:Bounds height="80.0" width="100.0" x="2820.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_10" id="shape_gw_ms_m_10"><omgdc:Bounds height="40.0" width="40.0" x="2960.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s10_yes" id="edge_seq_ms_s10_yes"><omgdi:waypoint x="2780.0" y="425.0"/><omgdi:waypoint x="2820.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s10_no" id="edge_seq_ms_s10_no"><omgdi:waypoint x="2760.0" y="445.0"/><omgdi:waypoint x="2760.0" y="500.0"/><omgdi:waypoint x="2980.0" y="500.0"/><omgdi:waypoint x="2980.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t10_out" id="edge_seq_ms_t10_out"><omgdi:waypoint x="2920.0" y="425.0"/><omgdi:waypoint x="2960.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m10_out" id="edge_seq_ms_m10_out"><omgdi:waypoint x="3000.0" y="425.0"/><omgdi:waypoint x="3020.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 11 (offset=2800) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_11" id="shape_gw_ms_s_11"><omgdc:Bounds height="40.0" width="40.0" x="3020.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_11" id="shape_task_ms_11"><omgdc:Bounds height="80.0" width="100.0" x="3100.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_11" id="shape_gw_ms_m_11"><omgdc:Bounds height="40.0" width="40.0" x="3240.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s11_yes" id="edge_seq_ms_s11_yes"><omgdi:waypoint x="3060.0" y="425.0"/><omgdi:waypoint x="3100.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s11_no" id="edge_seq_ms_s11_no"><omgdi:waypoint x="3040.0" y="445.0"/><omgdi:waypoint x="3040.0" y="500.0"/><omgdi:waypoint x="3260.0" y="500.0"/><omgdi:waypoint x="3260.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t11_out" id="edge_seq_ms_t11_out"><omgdi:waypoint x="3200.0" y="425.0"/><omgdi:waypoint x="3240.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m11_out" id="edge_seq_ms_m11_out"><omgdi:waypoint x="3280.0" y="425.0"/><omgdi:waypoint x="3300.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 12 (offset=3080) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_12" id="shape_gw_ms_s_12"><omgdc:Bounds height="40.0" width="40.0" x="3300.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_12" id="shape_task_ms_12"><omgdc:Bounds height="80.0" width="100.0" x="3380.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_12" id="shape_gw_ms_m_12"><omgdc:Bounds height="40.0" width="40.0" x="3520.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s12_yes" id="edge_seq_ms_s12_yes"><omgdi:waypoint x="3340.0" y="425.0"/><omgdi:waypoint x="3380.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s12_no" id="edge_seq_ms_s12_no"><omgdi:waypoint x="3320.0" y="445.0"/><omgdi:waypoint x="3320.0" y="500.0"/><omgdi:waypoint x="3540.0" y="500.0"/><omgdi:waypoint x="3540.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t12_out" id="edge_seq_ms_t12_out"><omgdi:waypoint x="3480.0" y="425.0"/><omgdi:waypoint x="3520.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m12_out" id="edge_seq_ms_m12_out"><omgdi:waypoint x="3560.0" y="425.0"/><omgdi:waypoint x="3580.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 13 (offset=3360) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_13" id="shape_gw_ms_s_13"><omgdc:Bounds height="40.0" width="40.0" x="3580.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_13" id="shape_task_ms_13"><omgdc:Bounds height="80.0" width="100.0" x="3660.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_13" id="shape_gw_ms_m_13"><omgdc:Bounds height="40.0" width="40.0" x="3800.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s13_yes" id="edge_seq_ms_s13_yes"><omgdi:waypoint x="3620.0" y="425.0"/><omgdi:waypoint x="3660.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s13_no" id="edge_seq_ms_s13_no"><omgdi:waypoint x="3600.0" y="445.0"/><omgdi:waypoint x="3600.0" y="500.0"/><omgdi:waypoint x="3820.0" y="500.0"/><omgdi:waypoint x="3820.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t13_out" id="edge_seq_ms_t13_out"><omgdi:waypoint x="3760.0" y="425.0"/><omgdi:waypoint x="3800.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m13_out" id="edge_seq_ms_m13_out"><omgdi:waypoint x="3840.0" y="425.0"/><omgdi:waypoint x="3860.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- Block 14 (offset=3640) -->
+            <bpmndi:BPMNShape bpmnElement="gw_ms_s_14" id="shape_gw_ms_s_14"><omgdc:Bounds height="40.0" width="40.0" x="3860.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_ms_14" id="shape_task_ms_14"><omgdc:Bounds height="80.0" width="100.0" x="3940.0" y="385.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw_ms_m_14" id="shape_gw_ms_m_14"><omgdc:Bounds height="40.0" width="40.0" x="4080.0" y="405.0" /></bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s14_yes" id="edge_seq_ms_s14_yes"><omgdi:waypoint x="3900.0" y="425.0"/><omgdi:waypoint x="3940.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_s14_no" id="edge_seq_ms_s14_no"><omgdi:waypoint x="3880.0" y="445.0"/><omgdi:waypoint x="3880.0" y="500.0"/><omgdi:waypoint x="4100.0" y="500.0"/><omgdi:waypoint x="4100.0" y="445.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_t14_out" id="edge_seq_ms_t14_out"><omgdi:waypoint x="4040.0" y="425.0"/><omgdi:waypoint x="4080.0" y="425.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_ms_m14_out" id="edge_seq_ms_m14_out"><omgdi:waypoint x="4120.0" y="425.0"/><omgdi:waypoint x="4140.0" y="425.0"/></bpmndi:BPMNEdge>
+
+            <!-- End MS -->
+            <bpmndi:BPMNShape bpmnElement="end_ms" id="shape_end_ms">
+                <omgdc:Bounds height="28.0" width="28.0" x="4140.0" y="411.0" />
+            </bpmndi:BPMNShape>
+
+            <!-- Commission Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_com" id="shape_start_com">
+                <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="770.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_com_1" id="shape_catch_com_1">
+                <omgdc:Bounds height="30.0" width="30.0" x="3135.0" y="770.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_com_1" id="shape_task_com_1">
+                <omgdc:Bounds height="80.0" width="100.0" x="3200.0" y="745.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_com_2" id="shape_catch_com_2">
+                <omgdc:Bounds height="30.0" width="30.0" x="3695.0" y="770.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="task_com_2" id="shape_task_com_2">
+                <omgdc:Bounds height="80.0" width="100.0" x="3780.0" y="745.0" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_com" id="shape_end_com">
+                <omgdc:Bounds height="28.0" width="28.0" x="3920.0" y="771.0" />
+            </bpmndi:BPMNShape>
+
+            <!-- Commission Edges -->
+            <bpmndi:BPMNEdge bpmnElement="seq_com_1" id="edge_seq_com_1"><omgdi:waypoint x="180.0" y="785.0" /><omgdi:waypoint x="3135.0" y="785.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_com_2" id="edge_seq_com_2"><omgdi:waypoint x="3165.0" y="785.0" /><omgdi:waypoint x="3200.0" y="785.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_com_3" id="edge_seq_com_3"><omgdi:waypoint x="3300.0" y="785.0" /><omgdi:waypoint x="3695.0" y="785.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_com_4" id="edge_seq_com_4"><omgdi:waypoint x="3725.0" y="785.0" /><omgdi:waypoint x="3780.0" y="785.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="seq_com_5" id="edge_seq_com_5"><omgdi:waypoint x="3880.0" y="785.0" /><omgdi:waypoint x="3920.0" y="785.0" /></bpmndi:BPMNEdge>
+
+            <!-- Message Flows -->
+            <bpmndi:BPMNEdge bpmnElement="msg_1" id="edge_msg_1"><omgdi:waypoint x="3150.0" y="465.0" /><omgdi:waypoint x="3150.0" y="770.0" /></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="msg_2" id="edge_msg_2"><omgdi:waypoint x="3710.0" y="465.0" /><omgdi:waypoint x="3710.0" y="770.0" /></bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

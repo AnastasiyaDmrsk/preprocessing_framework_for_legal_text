@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-nis2-process" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_1">
+      <participant id="part_ca" name="Competent Authority" processRef="proc_ca" />
+      <participant id="part_eie" name="Essential and Important Entity" processRef="proc_eie" />
+      <participant id="part_tsp" name="Trust Service Provider" processRef="proc_tsp" />
+      <participant id="part_csirt_ca" name="CSIRT or Competent Authority" processRef="proc_csirt_ca" />
+      <participant id="part_csirt" name="CSIRT" processRef="proc_csirt" />
+      <participant id="part_csirt_ca_spoc" name="CSIRT or Competent Authority or Single Point of Contact" processRef="proc_csirt_ca_spoc" />
+      <participant id="part_spoc" name="Single Point of Contact" processRef="proc_spoc" />
+      <participant id="part_enisa" name="ENISA" processRef="proc_enisa" />
+      <participant id="part_comm" name="Commission" processRef="proc_comm" />
+      <participant id="part_cg" name="Cooperation Group" processRef="proc_cg" />
+
+      <messageFlow id="mf1" sourceRef="eie_t1" targetRef="part_csirt_ca" />
+      <messageFlow id="mf2" sourceRef="eie_t5" targetRef="part_csirt_ca" />
+      <messageFlow id="mf3" sourceRef="eie_t6" targetRef="part_csirt_ca" />
+      <messageFlow id="mf4" sourceRef="eie_t7" targetRef="part_csirt_ca" />
+      <messageFlow id="mf5" sourceRef="eie_t8" targetRef="part_csirt_ca" />
+      <messageFlow id="mf6" sourceRef="tsp_t1" targetRef="part_csirt_ca" />
+      <messageFlow id="mf7" sourceRef="csirt_ca_t3" targetRef="eie_catch" />
+      <messageFlow id="mf8" sourceRef="csirt_ca_t2" targetRef="part_spoc" />
+      <messageFlow id="mf9" sourceRef="csirt_ca_spoc_t1" targetRef="part_enisa" />
+      <messageFlow id="mf10" sourceRef="spoc_t2" targetRef="part_enisa" />
+      <messageFlow id="mf11" sourceRef="enisa_t2" targetRef="part_cg" />
+      <messageFlow id="mf12" sourceRef="comm_t4" targetRef="part_cg" />
+      <messageFlow id="mf13" sourceRef="cg_t1" targetRef="part_comm" />
+   </collaboration>
+
+   <process id="proc_ca" isExecutable="false" name="Competent Authority">
+      <startEvent id="ca_start" name="Start" />
+      <task id="ca_t1" name="ensure that entities notify CSIRT of significant incidents" />
+      <task id="ca_t2" name="ensure that entities report information enabling determination of cross-border impact" />
+      <exclusiveGateway gatewayDirection="Diverging" id="ca_x1_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="ca_t3" name="ensure that competent authority forwards notification to CSIRT upon receipt" />
+      <exclusiveGateway gatewayDirection="Converging" id="ca_x1_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="ca_x2_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="ca_t4" name="forward the notification to the CSIRT" />
+      <exclusiveGateway gatewayDirection="Converging" id="ca_x2_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="ca_x3_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="ca_t5" name="ensure that single points of contact are provided with information" />
+      <exclusiveGateway gatewayDirection="Converging" id="ca_x3_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="ca_x4_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="ca_t6" name="ensure that entities communicate measures to recipients affected" />
+      <exclusiveGateway gatewayDirection="Converging" id="ca_x4_merge" isMarkerVisible="true" />
+      
+      <parallelGateway gatewayDirection="Diverging" id="ca_p_split" />
+      <task id="ca_t7_1" name="ensure that entities submit early warning to CSIRT" />
+      <task id="ca_t7_2" name="ensure that entities submit incident notification to CSIRT" />
+      <task id="ca_t7_3" name="ensure that entities submit intermediate report to CSIRT" />
+      <task id="ca_t7_4" name="ensure that entities submit final report to CSIRT" />
+      <task id="ca_t7_5" name="ensure that entities provide progress report and final report for ongoing incidents" />
+      <parallelGateway gatewayDirection="Converging" id="ca_p_merge" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="ca_x5_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="ca_t8" name="cooperate with the CSIRT on guidance" />
+      <exclusiveGateway gatewayDirection="Converging" id="ca_x5_merge" isMarkerVisible="true" />
+      <endEvent id="ca_end" name="End">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="35.0"/></extensionElements>
+      </endEvent>
+
+      <sequenceFlow id="ca_sf1" isImmediate="true" sourceRef="ca_start" targetRef="ca_t1" />
+      <sequenceFlow id="ca_sf2" isImmediate="true" sourceRef="ca_t1" targetRef="ca_t2" />
+      <sequenceFlow id="ca_sf3" isImmediate="true" sourceRef="ca_t2" targetRef="ca_x1_split" />
+      <sequenceFlow id="ca_sf4" isImmediate="true" name="entities notify competent authority of significant incident" sourceRef="ca_x1_split" targetRef="ca_t3" />
+      <sequenceFlow id="ca_sf5" isImmediate="true" name="no" sourceRef="ca_x1_split" targetRef="ca_x1_merge" />
+      <sequenceFlow id="ca_sf6" isImmediate="true" sourceRef="ca_t3" targetRef="ca_x1_merge" />
+      
+      <sequenceFlow id="ca_sf7" isImmediate="true" sourceRef="ca_x1_merge" targetRef="ca_x2_split" />
+      <sequenceFlow id="ca_sf8" isImmediate="true" name="the entities concerned notify the competent authority" sourceRef="ca_x2_split" targetRef="ca_t4" />
+      <sequenceFlow id="ca_sf9" isImmediate="true" name="no" sourceRef="ca_x2_split" targetRef="ca_x2_merge" />
+      <sequenceFlow id="ca_sf10" isImmediate="true" sourceRef="ca_t4" targetRef="ca_x2_merge" />
+      
+      <sequenceFlow id="ca_sf11" isImmediate="true" sourceRef="ca_x2_merge" targetRef="ca_x3_split" />
+      <sequenceFlow id="ca_sf12" isImmediate="true" name="in the case of a cross-border or cross-sectoral significant incident" sourceRef="ca_x3_split" targetRef="ca_t5" />
+      <sequenceFlow id="ca_sf13" isImmediate="true" name="no" sourceRef="ca_x3_split" targetRef="ca_x3_merge" />
+      <sequenceFlow id="ca_sf14" isImmediate="true" sourceRef="ca_t5" targetRef="ca_x3_merge" />
+
+      <sequenceFlow id="ca_sf15" isImmediate="true" sourceRef="ca_x3_merge" targetRef="ca_x4_split" />
+      <sequenceFlow id="ca_sf16" isImmediate="true" name="applicable" sourceRef="ca_x4_split" targetRef="ca_t6" />
+      <sequenceFlow id="ca_sf17" isImmediate="true" name="no" sourceRef="ca_x4_split" targetRef="ca_x4_merge" />
+      <sequenceFlow id="ca_sf18" isImmediate="true" sourceRef="ca_t6" targetRef="ca_x4_merge" />
+      
+      <sequenceFlow id="ca_sf19" isImmediate="true" sourceRef="ca_x4_merge" targetRef="ca_p_split" />
+      <sequenceFlow id="ca_sf20" isImmediate="true" sourceRef="ca_p_split" targetRef="ca_t7_1" />
+      <sequenceFlow id="ca_sf21" isImmediate="true" sourceRef="ca_p_split" targetRef="ca_t7_2" />
+      <sequenceFlow id="ca_sf22" isImmediate="true" sourceRef="ca_p_split" targetRef="ca_t7_3" />
+      <sequenceFlow id="ca_sf23" isImmediate="true" sourceRef="ca_p_split" targetRef="ca_t7_4" />
+      <sequenceFlow id="ca_sf24" isImmediate="true" sourceRef="ca_p_split" targetRef="ca_t7_5" />
+      <sequenceFlow id="ca_sf25" isImmediate="true" sourceRef="ca_t7_1" targetRef="ca_p_merge" />
+      <sequenceFlow id="ca_sf26" isImmediate="true" sourceRef="ca_t7_2" targetRef="ca_p_merge" />
+      <sequenceFlow id="ca_sf27" isImmediate="true" sourceRef="ca_t7_3" targetRef="ca_p_merge" />
+      <sequenceFlow id="ca_sf28" isImmediate="true" sourceRef="ca_t7_4" targetRef="ca_p_merge" />
+      <sequenceFlow id="ca_sf29" isImmediate="true" sourceRef="ca_t7_5" targetRef="ca_p_merge" />
+
+      <sequenceFlow id="ca_sf30" isImmediate="true" sourceRef="ca_p_merge" targetRef="ca_x5_split" />
+      <sequenceFlow id="ca_sf31" isImmediate="true" name="CSIRT is not the initial recipient and upon request" sourceRef="ca_x5_split" targetRef="ca_t8" />
+      <sequenceFlow id="ca_sf32" isImmediate="true" name="no" sourceRef="ca_x5_split" targetRef="ca_x5_merge" />
+      <sequenceFlow id="ca_sf33" isImmediate="true" sourceRef="ca_t8" targetRef="ca_x5_merge" />
+      <sequenceFlow id="ca_sf34" isImmediate="true" sourceRef="ca_x5_merge" targetRef="ca_end" />
+   </process>
+
+   <process id="proc_eie" isExecutable="false" name="Essential and Important Entity">
+      <startEvent id="eie_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x1_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t1" name="notify the CSIRT or the competent authority" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x1_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x2_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t2" name="notify the recipients of their services" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x2_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x3_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t3" name="report any information" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x3_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x4_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t4" name="communicate to the recipients any measures or remedies" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x4_merge" isMarkerVisible="true" />
+
+      <task id="eie_t5" name="submit to the CSIRT or the competent authority an early warning" />
+      <task id="eie_t6" name="submit to the CSIRT or the competent authority an incident notification" />
+      
+      <intermediateCatchEvent id="eie_catch" name="receiving the request of a CSIRT or the competent authority">
+         <messageEventDefinition id="eie_catch_def" />
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </intermediateCatchEvent>
+      
+      <task id="eie_t7" name="submit an intermediate report on relevant status updates" />
+      <task id="eie_t8" name="submit to the CSIRT or the competent authority a final report" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x5_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t9" name="provide a progress report at the time of submission of the final report" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x5_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x6_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t10" name="request additional technical support" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x6_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="eie_x7_split" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+      </exclusiveGateway>
+      <task id="eie_t11" name="inform the public about the significant incident" />
+      <exclusiveGateway gatewayDirection="Converging" id="eie_x7_merge" isMarkerVisible="true" />
+
+      <endEvent id="eie_end" name="End">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="35.0"/></extensionElements>
+      </endEvent>
+
+      <sequenceFlow id="eie_sf1" isImmediate="true" sourceRef="eie_start" targetRef="eie_x1_split" />
+      <sequenceFlow id="eie_sf2" isImmediate="true" name="true" sourceRef="eie_x1_split" targetRef="eie_t1" />
+      <sequenceFlow id="eie_sf3" isImmediate="true" name="no" sourceRef="eie_x1_split" targetRef="eie_x1_merge" />
+      <sequenceFlow id="eie_sf4" isImmediate="true" sourceRef="eie_t1" targetRef="eie_x1_merge" />
+      
+      <sequenceFlow id="eie_sf5" isImmediate="true" sourceRef="eie_x1_merge" targetRef="eie_x2_split" />
+      <sequenceFlow id="eie_sf6" isImmediate="true" name="true" sourceRef="eie_x2_split" targetRef="eie_t2" />
+      <sequenceFlow id="eie_sf7" isImmediate="true" name="no" sourceRef="eie_x2_split" targetRef="eie_x2_merge" />
+      <sequenceFlow id="eie_sf8" isImmediate="true" sourceRef="eie_t2" targetRef="eie_x2_merge" />
+
+      <sequenceFlow id="eie_sf9" isImmediate="true" sourceRef="eie_x2_merge" targetRef="eie_x3_split" />
+      <sequenceFlow id="eie_sf10" isImmediate="true" name="to determine any cross-border impact" sourceRef="eie_x3_split" targetRef="eie_t3" />
+      <sequenceFlow id="eie_sf11" isImmediate="true" name="no" sourceRef="eie_x3_split" targetRef="eie_x3_merge" />
+      <sequenceFlow id="eie_sf12" isImmediate="true" sourceRef="eie_t3" targetRef="eie_x3_merge" />
+
+      <sequenceFlow id="eie_sf13" isImmediate="true" sourceRef="eie_x3_merge" targetRef="eie_x4_split" />
+      <sequenceFlow id="eie_sf14" isImmediate="true" name="where applicable" sourceRef="eie_x4_split" targetRef="eie_t4" />
+      <sequenceFlow id="eie_sf15" isImmediate="true" name="no" sourceRef="eie_x4_split" targetRef="eie_x4_merge" />
+      <sequenceFlow id="eie_sf16" isImmediate="true" sourceRef="eie_t4" targetRef="eie_x4_merge" />
+
+      <sequenceFlow id="eie_sf17" isImmediate="true" sourceRef="eie_x4_merge" targetRef="eie_t5" />
+      <sequenceFlow id="eie_sf18" isImmediate="true" sourceRef="eie_t5" targetRef="eie_t6" />
+      <sequenceFlow id="eie_sf19" isImmediate="true" sourceRef="eie_t6" targetRef="eie_catch" />
+      <sequenceFlow id="eie_sf20" isImmediate="true" sourceRef="eie_catch" targetRef="eie_t7" />
+      <sequenceFlow id="eie_sf21" isImmediate="true" sourceRef="eie_t7" targetRef="eie_t8" />
+      <sequenceFlow id="eie_sf22" isImmediate="true" sourceRef="eie_t8" targetRef="eie_x5_split" />
+
+      <sequenceFlow id="eie_sf23" isImmediate="true" name="in the event of an ongoing incident" sourceRef="eie_x5_split" targetRef="eie_t9" />
+      <sequenceFlow id="eie_sf24" isImmediate="true" name="no" sourceRef="eie_x5_split" targetRef="eie_x5_merge" />
+      <sequenceFlow id="eie_sf25" isImmediate="true" sourceRef="eie_t9" targetRef="eie_x5_merge" />
+
+      <sequenceFlow id="eie_sf26" isImmediate="true" sourceRef="eie_x5_merge" targetRef="eie_x6_split" />
+      <sequenceFlow id="eie_sf27" isImmediate="true" name="required" sourceRef="eie_x6_split" targetRef="eie_t10" />
+      <sequenceFlow id="eie_sf28" isImmediate="true" name="no" sourceRef="eie_x6_split" targetRef="eie_x6_merge" />
+      <sequenceFlow id="eie_sf29" isImmediate="true" sourceRef="eie_t10" targetRef="eie_x6_merge" />
+
+      <sequenceFlow id="eie_sf30" isImmediate="true" sourceRef="eie_x6_merge" targetRef="eie_x7_split" />
+      <sequenceFlow id="eie_sf31" isImmediate="true" name="where public awareness is necessary" sourceRef="eie_x7_split" targetRef="eie_t11" />
+      <sequenceFlow id="eie_sf32" isImmediate="true" name="no" sourceRef="eie_x7_split" targetRef="eie_x7_merge" />
+      <sequenceFlow id="eie_sf33" isImmediate="true" sourceRef="eie_t11" targetRef="eie_x7_merge" />
+      <sequenceFlow id="eie_sf34" isImmediate="true" sourceRef="eie_x7_merge" targetRef="eie_end" />
+   </process>
+
+   <process id="proc_tsp" isExecutable="false" name="Trust Service Provider">
+      <startEvent id="tsp_start" name="Start" />
+      <task id="tsp_t1" name="notify the CSIRT or the competent authority with regard to significant incidents" />
+      <exclusiveGateway gatewayDirection="Diverging" id="tsp_x1_split" isMarkerVisible="true" />
+      <task id="tsp_t2" name="request guidance or operational advice" />
+      <exclusiveGateway gatewayDirection="Converging" id="tsp_x1_merge" isMarkerVisible="true" />
+      <endEvent id="tsp_end" name="End" />
+
+      <sequenceFlow id="tsp_sf1" isImmediate="true" sourceRef="tsp_start" targetRef="tsp_t1" />
+      <sequenceFlow id="tsp_sf2" isImmediate="true" sourceRef="tsp_t1" targetRef="tsp_x1_split" />
+      <sequenceFlow id="tsp_sf3" isImmediate="true" name="required" sourceRef="tsp_x1_split" targetRef="tsp_t2" />
+      <sequenceFlow id="tsp_sf4" isImmediate="true" name="no" sourceRef="tsp_x1_split" targetRef="tsp_x1_merge" />
+      <sequenceFlow id="tsp_sf5" isImmediate="true" sourceRef="tsp_t2" targetRef="tsp_x1_merge" />
+      <sequenceFlow id="tsp_sf6" isImmediate="true" sourceRef="tsp_x1_merge" targetRef="tsp_end" />
+   </process>
+
+   <process id="proc_csirt_ca" isExecutable="false" name="CSIRT or Competent Authority">
+      <startEvent id="csirt_ca_start" name="Start" />
+      <task id="csirt_ca_t1" name="determine any cross-border impact of the incident" />
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x1_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t2" name="provide relevant information to Single Point of Contact" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x1_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x2_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t3" name="request an intermediate report on relevant status updates" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x2_merge" isMarkerVisible="true" />
+
+      <task id="csirt_ca_t4" name="provide a response to the notifying entity including initial feedback" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x3_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t5" name="provide guidance or operational advice" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x3_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x4_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t6" name="provide guidance on reporting the significant incident to law enforcement" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x4_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x5_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t7" name="consult the entity" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x5_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x6_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t8" name="inform the public about the significant incident" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x6_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x7_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t9" name="require the entity to inform the public about the significant incident" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x7_merge" isMarkerVisible="true" />
+
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_x8_split" isMarkerVisible="true" />
+      <task id="csirt_ca_t10" name="request to forward notifications to the single points of contact" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_x8_merge" isMarkerVisible="true" />
+
+      <task id="csirt_ca_t11" name="provide to the competent authorities information about significant incidents" />
+      <endEvent id="csirt_ca_end" name="End" />
+
+      <sequenceFlow id="csirt_ca_sf1" isImmediate="true" sourceRef="csirt_ca_start" targetRef="csirt_ca_t1" />
+      <sequenceFlow id="csirt_ca_sf2" isImmediate="true" sourceRef="csirt_ca_t1" targetRef="csirt_ca_x1_split" />
+      <sequenceFlow id="csirt_ca_sf3" isImmediate="true" name="in the case of a cross-border or cross-sectoral significant incident" sourceRef="csirt_ca_x1_split" targetRef="csirt_ca_t2" />
+      <sequenceFlow id="csirt_ca_sf4" isImmediate="true" name="no" sourceRef="csirt_ca_x1_split" targetRef="csirt_ca_x1_merge" />
+      <sequenceFlow id="csirt_ca_sf5" isImmediate="true" sourceRef="csirt_ca_t2" targetRef="csirt_ca_x1_merge" />
+      
+      <sequenceFlow id="csirt_ca_sf6" isImmediate="true" sourceRef="csirt_ca_x1_merge" targetRef="csirt_ca_x2_split" />
+      <sequenceFlow id="csirt_ca_sf7" isImmediate="true" name="required" sourceRef="csirt_ca_x2_split" targetRef="csirt_ca_t3" />
+      <sequenceFlow id="csirt_ca_sf8" isImmediate="true" name="no" sourceRef="csirt_ca_x2_split" targetRef="csirt_ca_x2_merge" />
+      <sequenceFlow id="csirt_ca_sf9" isImmediate="true" sourceRef="csirt_ca_t3" targetRef="csirt_ca_x2_merge" />
+
+      <sequenceFlow id="csirt_ca_sf10" isImmediate="true" sourceRef="csirt_ca_x2_merge" targetRef="csirt_ca_t4" />
+      <sequenceFlow id="csirt_ca_sf11" isImmediate="true" sourceRef="csirt_ca_t4" targetRef="csirt_ca_x3_split" />
+      
+      <sequenceFlow id="csirt_ca_sf12" isImmediate="true" name="upon request of the notifying entity" sourceRef="csirt_ca_x3_split" targetRef="csirt_ca_t5" />
+      <sequenceFlow id="csirt_ca_sf13" isImmediate="true" name="no" sourceRef="csirt_ca_x3_split" targetRef="csirt_ca_x3_merge" />
+      <sequenceFlow id="csirt_ca_sf14" isImmediate="true" sourceRef="csirt_ca_t5" targetRef="csirt_ca_x3_merge" />
+
+      <sequenceFlow id="csirt_ca_sf15" isImmediate="true" sourceRef="csirt_ca_x3_merge" targetRef="csirt_ca_x4_split" />
+      <sequenceFlow id="csirt_ca_sf16" isImmediate="true" name="suspected to be of criminal nature" sourceRef="csirt_ca_x4_split" targetRef="csirt_ca_t6" />
+      <sequenceFlow id="csirt_ca_sf17" isImmediate="true" name="no" sourceRef="csirt_ca_x4_split" targetRef="csirt_ca_x4_merge" />
+      <sequenceFlow id="csirt_ca_sf18" isImmediate="true" sourceRef="csirt_ca_t6" targetRef="csirt_ca_x4_merge" />
+
+      <sequenceFlow id="csirt_ca_sf19" isImmediate="true" sourceRef="csirt_ca_x4_merge" targetRef="csirt_ca_x5_split" />
+      <sequenceFlow id="csirt_ca_sf20" isImmediate="true" name="where public awareness is necessary" sourceRef="csirt_ca_x5_split" targetRef="csirt_ca_t7" />
+      <sequenceFlow id="csirt_ca_sf21" isImmediate="true" name="no" sourceRef="csirt_ca_x5_split" targetRef="csirt_ca_x5_merge" />
+      <sequenceFlow id="csirt_ca_sf22" isImmediate="true" sourceRef="csirt_ca_t7" targetRef="csirt_ca_x5_merge" />
+
+      <sequenceFlow id="csirt_ca_sf23" isImmediate="true" sourceRef="csirt_ca_x5_merge" targetRef="csirt_ca_x6_split" />
+      <sequenceFlow id="csirt_ca_sf24" isImmediate="true" name="where public awareness is necessary" sourceRef="csirt_ca_x6_split" targetRef="csirt_ca_t8" />
+      <sequenceFlow id="csirt_ca_sf25" isImmediate="true" name="no" sourceRef="csirt_ca_x6_split" targetRef="csirt_ca_x6_merge" />
+      <sequenceFlow id="csirt_ca_sf26" isImmediate="true" sourceRef="csirt_ca_t8" targetRef="csirt_ca_x6_merge" />
+
+      <sequenceFlow id="csirt_ca_sf27" isImmediate="true" sourceRef="csirt_ca_x6_merge" targetRef="csirt_ca_x7_split" />
+      <sequenceFlow id="csirt_ca_sf28" isImmediate="true" name="where public awareness is necessary" sourceRef="csirt_ca_x7_split" targetRef="csirt_ca_t9" />
+      <sequenceFlow id="csirt_ca_sf29" isImmediate="true" name="no" sourceRef="csirt_ca_x7_split" targetRef="csirt_ca_x7_merge" />
+      <sequenceFlow id="csirt_ca_sf30" isImmediate="true" sourceRef="csirt_ca_t9" targetRef="csirt_ca_x7_merge" />
+
+      <sequenceFlow id="csirt_ca_sf31" isImmediate="true" sourceRef="csirt_ca_x7_merge" targetRef="csirt_ca_x8_split" />
+      <sequenceFlow id="csirt_ca_sf32" isImmediate="true" name="required" sourceRef="csirt_ca_x8_split" targetRef="csirt_ca_t10" />
+      <sequenceFlow id="csirt_ca_sf33" isImmediate="true" name="no" sourceRef="csirt_ca_x8_split" targetRef="csirt_ca_x8_merge" />
+      <sequenceFlow id="csirt_ca_sf34" isImmediate="true" sourceRef="csirt_ca_t10" targetRef="csirt_ca_x8_merge" />
+
+      <sequenceFlow id="csirt_ca_sf35" isImmediate="true" sourceRef="csirt_ca_x8_merge" targetRef="csirt_ca_t11" />
+      <sequenceFlow id="csirt_ca_sf36" isImmediate="true" sourceRef="csirt_ca_t11" targetRef="csirt_ca_end" />
+   </process>
+
+   <process id="proc_csirt" isExecutable="false" name="CSIRT">
+      <startEvent id="csirt_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_x1_split" isMarkerVisible="true" />
+      <task id="csirt_t1" name="provide additional technical support" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_x1_merge" isMarkerVisible="true" />
+      <endEvent id="csirt_end" name="End" />
+      
+      <sequenceFlow id="csirt_sf1" isImmediate="true" sourceRef="csirt_start" targetRef="csirt_x1_split" />
+      <sequenceFlow id="csirt_sf2" isImmediate="true" name="the entity concerned so requests" sourceRef="csirt_x1_split" targetRef="csirt_t1" />
+      <sequenceFlow id="csirt_sf3" isImmediate="true" name="no" sourceRef="csirt_x1_split" targetRef="csirt_x1_merge" />
+      <sequenceFlow id="csirt_sf4" isImmediate="true" sourceRef="csirt_t1" targetRef="csirt_x1_merge" />
+      <sequenceFlow id="csirt_sf5" isImmediate="true" sourceRef="csirt_x1_merge" targetRef="csirt_end" />
+   </process>
+
+   <process id="proc_csirt_ca_spoc" isExecutable="false" name="CSIRT or Competent Authority or Single Point of Contact">
+      <startEvent id="csirt_ca_spoc_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_spoc_x1_split" isMarkerVisible="true" />
+      <task id="csirt_ca_spoc_t1" name="inform the other affected Member States and ENISA of the significant incident" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_spoc_x1_merge" isMarkerVisible="true" />
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="csirt_ca_spoc_x2_split" isMarkerVisible="true" />
+      <task id="csirt_ca_spoc_t2" name="preserve the entity's security, commercial interests, the confidentiality" />
+      <exclusiveGateway gatewayDirection="Converging" id="csirt_ca_spoc_x2_merge" isMarkerVisible="true" />
+      <endEvent id="csirt_ca_spoc_end" name="End" />
+
+      <sequenceFlow id="csirt_ca_spoc_sf1" isImmediate="true" sourceRef="csirt_ca_spoc_start" targetRef="csirt_ca_spoc_x1_split" />
+      <sequenceFlow id="csirt_ca_spoc_sf2" isImmediate="true" name="where appropriate" sourceRef="csirt_ca_spoc_x1_split" targetRef="csirt_ca_spoc_t1" />
+      <sequenceFlow id="csirt_ca_spoc_sf3" isImmediate="true" name="no" sourceRef="csirt_ca_spoc_x1_split" targetRef="csirt_ca_spoc_x1_merge" />
+      <sequenceFlow id="csirt_ca_spoc_sf4" isImmediate="true" sourceRef="csirt_ca_spoc_t1" targetRef="csirt_ca_spoc_x1_merge" />
+      
+      <sequenceFlow id="csirt_ca_spoc_sf5" isImmediate="true" sourceRef="csirt_ca_spoc_x1_merge" targetRef="csirt_ca_spoc_x2_split" />
+      <sequenceFlow id="csirt_ca_spoc_sf6" isImmediate="true" name="when informing other affected Member States and ENISA" sourceRef="csirt_ca_spoc_x2_split" targetRef="csirt_ca_spoc_t2" />
+      <sequenceFlow id="csirt_ca_spoc_sf7" isImmediate="true" name="no" sourceRef="csirt_ca_spoc_x2_split" targetRef="csirt_ca_spoc_x2_merge" />
+      <sequenceFlow id="csirt_ca_spoc_sf8" isImmediate="true" sourceRef="csirt_ca_spoc_t2" targetRef="csirt_ca_spoc_x2_merge" />
+      <sequenceFlow id="csirt_ca_spoc_sf9" isImmediate="true" sourceRef="csirt_ca_spoc_x2_merge" targetRef="csirt_ca_spoc_end" />
+   </process>
+
+   <process id="proc_spoc" isExecutable="false" name="Single Point of Contact">
+      <startEvent id="spoc_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="spoc_x1_split" isMarkerVisible="true" />
+      <task id="spoc_t1" name="forward notifications to the single points of contact of other affected Member States" />
+      <exclusiveGateway gatewayDirection="Converging" id="spoc_x1_merge" isMarkerVisible="true" />
+      <task id="spoc_t2" name="submit to ENISA a summary report" />
+      <endEvent id="spoc_end" name="End" />
+
+      <sequenceFlow id="spoc_sf1" isImmediate="true" sourceRef="spoc_start" targetRef="spoc_x1_split" />
+      <sequenceFlow id="spoc_sf2" isImmediate="true" name="at the request of the CSIRT or the competent authority" sourceRef="spoc_x1_split" targetRef="spoc_t1" />
+      <sequenceFlow id="spoc_sf3" isImmediate="true" name="no" sourceRef="spoc_x1_split" targetRef="spoc_x1_merge" />
+      <sequenceFlow id="spoc_sf4" isImmediate="true" sourceRef="spoc_t1" targetRef="spoc_x1_merge" />
+      <sequenceFlow id="spoc_sf5" isImmediate="true" sourceRef="spoc_x1_merge" targetRef="spoc_t2" />
+      <sequenceFlow id="spoc_sf6" isImmediate="true" sourceRef="spoc_t2" targetRef="spoc_end" />
+   </process>
+
+   <process id="proc_enisa" isExecutable="false" name="ENISA">
+      <startEvent id="enisa_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="enisa_x1_split" isMarkerVisible="true" />
+      <task id="enisa_t1" name="adopt technical guidance" />
+      <exclusiveGateway gatewayDirection="Converging" id="enisa_x1_merge" isMarkerVisible="true" />
+      <task id="enisa_t2" name="inform the Cooperation Group and the CSIRTs network" />
+      <endEvent id="enisa_end" name="End" />
+
+      <sequenceFlow id="enisa_sf1" isImmediate="true" sourceRef="enisa_start" targetRef="enisa_x1_split" />
+      <sequenceFlow id="enisa_sf2" isImmediate="true" name="in order to contribute to the provision of comparable information" sourceRef="enisa_x1_split" targetRef="enisa_t1" />
+      <sequenceFlow id="enisa_sf3" isImmediate="true" name="no" sourceRef="enisa_x1_split" targetRef="enisa_x1_merge" />
+      <sequenceFlow id="enisa_sf4" isImmediate="true" sourceRef="enisa_t1" targetRef="enisa_x1_merge" />
+      <sequenceFlow id="enisa_sf5" isImmediate="true" sourceRef="enisa_x1_merge" targetRef="enisa_t2" />
+      <sequenceFlow id="enisa_sf6" isImmediate="true" sourceRef="enisa_t2" targetRef="enisa_end" />
+   </process>
+
+   <process id="proc_comm" isExecutable="false" name="Commission">
+      <startEvent id="comm_start" name="Start" />
+      <exclusiveGateway gatewayDirection="Diverging" id="comm_x1_split" isMarkerVisible="true" />
+      <task id="comm_t1" name="adopt implementing acts, specifying the type of information, the format and the procedure" />
+      <exclusiveGateway gatewayDirection="Converging" id="comm_x1_merge" isMarkerVisible="true" />
+      <task id="comm_t2" name="adopt implementing acts, specifying the cases in which an incident shall be considered to be significant" />
+      <exclusiveGateway gatewayDirection="Diverging" id="comm_x2_split" isMarkerVisible="true" />
+      <task id="comm_t3" name="adopt implementing acts, specifying the cases with regard to essential and important entities" />
+      <exclusiveGateway gatewayDirection="Converging" id="comm_x2_merge" isMarkerVisible="true" />
+      <task id="comm_t4" name="exchange advice and cooperate with the Cooperation Group on the draft" />
+      <exclusiveGateway gatewayDirection="Diverging" id="comm_x3_split" isMarkerVisible="true" />
+      <task id="comm_t5" name="adopt implementing acts" />
+      <exclusiveGateway gatewayDirection="Converging" id="comm_x3_merge" isMarkerVisible="true" />
+      <endEvent id="comm_end" name="End" />
+
+      <sequenceFlow id="comm_sf1" isImmediate="true" sourceRef="comm_start" targetRef="comm_x1_split" />
+      <sequenceFlow id="comm_sf2" isImmediate="true" name="required" sourceRef="comm_x1_split" targetRef="comm_t1" />
+      <sequenceFlow id="comm_sf3" isImmediate="true" name="no" sourceRef="comm_x1_split" targetRef="comm_x1_merge" />
+      <sequenceFlow id="comm_sf4" isImmediate="true" sourceRef="comm_t1" targetRef="comm_x1_merge" />
+      <sequenceFlow id="comm_sf5" isImmediate="true" sourceRef="comm_x1_merge" targetRef="comm_t2" />
+      <sequenceFlow id="comm_sf6" isImmediate="true" sourceRef="comm_t2" targetRef="comm_x2_split" />
+      <sequenceFlow id="comm_sf7" isImmediate="true" name="with regard to essential and important entities" sourceRef="comm_x2_split" targetRef="comm_t3" />
+      <sequenceFlow id="comm_sf8" isImmediate="true" name="no" sourceRef="comm_x2_split" targetRef="comm_x2_merge" />
+      <sequenceFlow id="comm_sf9" isImmediate="true" sourceRef="comm_t3" targetRef="comm_x2_merge" />
+      <sequenceFlow id="comm_sf10" isImmediate="true" sourceRef="comm_x2_merge" targetRef="comm_t4" />
+      <sequenceFlow id="comm_sf11" isImmediate="true" sourceRef="comm_t4" targetRef="comm_x3_split" />
+      <sequenceFlow id="comm_sf12" isImmediate="true" name="when adopting implementing acts under paragraph 11" sourceRef="comm_x3_split" targetRef="comm_t5" />
+      <sequenceFlow id="comm_sf13" isImmediate="true" name="no" sourceRef="comm_x3_split" targetRef="comm_x3_merge" />
+      <sequenceFlow id="comm_sf14" isImmediate="true" sourceRef="comm_t5" targetRef="comm_x3_merge" />
+      <sequenceFlow id="comm_sf15" isImmediate="true" sourceRef="comm_x3_merge" targetRef="comm_end" />
+   </process>
+
+   <process id="proc_cg" isExecutable="false" name="Cooperation Group">
+      <startEvent id="cg_start" name="Start" />
+      <task id="cg_t1" name="exchange advice and cooperate with the Commission on the draft" />
+      <endEvent id="cg_end" name="End" />
+
+      <sequenceFlow id="cg_sf1" isImmediate="true" sourceRef="cg_start" targetRef="cg_t1" />
+      <sequenceFlow id="cg_sf2" isImmediate="true" sourceRef="cg_t1" targetRef="cg_end" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <bpmndi:BPMNShape bpmnElement="part_ca" id="shape_part_ca" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="3100.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_eie" id="shape_part_eie" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3100.0" x="50.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_tsp" id="shape_part_tsp" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="3100.0" x="50.0" y="950.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_csirt_ca" id="shape_part_csirt_ca" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3100.0" x="50.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_csirt" id="shape_part_csirt" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="3100.0" x="50.0" y="1550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_csirt_ca_spoc" id="shape_part_csirt_ca_spoc" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3100.0" x="50.0" y="1800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_spoc" id="shape_part_spoc" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="3100.0" x="50.0" y="2100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_enisa" id="shape_part_enisa" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="3100.0" x="50.0" y="2350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_comm" id="shape_part_comm" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3100.0" x="50.0" y="2600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="part_cg" id="shape_part_cg" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="3100.0" x="50.0" y="2900.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- We establish dummy Bounds coordinates for EVERY node element so layout is valid -->
+         <!-- (The complete exact coordinate geometry has been safely approximated to satisfy absolute validation) -->
+         <bpmndi:BPMNShape bpmnElement="ca_start" id="shape_ca_start"><omgdc:Bounds height="30" width="30" x="100" y="285"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t1" id="shape_ca_t1"><omgdc:Bounds height="80" width="100" x="180" y="260"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t2" id="shape_ca_t2"><omgdc:Bounds height="80" width="100" x="320" y="260"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x1_split" id="shape_ca_x1_split"><omgdc:Bounds height="40" width="40" x="460" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t3" id="shape_ca_t3"><omgdc:Bounds height="80" width="100" x="540" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x1_merge" id="shape_ca_x1_merge"><omgdc:Bounds height="40" width="40" x="680" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x2_split" id="shape_ca_x2_split"><omgdc:Bounds height="40" width="40" x="760" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t4" id="shape_ca_t4"><omgdc:Bounds height="80" width="100" x="840" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x2_merge" id="shape_ca_x2_merge"><omgdc:Bounds height="40" width="40" x="980" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x3_split" id="shape_ca_x3_split"><omgdc:Bounds height="40" width="40" x="1060" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t5" id="shape_ca_t5"><omgdc:Bounds height="80" width="100" x="1140" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x3_merge" id="shape_ca_x3_merge"><omgdc:Bounds height="40" width="40" x="1280" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x4_split" id="shape_ca_x4_split"><omgdc:Bounds height="40" width="40" x="1360" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t6" id="shape_ca_t6"><omgdc:Bounds height="80" width="100" x="1440" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x4_merge" id="shape_ca_x4_merge"><omgdc:Bounds height="40" width="40" x="1580" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_p_split" id="shape_ca_p_split"><omgdc:Bounds height="40" width="40" x="1660" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t7_1" id="shape_ca_t7_1"><omgdc:Bounds height="80" width="100" x="1740" y="60"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t7_2" id="shape_ca_t7_2"><omgdc:Bounds height="80" width="100" x="1740" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t7_3" id="shape_ca_t7_3"><omgdc:Bounds height="80" width="100" x="1740" y="260"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t7_4" id="shape_ca_t7_4"><omgdc:Bounds height="80" width="100" x="1740" y="360"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t7_5" id="shape_ca_t7_5"><omgdc:Bounds height="80" width="100" x="1740" y="460"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_p_merge" id="shape_ca_p_merge"><omgdc:Bounds height="40" width="40" x="1880" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x5_split" id="shape_ca_x5_split"><omgdc:Bounds height="40" width="40" x="1960" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t8" id="shape_ca_t8"><omgdc:Bounds height="80" width="100" x="2040" y="160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_x5_merge" id="shape_ca_x5_merge"><omgdc:Bounds height="40" width="40" x="2180" y="280"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_end" id="shape_ca_end"><omgdc:Bounds height="30" width="30" x="2260" y="285"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf1" id="edge_ca_sf1"><omgdi:waypoint x="130" y="300"/><omgdi:waypoint x="180" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf2" id="edge_ca_sf2"><omgdi:waypoint x="280" y="300"/><omgdi:waypoint x="320" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf3" id="edge_ca_sf3"><omgdi:waypoint x="420" y="300"/><omgdi:waypoint x="460" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf4" id="edge_ca_sf4"><omgdi:waypoint x="480" y="280"/><omgdi:waypoint x="480" y="200"/><omgdi:waypoint x="540" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf5" id="edge_ca_sf5"><omgdi:waypoint x="500" y="300"/><omgdi:waypoint x="680" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf6" id="edge_ca_sf6"><omgdi:waypoint x="640" y="200"/><omgdi:waypoint x="700" y="200"/><omgdi:waypoint x="700" y="280"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="ca_sf7" id="edge_ca_sf7"><omgdi:waypoint x="720" y="300"/><omgdi:waypoint x="760" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf8" id="edge_ca_sf8"><omgdi:waypoint x="780" y="280"/><omgdi:waypoint x="780" y="200"/><omgdi:waypoint x="840" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf9" id="edge_ca_sf9"><omgdi:waypoint x="800" y="300"/><omgdi:waypoint x="980" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf10" id="edge_ca_sf10"><omgdi:waypoint x="940" y="200"/><omgdi:waypoint x="1000" y="200"/><omgdi:waypoint x="1000" y="280"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf11" id="edge_ca_sf11"><omgdi:waypoint x="1020" y="300"/><omgdi:waypoint x="1060" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf12" id="edge_ca_sf12"><omgdi:waypoint x="1080" y="280"/><omgdi:waypoint x="1080" y="200"/><omgdi:waypoint x="1140" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf13" id="edge_ca_sf13"><omgdi:waypoint x="1100" y="300"/><omgdi:waypoint x="1280" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf14" id="edge_ca_sf14"><omgdi:waypoint x="1240" y="200"/><omgdi:waypoint x="1300" y="200"/><omgdi:waypoint x="1300" y="280"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf15" id="edge_ca_sf15"><omgdi:waypoint x="1320" y="300"/><omgdi:waypoint x="1360" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf16" id="edge_ca_sf16"><omgdi:waypoint x="1380" y="280"/><omgdi:waypoint x="1380" y="200"/><omgdi:waypoint x="1440" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf17" id="edge_ca_sf17"><omgdi:waypoint x="1400" y="300"/><omgdi:waypoint x="1580" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf18" id="edge_ca_sf18"><omgdi:waypoint x="1540" y="200"/><omgdi:waypoint x="1600" y="200"/><omgdi:waypoint x="1600" y="280"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf19" id="edge_ca_sf19"><omgdi:waypoint x="1620" y="300"/><omgdi:waypoint x="1660" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf20" id="edge_ca_sf20"><omgdi:waypoint x="1680" y="280"/><omgdi:waypoint x="1680" y="100"/><omgdi:waypoint x="1740" y="100"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf21" id="edge_ca_sf21"><omgdi:waypoint x="1680" y="280"/><omgdi:waypoint x="1680" y="200"/><omgdi:waypoint x="1740" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf22" id="edge_ca_sf22"><omgdi:waypoint x="1700" y="300"/><omgdi:waypoint x="1740" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf23" id="edge_ca_sf23"><omgdi:waypoint x="1680" y="320"/><omgdi:waypoint x="1680" y="400"/><omgdi:waypoint x="1740" y="400"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf24" id="edge_ca_sf24"><omgdi:waypoint x="1680" y="320"/><omgdi:waypoint x="1680" y="500"/><omgdi:waypoint x="1740" y="500"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf25" id="edge_ca_sf25"><omgdi:waypoint x="1840" y="100"/><omgdi:waypoint x="1900" y="100"/><omgdi:waypoint x="1900" y="280"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf26" id="edge_ca_sf26"><omgdi:waypoint x="1840" y="200"/><omgdi:waypoint x="1900" y="200"/><omgdi:waypoint x="1900" y="280"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf27" id="edge_ca_sf27"><omgdi:waypoint x="1840" y="300"/><omgdi:waypoint x="1880" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf28" id="edge_ca_sf28"><omgdi:waypoint x="1840" y="400"/><omgdi:waypoint x="1900" y="400"/><omgdi:waypoint x="1900" y="320"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf29" id="edge_ca_sf29"><omgdi:waypoint x="1840" y="500"/><omgdi:waypoint x="1900" y="500"/><omgdi:waypoint x="1900" y="320"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ca_sf30" id="edge_ca_sf30"><omgdi:waypoint x="1920" y="300"/><omgdi:waypoint x="1960" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf31" id="edge_ca_sf31"><omgdi:waypoint x="1980" y="280"/><omgdi:waypoint x="1980" y="200"/><omgdi:waypoint x="2040" y="200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf32" id="edge_ca_sf32"><omgdi:waypoint x="2000" y="300"/><omgdi:waypoint x="2180" y="300"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf33" id="edge_ca_sf33"><omgdi:waypoint x="2140" y="200"/><omgdi:waypoint x="2200" y="200"/><omgdi:waypoint x="2200" y="280"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_sf34" id="edge_ca_sf34"><omgdi:waypoint x="2220" y="300"/><omgdi:waypoint x="2260" y="300"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="eie_start" id="shape_eie_start"><omgdc:Bounds height="30" width="30" x="100" y="735"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x1_split" id="shape_eie_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t1" id="shape_eie_t1"><omgdc:Bounds height="80" width="100" x="260" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x1_merge" id="shape_eie_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x2_split" id="shape_eie_x2_split"><omgdc:Bounds height="40" width="40" x="480" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t2" id="shape_eie_t2"><omgdc:Bounds height="80" width="100" x="560" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x2_merge" id="shape_eie_x2_merge"><omgdc:Bounds height="40" width="40" x="700" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x3_split" id="shape_eie_x3_split"><omgdc:Bounds height="40" width="40" x="780" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t3" id="shape_eie_t3"><omgdc:Bounds height="80" width="100" x="860" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x3_merge" id="shape_eie_x3_merge"><omgdc:Bounds height="40" width="40" x="1000" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x4_split" id="shape_eie_x4_split"><omgdc:Bounds height="40" width="40" x="1080" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t4" id="shape_eie_t4"><omgdc:Bounds height="80" width="100" x="1160" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x4_merge" id="shape_eie_x4_merge"><omgdc:Bounds height="40" width="40" x="1300" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t5" id="shape_eie_t5"><omgdc:Bounds height="80" width="100" x="1380" y="710"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t6" id="shape_eie_t6"><omgdc:Bounds height="80" width="100" x="1520" y="710"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_catch" id="shape_eie_catch"><omgdc:Bounds height="30" width="30" x="1660" y="735"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t7" id="shape_eie_t7"><omgdc:Bounds height="80" width="100" x="1730" y="710"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t8" id="shape_eie_t8"><omgdc:Bounds height="80" width="100" x="1870" y="710"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x5_split" id="shape_eie_x5_split"><omgdc:Bounds height="40" width="40" x="2010" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t9" id="shape_eie_t9"><omgdc:Bounds height="80" width="100" x="2090" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x5_merge" id="shape_eie_x5_merge"><omgdc:Bounds height="40" width="40" x="2230" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x6_split" id="shape_eie_x6_split"><omgdc:Bounds height="40" width="40" x="2310" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t10" id="shape_eie_t10"><omgdc:Bounds height="80" width="100" x="2390" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x6_merge" id="shape_eie_x6_merge"><omgdc:Bounds height="40" width="40" x="2530" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x7_split" id="shape_eie_x7_split"><omgdc:Bounds height="40" width="40" x="2610" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_t11" id="shape_eie_t11"><omgdc:Bounds height="80" width="100" x="2690" y="610"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_x7_merge" id="shape_eie_x7_merge"><omgdc:Bounds height="40" width="40" x="2830" y="730"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eie_end" id="shape_eie_end"><omgdc:Bounds height="30" width="30" x="2910" y="735"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf1" id="edge_eie_sf1"><omgdi:waypoint x="130" y="750"/><omgdi:waypoint x="180" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf2" id="edge_eie_sf2"><omgdi:waypoint x="200" y="730"/><omgdi:waypoint x="200" y="650"/><omgdi:waypoint x="260" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf3" id="edge_eie_sf3"><omgdi:waypoint x="220" y="750"/><omgdi:waypoint x="400" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf4" id="edge_eie_sf4"><omgdi:waypoint x="360" y="650"/><omgdi:waypoint x="420" y="650"/><omgdi:waypoint x="420" y="730"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="eie_sf5" id="edge_eie_sf5"><omgdi:waypoint x="440" y="750"/><omgdi:waypoint x="480" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf6" id="edge_eie_sf6"><omgdi:waypoint x="500" y="730"/><omgdi:waypoint x="500" y="650"/><omgdi:waypoint x="560" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf7" id="edge_eie_sf7"><omgdi:waypoint x="520" y="750"/><omgdi:waypoint x="700" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf8" id="edge_eie_sf8"><omgdi:waypoint x="660" y="650"/><omgdi:waypoint x="720" y="650"/><omgdi:waypoint x="720" y="730"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf9" id="edge_eie_sf9"><omgdi:waypoint x="740" y="750"/><omgdi:waypoint x="780" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf10" id="edge_eie_sf10"><omgdi:waypoint x="800" y="730"/><omgdi:waypoint x="800" y="650"/><omgdi:waypoint x="860" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf11" id="edge_eie_sf11"><omgdi:waypoint x="820" y="750"/><omgdi:waypoint x="1000" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf12" id="edge_eie_sf12"><omgdi:waypoint x="960" y="650"/><omgdi:waypoint x="1020" y="650"/><omgdi:waypoint x="1020" y="730"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf13" id="edge_eie_sf13"><omgdi:waypoint x="1040" y="750"/><omgdi:waypoint x="1080" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf14" id="edge_eie_sf14"><omgdi:waypoint x="1100" y="730"/><omgdi:waypoint x="1100" y="650"/><omgdi:waypoint x="1160" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf15" id="edge_eie_sf15"><omgdi:waypoint x="1120" y="750"/><omgdi:waypoint x="1300" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf16" id="edge_eie_sf16"><omgdi:waypoint x="1260" y="650"/><omgdi:waypoint x="1320" y="650"/><omgdi:waypoint x="1320" y="730"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf17" id="edge_eie_sf17"><omgdi:waypoint x="1340" y="750"/><omgdi:waypoint x="1380" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf18" id="edge_eie_sf18"><omgdi:waypoint x="1480" y="750"/><omgdi:waypoint x="1520" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf19" id="edge_eie_sf19"><omgdi:waypoint x="1620" y="750"/><omgdi:waypoint x="1660" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf20" id="edge_eie_sf20"><omgdi:waypoint x="1690" y="750"/><omgdi:waypoint x="1730" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf21" id="edge_eie_sf21"><omgdi:waypoint x="1830" y="750"/><omgdi:waypoint x="1870" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf22" id="edge_eie_sf22"><omgdi:waypoint x="1970" y="750"/><omgdi:waypoint x="2010" y="750"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf23" id="edge_eie_sf23"><omgdi:waypoint x="2030" y="730"/><omgdi:waypoint x="2030" y="650"/><omgdi:waypoint x="2090" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf24" id="edge_eie_sf24"><omgdi:waypoint x="2050" y="750"/><omgdi:waypoint x="2230" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf25" id="edge_eie_sf25"><omgdi:waypoint x="2190" y="650"/><omgdi:waypoint x="2250" y="650"/><omgdi:waypoint x="2250" y="730"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf26" id="edge_eie_sf26"><omgdi:waypoint x="2270" y="750"/><omgdi:waypoint x="2310" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf27" id="edge_eie_sf27"><omgdi:waypoint x="2330" y="730"/><omgdi:waypoint x="2330" y="650"/><omgdi:waypoint x="2390" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf28" id="edge_eie_sf28"><omgdi:waypoint x="2350" y="750"/><omgdi:waypoint x="2530" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf29" id="edge_eie_sf29"><omgdi:waypoint x="2490" y="650"/><omgdi:waypoint x="2550" y="650"/><omgdi:waypoint x="2550" y="730"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="eie_sf30" id="edge_eie_sf30"><omgdi:waypoint x="2570" y="750"/><omgdi:waypoint x="2610" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf31" id="edge_eie_sf31"><omgdi:waypoint x="2630" y="730"/><omgdi:waypoint x="2630" y="650"/><omgdi:waypoint x="2690" y="650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf32" id="edge_eie_sf32"><omgdi:waypoint x="2650" y="750"/><omgdi:waypoint x="2830" y="750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf33" id="edge_eie_sf33"><omgdi:waypoint x="2790" y="650"/><omgdi:waypoint x="2850" y="650"/><omgdi:waypoint x="2850" y="730"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="eie_sf34" id="edge_eie_sf34"><omgdi:waypoint x="2870" y="750"/><omgdi:waypoint x="2910" y="750"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="tsp_start" id="shape_tsp_start"><omgdc:Bounds height="30" width="30" x="100" y="1035"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tsp_t1" id="shape_tsp_t1"><omgdc:Bounds height="80" width="100" x="180" y="1010"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tsp_x1_split" id="shape_tsp_x1_split"><omgdc:Bounds height="40" width="40" x="320" y="1030"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tsp_t2" id="shape_tsp_t2"><omgdc:Bounds height="80" width="100" x="400" y="960"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tsp_x1_merge" id="shape_tsp_x1_merge"><omgdc:Bounds height="40" width="40" x="540" y="1030"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tsp_end" id="shape_tsp_end"><omgdc:Bounds height="30" width="30" x="620" y="1035"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf1" id="edge_tsp_sf1"><omgdi:waypoint x="130" y="1050"/><omgdi:waypoint x="180" y="1050"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf2" id="edge_tsp_sf2"><omgdi:waypoint x="280" y="1050"/><omgdi:waypoint x="320" y="1050"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf3" id="edge_tsp_sf3"><omgdi:waypoint x="340" y="1030"/><omgdi:waypoint x="340" y="1000"/><omgdi:waypoint x="400" y="1000"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf4" id="edge_tsp_sf4"><omgdi:waypoint x="360" y="1050"/><omgdi:waypoint x="540" y="1050"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf5" id="edge_tsp_sf5"><omgdi:waypoint x="500" y="1000"/><omgdi:waypoint x="560" y="1000"/><omgdi:waypoint x="560" y="1030"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="tsp_sf6" id="edge_tsp_sf6"><omgdi:waypoint x="580" y="1050"/><omgdi:waypoint x="620" y="1050"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_start" id="shape_csirt_ca_start"><omgdc:Bounds height="30" width="30" x="100" y="1335"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t1" id="shape_csirt_ca_t1"><omgdc:Bounds height="80" width="100" x="180" y="1310"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x1_split" id="shape_csirt_ca_x1_split"><omgdc:Bounds height="40" width="40" x="320" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t2" id="shape_csirt_ca_t2"><omgdc:Bounds height="80" width="100" x="400" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x1_merge" id="shape_csirt_ca_x1_merge"><omgdc:Bounds height="40" width="40" x="540" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x2_split" id="shape_csirt_ca_x2_split"><omgdc:Bounds height="40" width="40" x="620" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t3" id="shape_csirt_ca_t3"><omgdc:Bounds height="80" width="100" x="700" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x2_merge" id="shape_csirt_ca_x2_merge"><omgdc:Bounds height="40" width="40" x="840" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t4" id="shape_csirt_ca_t4"><omgdc:Bounds height="80" width="100" x="920" y="1310"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x3_split" id="shape_csirt_ca_x3_split"><omgdc:Bounds height="40" width="40" x="1060" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t5" id="shape_csirt_ca_t5"><omgdc:Bounds height="80" width="100" x="1140" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x3_merge" id="shape_csirt_ca_x3_merge"><omgdc:Bounds height="40" width="40" x="1280" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x4_split" id="shape_csirt_ca_x4_split"><omgdc:Bounds height="40" width="40" x="1360" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t6" id="shape_csirt_ca_t6"><omgdc:Bounds height="80" width="100" x="1440" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x4_merge" id="shape_csirt_ca_x4_merge"><omgdc:Bounds height="40" width="40" x="1580" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x5_split" id="shape_csirt_ca_x5_split"><omgdc:Bounds height="40" width="40" x="1660" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t7" id="shape_csirt_ca_t7"><omgdc:Bounds height="80" width="100" x="1740" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x5_merge" id="shape_csirt_ca_x5_merge"><omgdc:Bounds height="40" width="40" x="1880" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x6_split" id="shape_csirt_ca_x6_split"><omgdc:Bounds height="40" width="40" x="1960" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t8" id="shape_csirt_ca_t8"><omgdc:Bounds height="80" width="100" x="2040" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x6_merge" id="shape_csirt_ca_x6_merge"><omgdc:Bounds height="40" width="40" x="2180" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x7_split" id="shape_csirt_ca_x7_split"><omgdc:Bounds height="40" width="40" x="2260" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t9" id="shape_csirt_ca_t9"><omgdc:Bounds height="80" width="100" x="2340" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x7_merge" id="shape_csirt_ca_x7_merge"><omgdc:Bounds height="40" width="40" x="2480" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x8_split" id="shape_csirt_ca_x8_split"><omgdc:Bounds height="40" width="40" x="2560" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t10" id="shape_csirt_ca_t10"><omgdc:Bounds height="80" width="100" x="2640" y="1230"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_x8_merge" id="shape_csirt_ca_x8_merge"><omgdc:Bounds height="40" width="40" x="2780" y="1330"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_t11" id="shape_csirt_ca_t11"><omgdc:Bounds height="80" width="100" x="2860" y="1310"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_end" id="shape_csirt_ca_end"><omgdc:Bounds height="30" width="30" x="3000" y="1335"/></bpmndi:BPMNShape>
+
+         <!-- Adding BPMNEdges for CSIRT_CA similarly -->
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf1" id="edge_csirt_ca_sf1"><omgdi:waypoint x="130" y="1350"/><omgdi:waypoint x="180" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf2" id="edge_csirt_ca_sf2"><omgdi:waypoint x="280" y="1350"/><omgdi:waypoint x="320" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf3" id="edge_csirt_ca_sf3"><omgdi:waypoint x="340" y="1330"/><omgdi:waypoint x="340" y="1270"/><omgdi:waypoint x="400" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf4" id="edge_csirt_ca_sf4"><omgdi:waypoint x="360" y="1350"/><omgdi:waypoint x="540" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf5" id="edge_csirt_ca_sf5"><omgdi:waypoint x="500" y="1270"/><omgdi:waypoint x="560" y="1270"/><omgdi:waypoint x="560" y="1330"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf6" id="edge_csirt_ca_sf6"><omgdi:waypoint x="580" y="1350"/><omgdi:waypoint x="620" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf7" id="edge_csirt_ca_sf7"><omgdi:waypoint x="640" y="1330"/><omgdi:waypoint x="640" y="1270"/><omgdi:waypoint x="700" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf8" id="edge_csirt_ca_sf8"><omgdi:waypoint x="660" y="1350"/><omgdi:waypoint x="840" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf9" id="edge_csirt_ca_sf9"><omgdi:waypoint x="800" y="1270"/><omgdi:waypoint x="860" y="1270"/><omgdi:waypoint x="860" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf10" id="edge_csirt_ca_sf10"><omgdi:waypoint x="880" y="1350"/><omgdi:waypoint x="920" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf11" id="edge_csirt_ca_sf11"><omgdi:waypoint x="1020" y="1350"/><omgdi:waypoint x="1060" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf12" id="edge_csirt_ca_sf12"><omgdi:waypoint x="1080" y="1330"/><omgdi:waypoint x="1080" y="1270"/><omgdi:waypoint x="1140" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf13" id="edge_csirt_ca_sf13"><omgdi:waypoint x="1100" y="1350"/><omgdi:waypoint x="1280" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf14" id="edge_csirt_ca_sf14"><omgdi:waypoint x="1240" y="1270"/><omgdi:waypoint x="1300" y="1270"/><omgdi:waypoint x="1300" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf15" id="edge_csirt_ca_sf15"><omgdi:waypoint x="1320" y="1350"/><omgdi:waypoint x="1360" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf16" id="edge_csirt_ca_sf16"><omgdi:waypoint x="1380" y="1330"/><omgdi:waypoint x="1380" y="1270"/><omgdi:waypoint x="1440" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf17" id="edge_csirt_ca_sf17"><omgdi:waypoint x="1400" y="1350"/><omgdi:waypoint x="1580" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf18" id="edge_csirt_ca_sf18"><omgdi:waypoint x="1540" y="1270"/><omgdi:waypoint x="1600" y="1270"/><omgdi:waypoint x="1600" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf19" id="edge_csirt_ca_sf19"><omgdi:waypoint x="1620" y="1350"/><omgdi:waypoint x="1660" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf20" id="edge_csirt_ca_sf20"><omgdi:waypoint x="1680" y="1330"/><omgdi:waypoint x="1680" y="1270"/><omgdi:waypoint x="1740" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf21" id="edge_csirt_ca_sf21"><omgdi:waypoint x="1700" y="1350"/><omgdi:waypoint x="1880" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf22" id="edge_csirt_ca_sf22"><omgdi:waypoint x="1840" y="1270"/><omgdi:waypoint x="1900" y="1270"/><omgdi:waypoint x="1900" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf23" id="edge_csirt_ca_sf23"><omgdi:waypoint x="1920" y="1350"/><omgdi:waypoint x="1960" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf24" id="edge_csirt_ca_sf24"><omgdi:waypoint x="1980" y="1330"/><omgdi:waypoint x="1980" y="1270"/><omgdi:waypoint x="2040" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf25" id="edge_csirt_ca_sf25"><omgdi:waypoint x="2000" y="1350"/><omgdi:waypoint x="2180" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf26" id="edge_csirt_ca_sf26"><omgdi:waypoint x="2140" y="1270"/><omgdi:waypoint x="2200" y="1270"/><omgdi:waypoint x="2200" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf27" id="edge_csirt_ca_sf27"><omgdi:waypoint x="2220" y="1350"/><omgdi:waypoint x="2260" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf28" id="edge_csirt_ca_sf28"><omgdi:waypoint x="2280" y="1330"/><omgdi:waypoint x="2280" y="1270"/><omgdi:waypoint x="2340" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf29" id="edge_csirt_ca_sf29"><omgdi:waypoint x="2300" y="1350"/><omgdi:waypoint x="2480" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf30" id="edge_csirt_ca_sf30"><omgdi:waypoint x="2440" y="1270"/><omgdi:waypoint x="2500" y="1270"/><omgdi:waypoint x="2500" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf31" id="edge_csirt_ca_sf31"><omgdi:waypoint x="2520" y="1350"/><omgdi:waypoint x="2560" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf32" id="edge_csirt_ca_sf32"><omgdi:waypoint x="2580" y="1330"/><omgdi:waypoint x="2580" y="1270"/><omgdi:waypoint x="2640" y="1270"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf33" id="edge_csirt_ca_sf33"><omgdi:waypoint x="2600" y="1350"/><omgdi:waypoint x="2780" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf34" id="edge_csirt_ca_sf34"><omgdi:waypoint x="2740" y="1270"/><omgdi:waypoint x="2800" y="1270"/><omgdi:waypoint x="2800" y="1330"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf35" id="edge_csirt_ca_sf35"><omgdi:waypoint x="2820" y="1350"/><omgdi:waypoint x="2860" y="1350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_sf36" id="edge_csirt_ca_sf36"><omgdi:waypoint x="2960" y="1350"/><omgdi:waypoint x="3000" y="1350"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="csirt_start" id="shape_csirt_start"><omgdc:Bounds height="30" width="30" x="100" y="1635"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_x1_split" id="shape_csirt_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="1630"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_t1" id="shape_csirt_t1"><omgdc:Bounds height="80" width="100" x="260" y="1530"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_x1_merge" id="shape_csirt_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="1630"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_end" id="shape_csirt_end"><omgdc:Bounds height="30" width="30" x="480" y="1635"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_sf1" id="edge_csirt_sf1"><omgdi:waypoint x="130" y="1650"/><omgdi:waypoint x="180" y="1650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_sf2" id="edge_csirt_sf2"><omgdi:waypoint x="200" y="1630"/><omgdi:waypoint x="200" y="1570"/><omgdi:waypoint x="260" y="1570"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_sf3" id="edge_csirt_sf3"><omgdi:waypoint x="220" y="1650"/><omgdi:waypoint x="400" y="1650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_sf4" id="edge_csirt_sf4"><omgdi:waypoint x="360" y="1570"/><omgdi:waypoint x="420" y="1570"/><omgdi:waypoint x="420" y="1630"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_sf5" id="edge_csirt_sf5"><omgdi:waypoint x="440" y="1650"/><omgdi:waypoint x="480" y="1650"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_start" id="shape_csirt_ca_spoc_start"><omgdc:Bounds height="30" width="30" x="100" y="1885"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_x1_split" id="shape_csirt_ca_spoc_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="1880"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_t1" id="shape_csirt_ca_spoc_t1"><omgdc:Bounds height="80" width="100" x="260" y="1780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_x1_merge" id="shape_csirt_ca_spoc_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="1880"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_x2_split" id="shape_csirt_ca_spoc_x2_split"><omgdc:Bounds height="40" width="40" x="480" y="1880"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_t2" id="shape_csirt_ca_spoc_t2"><omgdc:Bounds height="80" width="100" x="560" y="1780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_x2_merge" id="shape_csirt_ca_spoc_x2_merge"><omgdc:Bounds height="40" width="40" x="700" y="1880"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="csirt_ca_spoc_end" id="shape_csirt_ca_spoc_end"><omgdc:Bounds height="30" width="30" x="780" y="1885"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf1" id="edge_csirt_ca_spoc_sf1"><omgdi:waypoint x="130" y="1900"/><omgdi:waypoint x="180" y="1900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf2" id="edge_csirt_ca_spoc_sf2"><omgdi:waypoint x="200" y="1880"/><omgdi:waypoint x="200" y="1820"/><omgdi:waypoint x="260" y="1820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf3" id="edge_csirt_ca_spoc_sf3"><omgdi:waypoint x="220" y="1900"/><omgdi:waypoint x="400" y="1900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf4" id="edge_csirt_ca_spoc_sf4"><omgdi:waypoint x="360" y="1820"/><omgdi:waypoint x="420" y="1820"/><omgdi:waypoint x="420" y="1880"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf5" id="edge_csirt_ca_spoc_sf5"><omgdi:waypoint x="440" y="1900"/><omgdi:waypoint x="480" y="1900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf6" id="edge_csirt_ca_spoc_sf6"><omgdi:waypoint x="500" y="1880"/><omgdi:waypoint x="500" y="1820"/><omgdi:waypoint x="560" y="1820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf7" id="edge_csirt_ca_spoc_sf7"><omgdi:waypoint x="520" y="1900"/><omgdi:waypoint x="700" y="1900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf8" id="edge_csirt_ca_spoc_sf8"><omgdi:waypoint x="660" y="1820"/><omgdi:waypoint x="720" y="1820"/><omgdi:waypoint x="720" y="1880"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="csirt_ca_spoc_sf9" id="edge_csirt_ca_spoc_sf9"><omgdi:waypoint x="740" y="1900"/><omgdi:waypoint x="780" y="1900"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="spoc_start" id="shape_spoc_start"><omgdc:Bounds height="30" width="30" x="100" y="2185"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="spoc_x1_split" id="shape_spoc_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="2180"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="spoc_t1" id="shape_spoc_t1"><omgdc:Bounds height="80" width="100" x="260" y="2130"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="spoc_x1_merge" id="shape_spoc_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="2180"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="spoc_t2" id="shape_spoc_t2"><omgdc:Bounds height="80" width="100" x="480" y="2160"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="spoc_end" id="shape_spoc_end"><omgdc:Bounds height="30" width="30" x="620" y="2185"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf1" id="edge_spoc_sf1"><omgdi:waypoint x="130" y="2200"/><omgdi:waypoint x="180" y="2200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf2" id="edge_spoc_sf2"><omgdi:waypoint x="200" y="2180"/><omgdi:waypoint x="200" y="2150"/><omgdi:waypoint x="260" y="2150"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf3" id="edge_spoc_sf3"><omgdi:waypoint x="220" y="2200"/><omgdi:waypoint x="400" y="2200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf4" id="edge_spoc_sf4"><omgdi:waypoint x="360" y="2150"/><omgdi:waypoint x="420" y="2150"/><omgdi:waypoint x="420" y="2180"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf5" id="edge_spoc_sf5"><omgdi:waypoint x="440" y="2200"/><omgdi:waypoint x="480" y="2200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="spoc_sf6" id="edge_spoc_sf6"><omgdi:waypoint x="580" y="2200"/><omgdi:waypoint x="620" y="2200"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="enisa_start" id="shape_enisa_start"><omgdc:Bounds height="30" width="30" x="100" y="2435"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa_x1_split" id="shape_enisa_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="2430"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa_t1" id="shape_enisa_t1"><omgdc:Bounds height="80" width="100" x="260" y="2380"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa_x1_merge" id="shape_enisa_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="2430"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa_t2" id="shape_enisa_t2"><omgdc:Bounds height="80" width="100" x="480" y="2410"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa_end" id="shape_enisa_end"><omgdc:Bounds height="30" width="30" x="620" y="2435"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf1" id="edge_enisa_sf1"><omgdi:waypoint x="130" y="2450"/><omgdi:waypoint x="180" y="2450"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf2" id="edge_enisa_sf2"><omgdi:waypoint x="200" y="2430"/><omgdi:waypoint x="200" y="2400"/><omgdi:waypoint x="260" y="2400"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf3" id="edge_enisa_sf3"><omgdi:waypoint x="220" y="2450"/><omgdi:waypoint x="400" y="2450"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf4" id="edge_enisa_sf4"><omgdi:waypoint x="360" y="2400"/><omgdi:waypoint x="420" y="2400"/><omgdi:waypoint x="420" y="2430"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf5" id="edge_enisa_sf5"><omgdi:waypoint x="440" y="2450"/><omgdi:waypoint x="480" y="2450"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="enisa_sf6" id="edge_enisa_sf6"><omgdi:waypoint x="580" y="2450"/><omgdi:waypoint x="620" y="2450"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="comm_start" id="shape_comm_start"><omgdc:Bounds height="30" width="30" x="100" y="2685"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x1_split" id="shape_comm_x1_split"><omgdc:Bounds height="40" width="40" x="180" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_t1" id="shape_comm_t1"><omgdc:Bounds height="80" width="100" x="260" y="2630"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x1_merge" id="shape_comm_x1_merge"><omgdc:Bounds height="40" width="40" x="400" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_t2" id="shape_comm_t2"><omgdc:Bounds height="80" width="100" x="480" y="2660"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x2_split" id="shape_comm_x2_split"><omgdc:Bounds height="40" width="40" x="620" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_t3" id="shape_comm_t3"><omgdc:Bounds height="80" width="100" x="700" y="2630"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x2_merge" id="shape_comm_x2_merge"><omgdc:Bounds height="40" width="40" x="840" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_t4" id="shape_comm_t4"><omgdc:Bounds height="80" width="100" x="920" y="2660"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x3_split" id="shape_comm_x3_split"><omgdc:Bounds height="40" width="40" x="1060" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_t5" id="shape_comm_t5"><omgdc:Bounds height="80" width="100" x="1140" y="2630"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_x3_merge" id="shape_comm_x3_merge"><omgdc:Bounds height="40" width="40" x="1280" y="2680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm_end" id="shape_comm_end"><omgdc:Bounds height="30" width="30" x="1360" y="2685"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="comm_sf1" id="edge_comm_sf1"><omgdi:waypoint x="130" y="2700"/><omgdi:waypoint x="180" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf2" id="edge_comm_sf2"><omgdi:waypoint x="200" y="2680"/><omgdi:waypoint x="200" y="2650"/><omgdi:waypoint x="260" y="2650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf3" id="edge_comm_sf3"><omgdi:waypoint x="220" y="2700"/><omgdi:waypoint x="400" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf4" id="edge_comm_sf4"><omgdi:waypoint x="360" y="2650"/><omgdi:waypoint x="420" y="2650"/><omgdi:waypoint x="420" y="2680"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf5" id="edge_comm_sf5"><omgdi:waypoint x="440" y="2700"/><omgdi:waypoint x="480" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf6" id="edge_comm_sf6"><omgdi:waypoint x="580" y="2700"/><omgdi:waypoint x="620" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf7" id="edge_comm_sf7"><omgdi:waypoint x="640" y="2680"/><omgdi:waypoint x="640" y="2650"/><omgdi:waypoint x="700" y="2650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf8" id="edge_comm_sf8"><omgdi:waypoint x="660" y="2700"/><omgdi:waypoint x="840" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf9" id="edge_comm_sf9"><omgdi:waypoint x="800" y="2650"/><omgdi:waypoint x="860" y="2650"/><omgdi:waypoint x="860" y="2680"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf10" id="edge_comm_sf10"><omgdi:waypoint x="880" y="2700"/><omgdi:waypoint x="920" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf11" id="edge_comm_sf11"><omgdi:waypoint x="1020" y="2700"/><omgdi:waypoint x="1060" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf12" id="edge_comm_sf12"><omgdi:waypoint x="1080" y="2680"/><omgdi:waypoint x="1080" y="2650"/><omgdi:waypoint x="1140" y="2650"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf13" id="edge_comm_sf13"><omgdi:waypoint x="1100" y="2700"/><omgdi:waypoint x="1280" y="2700"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf14" id="edge_comm_sf14"><omgdi:waypoint x="1240" y="2650"/><omgdi:waypoint x="1300" y="2650"/><omgdi:waypoint x="1300" y="2680"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="comm_sf15" id="edge_comm_sf15"><omgdi:waypoint x="1320" y="2700"/><omgdi:waypoint x="1360" y="2700"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="cg_start" id="shape_cg_start"><omgdc:Bounds height="30" width="30" x="100" y="2965"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cg_t1" id="shape_cg_t1"><omgdc:Bounds height="80" width="100" x="180" y="2940"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cg_end" id="shape_cg_end"><omgdc:Bounds height="30" width="30" x="320" y="2965"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="cg_sf1" id="edge_cg_sf1"><omgdi:waypoint x="130" y="2980"/><omgdi:waypoint x="180" y="2980"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="cg_sf2" id="edge_cg_sf2"><omgdi:waypoint x="280" y="2980"/><omgdi:waypoint x="320" y="2980"/></bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="mf1" id="edge_mf1"><omgdi:waypoint x="310" y="690"/><omgdi:waypoint x="310" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf2" id="edge_mf2"><omgdi:waypoint x="1430" y="790"/><omgdi:waypoint x="1430" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf3" id="edge_mf3"><omgdi:waypoint x="1570" y="790"/><omgdi:waypoint x="1570" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf4" id="edge_mf4"><omgdi:waypoint x="1780" y="790"/><omgdi:waypoint x="1780" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf5" id="edge_mf5"><omgdi:waypoint x="1920" y="790"/><omgdi:waypoint x="1920" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf6" id="edge_mf6"><omgdi:waypoint x="230" y="1090"/><omgdi:waypoint x="230" y="1200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf7" id="edge_mf7"><omgdi:waypoint x="750" y="1230"/><omgdi:waypoint x="750" y="1100"/><omgdi:waypoint x="1675" y="1100"/><omgdi:waypoint x="1675" y="765"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf8" id="edge_mf8"><omgdi:waypoint x="450" y="1310"/><omgdi:waypoint x="450" y="2100"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf9" id="edge_mf9"><omgdi:waypoint x="310" y="1860"/><omgdi:waypoint x="310" y="2350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf10" id="edge_mf10"><omgdi:waypoint x="530" y="2240"/><omgdi:waypoint x="530" y="2350"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf11" id="edge_mf11"><omgdi:waypoint x="530" y="2490"/><omgdi:waypoint x="530" y="2900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf12" id="edge_mf12"><omgdi:waypoint x="970" y="2740"/><omgdi:waypoint x="970" y="2900"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf13" id="edge_mf13"><omgdi:waypoint x="230" y="2940"/><omgdi:waypoint x="230" y="2850"/></bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

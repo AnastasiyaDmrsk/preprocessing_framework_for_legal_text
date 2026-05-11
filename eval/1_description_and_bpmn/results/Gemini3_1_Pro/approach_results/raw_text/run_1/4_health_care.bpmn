@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definition" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collab_1">
+      <participant id="pool_hp" name="Health Professional" processRef="proc_hp" />
+      <participant id="pool_ca" name="Competent Authority" processRef="proc_ca" />
+      <participant id="pool_com" name="Commission" processRef="proc_com" />
+      <participant id="pool_app" name="Applicant / Representative" processRef="proc_app" />
+      <messageFlow id="msg_flow_1" name="information" sourceRef="hp_t1" targetRef="ca_start" />
+   </collaboration>
+
+   <process id="proc_hp" isClosed="false" isExecutable="false" name="Health Professional" processType="None">
+      <laneSet id="laneSet_hp">
+         <lane id="lane_hp">
+            <flowNodeRef>hp_start</flowNodeRef>
+            <flowNodeRef>hp_gw1_div</flowNodeRef>
+            <flowNodeRef>hp_t1</flowNodeRef>
+            <flowNodeRef>hp_gw1_conv</flowNodeRef>
+            <flowNodeRef>hp_gw2_div</flowNodeRef>
+            <flowNodeRef>hp_t2</flowNodeRef>
+            <flowNodeRef>hp_gw2_conv</flowNodeRef>
+            <flowNodeRef>hp_gw3_div</flowNodeRef>
+            <flowNodeRef>hp_t3</flowNodeRef>
+            <flowNodeRef>hp_gw3_conv</flowNodeRef>
+            <flowNodeRef>hp_t4</flowNodeRef>
+            <flowNodeRef>hp_t5</flowNodeRef>
+            <flowNodeRef>hp_gw4_div</flowNodeRef>
+            <flowNodeRef>hp_t6</flowNodeRef>
+            <flowNodeRef>hp_gw4_conv</flowNodeRef>
+            <flowNodeRef>hp_t7</flowNodeRef>
+            <flowNodeRef>hp_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="hp_start" name="Need for exchange of health data">
+         <outgoing>hp_e1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="hp_gw1_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if for the sole purpose...">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e1</incoming>
+         <outgoing>hp_e2</outgoing>
+         <outgoing>hp_e3</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t1" name="transmit information">
+         <incoming>hp_e2</incoming>
+         <outgoing>hp_e4</outgoing>
+      </task>
+      <exclusiveGateway id="hp_gw1_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e3</incoming>
+         <incoming>hp_e4</incoming>
+         <outgoing>hp_e5</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="hp_gw2_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if in specific cases">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e5</incoming>
+         <outgoing>hp_e6</outgoing>
+         <outgoing>hp_e7</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t2" name="include information on physical or mental health">
+         <incoming>hp_e6</incoming>
+         <outgoing>hp_e8</outgoing>
+      </task>
+      <exclusiveGateway id="hp_gw2_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e7</incoming>
+         <incoming>hp_e8</incoming>
+         <outgoing>hp_e9</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="hp_gw3_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if prior to transmitting...">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e9</incoming>
+         <outgoing>hp_e10</outgoing>
+         <outgoing>hp_e11</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t3" name="obtain explicit consent">
+         <incoming>hp_e10</incoming>
+         <outgoing>hp_e12</outgoing>
+      </task>
+      <exclusiveGateway id="hp_gw3_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e11</incoming>
+         <incoming>hp_e12</incoming>
+         <outgoing>hp_e13</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t4" name="carry out the processing of personal health data">
+         <incoming>hp_e13</incoming>
+         <outgoing>hp_e14</outgoing>
+      </task>
+      <task id="hp_t5" name="exchange information">
+         <incoming>hp_e14</incoming>
+         <outgoing>hp_e15</outgoing>
+      </task>
+      <exclusiveGateway id="hp_gw4_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if only for the purposes...">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e15</incoming>
+         <outgoing>hp_e16</outgoing>
+         <outgoing>hp_e17</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t6" name="use exchanged information">
+         <incoming>hp_e16</incoming>
+         <outgoing>hp_e18</outgoing>
+      </task>
+      <exclusiveGateway id="hp_gw4_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>hp_e17</incoming>
+         <incoming>hp_e18</incoming>
+         <outgoing>hp_e19</outgoing>
+      </exclusiveGateway>
+      <task id="hp_t7" name="not further process the information">
+         <incoming>hp_e19</incoming>
+         <outgoing>hp_e20</outgoing>
+      </task>
+      <endEvent id="hp_end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>hp_e20</incoming>
+      </endEvent>
+      <sequenceFlow id="hp_e1" isImmediate="true" sourceRef="hp_start" targetRef="hp_gw1_div" />
+      <sequenceFlow id="hp_e2" name="yes" isImmediate="true" sourceRef="hp_gw1_div" targetRef="hp_t1" />
+      <sequenceFlow id="hp_e3" name="no" isImmediate="true" sourceRef="hp_gw1_div" targetRef="hp_gw1_conv" />
+      <sequenceFlow id="hp_e4" isImmediate="true" sourceRef="hp_t1" targetRef="hp_gw1_conv" />
+      <sequenceFlow id="hp_e5" isImmediate="true" sourceRef="hp_gw1_conv" targetRef="hp_gw2_div" />
+      <sequenceFlow id="hp_e6" name="yes" isImmediate="true" sourceRef="hp_gw2_div" targetRef="hp_t2" />
+      <sequenceFlow id="hp_e7" name="no" isImmediate="true" sourceRef="hp_gw2_div" targetRef="hp_gw2_conv" />
+      <sequenceFlow id="hp_e8" isImmediate="true" sourceRef="hp_t2" targetRef="hp_gw2_conv" />
+      <sequenceFlow id="hp_e9" isImmediate="true" sourceRef="hp_gw2_conv" targetRef="hp_gw3_div" />
+      <sequenceFlow id="hp_e10" name="yes" isImmediate="true" sourceRef="hp_gw3_div" targetRef="hp_t3" />
+      <sequenceFlow id="hp_e11" name="no" isImmediate="true" sourceRef="hp_gw3_div" targetRef="hp_gw3_conv" />
+      <sequenceFlow id="hp_e12" isImmediate="true" sourceRef="hp_t3" targetRef="hp_gw3_conv" />
+      <sequenceFlow id="hp_e13" isImmediate="true" sourceRef="hp_gw3_conv" targetRef="hp_t4" />
+      <sequenceFlow id="hp_e14" isImmediate="true" sourceRef="hp_t4" targetRef="hp_t5" />
+      <sequenceFlow id="hp_e15" isImmediate="true" sourceRef="hp_t5" targetRef="hp_gw4_div" />
+      <sequenceFlow id="hp_e16" name="yes" isImmediate="true" sourceRef="hp_gw4_div" targetRef="hp_t6" />
+      <sequenceFlow id="hp_e17" name="no" isImmediate="true" sourceRef="hp_gw4_div" targetRef="hp_gw4_conv" />
+      <sequenceFlow id="hp_e18" isImmediate="true" sourceRef="hp_t6" targetRef="hp_gw4_conv" />
+      <sequenceFlow id="hp_e19" isImmediate="true" sourceRef="hp_gw4_conv" targetRef="hp_t7" />
+      <sequenceFlow id="hp_e20" isImmediate="true" sourceRef="hp_t7" targetRef="hp_end" />
+   </process>
+
+   <process id="proc_ca" isClosed="false" isExecutable="false" name="Competent Authority" processType="None">
+      <laneSet id="laneSet_ca">
+         <lane id="lane_ca">
+            <flowNodeRef>ca_start</flowNodeRef>
+            <flowNodeRef>ca_t1</flowNodeRef>
+            <flowNodeRef>ca_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="ca_start" name="Receive information">
+         <outgoing>ca_e1</outgoing>
+         <messageEventDefinition id="msg_def_ca" />
+      </startEvent>
+      <task id="ca_t1" name="ensure that special needs are adequately addressed">
+         <incoming>ca_e1</incoming>
+         <outgoing>ca_e2</outgoing>
+      </task>
+      <endEvent id="ca_end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>ca_e2</incoming>
+      </endEvent>
+      <sequenceFlow id="ca_e1" isImmediate="true" sourceRef="ca_start" targetRef="ca_t1" />
+      <sequenceFlow id="ca_e2" isImmediate="true" sourceRef="ca_t1" targetRef="ca_end" />
+   </process>
+
+   <process id="proc_com" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="laneSet_com">
+         <lane id="lane_com">
+            <flowNodeRef>com_start</flowNodeRef>
+            <flowNodeRef>com_t1</flowNodeRef>
+            <flowNodeRef>com_t2</flowNodeRef>
+            <flowNodeRef>com_t3</flowNodeRef>
+            <flowNodeRef>com_t4</flowNodeRef>
+            <flowNodeRef>com_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="com_start" name="Start">
+         <outgoing>com_e1</outgoing>
+      </startEvent>
+      <task id="com_t1" name="draw up the common health certificate">
+         <incoming>com_e1</incoming>
+         <outgoing>com_e2</outgoing>
+      </task>
+      <task id="com_t2" name="adopt implementing acts">
+         <incoming>com_e2</incoming>
+         <outgoing>com_e3</outgoing>
+      </task>
+      <task id="com_t3" name="adopt uniform conditions and practical arrangements for exchanging the information">
+         <incoming>com_e3</incoming>
+         <outgoing>com_e4</outgoing>
+      </task>
+      <task id="com_t4" name="adopt those implementing acts">
+         <incoming>com_e4</incoming>
+         <outgoing>com_e5</outgoing>
+      </task>
+      <endEvent id="com_end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>com_e5</incoming>
+      </endEvent>
+      <sequenceFlow id="com_e1" isImmediate="true" sourceRef="com_start" targetRef="com_t1" />
+      <sequenceFlow id="com_e2" isImmediate="true" sourceRef="com_t1" targetRef="com_t2" />
+      <sequenceFlow id="com_e3" isImmediate="true" sourceRef="com_t2" targetRef="com_t3" />
+      <sequenceFlow id="com_e4" isImmediate="true" sourceRef="com_t3" targetRef="com_t4" />
+      <sequenceFlow id="com_e5" isImmediate="true" sourceRef="com_t4" targetRef="com_end" />
+   </process>
+
+   <process id="proc_app" isClosed="false" isExecutable="false" name="Applicant / Representative" processType="None">
+      <laneSet id="laneSet_app">
+         <lane id="lane_app">
+            <flowNodeRef>app_start</flowNodeRef>
+            <flowNodeRef>app_gw1_div</flowNodeRef>
+            <flowNodeRef>app_t1</flowNodeRef>
+            <flowNodeRef>app_gw1_conv</flowNodeRef>
+            <flowNodeRef>app_gw2_div</flowNodeRef>
+            <flowNodeRef>app_t2</flowNodeRef>
+            <flowNodeRef>app_gw2_conv</flowNodeRef>
+            <flowNodeRef>app_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="app_start" name="Start">
+         <outgoing>app_e1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="app_gw1_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>app_e1</incoming>
+         <outgoing>app_e2</outgoing>
+         <outgoing>app_e3</outgoing>
+      </exclusiveGateway>
+      <task id="app_t1" name="provide consent">
+         <incoming>app_e2</incoming>
+         <outgoing>app_e4</outgoing>
+      </task>
+      <exclusiveGateway id="app_gw1_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>app_e3</incoming>
+         <incoming>app_e4</incoming>
+         <outgoing>app_e5</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="app_gw2_div" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>app_e5</incoming>
+         <outgoing>app_e6</outgoing>
+         <outgoing>app_e7</outgoing>
+      </exclusiveGateway>
+      <task id="app_t2" name="refuse consent">
+         <incoming>app_e6</incoming>
+         <outgoing>app_e8</outgoing>
+      </task>
+      <exclusiveGateway id="app_gw2_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>app_e7</incoming>
+         <incoming>app_e8</incoming>
+         <outgoing>app_e9</outgoing>
+      </exclusiveGateway>
+      <endEvent id="app_end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>app_e9</incoming>
+      </endEvent>
+      <sequenceFlow id="app_e1" isImmediate="true" sourceRef="app_start" targetRef="app_gw1_div" />
+      <sequenceFlow id="app_e2" name="yes" isImmediate="true" sourceRef="app_gw1_div" targetRef="app_t1" />
+      <sequenceFlow id="app_e3" name="no" isImmediate="true" sourceRef="app_gw1_div" targetRef="app_gw1_conv" />
+      <sequenceFlow id="app_e4" isImmediate="true" sourceRef="app_t1" targetRef="app_gw1_conv" />
+      <sequenceFlow id="app_e5" isImmediate="true" sourceRef="app_gw1_conv" targetRef="app_gw2_div" />
+      <sequenceFlow id="app_e6" name="yes" isImmediate="true" sourceRef="app_gw2_div" targetRef="app_t2" />
+      <sequenceFlow id="app_e7" name="no" isImmediate="true" sourceRef="app_gw2_div" targetRef="app_gw2_conv" />
+      <sequenceFlow id="app_e8" isImmediate="true" sourceRef="app_t2" targetRef="app_gw2_conv" />
+      <sequenceFlow id="app_e9" isImmediate="true" sourceRef="app_gw2_conv" targetRef="app_end" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <bpmndi:BPMNShape bpmnElement="pool_hp" id="pool_hp_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2100.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_hp" id="lane_hp_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2070.0" x="80.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_start" id="hp_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw1_div" id="hp_gw1_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t1" id="hp_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw1_conv" id="hp_gw1_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw2_div" id="hp_gw2_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t2" id="hp_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw2_conv" id="hp_gw2_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw3_div" id="hp_gw3_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="950.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t3" id="hp_t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw3_conv" id="hp_gw3_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t4" id="hp_t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t5" id="hp_t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw4_div" id="hp_gw4_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1600.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t6" id="hp_t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_gw4_conv" id="hp_gw4_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1850.0" y="130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_t7" id="hp_t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="110.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="hp_end" id="hp_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2100.0" y="136.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="hp_e1" id="hp_e1_gui">
+            <omgdi:waypoint x="180.0" y="150.0" />
+            <omgdi:waypoint x="250.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e2" id="hp_e2_gui">
+            <omgdi:waypoint x="290.0" y="150.0" />
+            <omgdi:waypoint x="350.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e3" id="hp_e3_gui">
+            <omgdi:waypoint x="270.0" y="130.0" />
+            <omgdi:waypoint x="270.0" y="90.0" />
+            <omgdi:waypoint x="520.0" y="90.0" />
+            <omgdi:waypoint x="520.0" y="130.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e4" id="hp_e4_gui">
+            <omgdi:waypoint x="450.0" y="150.0" />
+            <omgdi:waypoint x="500.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e5" id="hp_e5_gui">
+            <omgdi:waypoint x="540.0" y="150.0" />
+            <omgdi:waypoint x="600.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e6" id="hp_e6_gui">
+            <omgdi:waypoint x="640.0" y="150.0" />
+            <omgdi:waypoint x="700.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e7" id="hp_e7_gui">
+            <omgdi:waypoint x="620.0" y="130.0" />
+            <omgdi:waypoint x="620.0" y="90.0" />
+            <omgdi:waypoint x="870.0" y="90.0" />
+            <omgdi:waypoint x="870.0" y="130.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e8" id="hp_e8_gui">
+            <omgdi:waypoint x="800.0" y="150.0" />
+            <omgdi:waypoint x="850.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e9" id="hp_e9_gui">
+            <omgdi:waypoint x="890.0" y="150.0" />
+            <omgdi:waypoint x="950.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e10" id="hp_e10_gui">
+            <omgdi:waypoint x="990.0" y="150.0" />
+            <omgdi:waypoint x="1050.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e11" id="hp_e11_gui">
+            <omgdi:waypoint x="970.0" y="130.0" />
+            <omgdi:waypoint x="970.0" y="90.0" />
+            <omgdi:waypoint x="1220.0" y="90.0" />
+            <omgdi:waypoint x="1220.0" y="130.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e12" id="hp_e12_gui">
+            <omgdi:waypoint x="1150.0" y="150.0" />
+            <omgdi:waypoint x="1200.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e13" id="hp_e13_gui">
+            <omgdi:waypoint x="1240.0" y="150.0" />
+            <omgdi:waypoint x="1300.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e14" id="hp_e14_gui">
+            <omgdi:waypoint x="1400.0" y="150.0" />
+            <omgdi:waypoint x="1450.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e15" id="hp_e15_gui">
+            <omgdi:waypoint x="1550.0" y="150.0" />
+            <omgdi:waypoint x="1600.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e16" id="hp_e16_gui">
+            <omgdi:waypoint x="1640.0" y="150.0" />
+            <omgdi:waypoint x="1700.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e17" id="hp_e17_gui">
+            <omgdi:waypoint x="1620.0" y="130.0" />
+            <omgdi:waypoint x="1620.0" y="90.0" />
+            <omgdi:waypoint x="1870.0" y="90.0" />
+            <omgdi:waypoint x="1870.0" y="130.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e18" id="hp_e18_gui">
+            <omgdi:waypoint x="1800.0" y="150.0" />
+            <omgdi:waypoint x="1850.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e19" id="hp_e19_gui">
+            <omgdi:waypoint x="1890.0" y="150.0" />
+            <omgdi:waypoint x="1950.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="hp_e20" id="hp_e20_gui">
+            <omgdi:waypoint x="2050.0" y="150.0" />
+            <omgdi:waypoint x="2100.0" y="150.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="pool_ca" id="pool_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2100.0" x="50.0" y="300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ca" id="lane_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2070.0" x="80.0" y="300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_start" id="ca_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="385.0" y="360.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_t1" id="ca_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="335.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ca_end" id="ca_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="630.0" y="361.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="ca_e1" id="ca_e1_gui">
+            <omgdi:waypoint x="415.0" y="375.0" />
+            <omgdi:waypoint x="480.0" y="375.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ca_e2" id="ca_e2_gui">
+            <omgdi:waypoint x="580.0" y="375.0" />
+            <omgdi:waypoint x="630.0" y="375.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="pool_com" id="pool_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2100.0" x="50.0" y="500.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_com" id="lane_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2070.0" x="80.0" y="500.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_start" id="com_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="560.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t1" id="com_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="535.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t2" id="com_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="535.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t3" id="com_t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="535.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t4" id="com_t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="535.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_end" id="com_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="850.0" y="561.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="com_e1" id="com_e1_gui">
+            <omgdi:waypoint x="180.0" y="575.0" />
+            <omgdi:waypoint x="250.0" y="575.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_e2" id="com_e2_gui">
+            <omgdi:waypoint x="350.0" y="575.0" />
+            <omgdi:waypoint x="400.0" y="575.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_e3" id="com_e3_gui">
+            <omgdi:waypoint x="500.0" y="575.0" />
+            <omgdi:waypoint x="550.0" y="575.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_e4" id="com_e4_gui">
+            <omgdi:waypoint x="650.0" y="575.0" />
+            <omgdi:waypoint x="700.0" y="575.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_e5" id="com_e5_gui">
+            <omgdi:waypoint x="800.0" y="575.0" />
+            <omgdi:waypoint x="850.0" y="575.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="pool_app" id="pool_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2100.0" x="50.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_app" id="lane_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2070.0" x="80.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_start" id="app_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="760.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_gw1_div" id="app_gw1_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="755.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_t1" id="app_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="735.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_gw1_conv" id="app_gw1_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="755.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_gw2_div" id="app_gw2_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="755.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_t2" id="app_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="735.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_gw2_conv" id="app_gw2_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="755.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_end" id="app_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="950.0" y="761.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="app_e1" id="app_e1_gui">
+            <omgdi:waypoint x="180.0" y="775.0" />
+            <omgdi:waypoint x="250.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e2" id="app_e2_gui">
+            <omgdi:waypoint x="290.0" y="775.0" />
+            <omgdi:waypoint x="350.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e3" id="app_e3_gui">
+            <omgdi:waypoint x="270.0" y="755.0" />
+            <omgdi:waypoint x="270.0" y="715.0" />
+            <omgdi:waypoint x="520.0" y="715.0" />
+            <omgdi:waypoint x="520.0" y="755.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e4" id="app_e4_gui">
+            <omgdi:waypoint x="450.0" y="775.0" />
+            <omgdi:waypoint x="500.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e5" id="app_e5_gui">
+            <omgdi:waypoint x="540.0" y="775.0" />
+            <omgdi:waypoint x="600.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e6" id="app_e6_gui">
+            <omgdi:waypoint x="640.0" y="775.0" />
+            <omgdi:waypoint x="700.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e7" id="app_e7_gui">
+            <omgdi:waypoint x="620.0" y="755.0" />
+            <omgdi:waypoint x="620.0" y="715.0" />
+            <omgdi:waypoint x="870.0" y="715.0" />
+            <omgdi:waypoint x="870.0" y="755.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e8" id="app_e8_gui">
+            <omgdi:waypoint x="800.0" y="775.0" />
+            <omgdi:waypoint x="850.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_e9" id="app_e9_gui">
+            <omgdi:waypoint x="890.0" y="775.0" />
+            <omgdi:waypoint x="950.0" y="775.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="msg_flow_1" id="msg_flow_1_gui">
+            <omgdi:waypoint x="400.0" y="190.0" />
+            <omgdi:waypoint x="400.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

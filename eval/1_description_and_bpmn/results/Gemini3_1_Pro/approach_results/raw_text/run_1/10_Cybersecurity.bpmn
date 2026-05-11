@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             id="sid-cybersecurity-scheme" 
+             targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="collab_1">
+      <participant id="participant_C" name="Commission" processRef="process_C">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="participant_E" name="ECCG" processRef="process_E">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="participant_EN" name="ENISA" processRef="process_EN">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="participant_IP" name="Interested Party" processRef="process_IP">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+
+      <messageFlow id="mf1" name="" sourceRef="c_t6" targetRef="en_catch_req"/>
+      <messageFlow id="mf2" name="" sourceRef="e_t3" targetRef="en_catch_req"/>
+      <messageFlow id="mf3" name="" sourceRef="en_pt3" targetRef="e_catch1"/>
+      <messageFlow id="mf4" name="" sourceRef="e_t6" targetRef="en_catch_op"/>
+      <messageFlow id="mf5" name="" sourceRef="en_t6" targetRef="c_catch1"/>
+      <messageFlow id="mf6" name="" sourceRef="ip_t2" targetRef="en_catch_fb"/>
+      <messageFlow id="mf7" name="" sourceRef="c_t9" targetRef="en_catch_rev"/>
+      <messageFlow id="mf8" name="" sourceRef="e_t8" targetRef="en_catch_rev"/>
+   </collaboration>
+
+   <process id="process_C" isClosed="false" isExecutable="true" name="Commission" processType="None">
+      <startEvent id="c_start" name="Need to prepare or review scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>c_sf1</outgoing>
+      </startEvent>
+      <task id="c_t1" name="Assess whether the scheme is on the basis of the Union rolling work programme">
+         <incoming>c_sf1</incoming>
+         <outgoing>c_sf2</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw1" name="On basis?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf2</incoming>
+         <outgoing>c_sf3</outgoing>
+         <outgoing>c_sf4</outgoing>
+         <outgoing>c_sf5</outgoing>
+      </exclusiveGateway>
+      <task id="c_t2a" name="Request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>c_sf3</incoming>
+         <outgoing>c_sf10</outgoing>
+      </task>
+      <task id="c_t2b" name="Request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>c_sf4</incoming>
+         <outgoing>c_sf11</outgoing>
+      </task>
+      <task id="c_t3" name="Assess whether the candidate scheme or existing scheme is not included in programme and whether in duly justified cases">
+         <incoming>c_sf5</incoming>
+         <outgoing>c_sf6</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw2" name="Duly justified?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf6</incoming>
+         <outgoing>c_sf7</outgoing>
+         <outgoing>c_sf8</outgoing>
+         <outgoing>c_sf9</outgoing>
+      </exclusiveGateway>
+      <task id="c_t4a" name="Request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>c_sf7</incoming>
+         <outgoing>c_sf12</outgoing>
+      </task>
+      <task id="c_t4b" name="Request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>c_sf8</incoming>
+         <outgoing>c_sf13</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw_merge1" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf10</incoming>
+         <incoming>c_sf11</incoming>
+         <incoming>c_sf9</incoming>
+         <incoming>c_sf12</incoming>
+         <incoming>c_sf13</incoming>
+         <outgoing>c_sf14</outgoing>
+      </exclusiveGateway>
+      <task id="c_t5" name="Update the Union rolling work programme">
+         <incoming>c_sf14</incoming>
+         <outgoing>c_sf15</outgoing>
+      </task>
+      <task id="c_t6" name="Transmit the request to ENISA">
+         <incoming>c_sf15</incoming>
+         <outgoing>c_sf16</outgoing>
+      </task>
+      <intermediateCatchEvent id="c_catch1" name="Receive candidate scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf16</incoming>
+         <outgoing>c_sf17</outgoing>
+         <messageEventDefinition id="med_c_catch1"/>
+      </intermediateCatchEvent>
+      <task id="c_t7" name="Adopt implementing acts">
+         <incoming>c_sf17</incoming>
+         <outgoing>c_sf18</outgoing>
+      </task>
+      <task id="c_t8" name="Request ENISA to start the process of developing a revised candidate scheme">
+         <incoming>c_sf18</incoming>
+         <outgoing>c_sf19</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw3" name="Request made?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf19</incoming>
+         <outgoing>c_sf20</outgoing>
+         <outgoing>c_sf21</outgoing>
+      </exclusiveGateway>
+      <task id="c_t9" name="Transmit the request to ENISA">
+         <incoming>c_sf20</incoming>
+         <outgoing>c_sf22</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw_merge2" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf21</incoming>
+         <incoming>c_sf22</incoming>
+         <outgoing>c_sf23</outgoing>
+      </exclusiveGateway>
+      <endEvent id="c_end" name="Scheme adoption or revised candidate scheme end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>c_sf23</incoming>
+      </endEvent>
+
+      <sequenceFlow id="c_sf1" isImmediate="true" sourceRef="c_start" targetRef="c_t1"/>
+      <sequenceFlow id="c_sf2" isImmediate="true" sourceRef="c_t1" targetRef="c_gw1"/>
+      <sequenceFlow id="c_sf3" isImmediate="true" name="yes, prepare" sourceRef="c_gw1" targetRef="c_t2a"/>
+      <sequenceFlow id="c_sf4" isImmediate="true" name="yes, review" sourceRef="c_gw1" targetRef="c_t2b"/>
+      <sequenceFlow id="c_sf5" isImmediate="true" name="no" sourceRef="c_gw1" targetRef="c_t3"/>
+      <sequenceFlow id="c_sf6" isImmediate="true" sourceRef="c_t3" targetRef="c_gw2"/>
+      <sequenceFlow id="c_sf7" isImmediate="true" name="yes, prepare" sourceRef="c_gw2" targetRef="c_t4a"/>
+      <sequenceFlow id="c_sf8" isImmediate="true" name="yes, review" sourceRef="c_gw2" targetRef="c_t4b"/>
+      <sequenceFlow id="c_sf9" isImmediate="true" name="no" sourceRef="c_gw2" targetRef="c_gw_merge1"/>
+      <sequenceFlow id="c_sf10" isImmediate="true" sourceRef="c_t2a" targetRef="c_gw_merge1"/>
+      <sequenceFlow id="c_sf11" isImmediate="true" sourceRef="c_t2b" targetRef="c_gw_merge1"/>
+      <sequenceFlow id="c_sf12" isImmediate="true" sourceRef="c_t4a" targetRef="c_gw_merge1"/>
+      <sequenceFlow id="c_sf13" isImmediate="true" sourceRef="c_t4b" targetRef="c_gw_merge1"/>
+      <sequenceFlow id="c_sf14" isImmediate="true" sourceRef="c_gw_merge1" targetRef="c_t5"/>
+      <sequenceFlow id="c_sf15" isImmediate="true" sourceRef="c_t5" targetRef="c_t6"/>
+      <sequenceFlow id="c_sf16" isImmediate="true" sourceRef="c_t6" targetRef="c_catch1"/>
+      <sequenceFlow id="c_sf17" isImmediate="true" sourceRef="c_catch1" targetRef="c_t7"/>
+      <sequenceFlow id="c_sf18" isImmediate="true" sourceRef="c_t7" targetRef="c_t8"/>
+      <sequenceFlow id="c_sf19" isImmediate="true" sourceRef="c_t8" targetRef="c_gw3"/>
+      <sequenceFlow id="c_sf20" isImmediate="true" name="yes" sourceRef="c_gw3" targetRef="c_t9"/>
+      <sequenceFlow id="c_sf21" isImmediate="true" name="no" sourceRef="c_gw3" targetRef="c_gw_merge2"/>
+      <sequenceFlow id="c_sf22" isImmediate="true" sourceRef="c_t9" targetRef="c_gw_merge2"/>
+      <sequenceFlow id="c_sf23" isImmediate="true" sourceRef="c_gw_merge2" targetRef="c_end"/>
+   </process>
+
+   <process id="process_E" isClosed="false" isExecutable="true" name="ECCG" processType="None">
+      <startEvent id="e_start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>e_sf1</outgoing>
+      </startEvent>
+      <task id="e_t1" name="Assess whether the candidate scheme or existing scheme is not included in programme and whether in duly justified cases">
+         <incoming>e_sf1</incoming>
+         <outgoing>e_sf2</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw1" name="Duly justified?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf2</incoming>
+         <outgoing>e_sf3</outgoing>
+         <outgoing>e_sf4</outgoing>
+         <outgoing>e_sf5</outgoing>
+      </exclusiveGateway>
+      <task id="e_t2a" name="Request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>e_sf3</incoming>
+         <outgoing>e_sf6</outgoing>
+      </task>
+      <task id="e_t2b" name="Request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>e_sf4</incoming>
+         <outgoing>e_sf7</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_merge1" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf6</incoming>
+         <incoming>e_sf7</incoming>
+         <incoming>e_sf5</incoming>
+         <outgoing>e_sf8</outgoing>
+      </exclusiveGateway>
+      <task id="e_t3" name="Transmit the request to ENISA">
+         <incoming>e_sf8</incoming>
+         <outgoing>e_sf9</outgoing>
+      </task>
+      <intermediateCatchEvent id="e_catch1" name="Receive communication from ENISA">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf9</incoming>
+         <outgoing>e_sf10</outgoing>
+         <messageEventDefinition id="med_e_catch1"/>
+      </intermediateCatchEvent>
+      <task id="e_t4" name="Provide ENISA with assistance and expert advice">
+         <incoming>e_sf10</incoming>
+         <outgoing>e_sf11</outgoing>
+      </task>
+      <task id="e_t5" name="Adopt an opinion on the candidate scheme">
+         <incoming>e_sf11</incoming>
+         <outgoing>e_sf12</outgoing>
+      </task>
+      <task id="e_t6" name="Transmit the opinion on the candidate scheme to ENISA">
+         <incoming>e_sf12</incoming>
+         <outgoing>e_sf13</outgoing>
+      </task>
+      <task id="e_t7" name="Request ENISA to start the process of developing a revised candidate scheme">
+         <incoming>e_sf13</incoming>
+         <outgoing>e_sf14</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw2" name="Request made?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf14</incoming>
+         <outgoing>e_sf15</outgoing>
+         <outgoing>e_sf16</outgoing>
+      </exclusiveGateway>
+      <task id="e_t8" name="Transmit the request to ENISA">
+         <incoming>e_sf15</incoming>
+         <outgoing>e_sf17</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_merge2" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf16</incoming>
+         <incoming>e_sf17</incoming>
+         <outgoing>e_sf18</outgoing>
+      </exclusiveGateway>
+      <endEvent id="e_end" name="Revision request end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>e_sf18</incoming>
+      </endEvent>
+
+      <sequenceFlow id="e_sf1" isImmediate="true" sourceRef="e_start" targetRef="e_t1"/>
+      <sequenceFlow id="e_sf2" isImmediate="true" sourceRef="e_t1" targetRef="e_gw1"/>
+      <sequenceFlow id="e_sf3" isImmediate="true" name="yes, prepare" sourceRef="e_gw1" targetRef="e_t2a"/>
+      <sequenceFlow id="e_sf4" isImmediate="true" name="yes, review" sourceRef="e_gw1" targetRef="e_t2b"/>
+      <sequenceFlow id="e_sf5" isImmediate="true" name="no" sourceRef="e_gw1" targetRef="e_gw_merge1"/>
+      <sequenceFlow id="e_sf6" isImmediate="true" sourceRef="e_t2a" targetRef="e_gw_merge1"/>
+      <sequenceFlow id="e_sf7" isImmediate="true" sourceRef="e_t2b" targetRef="e_gw_merge1"/>
+      <sequenceFlow id="e_sf8" isImmediate="true" sourceRef="e_gw_merge1" targetRef="e_t3"/>
+      <sequenceFlow id="e_sf9" isImmediate="true" sourceRef="e_t3" targetRef="e_catch1"/>
+      <sequenceFlow id="e_sf10" isImmediate="true" sourceRef="e_catch1" targetRef="e_t4"/>
+      <sequenceFlow id="e_sf11" isImmediate="true" sourceRef="e_t4" targetRef="e_t5"/>
+      <sequenceFlow id="e_sf12" isImmediate="true" sourceRef="e_t5" targetRef="e_t6"/>
+      <sequenceFlow id="e_sf13" isImmediate="true" sourceRef="e_t6" targetRef="e_t7"/>
+      <sequenceFlow id="e_sf14" isImmediate="true" sourceRef="e_t7" targetRef="e_gw2"/>
+      <sequenceFlow id="e_sf15" isImmediate="true" name="yes" sourceRef="e_gw2" targetRef="e_t8"/>
+      <sequenceFlow id="e_sf16" isImmediate="true" name="no" sourceRef="e_gw2" targetRef="e_gw_merge2"/>
+      <sequenceFlow id="e_sf17" isImmediate="true" sourceRef="e_t8" targetRef="e_gw_merge2"/>
+      <sequenceFlow id="e_sf18" isImmediate="true" sourceRef="e_gw_merge2" targetRef="e_end"/>
+   </process>
+
+   <process id="process_EN" isClosed="false" isExecutable="true" name="ENISA" processType="None">
+      <laneSet id="ls_enisa">
+         <lane id="lane_enisa_main" name="ENISA">
+            <flowNodeRef>en_start</flowNodeRef>
+            <flowNodeRef>en_catch_req</flowNodeRef>
+            <flowNodeRef>en_gw1</flowNodeRef>
+            <flowNodeRef>en_t1</flowNodeRef>
+            <flowNodeRef>en_t3</flowNodeRef>
+            <flowNodeRef>en_end_refuse</flowNodeRef>
+            <flowNodeRef>en_t4</flowNodeRef>
+            <flowNodeRef>en_gw_par1</flowNodeRef>
+            <flowNodeRef>en_pt1</flowNodeRef>
+            <flowNodeRef>en_pt2</flowNodeRef>
+            <flowNodeRef>en_pt3</flowNodeRef>
+            <flowNodeRef>en_gw_par2</flowNodeRef>
+            <flowNodeRef>en_gw2</flowNodeRef>
+            <flowNodeRef>en_gw_merge_op</flowNodeRef>
+            <flowNodeRef>en_catch_op</flowNodeRef>
+            <flowNodeRef>en_t5</flowNodeRef>
+            <flowNodeRef>en_t6</flowNodeRef>
+            <flowNodeRef>en_catch_fb</flowNodeRef>
+            <flowNodeRef>en_t7</flowNodeRef>
+            <flowNodeRef>en_catch_rev</flowNodeRef>
+            <flowNodeRef>en_t8</flowNodeRef>
+            <flowNodeRef>en_end</flowNodeRef>
+         </lane>
+         <lane id="lane_mb" name="Management Board">
+            <flowNodeRef>en_t2_mb</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="en_start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>en_sf1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="en_catch_req" name="Receive request from Commission or ECCG">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf1</incoming>
+         <outgoing>en_sf2</outgoing>
+         <messageEventDefinition id="med_en_catch_req"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="en_gw1" name="Refuse ECCG request?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf2</incoming>
+         <outgoing>en_sf3</outgoing>
+         <outgoing>en_sf7</outgoing>
+      </exclusiveGateway>
+      <task id="en_t1" name="Assess whether it decides to refuse a request from the ECCG">
+         <incoming>en_sf3</incoming>
+         <outgoing>en_sf4</outgoing>
+      </task>
+      <task id="en_t2_mb" name="Take decision to refuse a request">
+         <incoming>en_sf4</incoming>
+         <outgoing>en_sf5</outgoing>
+      </task>
+      <task id="en_t3" name="Give reasons for refusal of preparing a candidate scheme">
+         <incoming>en_sf5</incoming>
+         <outgoing>en_sf6</outgoing>
+      </task>
+      <endEvent id="en_end_refuse" name="Refusal end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf6</incoming>
+      </endEvent>
+      <task id="en_t4" name="Prepare a candidate cybersecurity certification scheme">
+         <incoming>en_sf7</incoming>
+         <outgoing>en_sf8</outgoing>
+      </task>
+      <parallelGateway id="en_gw_par1" name="Split" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf8</incoming>
+         <outgoing>en_sf9</outgoing>
+         <outgoing>en_sf10</outgoing>
+         <outgoing>en_sf11</outgoing>
+      </parallelGateway>
+      <task id="en_pt1" name="Consult all relevant stakeholders">
+         <incoming>en_sf9</incoming>
+         <outgoing>en_sf12</outgoing>
+      </task>
+      <task id="en_pt2" name="Establish an ad hoc working group">
+         <incoming>en_sf10</incoming>
+         <outgoing>en_sf13</outgoing>
+      </task>
+      <task id="en_pt3" name="Cooperate with the ECCG">
+         <incoming>en_sf11</incoming>
+         <outgoing>en_sf14</outgoing>
+      </task>
+      <parallelGateway id="en_gw_par2" name="Merge" gatewayDirection="Converging">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf12</incoming>
+         <incoming>en_sf13</incoming>
+         <incoming>en_sf14</incoming>
+         <outgoing>en_sf_par_out</outgoing>
+      </parallelGateway>
+
+      <exclusiveGateway id="en_gw2" name="Opinion absent?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf_par_out</incoming>
+         <outgoing>en_sf15</outgoing>
+         <outgoing>en_sf_except</outgoing>
+      </exclusiveGateway>
+
+      <intermediateCatchEvent id="en_catch_op" name="Receive opinion from ECCG">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf15</incoming>
+         <outgoing>en_sf16</outgoing>
+         <messageEventDefinition id="med_en_catch_op"/>
+      </intermediateCatchEvent>
+      <task id="en_t5" name="Take utmost account of the ECCG opinion">
+         <incoming>en_sf16</incoming>
+         <outgoing>en_sf_to_merge_op</outgoing>
+      </task>
+
+      <exclusiveGateway id="en_gw_merge_op" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf_to_merge_op</incoming>
+         <incoming>en_sf_except</incoming>
+         <outgoing>en_sf17</outgoing>
+      </exclusiveGateway>
+
+      <task id="en_t6" name="Transmit the candidate scheme to the Commission">
+         <incoming>en_sf17</incoming>
+         <outgoing>en_sf18</outgoing>
+      </task>
+      <intermediateCatchEvent id="en_catch_fb" name="Receive feedback from Interested Party">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf18</incoming>
+         <outgoing>en_sf19</outgoing>
+         <messageEventDefinition id="med_en_catch_fb"/>
+      </intermediateCatchEvent>
+      <task id="en_t7" name="Evaluate each adopted European cybersecurity certification scheme">
+         <incoming>en_sf19</incoming>
+         <outgoing>en_sf20</outgoing>
+      </task>
+      <intermediateCatchEvent id="en_catch_rev" name="Receive request for revised scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf20</incoming>
+         <outgoing>en_sf21</outgoing>
+         <messageEventDefinition id="med_en_catch_rev"/>
+      </intermediateCatchEvent>
+      <task id="en_t8" name="Start developing a revised candidate scheme">
+         <incoming>en_sf21</incoming>
+         <outgoing>en_sf22</outgoing>
+      </task>
+      <endEvent id="en_end" name="Candidate scheme evaluated or revised end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>en_sf22</incoming>
+      </endEvent>
+
+      <sequenceFlow id="en_sf1" isImmediate="true" sourceRef="en_start" targetRef="en_catch_req"/>
+      <sequenceFlow id="en_sf2" isImmediate="true" sourceRef="en_catch_req" targetRef="en_gw1"/>
+      <sequenceFlow id="en_sf3" isImmediate="true" name="refuse" sourceRef="en_gw1" targetRef="en_t1"/>
+      <sequenceFlow id="en_sf4" isImmediate="true" sourceRef="en_t1" targetRef="en_t2_mb"/>
+      <sequenceFlow id="en_sf5" isImmediate="true" sourceRef="en_t2_mb" targetRef="en_t3"/>
+      <sequenceFlow id="en_sf6" isImmediate="true" sourceRef="en_t3" targetRef="en_end_refuse"/>
+      <sequenceFlow id="en_sf7" isImmediate="true" name="prepare" sourceRef="en_gw1" targetRef="en_t4"/>
+      <sequenceFlow id="en_sf8" isImmediate="true" sourceRef="en_t4" targetRef="en_gw_par1"/>
+      <sequenceFlow id="en_sf9" isImmediate="true" sourceRef="en_gw_par1" targetRef="en_pt1"/>
+      <sequenceFlow id="en_sf10" isImmediate="true" sourceRef="en_gw_par1" targetRef="en_pt2"/>
+      <sequenceFlow id="en_sf11" isImmediate="true" sourceRef="en_gw_par1" targetRef="en_pt3"/>
+      <sequenceFlow id="en_sf12" isImmediate="true" sourceRef="en_pt1" targetRef="en_gw_par2"/>
+      <sequenceFlow id="en_sf13" isImmediate="true" sourceRef="en_pt2" targetRef="en_gw_par2"/>
+      <sequenceFlow id="en_sf14" isImmediate="true" sourceRef="en_pt3" targetRef="en_gw_par2"/>
+      <sequenceFlow id="en_sf_par_out" isImmediate="true" sourceRef="en_gw_par2" targetRef="en_gw2"/>
+      <sequenceFlow id="en_sf15" isImmediate="true" name="no (opinion present)" sourceRef="en_gw2" targetRef="en_catch_op"/>
+      <sequenceFlow id="en_sf_except" isImmediate="true" name="except where absence" sourceRef="en_gw2" targetRef="en_gw_merge_op"/>
+      <sequenceFlow id="en_sf16" isImmediate="true" sourceRef="en_catch_op" targetRef="en_t5"/>
+      <sequenceFlow id="en_sf_to_merge_op" isImmediate="true" sourceRef="en_t5" targetRef="en_gw_merge_op"/>
+      <sequenceFlow id="en_sf17" isImmediate="true" sourceRef="en_gw_merge_op" targetRef="en_t6"/>
+      <sequenceFlow id="en_sf18" isImmediate="true" sourceRef="en_t6" targetRef="en_catch_fb"/>
+      <sequenceFlow id="en_sf19" isImmediate="true" sourceRef="en_catch_fb" targetRef="en_t7"/>
+      <sequenceFlow id="en_sf20" isImmediate="true" sourceRef="en_t7" targetRef="en_catch_rev"/>
+      <sequenceFlow id="en_sf21" isImmediate="true" sourceRef="en_catch_rev" targetRef="en_t8"/>
+      <sequenceFlow id="en_sf22" isImmediate="true" sourceRef="en_t8" targetRef="en_end"/>
+   </process>
+
+   <process id="process_IP" isClosed="false" isExecutable="true" name="Interested Party" processType="None">
+      <startEvent id="ip_start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>ip_sf1</outgoing>
+      </startEvent>
+      <task id="ip_t1" name="Provide feedback if required">
+         <incoming>ip_sf1</incoming>
+         <outgoing>ip_sf2</outgoing>
+      </task>
+      <task id="ip_t2" name="Transmit the feedback to ENISA">
+         <incoming>ip_sf2</incoming>
+         <outgoing>ip_sf3</outgoing>
+      </task>
+      <endEvent id="ip_end" name="Feedback provided end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ip_sf3</incoming>
+      </endEvent>
+      <sequenceFlow id="ip_sf1" isImmediate="true" sourceRef="ip_start" targetRef="ip_t1"/>
+      <sequenceFlow id="ip_sf2" isImmediate="true" sourceRef="ip_t1" targetRef="ip_t2"/>
+      <sequenceFlow id="ip_sf3" isImmediate="true" sourceRef="ip_t2" targetRef="ip_end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="diag_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+         <bpmndi:BPMNShape bpmnElement="participant_C" id="shape_part_C" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="2950.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_start" id="shape_c_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t1" id="shape_c_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw1" id="shape_c_gw1">
+            <omgdc:Bounds height="40.0" width="40.0" x="320.0" y="205.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t2a" id="shape_c_t2a">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="65.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t2b" id="shape_c_t2b">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t3" id="shape_c_t3">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="285.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw2" id="shape_c_gw2">
+            <omgdc:Bounds height="40.0" width="40.0" x="540.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t4a" id="shape_c_t4a">
+            <omgdc:Bounds height="80.0" width="100.0" x="620.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t4b" id="shape_c_t4b">
+            <omgdc:Bounds height="80.0" width="100.0" x="620.0" y="325.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_merge1" id="shape_c_gw_merge1">
+            <omgdc:Bounds height="40.0" width="40.0" x="760.0" y="205.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t5" id="shape_c_t5">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t6" id="shape_c_t6">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_catch1" id="shape_c_catch1">
+            <omgdc:Bounds height="30.0" width="30.0" x="2200.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t7" id="shape_c_t7">
+            <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t8" id="shape_c_t8">
+            <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw3" id="shape_c_gw3">
+            <omgdc:Bounds height="40.0" width="40.0" x="2600.0" y="205.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_t9" id="shape_c_t9">
+            <omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_merge2" id="shape_c_gw_merge2">
+            <omgdc:Bounds height="40.0" width="40.0" x="2850.0" y="205.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_end" id="shape_c_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="2950.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="participant_E" id="shape_part_E" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2950.0" x="50.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_start" id="shape_e_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="525.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t1" id="shape_e_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw1" id="shape_e_gw1">
+            <omgdc:Bounds height="40.0" width="40.0" x="320.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t2a" id="shape_e_t2a">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t2b" id="shape_e_t2b">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_merge1" id="shape_e_gw_merge1">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t3" id="shape_e_t3">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_catch1" id="shape_e_catch1">
+            <omgdc:Bounds height="30.0" width="30.0" x="1485.0" y="525.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t4" id="shape_e_t4">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t5" id="shape_e_t5">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t6" id="shape_e_t6">
+            <omgdc:Bounds height="80.0" width="100.0" x="1850.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t7" id="shape_e_t7">
+            <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw2" id="shape_e_gw2">
+            <omgdc:Bounds height="40.0" width="40.0" x="2600.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_t8" id="shape_e_t8">
+            <omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_merge2" id="shape_e_gw_merge2">
+            <omgdc:Bounds height="40.0" width="40.0" x="2850.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_end" id="shape_e_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="2950.0" y="525.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="participant_EN" id="shape_part_EN" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="2950.0" x="50.0" y="690.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_enisa_main" id="shape_lane_enisa" isHorizontal="true">
+            <omgdc:Bounds height="260.0" width="2920.0" x="80.0" y="690.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_mb" id="shape_lane_mb" isHorizontal="true">
+            <omgdc:Bounds height="140.0" width="2920.0" x="80.0" y="950.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_start" id="shape_en_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_req" id="shape_en_catch_req">
+            <omgdc:Bounds height="30.0" width="30.0" x="1035.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw1" id="shape_en_gw1">
+            <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="795.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t1" id="shape_en_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="705.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t2_mb" id="shape_en_t2_mb">
+            <omgdc:Bounds height="80.0" width="100.0" x="1350.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t3" id="shape_en_t3">
+            <omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="705.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_end_refuse" id="shape_en_end_refuse">
+            <omgdc:Bounds height="30.0" width="30.0" x="1650.0" y="730.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t4" id="shape_en_t4">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_par1" id="shape_en_gw_par1">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_pt1" id="shape_en_pt1">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_pt2" id="shape_en_pt2">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="790.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_pt3" id="shape_en_pt3">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="880.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_par2" id="shape_en_gw_par2">
+            <omgdc:Bounds height="40.0" width="40.0" x="1600.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw2" id="shape_en_gw2">
+            <omgdc:Bounds height="40.0" width="40.0" x="1700.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_op" id="shape_en_catch_op">
+            <omgdc:Bounds height="30.0" width="30.0" x="1865.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t5" id="shape_en_t5">
+            <omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_merge_op" id="shape_en_gw_merge_op">
+            <omgdc:Bounds height="40.0" width="40.0" x="2080.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t6" id="shape_en_t6">
+            <omgdc:Bounds height="80.0" width="100.0" x="2150.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_fb" id="shape_en_catch_fb">
+            <omgdc:Bounds height="30.0" width="30.0" x="2300.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t7" id="shape_en_t7">
+            <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_rev" id="shape_en_catch_rev">
+            <omgdc:Bounds height="30.0" width="30.0" x="2700.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_t8" id="shape_en_t8">
+            <omgdc:Bounds height="80.0" width="100.0" x="2800.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_end" id="shape_en_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="2950.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="participant_IP" id="shape_part_IP" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2950.0" x="50.0" y="1120.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_start" id="shape_ip_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="2000.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_t1" id="shape_ip_t1">
+            <omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="1175.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_t2" id="shape_ip_t2">
+            <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="1175.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_end" id="shape_ip_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="2450.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="c_sf1" id="edge_c_sf1">
+            <omgdi:waypoint x="130.0" y="225.0"/>
+            <omgdi:waypoint x="180.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf2" id="edge_c_sf2">
+            <omgdi:waypoint x="280.0" y="225.0"/>
+            <omgdi:waypoint x="320.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf3" id="edge_c_sf3">
+            <omgdi:waypoint x="360.0" y="225.0"/>
+            <omgdi:waypoint x="380.0" y="225.0"/>
+            <omgdi:waypoint x="380.0" y="105.0"/>
+            <omgdi:waypoint x="400.0" y="105.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf4" id="edge_c_sf4">
+            <omgdi:waypoint x="360.0" y="225.0"/>
+            <omgdi:waypoint x="400.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf5" id="edge_c_sf5">
+            <omgdi:waypoint x="360.0" y="225.0"/>
+            <omgdi:waypoint x="380.0" y="225.0"/>
+            <omgdi:waypoint x="380.0" y="325.0"/>
+            <omgdi:waypoint x="400.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf6" id="edge_c_sf6">
+            <omgdi:waypoint x="500.0" y="325.0"/>
+            <omgdi:waypoint x="540.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf7" id="edge_c_sf7">
+            <omgdi:waypoint x="580.0" y="325.0"/>
+            <omgdi:waypoint x="600.0" y="325.0"/>
+            <omgdi:waypoint x="600.0" y="275.0"/>
+            <omgdi:waypoint x="620.0" y="275.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf8" id="edge_c_sf8">
+            <omgdi:waypoint x="580.0" y="325.0"/>
+            <omgdi:waypoint x="600.0" y="325.0"/>
+            <omgdi:waypoint x="600.0" y="365.0"/>
+            <omgdi:waypoint x="620.0" y="365.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf9" id="edge_c_sf9">
+            <omgdi:waypoint x="560.0" y="345.0"/>
+            <omgdi:waypoint x="560.0" y="400.0"/>
+            <omgdi:waypoint x="780.0" y="400.0"/>
+            <omgdi:waypoint x="780.0" y="245.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf10" id="edge_c_sf10">
+            <omgdi:waypoint x="500.0" y="105.0"/>
+            <omgdi:waypoint x="780.0" y="105.0"/>
+            <omgdi:waypoint x="780.0" y="205.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf11" id="edge_c_sf11">
+            <omgdi:waypoint x="500.0" y="225.0"/>
+            <omgdi:waypoint x="760.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf12" id="edge_c_sf12">
+            <omgdi:waypoint x="720.0" y="275.0"/>
+            <omgdi:waypoint x="780.0" y="275.0"/>
+            <omgdi:waypoint x="780.0" y="245.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf13" id="edge_c_sf13">
+            <omgdi:waypoint x="720.0" y="365.0"/>
+            <omgdi:waypoint x="780.0" y="365.0"/>
+            <omgdi:waypoint x="780.0" y="245.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf14" id="edge_c_sf14">
+            <omgdi:waypoint x="800.0" y="225.0"/>
+            <omgdi:waypoint x="850.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf15" id="edge_c_sf15">
+            <omgdi:waypoint x="950.0" y="225.0"/>
+            <omgdi:waypoint x="1000.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf16" id="edge_c_sf16">
+            <omgdi:waypoint x="1100.0" y="225.0"/>
+            <omgdi:waypoint x="2200.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf17" id="edge_c_sf17">
+            <omgdi:waypoint x="2230.0" y="225.0"/>
+            <omgdi:waypoint x="2300.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf18" id="edge_c_sf18">
+            <omgdi:waypoint x="2400.0" y="225.0"/>
+            <omgdi:waypoint x="2450.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf19" id="edge_c_sf19">
+            <omgdi:waypoint x="2550.0" y="225.0"/>
+            <omgdi:waypoint x="2600.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf20" id="edge_c_sf20">
+            <omgdi:waypoint x="2640.0" y="225.0"/>
+            <omgdi:waypoint x="2700.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf21" id="edge_c_sf21">
+            <omgdi:waypoint x="2620.0" y="205.0"/>
+            <omgdi:waypoint x="2620.0" y="150.0"/>
+            <omgdi:waypoint x="2870.0" y="150.0"/>
+            <omgdi:waypoint x="2870.0" y="205.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf22" id="edge_c_sf22">
+            <omgdi:waypoint x="2800.0" y="225.0"/>
+            <omgdi:waypoint x="2850.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf23" id="edge_c_sf23">
+            <omgdi:waypoint x="2890.0" y="225.0"/>
+            <omgdi:waypoint x="2950.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="e_sf1" id="edge_e_sf1">
+            <omgdi:waypoint x="130.0" y="540.0"/>
+            <omgdi:waypoint x="180.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf2" id="edge_e_sf2">
+            <omgdi:waypoint x="280.0" y="540.0"/>
+            <omgdi:waypoint x="320.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf3" id="edge_e_sf3">
+            <omgdi:waypoint x="360.0" y="540.0"/>
+            <omgdi:waypoint x="380.0" y="540.0"/>
+            <omgdi:waypoint x="380.0" y="475.0"/>
+            <omgdi:waypoint x="400.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf4" id="edge_e_sf4">
+            <omgdi:waypoint x="360.0" y="540.0"/>
+            <omgdi:waypoint x="380.0" y="540.0"/>
+            <omgdi:waypoint x="380.0" y="585.0"/>
+            <omgdi:waypoint x="400.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf5" id="edge_e_sf5">
+            <omgdi:waypoint x="340.0" y="560.0"/>
+            <omgdi:waypoint x="340.0" y="650.0"/>
+            <omgdi:waypoint x="570.0" y="650.0"/>
+            <omgdi:waypoint x="570.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf6" id="edge_e_sf6">
+            <omgdi:waypoint x="500.0" y="475.0"/>
+            <omgdi:waypoint x="570.0" y="475.0"/>
+            <omgdi:waypoint x="570.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf7" id="edge_e_sf7">
+            <omgdi:waypoint x="500.0" y="585.0"/>
+            <omgdi:waypoint x="570.0" y="585.0"/>
+            <omgdi:waypoint x="570.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf8" id="edge_e_sf8">
+            <omgdi:waypoint x="590.0" y="540.0"/>
+            <omgdi:waypoint x="1000.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf9" id="edge_e_sf9">
+            <omgdi:waypoint x="1100.0" y="540.0"/>
+            <omgdi:waypoint x="1485.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf10" id="edge_e_sf10">
+            <omgdi:waypoint x="1515.0" y="540.0"/>
+            <omgdi:waypoint x="1550.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf11" id="edge_e_sf11">
+            <omgdi:waypoint x="1650.0" y="540.0"/>
+            <omgdi:waypoint x="1700.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf12" id="edge_e_sf12">
+            <omgdi:waypoint x="1800.0" y="540.0"/>
+            <omgdi:waypoint x="1850.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf13" id="edge_e_sf13">
+            <omgdi:waypoint x="1950.0" y="540.0"/>
+            <omgdi:waypoint x="2450.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf14" id="edge_e_sf14">
+            <omgdi:waypoint x="2550.0" y="540.0"/>
+            <omgdi:waypoint x="2600.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf15" id="edge_e_sf15">
+            <omgdi:waypoint x="2640.0" y="540.0"/>
+            <omgdi:waypoint x="2700.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf16" id="edge_e_sf16">
+            <omgdi:waypoint x="2620.0" y="520.0"/>
+            <omgdi:waypoint x="2620.0" y="460.0"/>
+            <omgdi:waypoint x="2870.0" y="460.0"/>
+            <omgdi:waypoint x="2870.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf17" id="edge_e_sf17">
+            <omgdi:waypoint x="2800.0" y="540.0"/>
+            <omgdi:waypoint x="2850.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf18" id="edge_e_sf18">
+            <omgdi:waypoint x="2890.0" y="540.0"/>
+            <omgdi:waypoint x="2950.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="en_sf1" id="edge_en_sf1">
+            <omgdi:waypoint x="130.0" y="815.0"/>
+            <omgdi:waypoint x="1035.0" y="815.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf2" id="edge_en_sf2">
+            <omgdi:waypoint x="1065.0" y="815.0"/>
+            <omgdi:waypoint x="1100.0" y="815.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf3" id="edge_en_sf3">
+            <omgdi:waypoint x="1120.0" y="795.0"/>
+            <omgdi:waypoint x="1120.0" y="745.0"/>
+            <omgdi:waypoint x="1200.0" y="745.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf4" id="edge_en_sf4">
+            <omgdi:waypoint x="1300.0" y="745.0"/>
+            <omgdi:waypoint x="1325.0" y="745.0"/>
+            <omgdi:waypoint x="1325.0" y="1020.0"/>
+            <omgdi:waypoint x="1350.0" y="1020.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf5" id="edge_en_sf5">
+            <omgdi:waypoint x="1450.0" y="1020.0"/>
+            <omgdi:waypoint x="1475.0" y="1020.0"/>
+            <omgdi:waypoint x="1475.0" y="745.0"/>
+            <omgdi:waypoint x="1500.0" y="745.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf6" id="edge_en_sf6">
+            <omgdi:waypoint x="1600.0" y="745.0"/>
+            <omgdi:waypoint x="1650.0" y="745.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf7" id="edge_en_sf7">
+            <omgdi:waypoint x="1140.0" y="815.0"/>
+            <omgdi:waypoint x="1170.0" y="815.0"/>
+            <omgdi:waypoint x="1170.0" y="845.0"/>
+            <omgdi:waypoint x="1200.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf8" id="edge_en_sf8">
+            <omgdi:waypoint x="1300.0" y="845.0"/>
+            <omgdi:waypoint x="1350.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf9" id="edge_en_sf9">
+            <omgdi:waypoint x="1370.0" y="825.0"/>
+            <omgdi:waypoint x="1370.0" y="740.0"/>
+            <omgdi:waypoint x="1450.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf10" id="edge_en_sf10">
+            <omgdi:waypoint x="1390.0" y="845.0"/>
+            <omgdi:waypoint x="1450.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf11" id="edge_en_sf11">
+            <omgdi:waypoint x="1370.0" y="865.0"/>
+            <omgdi:waypoint x="1370.0" y="920.0"/>
+            <omgdi:waypoint x="1450.0" y="920.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf12" id="edge_en_sf12">
+            <omgdi:waypoint x="1550.0" y="740.0"/>
+            <omgdi:waypoint x="1620.0" y="740.0"/>
+            <omgdi:waypoint x="1620.0" y="825.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf13" id="edge_en_sf13">
+            <omgdi:waypoint x="1550.0" y="830.0"/>
+            <omgdi:waypoint x="1600.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf14" id="edge_en_sf14">
+            <omgdi:waypoint x="1550.0" y="920.0"/>
+            <omgdi:waypoint x="1620.0" y="920.0"/>
+            <omgdi:waypoint x="1620.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_par_out" id="edge_en_sf_par_out">
+            <omgdi:waypoint x="1640.0" y="845.0"/>
+            <omgdi:waypoint x="1700.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf15" id="edge_en_sf15">
+            <omgdi:waypoint x="1740.0" y="845.0"/>
+            <omgdi:waypoint x="1865.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_except" id="edge_en_sf_except">
+            <omgdi:waypoint x="1720.0" y="865.0"/>
+            <omgdi:waypoint x="1720.0" y="930.0"/>
+            <omgdi:waypoint x="2100.0" y="930.0"/>
+            <omgdi:waypoint x="2100.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf16" id="edge_en_sf16">
+            <omgdi:waypoint x="1895.0" y="845.0"/>
+            <omgdi:waypoint x="1950.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_to_merge_op" id="edge_en_sf_to_merge_op">
+            <omgdi:waypoint x="2050.0" y="845.0"/>
+            <omgdi:waypoint x="2080.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf17" id="edge_en_sf17">
+            <omgdi:waypoint x="2120.0" y="845.0"/>
+            <omgdi:waypoint x="2150.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf18" id="edge_en_sf18">
+            <omgdi:waypoint x="2250.0" y="845.0"/>
+            <omgdi:waypoint x="2300.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf19" id="edge_en_sf19">
+            <omgdi:waypoint x="2330.0" y="845.0"/>
+            <omgdi:waypoint x="2450.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf20" id="edge_en_sf20">
+            <omgdi:waypoint x="2550.0" y="845.0"/>
+            <omgdi:waypoint x="2700.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf21" id="edge_en_sf21">
+            <omgdi:waypoint x="2730.0" y="845.0"/>
+            <omgdi:waypoint x="2800.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf22" id="edge_en_sf22">
+            <omgdi:waypoint x="2900.0" y="845.0"/>
+            <omgdi:waypoint x="2950.0" y="845.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ip_sf1" id="edge_ip_sf1">
+            <omgdi:waypoint x="2030.0" y="1215.0"/>
+            <omgdi:waypoint x="2100.0" y="1215.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ip_sf2" id="edge_ip_sf2">
+            <omgdi:waypoint x="2200.0" y="1215.0"/>
+            <omgdi:waypoint x="2300.0" y="1215.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ip_sf3" id="edge_ip_sf3">
+            <omgdi:waypoint x="2400.0" y="1215.0"/>
+            <omgdi:waypoint x="2450.0" y="1215.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="mf1" id="edge_mf1">
+            <omgdi:waypoint x="1050.0" y="265.0"/>
+            <omgdi:waypoint x="1050.0" y="800.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf2" id="edge_mf2">
+            <omgdi:waypoint x="1050.0" y="580.0"/>
+            <omgdi:waypoint x="1050.0" y="800.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf3" id="edge_mf3">
+            <omgdi:waypoint x="1500.0" y="880.0"/>
+            <omgdi:waypoint x="1500.0" y="555.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf4" id="edge_mf4">
+            <omgdi:waypoint x="1880.0" y="580.0"/>
+            <omgdi:waypoint x="1880.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf5" id="edge_mf5">
+            <omgdi:waypoint x="2215.0" y="805.0"/>
+            <omgdi:waypoint x="2215.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf6" id="edge_mf6">
+            <omgdi:waypoint x="2315.0" y="1175.0"/>
+            <omgdi:waypoint x="2315.0" y="860.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf7" id="edge_mf7">
+            <omgdi:waypoint x="2715.0" y="265.0"/>
+            <omgdi:waypoint x="2715.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf8" id="edge_mf8">
+            <omgdi:waypoint x="2750.0" y="580.0"/>
+            <omgdi:waypoint x="2750.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
