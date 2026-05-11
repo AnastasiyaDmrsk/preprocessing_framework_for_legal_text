@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_1">
+      <participant id="participant_manufacturer" name="Manufacturer" processRef="process_manufacturer"/>
+      <participant id="participant_commission" name="Commission" processRef="process_commission"/>
+      <participant id="participant_competent_authority" name="Competent Authority" processRef="process_competent_authority"/>
+   </collaboration>
+
+   <!-- ======= MANUFACTURER PROCESS ======= -->
+   <process id="process_manufacturer" name="Manufacturer" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_manufacturer">
+         <lane id="lane_manufacturer" name="">
+            <flowNodeRef>start_mfr</flowNodeRef>
+            <flowNodeRef>task_ensure_design</flowNodeRef>
+            <flowNodeRef>task_establish_rms</flowNodeRef>
+            <flowNodeRef>task_conduct_clinical_eval</flowNodeRef>
+            <flowNodeRef>task_draw_up_tech_doc</flowNodeRef>
+            <flowNodeRef>task_draw_up_custom_doc</flowNodeRef>
+            <flowNodeRef>task_establish_qms</flowNodeRef>
+            <flowNodeRef>pg_fork1</flowNodeRef>
+            <flowNodeRef>pg_join1</flowNodeRef>
+            <flowNodeRef>task_draw_up_eu_declaration</flowNodeRef>
+            <flowNodeRef>task_affix_ce_marking</flowNodeRef>
+            <flowNodeRef>task_comply_udi</flowNodeRef>
+            <flowNodeRef>task_ensure_info_with_device</flowNodeRef>
+            <flowNodeRef>pg_fork2</flowNodeRef>
+            <flowNodeRef>task_keep_documentation</flowNodeRef>
+            <flowNodeRef>task_ensure_series_conformity</flowNodeRef>
+            <flowNodeRef>task_implement_pms</flowNodeRef>
+            <flowNodeRef>task_record_report_incidents</flowNodeRef>
+            <flowNodeRef>pg_join2</flowNodeRef>
+            <flowNodeRef>task_take_corrective_action</flowNodeRef>
+            <flowNodeRef>task_inform_distributors</flowNodeRef>
+            <flowNodeRef>task_inform_authorities_serious_risk</flowNodeRef>
+            <flowNodeRef>task_provide_info_to_authority</flowNodeRef>
+            <flowNodeRef>task_cooperate_corrective_action</flowNodeRef>
+            <flowNodeRef>task_ensure_financial_coverage</flowNodeRef>
+            <flowNodeRef>end_mfr</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_mfr" name="Device to be placed on market">
+         <outgoing>flow_s1</outgoing>
+      </startEvent>
+
+      <task id="task_ensure_design" name="Ensure device designed and manufactured per requirements" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s1</incoming>
+         <outgoing>flow_s2</outgoing>
+      </task>
+
+      <parallelGateway id="pg_fork1" name="" gatewayDirection="Diverging">
+         <incoming>flow_s2</incoming>
+         <outgoing>flow_f1a</outgoing>
+         <outgoing>flow_f1b</outgoing>
+         <outgoing>flow_f1c</outgoing>
+         <outgoing>flow_f1d</outgoing>
+         <outgoing>flow_f1e</outgoing>
+      </parallelGateway>
+
+      <task id="task_establish_rms" name="Establish, document, implement and maintain risk management system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f1a</incoming>
+         <outgoing>flow_j1a</outgoing>
+      </task>
+
+      <task id="task_conduct_clinical_eval" name="Conduct clinical evaluation including PMCF" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f1b</incoming>
+         <outgoing>flow_j1b</outgoing>
+      </task>
+
+      <task id="task_draw_up_tech_doc" name="Draw up and keep up to date technical documentation" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f1c</incoming>
+         <outgoing>flow_j1c</outgoing>
+      </task>
+
+      <task id="task_draw_up_custom_doc" name="Draw up and keep available documentation for custom-made devices" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f1d</incoming>
+         <outgoing>flow_j1d</outgoing>
+      </task>
+
+      <task id="task_establish_qms" name="Establish, document, implement and maintain quality management system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f1e</incoming>
+         <outgoing>flow_j1e</outgoing>
+      </task>
+
+      <parallelGateway id="pg_join1" name="" gatewayDirection="Converging">
+         <incoming>flow_j1a</incoming>
+         <incoming>flow_j1b</incoming>
+         <incoming>flow_j1c</incoming>
+         <incoming>flow_j1d</incoming>
+         <incoming>flow_j1e</incoming>
+         <outgoing>flow_s3</outgoing>
+      </parallelGateway>
+
+      <task id="task_draw_up_eu_declaration" name="Draw up EU declaration of conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s3</incoming>
+         <outgoing>flow_s4</outgoing>
+      </task>
+
+      <task id="task_affix_ce_marking" name="Affix CE marking of conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s4</incoming>
+         <outgoing>flow_s5</outgoing>
+      </task>
+
+      <task id="task_comply_udi" name="Comply with UDI system and registration obligations" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s5</incoming>
+         <outgoing>flow_s6</outgoing>
+      </task>
+
+      <task id="task_ensure_info_with_device" name="Ensure device accompanied by required information" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s6</incoming>
+         <outgoing>flow_s7</outgoing>
+      </task>
+
+      <parallelGateway id="pg_fork2" name="" gatewayDirection="Diverging">
+         <incoming>flow_s7</incoming>
+         <outgoing>flow_f2a</outgoing>
+         <outgoing>flow_f2b</outgoing>
+         <outgoing>flow_f2c</outgoing>
+         <outgoing>flow_f2d</outgoing>
+      </parallelGateway>
+
+      <task id="task_keep_documentation" name="Keep technical documentation and EU declaration available for at least 10 years" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f2a</incoming>
+         <outgoing>flow_j2a</outgoing>
+      </task>
+
+      <task id="task_ensure_series_conformity" name="Ensure procedures to keep series production in conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f2b</incoming>
+         <outgoing>flow_j2b</outgoing>
+      </task>
+
+      <task id="task_implement_pms" name="Implement and keep up to date post-market surveillance system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f2c</incoming>
+         <outgoing>flow_j2c</outgoing>
+      </task>
+
+      <task id="task_record_report_incidents" name="Record and report incidents and field safety corrective actions" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_f2d</incoming>
+         <outgoing>flow_j2d</outgoing>
+      </task>
+
+      <parallelGateway id="pg_join2" name="" gatewayDirection="Converging">
+         <incoming>flow_j2a</incoming>
+         <incoming>flow_j2b</incoming>
+         <incoming>flow_j2c</incoming>
+         <incoming>flow_j2d</incoming>
+         <outgoing>flow_s8</outgoing>
+      </parallelGateway>
+
+      <task id="task_take_corrective_action" name="Take corrective action for non-conforming devices" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s8</incoming>
+         <outgoing>flow_s9</outgoing>
+      </task>
+
+      <task id="task_inform_distributors" name="Inform distributors of non-conforming device" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s9</incoming>
+         <outgoing>flow_s10</outgoing>
+      </task>
+
+      <task id="task_inform_authorities_serious_risk" name="Inform competent authorities of serious risk" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s10</incoming>
+         <outgoing>flow_s11</outgoing>
+      </task>
+
+      <task id="task_provide_info_to_authority" name="Provide information and documentation to competent authority upon request" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s11</incoming>
+         <outgoing>flow_s12</outgoing>
+      </task>
+
+      <task id="task_cooperate_corrective_action" name="Cooperate with competent authority on corrective action" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s12</incoming>
+         <outgoing>flow_s13</outgoing>
+      </task>
+
+      <task id="task_ensure_financial_coverage" name="Have measures for sufficient financial coverage for liability" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_s13</incoming>
+         <outgoing>flow_s14</outgoing>
+      </task>
+
+      <endEvent id="end_mfr" name="End">
+         <incoming>flow_s14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="flow_s1" sourceRef="start_mfr" targetRef="task_ensure_design"/>
+      <sequenceFlow id="flow_s2" sourceRef="task_ensure_design" targetRef="pg_fork1"/>
+      <sequenceFlow id="flow_f1a" sourceRef="pg_fork1" targetRef="task_establish_rms"/>
+      <sequenceFlow id="flow_f1b" sourceRef="pg_fork1" targetRef="task_conduct_clinical_eval"/>
+      <sequenceFlow id="flow_f1c" sourceRef="pg_fork1" targetRef="task_draw_up_tech_doc"/>
+      <sequenceFlow id="flow_f1d" sourceRef="pg_fork1" targetRef="task_draw_up_custom_doc"/>
+      <sequenceFlow id="flow_f1e" sourceRef="pg_fork1" targetRef="task_establish_qms"/>
+      <sequenceFlow id="flow_j1a" sourceRef="task_establish_rms" targetRef="pg_join1"/>
+      <sequenceFlow id="flow_j1b" sourceRef="task_conduct_clinical_eval" targetRef="pg_join1"/>
+      <sequenceFlow id="flow_j1c" sourceRef="task_draw_up_tech_doc" targetRef="pg_join1"/>
+      <sequenceFlow id="flow_j1d" sourceRef="task_draw_up_custom_doc" targetRef="pg_join1"/>
+      <sequenceFlow id="flow_j1e" sourceRef="task_establish_qms" targetRef="pg_join1"/>
+      <sequenceFlow id="flow_s3" sourceRef="pg_join1" targetRef="task_draw_up_eu_declaration"/>
+      <sequenceFlow id="flow_s4" sourceRef="task_draw_up_eu_declaration" targetRef="task_affix_ce_marking"/>
+      <sequenceFlow id="flow_s5" sourceRef="task_affix_ce_marking" targetRef="task_comply_udi"/>
+      <sequenceFlow id="flow_s6" sourceRef="task_comply_udi" targetRef="task_ensure_info_with_device"/>
+      <sequenceFlow id="flow_s7" sourceRef="task_ensure_info_with_device" targetRef="pg_fork2"/>
+      <sequenceFlow id="flow_f2a" sourceRef="pg_fork2" targetRef="task_keep_documentation"/>
+      <sequenceFlow id="flow_f2b" sourceRef="pg_fork2" targetRef="task_ensure_series_conformity"/>
+      <sequenceFlow id="flow_f2c" sourceRef="pg_fork2" targetRef="task_implement_pms"/>
+      <sequenceFlow id="flow_f2d" sourceRef="pg_fork2" targetRef="task_record_report_incidents"/>
+      <sequenceFlow id="flow_j2a" sourceRef="task_keep_documentation" targetRef="pg_join2"/>
+      <sequenceFlow id="flow_j2b" sourceRef="task_ensure_series_conformity" targetRef="pg_join2"/>
+      <sequenceFlow id="flow_j2c" sourceRef="task_implement_pms" targetRef="pg_join2"/>
+      <sequenceFlow id="flow_j2d" sourceRef="task_record_report_incidents" targetRef="pg_join2"/>
+      <sequenceFlow id="flow_s8" sourceRef="pg_join2" targetRef="task_take_corrective_action"/>
+      <sequenceFlow id="flow_s9" sourceRef="task_take_corrective_action" targetRef="task_inform_distributors"/>
+      <sequenceFlow id="flow_s10" sourceRef="task_inform_distributors" targetRef="task_inform_authorities_serious_risk"/>
+      <sequenceFlow id="flow_s11" sourceRef="task_inform_authorities_serious_risk" targetRef="task_provide_info_to_authority"/>
+      <sequenceFlow id="flow_s12" sourceRef="task_provide_info_to_authority" targetRef="task_cooperate_corrective_action"/>
+      <sequenceFlow id="flow_s13" sourceRef="task_cooperate_corrective_action" targetRef="task_ensure_financial_coverage"/>
+      <sequenceFlow id="flow_s14" sourceRef="task_ensure_financial_coverage" targetRef="end_mfr"/>
+   </process>
+
+   <!-- ======= COMMISSION PROCESS ======= -->
+   <process id="process_commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_commission">
+         <lane id="lane_commission" name="">
+            <flowNodeRef>start_commission</flowNodeRef>
+            <flowNodeRef>task_adopt_delegated_acts</flowNodeRef>
+            <flowNodeRef>end_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_commission" name="Start">
+         <outgoing>flow_c1</outgoing>
+      </startEvent>
+
+      <task id="task_adopt_delegated_acts" name="Adopt delegated acts amending Annexes II and III" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_c1</incoming>
+         <outgoing>flow_c2</outgoing>
+      </task>
+
+      <endEvent id="end_commission" name="End">
+         <incoming>flow_c2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="flow_c1" sourceRef="start_commission" targetRef="task_adopt_delegated_acts"/>
+      <sequenceFlow id="flow_c2" sourceRef="task_adopt_delegated_acts" targetRef="end_commission"/>
+   </process>
+
+   <!-- ======= COMPETENT AUTHORITY PROCESS ======= -->
+   <process id="process_competent_authority" name="Competent Authority" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_ca">
+         <lane id="lane_ca" name="">
+            <flowNodeRef>start_ca</flowNodeRef>
+            <flowNodeRef>task_request_documentation</flowNodeRef>
+            <flowNodeRef>task_require_samples</flowNodeRef>
+            <flowNodeRef>task_take_measures_noncompliance</flowNodeRef>
+            <flowNodeRef>task_facilitate_info_provision</flowNodeRef>
+            <flowNodeRef>end_ca</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ca" name="Start">
+         <outgoing>flow_ca1</outgoing>
+      </startEvent>
+
+      <task id="task_request_documentation" name="Request technical documentation from manufacturer" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_ca1</incoming>
+         <outgoing>flow_ca2</outgoing>
+      </task>
+
+      <task id="task_require_samples" name="Require manufacturer to provide device samples" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_ca2</incoming>
+         <outgoing>flow_ca3</outgoing>
+      </task>
+
+      <task id="task_take_measures_noncompliance" name="Take measures to prohibit or restrict non-compliant device" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_ca3</incoming>
+         <outgoing>flow_ca4</outgoing>
+      </task>
+
+      <task id="task_facilitate_info_provision" name="Facilitate provision of information to injured patient or user" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>flow_ca4</incoming>
+         <outgoing>flow_ca5</outgoing>
+      </task>
+
+      <endEvent id="end_ca" name="End">
+         <incoming>flow_ca5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="flow_ca1" sourceRef="start_ca" targetRef="task_request_documentation"/>
+      <sequenceFlow id="flow_ca2" sourceRef="task_request_documentation" targetRef="task_require_samples"/>
+      <sequenceFlow id="flow_ca3" sourceRef="task_require_samples" targetRef="task_take_measures_noncompliance"/>
+      <sequenceFlow id="flow_ca4" sourceRef="task_take_measures_noncompliance" targetRef="task_facilitate_info_provision"/>
+      <sequenceFlow id="flow_ca5" sourceRef="task_facilitate_info_provision" targetRef="end_ca"/>
+   </process>
+
+   <!-- ======= DIAGRAM ======= -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- Manufacturer Pool -->
+         <bpmndi:BPMNShape bpmnElement="participant_manufacturer" id="participant_manufacturer_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="2600.0" x="60.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_manufacturer" id="lane_manufacturer_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="2570.0" x="90.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Pool -->
+         <bpmndi:BPMNShape bpmnElement="participant_commission" id="participant_commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="500.0" x="60.0" y="860.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_commission" id="lane_commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="470.0" x="90.0" y="860.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Competent Authority Pool -->
+         <bpmndi:BPMNShape bpmnElement="participant_competent_authority" id="participant_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="900.0" x="60.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ca" id="lane_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="870.0" x="90.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== MANUFACTURER SHAPES ===== -->
+         <bpmndi:BPMNShape bpmnElement="start_mfr" id="start_mfr_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="130.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ensure_design" id="task_ensure_design_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="200.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="pg_fork1" id="pg_fork1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_establish_rms" id="task_establish_rms_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="450.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_conduct_clinical_eval" id="task_conduct_clinical_eval_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="450.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_draw_up_tech_doc" id="task_draw_up_tech_doc_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="450.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_draw_up_custom_doc" id="task_draw_up_custom_doc_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="450.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_establish_qms" id="task_establish_qms_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="450.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="pg_join1" id="pg_join1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="640.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_draw_up_eu_declaration" id="task_draw_up_eu_declaration_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="720.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_affix_ce_marking" id="task_affix_ce_marking_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="880.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comply_udi" id="task_comply_udi_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1040.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensure_info_with_device" id="task_ensure_info_with_device_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1200.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="pg_fork2" id="pg_fork2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1360.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_keep_documentation" id="task_keep_documentation_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1450.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensure_series_conformity" id="task_ensure_series_conformity_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1450.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_implement_pms" id="task_implement_pms_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1450.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_record_report_incidents" id="task_record_report_incidents_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="1450.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="pg_join2" id="pg_join2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1640.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_take_corrective_action" id="task_take_corrective_action_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1720.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_distributors" id="task_inform_distributors_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1880.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_authorities_serious_risk" id="task_inform_authorities_serious_risk_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="2040.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_provide_info_to_authority" id="task_provide_info_to_authority_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="2040.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_cooperate_corrective_action" id="task_cooperate_corrective_action_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="2200.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensure_financial_coverage" id="task_ensure_financial_coverage_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="2360.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_mfr" id="end_mfr_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2530.0" y="406.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== COMMISSION SHAPES ===== -->
+         <bpmndi:BPMNShape bpmnElement="start_commission" id="start_commission_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="130.0" y="920.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_delegated_acts" id="task_adopt_delegated_acts_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="210.0" y="895.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_commission" id="end_commission_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="400.0" y="921.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== COMPETENT AUTHORITY SHAPES ===== -->
+         <bpmndi:BPMNShape bpmnElement="start_ca" id="start_ca_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="130.0" y="1120.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_request_documentation" id="task_request_documentation_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="200.0" y="1095.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_require_samples" id="task_require_samples_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="360.0" y="1095.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_take_measures_noncompliance" id="task_take_measures_noncompliance_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="520.0" y="1095.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_facilitate_info_provision" id="task_facilitate_info_provision_gui">
+            <omgdc:Bounds height="80.0" width="140.0" x="700.0" y="1095.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ca" id="end_ca_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="880.0" y="1121.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== MANUFACTURER EDGES ===== -->
+         <bpmndi:BPMNEdge bpmnElement="flow_s1" id="flow_s1_gui">
+            <omgdi:waypoint x="160.0" y="290.0"/>
+            <omgdi:waypoint x="200.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s2" id="flow_s2_gui">
+            <omgdi:waypoint x="320.0" y="290.0"/>
+            <omgdi:waypoint x="360.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_f1a" id="flow_f1a_gui">
+            <omgdi:waypoint x="380.0" y="270.0"/>
+            <omgdi:waypoint x="380.0" y="120.0"/>
+            <omgdi:waypoint x="450.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f1b" id="flow_f1b_gui">
+            <omgdi:waypoint x="380.0" y="270.0"/>
+            <omgdi:waypoint x="380.0" y="220.0"/>
+            <omgdi:waypoint x="450.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f1c" id="flow_f1c_gui">
+            <omgdi:waypoint x="400.0" y="290.0"/>
+            <omgdi:waypoint x="450.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f1d" id="flow_f1d_gui">
+            <omgdi:waypoint x="380.0" y="310.0"/>
+            <omgdi:waypoint x="380.0" y="420.0"/>
+            <omgdi:waypoint x="450.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f1e" id="flow_f1e_gui">
+            <omgdi:waypoint x="380.0" y="310.0"/>
+            <omgdi:waypoint x="380.0" y="520.0"/>
+            <omgdi:waypoint x="450.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_j1a" id="flow_j1a_gui">
+            <omgdi:waypoint x="590.0" y="120.0"/>
+            <omgdi:waypoint x="660.0" y="120.0"/>
+            <omgdi:waypoint x="660.0" y="270.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j1b" id="flow_j1b_gui">
+            <omgdi:waypoint x="590.0" y="220.0"/>
+            <omgdi:waypoint x="660.0" y="220.0"/>
+            <omgdi:waypoint x="660.0" y="270.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j1c" id="flow_j1c_gui">
+            <omgdi:waypoint x="590.0" y="320.0"/>
+            <omgdi:waypoint x="660.0" y="320.0"/>
+            <omgdi:waypoint x="660.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j1d" id="flow_j1d_gui">
+            <omgdi:waypoint x="590.0" y="420.0"/>
+            <omgdi:waypoint x="660.0" y="420.0"/>
+            <omgdi:waypoint x="660.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j1e" id="flow_j1e_gui">
+            <omgdi:waypoint x="590.0" y="520.0"/>
+            <omgdi:waypoint x="660.0" y="520.0"/>
+            <omgdi:waypoint x="660.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_s3" id="flow_s3_gui">
+            <omgdi:waypoint x="680.0" y="290.0"/>
+            <omgdi:waypoint x="720.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s4" id="flow_s4_gui">
+            <omgdi:waypoint x="840.0" y="290.0"/>
+            <omgdi:waypoint x="880.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s5" id="flow_s5_gui">
+            <omgdi:waypoint x="1000.0" y="290.0"/>
+            <omgdi:waypoint x="1040.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s6" id="flow_s6_gui">
+            <omgdi:waypoint x="1160.0" y="290.0"/>
+            <omgdi:waypoint x="1200.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s7" id="flow_s7_gui">
+            <omgdi:waypoint x="1320.0" y="290.0"/>
+            <omgdi:waypoint x="1360.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_f2a" id="flow_f2a_gui">
+            <omgdi:waypoint x="1380.0" y="270.0"/>
+            <omgdi:waypoint x="1380.0" y="140.0"/>
+            <omgdi:waypoint x="1450.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f2b" id="flow_f2b_gui">
+            <omgdi:waypoint x="1380.0" y="270.0"/>
+            <omgdi:waypoint x="1380.0" y="250.0"/>
+            <omgdi:waypoint x="1450.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f2c" id="flow_f2c_gui">
+            <omgdi:waypoint x="1380.0" y="310.0"/>
+            <omgdi:waypoint x="1380.0" y="360.0"/>
+            <omgdi:waypoint x="1450.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_f2d" id="flow_f2d_gui">
+            <omgdi:waypoint x="1380.0" y="310.0"/>
+            <omgdi:waypoint x="1380.0" y="470.0"/>
+            <omgdi:waypoint x="1450.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_j2a" id="flow_j2a_gui">
+            <omgdi:waypoint x="1590.0" y="140.0"/>
+            <omgdi:waypoint x="1660.0" y="140.0"/>
+            <omgdi:waypoint x="1660.0" y="270.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j2b" id="flow_j2b_gui">
+            <omgdi:waypoint x="1590.0" y="250.0"/>
+            <omgdi:waypoint x="1660.0" y="250.0"/>
+            <omgdi:waypoint x="1660.0" y="270.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j2c" id="flow_j2c_gui">
+            <omgdi:waypoint x="1590.0" y="360.0"/>
+            <omgdi:waypoint x="1660.0" y="360.0"/>
+            <omgdi:waypoint x="1660.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_j2d" id="flow_j2d_gui">
+            <omgdi:waypoint x="1590.0" y="470.0"/>
+            <omgdi:waypoint x="1660.0" y="470.0"/>
+            <omgdi:waypoint x="1660.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="flow_s8" id="flow_s8_gui">
+            <omgdi:waypoint x="1680.0" y="290.0"/>
+            <omgdi:waypoint x="1720.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s9" id="flow_s9_gui">
+            <omgdi:waypoint x="1840.0" y="290.0"/>
+            <omgdi:waypoint x="1880.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s10" id="flow_s10_gui">
+            <omgdi:waypoint x="2000.0" y="290.0"/>
+            <omgdi:waypoint x="2040.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s11" id="flow_s11_gui">
+            <omgdi:waypoint x="2100.0" y="330.0"/>
+            <omgdi:waypoint x="2100.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s12" id="flow_s12_gui">
+            <omgdi:waypoint x="2160.0" y="420.0"/>
+            <omgdi:waypoint x="2200.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s13" id="flow_s13_gui">
+            <omgdi:waypoint x="2320.0" y="420.0"/>
+            <omgdi:waypoint x="2360.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_s14" id="flow_s14_gui">
+            <omgdi:waypoint x="2480.0" y="420.0"/>
+            <omgdi:waypoint x="2530.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== COMMISSION EDGES ===== -->
+         <bpmndi:BPMNEdge bpmnElement="flow_c1" id="flow_c1_gui">
+            <omgdi:waypoint x="160.0" y="935.0"/>
+            <omgdi:waypoint x="210.0" y="935.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_c2" id="flow_c2_gui">
+            <omgdi:waypoint x="350.0" y="935.0"/>
+            <omgdi:waypoint x="400.0" y="935.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== COMPETENT AUTHORITY EDGES ===== -->
+         <bpmndi:BPMNEdge bpmnElement="flow_ca1" id="flow_ca1_gui">
+            <omgdi:waypoint x="160.0" y="1135.0"/>
+            <omgdi:waypoint x="200.0" y="1135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_ca2" id="flow_ca2_gui">
+            <omgdi:waypoint x="320.0" y="1135.0"/>
+            <omgdi:waypoint x="360.0" y="1135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_ca3" id="flow_ca3_gui">
+            <omgdi:waypoint x="480.0" y="1135.0"/>
+            <omgdi:waypoint x="520.0" y="1135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_ca4" id="flow_ca4_gui">
+            <omgdi:waypoint x="660.0" y="1135.0"/>
+            <omgdi:waypoint x="700.0" y="1135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="flow_ca5" id="flow_ca5_gui">
+            <omgdi:waypoint x="840.0" y="1135.0"/>
+            <omgdi:waypoint x="880.0" y="1135.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

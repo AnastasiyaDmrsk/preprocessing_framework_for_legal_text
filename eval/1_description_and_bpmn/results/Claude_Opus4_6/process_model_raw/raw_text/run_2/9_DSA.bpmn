@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ================================================================ -->
+   <!-- COLLABORATION                                                     -->
+   <!-- ================================================================ -->
+   <collaboration id="collab_1">
+      <participant id="pool_entity" name="Entity / Trusted Flagger" processRef="proc_entity"/>
+      <participant id="pool_provider" name="Provider of Online Platforms" processRef="proc_provider"/>
+      <participant id="pool_dsc" name="Digital Services Coordinator" processRef="proc_dsc"/>
+      <participant id="pool_commission" name="Commission" processRef="proc_commission"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_apply" name="" sourceRef="task_apply" targetRef="start_dsc_receive_application"/>
+      <messageFlow id="mf_award" name="" sourceRef="task_award_status" targetRef="evt_receive_award"/>
+      <messageFlow id="mf_submit_notice" name="" sourceRef="task_submit_notice" targetRef="start_provider_receive_notice"/>
+      <messageFlow id="mf_send_report" name="" sourceRef="task_send_reports" targetRef="evt_dsc_receive_report"/>
+      <messageFlow id="mf_communicate_names" name="" sourceRef="task_communicate_names" targetRef="start_commission_receive"/>
+      <messageFlow id="mf_bad_notices" name="" sourceRef="task_communicate_bad_notices" targetRef="evt_dsc_receive_bad_notice_info"/>
+      <messageFlow id="mf_afford_react" name="" sourceRef="task_afford_react" targetRef="evt_entity_receive_react"/>
+   </collaboration>
+
+   <!-- ================================================================ -->
+   <!-- PROCESS: Entity / Trusted Flagger                                 -->
+   <!-- ================================================================ -->
+   <process id="proc_entity" name="Entity / Trusted Flagger" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_entity">
+         <lane id="lane_entity">
+            <flowNodeRef>start_entity</flowNodeRef>
+            <flowNodeRef>task_apply</flowNodeRef>
+            <flowNodeRef>evt_receive_award</flowNodeRef>
+            <flowNodeRef>task_submit_notice</flowNodeRef>
+            <flowNodeRef>task_publish_reports</flowNodeRef>
+            <flowNodeRef>task_send_reports</flowNodeRef>
+            <flowNodeRef>evt_entity_receive_react</flowNodeRef>
+            <flowNodeRef>end_entity</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_entity" name="Start">
+         <outgoing>sf_e1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="task_apply" isForCompensation="false" name="apply for trusted flagger status" startQuantity="1">
+         <incoming>sf_e1</incoming>
+         <outgoing>sf_e2</outgoing>
+      </task>
+      <intermediateCatchEvent id="evt_receive_award" name="receive award of status">
+         <incoming>sf_e2</incoming>
+         <outgoing>sf_e3</outgoing>
+         <messageEventDefinition id="med_receive_award"/>
+      </intermediateCatchEvent>
+      <task completionQuantity="1" id="task_submit_notice" isForCompensation="false" name="submit notice" startQuantity="1">
+         <incoming>sf_e3</incoming>
+         <outgoing>sf_e4</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_publish_reports" isForCompensation="false" name="publish reports on notices" startQuantity="1">
+         <incoming>sf_e4</incoming>
+         <outgoing>sf_e5</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_send_reports" isForCompensation="false" name="send reports to Digital Services Coordinator" startQuantity="1">
+         <incoming>sf_e5</incoming>
+         <outgoing>sf_e5b</outgoing>
+      </task>
+      <intermediateCatchEvent id="evt_entity_receive_react" name="receive opportunity to react">
+         <incoming>sf_e5b</incoming>
+         <outgoing>sf_e6</outgoing>
+         <messageEventDefinition id="med_entity_react"/>
+      </intermediateCatchEvent>
+      <endEvent id="end_entity" name="End">
+         <incoming>sf_e6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_e1" name="" sourceRef="start_entity" targetRef="task_apply"/>
+      <sequenceFlow id="sf_e2" name="" sourceRef="task_apply" targetRef="evt_receive_award"/>
+      <sequenceFlow id="sf_e3" name="" sourceRef="evt_receive_award" targetRef="task_submit_notice"/>
+      <sequenceFlow id="sf_e4" name="" sourceRef="task_submit_notice" targetRef="task_publish_reports"/>
+      <sequenceFlow id="sf_e5" name="" sourceRef="task_publish_reports" targetRef="task_send_reports"/>
+      <sequenceFlow id="sf_e5b" name="" sourceRef="task_send_reports" targetRef="evt_entity_receive_react"/>
+      <sequenceFlow id="sf_e6" name="" sourceRef="evt_entity_receive_react" targetRef="end_entity"/>
+   </process>
+
+   <!-- ================================================================ -->
+   <!-- PROCESS: Provider of Online Platforms                              -->
+   <!-- ================================================================ -->
+   <process id="proc_provider" name="Provider of Online Platforms" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_provider">
+         <lane id="lane_provider">
+            <flowNodeRef>start_provider_receive_notice</flowNodeRef>
+            <flowNodeRef>task_process_notices</flowNodeRef>
+            <flowNodeRef>gw_bad_notices</flowNodeRef>
+            <flowNodeRef>task_communicate_bad_notices</flowNodeRef>
+            <flowNodeRef>end_provider</flowNodeRef>
+            <flowNodeRef>end_provider2</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_provider_receive_notice" name="receive notice from trusted flagger">
+         <outgoing>sf_p1</outgoing>
+         <messageEventDefinition id="med_provider_notice"/>
+      </startEvent>
+      <task completionQuantity="1" id="task_process_notices" isForCompensation="false" name="process and decide upon notices without undue delay" startQuantity="1">
+         <incoming>sf_p1</incoming>
+         <outgoing>sf_p2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_bad_notices" name="notices insufficiently substantiated?" gatewayDirection="Diverging">
+         <incoming>sf_p2</incoming>
+         <outgoing>sf_p3_yes</outgoing>
+         <outgoing>sf_p3_no</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="task_communicate_bad_notices" isForCompensation="false" name="communicate information about insufficiently precise notices to DSC" startQuantity="1">
+         <incoming>sf_p3_yes</incoming>
+         <outgoing>sf_p4</outgoing>
+      </task>
+      <endEvent id="end_provider" name="End">
+         <incoming>sf_p3_no</incoming>
+      </endEvent>
+      <endEvent id="end_provider2" name="End">
+         <incoming>sf_p4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_p1" name="" sourceRef="start_provider_receive_notice" targetRef="task_process_notices"/>
+      <sequenceFlow id="sf_p2" name="" sourceRef="task_process_notices" targetRef="gw_bad_notices"/>
+      <sequenceFlow id="sf_p3_yes" name="yes" sourceRef="gw_bad_notices" targetRef="task_communicate_bad_notices"/>
+      <sequenceFlow id="sf_p3_no" name="no" sourceRef="gw_bad_notices" targetRef="end_provider"/>
+      <sequenceFlow id="sf_p4" name="" sourceRef="task_communicate_bad_notices" targetRef="end_provider2"/>
+   </process>
+
+   <!-- ================================================================ -->
+   <!-- PROCESS: Digital Services Coordinator                              -->
+   <!-- ================================================================ -->
+   <process id="proc_dsc" name="Digital Services Coordinator" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_dsc">
+         <lane id="lane_dsc">
+            <flowNodeRef>start_dsc_receive_application</flowNodeRef>
+            <flowNodeRef>task_award_status</flowNodeRef>
+            <flowNodeRef>task_communicate_names</flowNodeRef>
+            <flowNodeRef>evt_dsc_receive_report</flowNodeRef>
+            <flowNodeRef>evt_dsc_receive_bad_notice_info</flowNodeRef>
+            <flowNodeRef>gw_investigate</flowNodeRef>
+            <flowNodeRef>task_suspend_status</flowNodeRef>
+            <flowNodeRef>task_carry_out_investigation</flowNodeRef>
+            <flowNodeRef>gw_revoke</flowNodeRef>
+            <flowNodeRef>task_afford_react</flowNodeRef>
+            <flowNodeRef>task_revoke_status</flowNodeRef>
+            <flowNodeRef>end_dsc</flowNodeRef>
+            <flowNodeRef>end_dsc2</flowNodeRef>
+            <flowNodeRef>end_dsc3</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_dsc_receive_application" name="receive application for trusted flagger status">
+         <outgoing>sf_d1</outgoing>
+         <messageEventDefinition id="med_dsc_app"/>
+      </startEvent>
+      <task completionQuantity="1" id="task_award_status" isForCompensation="false" name="award trusted flagger status" startQuantity="1">
+         <incoming>sf_d1</incoming>
+         <outgoing>sf_d2</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_communicate_names" isForCompensation="false" name="communicate names, addresses and emails to Commission and Board" startQuantity="1">
+         <incoming>sf_d2</incoming>
+         <outgoing>sf_d3</outgoing>
+      </task>
+      <intermediateCatchEvent id="evt_dsc_receive_report" name="receive report from trusted flagger">
+         <incoming>sf_d3</incoming>
+         <outgoing>sf_d4</outgoing>
+         <messageEventDefinition id="med_dsc_report"/>
+      </intermediateCatchEvent>
+      <intermediateCatchEvent id="evt_dsc_receive_bad_notice_info" name="receive info about bad notices from provider">
+         <incoming>sf_d4</incoming>
+         <outgoing>sf_d5</outgoing>
+         <messageEventDefinition id="med_dsc_bad"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="gw_investigate" name="legitimate reasons to investigate?" gatewayDirection="Diverging">
+         <incoming>sf_d5</incoming>
+         <outgoing>sf_d6_yes</outgoing>
+         <outgoing>sf_d6_no</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="task_suspend_status" isForCompensation="false" name="suspend trusted flagger status" startQuantity="1">
+         <incoming>sf_d6_yes</incoming>
+         <outgoing>sf_d7</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_carry_out_investigation" isForCompensation="false" name="carry out investigation" startQuantity="1">
+         <incoming>sf_d7</incoming>
+         <outgoing>sf_d8</outgoing>
+      </task>
+      <exclusiveGateway id="gw_revoke" name="entity no longer meets conditions?" gatewayDirection="Diverging">
+         <incoming>sf_d8</incoming>
+         <outgoing>sf_d9_yes</outgoing>
+         <outgoing>sf_d9_no</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="task_afford_react" isForCompensation="false" name="afford entity opportunity to react" startQuantity="1">
+         <incoming>sf_d9_yes</incoming>
+         <outgoing>sf_d10</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_revoke_status" isForCompensation="false" name="revoke trusted flagger status" startQuantity="1">
+         <incoming>sf_d10</incoming>
+         <outgoing>sf_d11</outgoing>
+      </task>
+      <endEvent id="end_dsc" name="End">
+         <incoming>sf_d6_no</incoming>
+      </endEvent>
+      <endEvent id="end_dsc2" name="End">
+         <incoming>sf_d9_no</incoming>
+      </endEvent>
+      <endEvent id="end_dsc3" name="End">
+         <incoming>sf_d11</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_d1" name="" sourceRef="start_dsc_receive_application" targetRef="task_award_status"/>
+      <sequenceFlow id="sf_d2" name="" sourceRef="task_award_status" targetRef="task_communicate_names"/>
+      <sequenceFlow id="sf_d3" name="" sourceRef="task_communicate_names" targetRef="evt_dsc_receive_report"/>
+      <sequenceFlow id="sf_d4" name="" sourceRef="evt_dsc_receive_report" targetRef="evt_dsc_receive_bad_notice_info"/>
+      <sequenceFlow id="sf_d5" name="" sourceRef="evt_dsc_receive_bad_notice_info" targetRef="gw_investigate"/>
+      <sequenceFlow id="sf_d6_yes" name="yes" sourceRef="gw_investigate" targetRef="task_suspend_status"/>
+      <sequenceFlow id="sf_d6_no" name="no" sourceRef="gw_investigate" targetRef="end_dsc"/>
+      <sequenceFlow id="sf_d7" name="" sourceRef="task_suspend_status" targetRef="task_carry_out_investigation"/>
+      <sequenceFlow id="sf_d8" name="" sourceRef="task_carry_out_investigation" targetRef="gw_revoke"/>
+      <sequenceFlow id="sf_d9_yes" name="yes" sourceRef="gw_revoke" targetRef="task_afford_react"/>
+      <sequenceFlow id="sf_d9_no" name="no" sourceRef="gw_revoke" targetRef="end_dsc2"/>
+      <sequenceFlow id="sf_d10" name="" sourceRef="task_afford_react" targetRef="task_revoke_status"/>
+      <sequenceFlow id="sf_d11" name="" sourceRef="task_revoke_status" targetRef="end_dsc3"/>
+   </process>
+
+   <!-- ================================================================ -->
+   <!-- PROCESS: Commission                                                -->
+   <!-- ================================================================ -->
+   <process id="proc_commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_commission">
+         <lane id="lane_commission">
+            <flowNodeRef>start_commission_receive</flowNodeRef>
+            <flowNodeRef>task_publish_database</flowNodeRef>
+            <flowNodeRef>task_issue_guidelines</flowNodeRef>
+            <flowNodeRef>end_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_commission_receive" name="receive names and addresses from DSC">
+         <outgoing>sf_c1</outgoing>
+         <messageEventDefinition id="med_commission_receive"/>
+      </startEvent>
+      <task completionQuantity="1" id="task_publish_database" isForCompensation="false" name="publish information in publicly available database" startQuantity="1">
+         <incoming>sf_c1</incoming>
+         <outgoing>sf_c2</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_issue_guidelines" isForCompensation="false" name="issue guidelines for application of paragraphs 2, 6 and 7" startQuantity="1">
+         <incoming>sf_c2</incoming>
+         <outgoing>sf_c3</outgoing>
+      </task>
+      <endEvent id="end_commission" name="End">
+         <incoming>sf_c3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_c1" name="" sourceRef="start_commission_receive" targetRef="task_publish_database"/>
+      <sequenceFlow id="sf_c2" name="" sourceRef="task_publish_database" targetRef="task_issue_guidelines"/>
+      <sequenceFlow id="sf_c3" name="" sourceRef="task_issue_guidelines" targetRef="end_commission"/>
+   </process>
+
+   <!-- ================================================================ -->
+   <!-- DIAGRAM (DI)                                                       -->
+   <!-- ================================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- ========== POOL: Entity / Trusted Flagger (y=60) ========== -->
+         <bpmndi:BPMNShape bpmnElement="pool_entity" id="pool_entity_gui" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1180.0" x="60.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_entity" id="lane_entity_gui" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1150.0" x="90.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_entity" id="start_entity_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="125.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_apply" id="task_apply_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_receive_award" id="evt_receive_award_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="350.0" y="125.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_submit_notice" id="task_submit_notice_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_publish_reports" id="task_publish_reports_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="580.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_send_reports" id="task_send_reports_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_entity_receive_react" id="evt_entity_receive_react_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1050.0" y="125.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_entity" id="end_entity_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1150.0" y="126.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Entity sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_e1" id="sf_e1_gui">
+            <omgdi:waypoint x="150.0" y="140.0"/>
+            <omgdi:waypoint x="200.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e2" id="sf_e2_gui">
+            <omgdi:waypoint x="300.0" y="140.0"/>
+            <omgdi:waypoint x="350.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e3" id="sf_e3_gui">
+            <omgdi:waypoint x="380.0" y="140.0"/>
+            <omgdi:waypoint x="430.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e4" id="sf_e4_gui">
+            <omgdi:waypoint x="530.0" y="140.0"/>
+            <omgdi:waypoint x="580.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5" id="sf_e5_gui">
+            <omgdi:waypoint x="680.0" y="140.0"/>
+            <omgdi:waypoint x="730.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5b" id="sf_e5b_gui">
+            <omgdi:waypoint x="830.0" y="140.0"/>
+            <omgdi:waypoint x="1050.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6" id="sf_e6_gui">
+            <omgdi:waypoint x="1080.0" y="140.0"/>
+            <omgdi:waypoint x="1150.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ========== POOL: Provider of Online Platforms (y=280) ========== -->
+         <bpmndi:BPMNShape bpmnElement="pool_provider" id="pool_provider_gui" isHorizontal="true">
+            <omgdc:Bounds height="180.0" width="1180.0" x="60.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_provider" id="lane_provider_gui" isHorizontal="true">
+            <omgdc:Bounds height="180.0" width="1150.0" x="90.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_provider_receive_notice" id="start_provider_receive_notice_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="465.0" y="345.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_process_notices" id="task_process_notices_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_bad_notices" id="gw_bad_notices_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="700.0" y="340.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_communicate_bad_notices" id="task_communicate_bad_notices_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_provider" id="end_provider_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="706.0" y="416.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_provider2" id="end_provider2_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="950.0" y="346.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Provider sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_p1" id="sf_p1_gui">
+            <omgdi:waypoint x="495.0" y="360.0"/>
+            <omgdi:waypoint x="550.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_p2" id="sf_p2_gui">
+            <omgdi:waypoint x="650.0" y="360.0"/>
+            <omgdi:waypoint x="700.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_p3_yes" id="sf_p3_yes_gui">
+            <omgdi:waypoint x="740.0" y="360.0"/>
+            <omgdi:waypoint x="800.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_p3_no" id="sf_p3_no_gui">
+            <omgdi:waypoint x="720.0" y="380.0"/>
+            <omgdi:waypoint x="720.0" y="416.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_p4" id="sf_p4_gui">
+            <omgdi:waypoint x="900.0" y="360.0"/>
+            <omgdi:waypoint x="950.0" y="360.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ========== POOL: Digital Services Coordinator (y=520) ========== -->
+         <bpmndi:BPMNShape bpmnElement="pool_dsc" id="pool_dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="220.0" width="1180.0" x="60.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_dsc" id="lane_dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="220.0" width="1150.0" x="90.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_dsc_receive_application" id="start_dsc_receive_application_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="595.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_award_status" id="task_award_status_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_communicate_names" id="task_communicate_names_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_dsc_receive_report" id="evt_dsc_receive_report_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="500.0" y="595.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_dsc_receive_bad_notice_info" id="evt_dsc_receive_bad_notice_info_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="580.0" y="595.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_investigate" id="gw_investigate_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_suspend_status" id="task_suspend_status_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="740.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_carry_out_investigation" id="task_carry_out_investigation_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_revoke" id="gw_revoke_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1010.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_afford_react" id="task_afford_react_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1070.0" y="540.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_revoke_status" id="task_revoke_status_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1070.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_dsc" id="end_dsc_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="666.0" y="696.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_dsc2" id="end_dsc2_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1016.0" y="696.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_dsc3" id="end_dsc3_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1200.0" y="666.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- DSC sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_d1" id="sf_d1_gui">
+            <omgdi:waypoint x="150.0" y="610.0"/>
+            <omgdi:waypoint x="200.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d2" id="sf_d2_gui">
+            <omgdi:waypoint x="300.0" y="610.0"/>
+            <omgdi:waypoint x="350.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d3" id="sf_d3_gui">
+            <omgdi:waypoint x="450.0" y="610.0"/>
+            <omgdi:waypoint x="500.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d4" id="sf_d4_gui">
+            <omgdi:waypoint x="530.0" y="610.0"/>
+            <omgdi:waypoint x="580.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d5" id="sf_d5_gui">
+            <omgdi:waypoint x="610.0" y="610.0"/>
+            <omgdi:waypoint x="660.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d6_yes" id="sf_d6_yes_gui">
+            <omgdi:waypoint x="700.0" y="610.0"/>
+            <omgdi:waypoint x="740.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d6_no" id="sf_d6_no_gui">
+            <omgdi:waypoint x="680.0" y="630.0"/>
+            <omgdi:waypoint x="680.0" y="696.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d7" id="sf_d7_gui">
+            <omgdi:waypoint x="840.0" y="610.0"/>
+            <omgdi:waypoint x="880.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d8" id="sf_d8_gui">
+            <omgdi:waypoint x="980.0" y="610.0"/>
+            <omgdi:waypoint x="1010.0" y="610.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d9_yes" id="sf_d9_yes_gui">
+            <omgdi:waypoint x="1030.0" y="590.0"/>
+            <omgdi:waypoint x="1030.0" y="580.0"/>
+            <omgdi:waypoint x="1070.0" y="580.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d9_no" id="sf_d9_no_gui">
+            <omgdi:waypoint x="1030.0" y="630.0"/>
+            <omgdi:waypoint x="1030.0" y="696.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d10" id="sf_d10_gui">
+            <omgdi:waypoint x="1120.0" y="620.0"/>
+            <omgdi:waypoint x="1120.0" y="640.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_d11" id="sf_d11_gui">
+            <omgdi:waypoint x="1170.0" y="680.0"/>
+            <omgdi:waypoint x="1200.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ========== POOL: Commission (y=800) ========== -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="pool_commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1180.0" x="60.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_commission" id="lane_commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1150.0" x="90.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_commission_receive" id="start_commission_receive_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="385.0" y="865.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_publish_database" id="task_publish_database_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="840.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_issue_guidelines" id="task_issue_guidelines_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="640.0" y="840.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_commission" id="end_commission_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="800.0" y="866.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission sequence flow edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_c1" id="sf_c1_gui">
+            <omgdi:waypoint x="415.0" y="880.0"/>
+            <omgdi:waypoint x="480.0" y="880.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c2" id="sf_c2_gui">
+            <omgdi:waypoint x="580.0" y="880.0"/>
+            <omgdi:waypoint x="640.0" y="880.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c3" id="sf_c3_gui">
+            <omgdi:waypoint x="740.0" y="880.0"/>
+            <omgdi:waypoint x="800.0" y="880.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ========== MESSAGE FLOW EDGES ========== -->
+         <bpmndi:BPMNEdge bpmnElement="mf_apply" id="mf_apply_gui">
+            <omgdi:waypoint x="250.0" y="180.0"/>
+            <omgdi:waypoint x="135.0" y="595.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_award" id="mf_award_gui">
+            <omgdi:waypoint x="280.0" y="570.0"/>
+            <omgdi:waypoint x="365.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_submit_notice" id="mf_submit_notice_gui">
+            <omgdi:waypoint x="480.0" y="180.0"/>
+            <omgdi:waypoint x="480.0" y="345.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_send_report" id="mf_send_report_gui">
+            <omgdi:waypoint x="780.0" y="180.0"/>
+            <omgdi:waypoint x="515.0" y="595.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_communicate_names" id="mf_communicate_names_gui">
+            <omgdi:waypoint x="400.0" y="650.0"/>
+            <omgdi:waypoint x="400.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_bad_notices" id="mf_bad_notices_gui">
+            <omgdi:waypoint x="850.0" y="400.0"/>
+            <omgdi:waypoint x="595.0" y="595.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_afford_react" id="mf_afford_react_gui">
+            <omgdi:waypoint x="1100.0" y="540.0"/>
+            <omgdi:waypoint x="1065.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+
+</definitions>

@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="Claude"
+             exporterVersion="1.0"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="participant_manufacturer" name="Manufacturer" processRef="process_manufacturer"/>
+      <participant id="participant_competent_authority" name="Competent Authority"/>
+      <messageFlow id="mf_inform_authority" name="inform of non-compliance and corrective action" sourceRef="task_corrective_action" targetRef="participant_competent_authority"/>
+      <messageFlow id="mf_provide_info" name="provide information and documentation" sourceRef="task_provide_info" targetRef="participant_competent_authority"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- MANUFACTURER PROCESS                                          -->
+   <!-- ============================================================ -->
+   <process id="process_manufacturer" name="Manufacturer" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_manufacturer">
+         <lane id="lane_manufacturer" name="Manufacturer">
+            <flowNodeRef>start_event</flowNodeRef>
+            <flowNodeRef>task_ensure_design</flowNodeRef>
+            <flowNodeRef>task_risk_management</flowNodeRef>
+            <flowNodeRef>task_clinical_evaluation</flowNodeRef>
+            <flowNodeRef>task_technical_documentation</flowNodeRef>
+            <flowNodeRef>task_eu_declaration</flowNodeRef>
+            <flowNodeRef>task_udi_registration</flowNodeRef>
+            <flowNodeRef>task_labeling</flowNodeRef>
+            <flowNodeRef>task_qms</flowNodeRef>
+            <flowNodeRef>task_post_market_surveillance</flowNodeRef>
+            <flowNodeRef>task_corrective_action</flowNodeRef>
+            <flowNodeRef>task_record_report_incidents</flowNodeRef>
+            <flowNodeRef>task_provide_info</flowNodeRef>
+            <flowNodeRef>task_keep_documentation</flowNodeRef>
+            <flowNodeRef>task_financial_coverage</flowNodeRef>
+            <flowNodeRef>pg_fork_premarket</flowNodeRef>
+            <flowNodeRef>pg_join_premarket</flowNodeRef>
+            <flowNodeRef>pg_fork_postmarket</flowNodeRef>
+            <flowNodeRef>pg_join_postmarket</flowNodeRef>
+            <flowNodeRef>end_event</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- START -->
+      <startEvent id="start_event" name="Device development initiated">
+         <outgoing>sf_start_to_design</outgoing>
+      </startEvent>
+
+      <!-- PRE-MARKET ACTIVITIES -->
+      <task id="task_ensure_design" name="Ensure design and manufacturing per requirements" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_start_to_design</incoming>
+         <outgoing>sf_design_to_fork</outgoing>
+      </task>
+
+      <parallelGateway id="pg_fork_premarket" name="" gatewayDirection="Diverging">
+         <incoming>sf_design_to_fork</incoming>
+         <outgoing>sf_fork_to_risk</outgoing>
+         <outgoing>sf_fork_to_clinical</outgoing>
+         <outgoing>sf_fork_to_techdoc</outgoing>
+      </parallelGateway>
+
+      <task id="task_risk_management" name="Establish and maintain risk management system" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_fork_to_risk</incoming>
+         <outgoing>sf_risk_to_join</outgoing>
+      </task>
+
+      <task id="task_clinical_evaluation" name="Conduct clinical evaluation including PMCF" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_fork_to_clinical</incoming>
+         <outgoing>sf_clinical_to_join</outgoing>
+      </task>
+
+      <task id="task_technical_documentation" name="Draw up and maintain technical documentation" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_fork_to_techdoc</incoming>
+         <outgoing>sf_techdoc_to_join</outgoing>
+      </task>
+
+      <parallelGateway id="pg_join_premarket" name="" gatewayDirection="Converging">
+         <incoming>sf_risk_to_join</incoming>
+         <incoming>sf_clinical_to_join</incoming>
+         <incoming>sf_techdoc_to_join</incoming>
+         <outgoing>sf_join_to_declaration</outgoing>
+      </parallelGateway>
+
+      <task id="task_eu_declaration" name="Draw up EU declaration of conformity and affix CE marking" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_join_to_declaration</incoming>
+         <outgoing>sf_declaration_to_udi</outgoing>
+      </task>
+
+      <task id="task_udi_registration" name="Comply with UDI system and registration obligations" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_declaration_to_udi</incoming>
+         <outgoing>sf_udi_to_labeling</outgoing>
+      </task>
+
+      <task id="task_labeling" name="Ensure device labeling and information" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_udi_to_labeling</incoming>
+         <outgoing>sf_labeling_to_postfork</outgoing>
+      </task>
+
+      <!-- POST-MARKET ACTIVITIES -->
+      <parallelGateway id="pg_fork_postmarket" name="" gatewayDirection="Diverging">
+         <incoming>sf_labeling_to_postfork</incoming>
+         <outgoing>sf_postfork_to_keepdoc</outgoing>
+         <outgoing>sf_postfork_to_qms</outgoing>
+         <outgoing>sf_postfork_to_pms</outgoing>
+         <outgoing>sf_postfork_to_corrective</outgoing>
+         <outgoing>sf_postfork_to_incidents</outgoing>
+         <outgoing>sf_postfork_to_provideinfo</outgoing>
+         <outgoing>sf_postfork_to_financial</outgoing>
+      </parallelGateway>
+
+      <task id="task_keep_documentation" name="Keep documentation available for competent authorities" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_keepdoc</incoming>
+         <outgoing>sf_keepdoc_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_qms" name="Establish and maintain quality management system" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_qms</incoming>
+         <outgoing>sf_qms_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_post_market_surveillance" name="Implement post-market surveillance system" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_pms</incoming>
+         <outgoing>sf_pms_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_corrective_action" name="Take corrective action for non-conforming devices" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_corrective</incoming>
+         <outgoing>sf_corrective_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_record_report_incidents" name="Record and report incidents and field safety corrective actions" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_incidents</incoming>
+         <outgoing>sf_incidents_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_provide_info" name="Provide information and documentation to competent authority" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_provideinfo</incoming>
+         <outgoing>sf_provideinfo_to_postjoin</outgoing>
+      </task>
+
+      <task id="task_financial_coverage" name="Have measures for financial coverage of liability" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_postfork_to_financial</incoming>
+         <outgoing>sf_financial_to_postjoin</outgoing>
+      </task>
+
+      <parallelGateway id="pg_join_postmarket" name="" gatewayDirection="Converging">
+         <incoming>sf_keepdoc_to_postjoin</incoming>
+         <incoming>sf_qms_to_postjoin</incoming>
+         <incoming>sf_pms_to_postjoin</incoming>
+         <incoming>sf_corrective_to_postjoin</incoming>
+         <incoming>sf_incidents_to_postjoin</incoming>
+         <incoming>sf_provideinfo_to_postjoin</incoming>
+         <incoming>sf_financial_to_postjoin</incoming>
+         <outgoing>sf_postjoin_to_end</outgoing>
+      </parallelGateway>
+
+      <endEvent id="end_event" name="Obligations fulfilled">
+         <incoming>sf_postjoin_to_end</incoming>
+      </endEvent>
+
+      <!-- SEQUENCE FLOWS -->
+      <sequenceFlow id="sf_start_to_design" sourceRef="start_event" targetRef="task_ensure_design"/>
+      <sequenceFlow id="sf_design_to_fork" sourceRef="task_ensure_design" targetRef="pg_fork_premarket"/>
+      <sequenceFlow id="sf_fork_to_risk" sourceRef="pg_fork_premarket" targetRef="task_risk_management"/>
+      <sequenceFlow id="sf_fork_to_clinical" sourceRef="pg_fork_premarket" targetRef="task_clinical_evaluation"/>
+      <sequenceFlow id="sf_fork_to_techdoc" sourceRef="pg_fork_premarket" targetRef="task_technical_documentation"/>
+      <sequenceFlow id="sf_risk_to_join" sourceRef="task_risk_management" targetRef="pg_join_premarket"/>
+      <sequenceFlow id="sf_clinical_to_join" sourceRef="task_clinical_evaluation" targetRef="pg_join_premarket"/>
+      <sequenceFlow id="sf_techdoc_to_join" sourceRef="task_technical_documentation" targetRef="pg_join_premarket"/>
+      <sequenceFlow id="sf_join_to_declaration" sourceRef="pg_join_premarket" targetRef="task_eu_declaration"/>
+      <sequenceFlow id="sf_declaration_to_udi" sourceRef="task_eu_declaration" targetRef="task_udi_registration"/>
+      <sequenceFlow id="sf_udi_to_labeling" sourceRef="task_udi_registration" targetRef="task_labeling"/>
+      <sequenceFlow id="sf_labeling_to_postfork" sourceRef="task_labeling" targetRef="pg_fork_postmarket"/>
+      <sequenceFlow id="sf_postfork_to_keepdoc" sourceRef="pg_fork_postmarket" targetRef="task_keep_documentation"/>
+      <sequenceFlow id="sf_postfork_to_qms" sourceRef="pg_fork_postmarket" targetRef="task_qms"/>
+      <sequenceFlow id="sf_postfork_to_pms" sourceRef="pg_fork_postmarket" targetRef="task_post_market_surveillance"/>
+      <sequenceFlow id="sf_postfork_to_corrective" sourceRef="pg_fork_postmarket" targetRef="task_corrective_action"/>
+      <sequenceFlow id="sf_postfork_to_incidents" sourceRef="pg_fork_postmarket" targetRef="task_record_report_incidents"/>
+      <sequenceFlow id="sf_postfork_to_provideinfo" sourceRef="pg_fork_postmarket" targetRef="task_provide_info"/>
+      <sequenceFlow id="sf_postfork_to_financial" sourceRef="pg_fork_postmarket" targetRef="task_financial_coverage"/>
+      <sequenceFlow id="sf_keepdoc_to_postjoin" sourceRef="task_keep_documentation" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_qms_to_postjoin" sourceRef="task_qms" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_pms_to_postjoin" sourceRef="task_post_market_surveillance" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_corrective_to_postjoin" sourceRef="task_corrective_action" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_incidents_to_postjoin" sourceRef="task_record_report_incidents" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_provideinfo_to_postjoin" sourceRef="task_provide_info" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_financial_to_postjoin" sourceRef="task_financial_coverage" targetRef="pg_join_postmarket"/>
+      <sequenceFlow id="sf_postjoin_to_end" sourceRef="pg_join_postmarket" targetRef="end_event"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM                                                       -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- MANUFACTURER POOL -->
+         <bpmndi:BPMNShape bpmnElement="participant_manufacturer" id="shape_participant_manufacturer" isHorizontal="true">
+            <omgdc:Bounds x="60" y="60" width="2060" height="820"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MANUFACTURER LANE -->
+         <bpmndi:BPMNShape bpmnElement="lane_manufacturer" id="shape_lane_manufacturer" isHorizontal="true">
+            <omgdc:Bounds x="90" y="60" width="2030" height="820"/>
+         </bpmndi:BPMNShape>
+
+         <!-- COMPETENT AUTHORITY POOL (collapsed) -->
+         <bpmndi:BPMNShape bpmnElement="participant_competent_authority" id="shape_participant_competent_authority" isHorizontal="true">
+            <omgdc:Bounds x="60" y="930" width="2060" height="60"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== ROW 1: PRE-MARKET (y_center=180) ===== -->
+
+         <!-- Start Event -->
+         <bpmndi:BPMNShape bpmnElement="start_event" id="shape_start_event">
+            <omgdc:Bounds x="140" y="165" width="30" height="30"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds x="110" y="200" width="90" height="28"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Ensure design -->
+         <bpmndi:BPMNShape bpmnElement="task_ensure_design" id="shape_task_ensure_design">
+            <omgdc:Bounds x="220" y="140" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Fork (pre-market) -->
+         <bpmndi:BPMNShape bpmnElement="pg_fork_premarket" id="shape_pg_fork_premarket" isMarkerVisible="true">
+            <omgdc:Bounds x="410" y="160" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Risk management (top branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_risk_management" id="shape_task_risk_management">
+            <omgdc:Bounds x="510" y="90" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Clinical evaluation (middle branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_clinical_evaluation" id="shape_task_clinical_evaluation">
+            <omgdc:Bounds x="510" y="190" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Technical documentation (bottom branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_technical_documentation" id="shape_task_technical_documentation">
+            <omgdc:Bounds x="510" y="290" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Join (pre-market) -->
+         <bpmndi:BPMNShape bpmnElement="pg_join_premarket" id="shape_pg_join_premarket" isMarkerVisible="true">
+            <omgdc:Bounds x="710" y="160" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: EU declaration -->
+         <bpmndi:BPMNShape bpmnElement="task_eu_declaration" id="shape_task_eu_declaration">
+            <omgdc:Bounds x="800" y="140" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: UDI registration -->
+         <bpmndi:BPMNShape bpmnElement="task_udi_registration" id="shape_task_udi_registration">
+            <omgdc:Bounds x="990" y="140" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Labeling -->
+         <bpmndi:BPMNShape bpmnElement="task_labeling" id="shape_task_labeling">
+            <omgdc:Bounds x="1180" y="140" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== ROW 2: POST-MARKET (y spread 420-780) ===== -->
+
+         <!-- Parallel Gateway Fork (post-market) -->
+         <bpmndi:BPMNShape bpmnElement="pg_fork_postmarket" id="shape_pg_fork_postmarket" isMarkerVisible="true">
+            <omgdc:Bounds x="1370" y="160" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Post-market tasks fanned vertically -->
+         <!-- Task: Keep documentation -->
+         <bpmndi:BPMNShape bpmnElement="task_keep_documentation" id="shape_task_keep_documentation">
+            <omgdc:Bounds x="1470" y="90" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: QMS -->
+         <bpmndi:BPMNShape bpmnElement="task_qms" id="shape_task_qms">
+            <omgdc:Bounds x="1470" y="190" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Post-market surveillance -->
+         <bpmndi:BPMNShape bpmnElement="task_post_market_surveillance" id="shape_task_post_market_surveillance">
+            <omgdc:Bounds x="1470" y="290" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Corrective action -->
+         <bpmndi:BPMNShape bpmnElement="task_corrective_action" id="shape_task_corrective_action">
+            <omgdc:Bounds x="1470" y="390" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Record and report incidents -->
+         <bpmndi:BPMNShape bpmnElement="task_record_report_incidents" id="shape_task_record_report_incidents">
+            <omgdc:Bounds x="1470" y="490" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Provide info to authority -->
+         <bpmndi:BPMNShape bpmnElement="task_provide_info" id="shape_task_provide_info">
+            <omgdc:Bounds x="1470" y="590" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Financial coverage -->
+         <bpmndi:BPMNShape bpmnElement="task_financial_coverage" id="shape_task_financial_coverage">
+            <omgdc:Bounds x="1470" y="690" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Join (post-market) -->
+         <bpmndi:BPMNShape bpmnElement="pg_join_postmarket" id="shape_pg_join_postmarket" isMarkerVisible="true">
+            <omgdc:Bounds x="1680" y="390" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- End Event -->
+         <bpmndi:BPMNShape bpmnElement="end_event" id="shape_end_event">
+            <omgdc:Bounds x="1780" y="396" width="28" height="28"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds x="1755" y="430" width="80" height="14"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== SEQUENCE FLOW EDGES ===== -->
+
+         <!-- Start -> Ensure design -->
+         <bpmndi:BPMNEdge bpmnElement="sf_start_to_design" id="edge_sf_start_to_design">
+            <omgdi:waypoint x="170" y="180"/>
+            <omgdi:waypoint x="220" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Ensure design -> Fork -->
+         <bpmndi:BPMNEdge bpmnElement="sf_design_to_fork" id="edge_sf_design_to_fork">
+            <omgdi:waypoint x="360" y="180"/>
+            <omgdi:waypoint x="410" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Fork -> Risk management -->
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_risk" id="edge_sf_fork_to_risk">
+            <omgdi:waypoint x="430" y="160"/>
+            <omgdi:waypoint x="430" y="130"/>
+            <omgdi:waypoint x="510" y="130"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Fork -> Clinical evaluation -->
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_clinical" id="edge_sf_fork_to_clinical">
+            <omgdi:waypoint x="450" y="180"/>
+            <omgdi:waypoint x="480" y="180"/>
+            <omgdi:waypoint x="480" y="230"/>
+            <omgdi:waypoint x="510" y="230"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Fork -> Technical documentation -->
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_techdoc" id="edge_sf_fork_to_techdoc">
+            <omgdi:waypoint x="430" y="200"/>
+            <omgdi:waypoint x="430" y="330"/>
+            <omgdi:waypoint x="510" y="330"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Risk management -> Join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_risk_to_join" id="edge_sf_risk_to_join">
+            <omgdi:waypoint x="650" y="130"/>
+            <omgdi:waypoint x="730" y="130"/>
+            <omgdi:waypoint x="730" y="160"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Clinical evaluation -> Join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_clinical_to_join" id="edge_sf_clinical_to_join">
+            <omgdi:waypoint x="650" y="230"/>
+            <omgdi:waypoint x="680" y="230"/>
+            <omgdi:waypoint x="680" y="180"/>
+            <omgdi:waypoint x="710" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Technical documentation -> Join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_techdoc_to_join" id="edge_sf_techdoc_to_join">
+            <omgdi:waypoint x="650" y="330"/>
+            <omgdi:waypoint x="730" y="330"/>
+            <omgdi:waypoint x="730" y="200"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Join -> EU declaration -->
+         <bpmndi:BPMNEdge bpmnElement="sf_join_to_declaration" id="edge_sf_join_to_declaration">
+            <omgdi:waypoint x="750" y="180"/>
+            <omgdi:waypoint x="800" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EU declaration -> UDI -->
+         <bpmndi:BPMNEdge bpmnElement="sf_declaration_to_udi" id="edge_sf_declaration_to_udi">
+            <omgdi:waypoint x="940" y="180"/>
+            <omgdi:waypoint x="990" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- UDI -> Labeling -->
+         <bpmndi:BPMNEdge bpmnElement="sf_udi_to_labeling" id="edge_sf_udi_to_labeling">
+            <omgdi:waypoint x="1130" y="180"/>
+            <omgdi:waypoint x="1180" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Labeling -> Post-market fork -->
+         <bpmndi:BPMNEdge bpmnElement="sf_labeling_to_postfork" id="edge_sf_labeling_to_postfork">
+            <omgdi:waypoint x="1320" y="180"/>
+            <omgdi:waypoint x="1370" y="180"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> Keep documentation -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_keepdoc" id="edge_sf_postfork_to_keepdoc">
+            <omgdi:waypoint x="1390" y="160"/>
+            <omgdi:waypoint x="1390" y="130"/>
+            <omgdi:waypoint x="1470" y="130"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> QMS -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_qms" id="edge_sf_postfork_to_qms">
+            <omgdi:waypoint x="1410" y="180"/>
+            <omgdi:waypoint x="1440" y="180"/>
+            <omgdi:waypoint x="1440" y="230"/>
+            <omgdi:waypoint x="1470" y="230"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> PMS -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_pms" id="edge_sf_postfork_to_pms">
+            <omgdi:waypoint x="1390" y="200"/>
+            <omgdi:waypoint x="1390" y="330"/>
+            <omgdi:waypoint x="1470" y="330"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> Corrective action -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_corrective" id="edge_sf_postfork_to_corrective">
+            <omgdi:waypoint x="1390" y="200"/>
+            <omgdi:waypoint x="1390" y="430"/>
+            <omgdi:waypoint x="1470" y="430"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> Record incidents -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_incidents" id="edge_sf_postfork_to_incidents">
+            <omgdi:waypoint x="1390" y="200"/>
+            <omgdi:waypoint x="1390" y="530"/>
+            <omgdi:waypoint x="1470" y="530"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> Provide info -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_provideinfo" id="edge_sf_postfork_to_provideinfo">
+            <omgdi:waypoint x="1390" y="200"/>
+            <omgdi:waypoint x="1390" y="630"/>
+            <omgdi:waypoint x="1470" y="630"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market fork -> Financial coverage -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postfork_to_financial" id="edge_sf_postfork_to_financial">
+            <omgdi:waypoint x="1390" y="200"/>
+            <omgdi:waypoint x="1390" y="730"/>
+            <omgdi:waypoint x="1470" y="730"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Keep documentation -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_keepdoc_to_postjoin" id="edge_sf_keepdoc_to_postjoin">
+            <omgdi:waypoint x="1610" y="130"/>
+            <omgdi:waypoint x="1700" y="130"/>
+            <omgdi:waypoint x="1700" y="390"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- QMS -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_qms_to_postjoin" id="edge_sf_qms_to_postjoin">
+            <omgdi:waypoint x="1610" y="230"/>
+            <omgdi:waypoint x="1700" y="230"/>
+            <omgdi:waypoint x="1700" y="390"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- PMS -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_pms_to_postjoin" id="edge_sf_pms_to_postjoin">
+            <omgdi:waypoint x="1610" y="330"/>
+            <omgdi:waypoint x="1700" y="330"/>
+            <omgdi:waypoint x="1700" y="390"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Corrective action -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_corrective_to_postjoin" id="edge_sf_corrective_to_postjoin">
+            <omgdi:waypoint x="1610" y="430"/>
+            <omgdi:waypoint x="1660" y="430"/>
+            <omgdi:waypoint x="1660" y="410"/>
+            <omgdi:waypoint x="1680" y="410"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Record incidents -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_incidents_to_postjoin" id="edge_sf_incidents_to_postjoin">
+            <omgdi:waypoint x="1610" y="530"/>
+            <omgdi:waypoint x="1700" y="530"/>
+            <omgdi:waypoint x="1700" y="430"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Provide info -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_provideinfo_to_postjoin" id="edge_sf_provideinfo_to_postjoin">
+            <omgdi:waypoint x="1610" y="630"/>
+            <omgdi:waypoint x="1700" y="630"/>
+            <omgdi:waypoint x="1700" y="430"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Financial coverage -> Post-market join -->
+         <bpmndi:BPMNEdge bpmnElement="sf_financial_to_postjoin" id="edge_sf_financial_to_postjoin">
+            <omgdi:waypoint x="1610" y="730"/>
+            <omgdi:waypoint x="1700" y="730"/>
+            <omgdi:waypoint x="1700" y="430"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Post-market join -> End -->
+         <bpmndi:BPMNEdge bpmnElement="sf_postjoin_to_end" id="edge_sf_postjoin_to_end">
+            <omgdi:waypoint x="1720" y="410"/>
+            <omgdi:waypoint x="1780" y="410"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== MESSAGE FLOW EDGES ===== -->
+
+         <!-- Corrective action -> Competent Authority -->
+         <bpmndi:BPMNEdge bpmnElement="mf_inform_authority" id="edge_mf_inform_authority">
+            <omgdi:waypoint x="1540" y="470"/>
+            <omgdi:waypoint x="1540" y="930"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Provide info -> Competent Authority -->
+         <bpmndi:BPMNEdge bpmnElement="mf_provide_info" id="edge_mf_provide_info">
+            <omgdi:waypoint x="1540" y="670"/>
+            <omgdi:waypoint x="1540" y="930"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

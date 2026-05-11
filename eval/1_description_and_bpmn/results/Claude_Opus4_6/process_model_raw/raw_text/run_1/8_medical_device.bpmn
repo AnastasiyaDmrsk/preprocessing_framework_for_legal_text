@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ================================================================== -->
+   <!-- COLLABORATION                                                       -->
+   <!-- ================================================================== -->
+   <collaboration id="collab_1">
+      <participant id="participant_manufacturer" name="Manufacturers" processRef="process_manufacturer"/>
+      <participant id="participant_competent_authority" name="Competent Authority" processRef="process_competent_authority"/>
+      <messageFlow id="msgflow_doc_to_ca" name="" sourceRef="task_keep_documentation" targetRef="start_ca_receive_doc"/>
+      <messageFlow id="msgflow_info_to_ca" name="" sourceRef="task_provide_info" targetRef="task_ca_review_info"/>
+      <messageFlow id="msgflow_incident_to_ca" name="" sourceRef="task_inform_ca_risk" targetRef="task_ca_receive_incident"/>
+   </collaboration>
+
+   <!-- ================================================================== -->
+   <!-- MANUFACTURER PROCESS                                                -->
+   <!-- ================================================================== -->
+   <process id="process_manufacturer" name="Manufacturers" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_manufacturer">
+         <lane id="lane_manufacturer" name="">
+            <flowNodeRef>start_manufacturer</flowNodeRef>
+            <flowNodeRef>task_ensure_design</flowNodeRef>
+            <flowNodeRef>pg_fork1</flowNodeRef>
+            <flowNodeRef>task_risk_mgmt</flowNodeRef>
+            <flowNodeRef>task_clinical_eval</flowNodeRef>
+            <flowNodeRef>task_tech_doc</flowNodeRef>
+            <flowNodeRef>pg_join1</flowNodeRef>
+            <flowNodeRef>task_eu_declaration</flowNodeRef>
+            <flowNodeRef>task_ce_marking</flowNodeRef>
+            <flowNodeRef>task_udi_registration</flowNodeRef>
+            <flowNodeRef>task_keep_documentation</flowNodeRef>
+            <flowNodeRef>task_qms</flowNodeRef>
+            <flowNodeRef>task_post_market</flowNodeRef>
+            <flowNodeRef>task_ensure_labeling</flowNodeRef>
+            <flowNodeRef>task_record_incidents</flowNodeRef>
+            <flowNodeRef>xg_nonconformity</flowNodeRef>
+            <flowNodeRef>task_corrective_action</flowNodeRef>
+            <flowNodeRef>task_inform_ca_risk</flowNodeRef>
+            <flowNodeRef>xg_merge_nonconformity</flowNodeRef>
+            <flowNodeRef>task_provide_info</flowNodeRef>
+            <flowNodeRef>task_financial_coverage</flowNodeRef>
+            <flowNodeRef>end_manufacturer</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <!-- Start -->
+      <startEvent id="start_manufacturer" name="Device ready for market">
+         <outgoing>sf_start_to_design</outgoing>
+      </startEvent>
+
+      <!-- 1. Ensure design and manufacturing compliance -->
+      <task id="task_ensure_design" name="Ensure devices designed and manufactured per requirements" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_start_to_design</incoming>
+         <outgoing>sf_design_to_fork</outgoing>
+      </task>
+
+      <!-- Parallel fork: risk mgmt, clinical eval, tech doc -->
+      <parallelGateway id="pg_fork1" name="" gatewayDirection="Diverging">
+         <incoming>sf_design_to_fork</incoming>
+         <outgoing>sf_fork_to_risk</outgoing>
+         <outgoing>sf_fork_to_clinical</outgoing>
+         <outgoing>sf_fork_to_techdoc</outgoing>
+      </parallelGateway>
+
+      <!-- 2. Risk management -->
+      <task id="task_risk_mgmt" name="Establish and maintain risk management system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_fork_to_risk</incoming>
+         <outgoing>sf_risk_to_join</outgoing>
+      </task>
+
+      <!-- 3. Clinical evaluation -->
+      <task id="task_clinical_eval" name="Conduct clinical evaluation including PMCF" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_fork_to_clinical</incoming>
+         <outgoing>sf_clinical_to_join</outgoing>
+      </task>
+
+      <!-- 4. Technical documentation -->
+      <task id="task_tech_doc" name="Draw up and maintain technical documentation" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_fork_to_techdoc</incoming>
+         <outgoing>sf_techdoc_to_join</outgoing>
+      </task>
+
+      <!-- Parallel join -->
+      <parallelGateway id="pg_join1" name="" gatewayDirection="Converging">
+         <incoming>sf_risk_to_join</incoming>
+         <incoming>sf_clinical_to_join</incoming>
+         <incoming>sf_techdoc_to_join</incoming>
+         <outgoing>sf_join_to_declaration</outgoing>
+      </parallelGateway>
+
+      <!-- 6. EU declaration of conformity -->
+      <task id="task_eu_declaration" name="Draw up EU declaration of conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_join_to_declaration</incoming>
+         <outgoing>sf_declaration_to_ce</outgoing>
+      </task>
+
+      <!-- 6. Affix CE marking -->
+      <task id="task_ce_marking" name="Affix CE marking of conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_declaration_to_ce</incoming>
+         <outgoing>sf_ce_to_udi</outgoing>
+      </task>
+
+      <!-- 7. UDI and registration -->
+      <task id="task_udi_registration" name="Comply with UDI system and registration obligations" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ce_to_udi</incoming>
+         <outgoing>sf_udi_to_keepdoc</outgoing>
+      </task>
+
+      <!-- 8. Keep documentation available -->
+      <task id="task_keep_documentation" name="Keep documentation available for competent authorities" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_udi_to_keepdoc</incoming>
+         <outgoing>sf_keepdoc_to_qms</outgoing>
+      </task>
+
+      <!-- 9. Quality management system -->
+      <task id="task_qms" name="Establish and maintain quality management system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_keepdoc_to_qms</incoming>
+         <outgoing>sf_qms_to_pms</outgoing>
+      </task>
+
+      <!-- 10. Post-market surveillance -->
+      <task id="task_post_market" name="Implement post-market surveillance system" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_qms_to_pms</incoming>
+         <outgoing>sf_pms_to_label</outgoing>
+      </task>
+
+      <!-- 11. Ensure labeling -->
+      <task id="task_ensure_labeling" name="Ensure device accompanied by required information" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_pms_to_label</incoming>
+         <outgoing>sf_label_to_incidents</outgoing>
+      </task>
+
+      <!-- 13. Record and report incidents -->
+      <task id="task_record_incidents" name="Record and report incidents and field safety corrective actions" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_label_to_incidents</incoming>
+         <outgoing>sf_incidents_to_xg</outgoing>
+      </task>
+
+      <!-- 12. Exclusive gateway: non-conformity detected? -->
+      <exclusiveGateway id="xg_nonconformity" name="Non-conformity detected?" gatewayDirection="Diverging">
+         <incoming>sf_incidents_to_xg</incoming>
+         <outgoing>sf_xg_to_corrective</outgoing>
+         <outgoing>sf_xg_to_merge</outgoing>
+      </exclusiveGateway>
+
+      <!-- 12. Corrective action -->
+      <task id="task_corrective_action" name="Take corrective action, withdraw or recall device" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_xg_to_corrective</incoming>
+         <outgoing>sf_corrective_to_inform</outgoing>
+      </task>
+
+      <!-- 12. Inform CA of serious risk -->
+      <task id="task_inform_ca_risk" name="Inform competent authorities of non-compliance and corrective action" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_corrective_to_inform</incoming>
+         <outgoing>sf_inform_to_merge</outgoing>
+      </task>
+
+      <!-- Merge after non-conformity path -->
+      <exclusiveGateway id="xg_merge_nonconformity" name="" gatewayDirection="Converging">
+         <incoming>sf_xg_to_merge</incoming>
+         <incoming>sf_inform_to_merge</incoming>
+         <outgoing>sf_merge_to_provide</outgoing>
+      </exclusiveGateway>
+
+      <!-- 14. Provide information to authority -->
+      <task id="task_provide_info" name="Provide information and documentation to competent authority" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_merge_to_provide</incoming>
+         <outgoing>sf_provide_to_financial</outgoing>
+      </task>
+
+      <!-- 16. Financial coverage -->
+      <task id="task_financial_coverage" name="Have financial coverage measures in place" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_provide_to_financial</incoming>
+         <outgoing>sf_financial_to_end</outgoing>
+      </task>
+
+      <!-- End -->
+      <endEvent id="end_manufacturer" name="Obligations fulfilled">
+         <incoming>sf_financial_to_end</incoming>
+      </endEvent>
+
+      <!-- Sequence Flows -->
+      <sequenceFlow id="sf_start_to_design" sourceRef="start_manufacturer" targetRef="task_ensure_design"/>
+      <sequenceFlow id="sf_design_to_fork" sourceRef="task_ensure_design" targetRef="pg_fork1"/>
+      <sequenceFlow id="sf_fork_to_risk" sourceRef="pg_fork1" targetRef="task_risk_mgmt"/>
+      <sequenceFlow id="sf_fork_to_clinical" sourceRef="pg_fork1" targetRef="task_clinical_eval"/>
+      <sequenceFlow id="sf_fork_to_techdoc" sourceRef="pg_fork1" targetRef="task_tech_doc"/>
+      <sequenceFlow id="sf_risk_to_join" sourceRef="task_risk_mgmt" targetRef="pg_join1"/>
+      <sequenceFlow id="sf_clinical_to_join" sourceRef="task_clinical_eval" targetRef="pg_join1"/>
+      <sequenceFlow id="sf_techdoc_to_join" sourceRef="task_tech_doc" targetRef="pg_join1"/>
+      <sequenceFlow id="sf_join_to_declaration" sourceRef="pg_join1" targetRef="task_eu_declaration"/>
+      <sequenceFlow id="sf_declaration_to_ce" sourceRef="task_eu_declaration" targetRef="task_ce_marking"/>
+      <sequenceFlow id="sf_ce_to_udi" sourceRef="task_ce_marking" targetRef="task_udi_registration"/>
+      <sequenceFlow id="sf_udi_to_keepdoc" sourceRef="task_udi_registration" targetRef="task_keep_documentation"/>
+      <sequenceFlow id="sf_keepdoc_to_qms" sourceRef="task_keep_documentation" targetRef="task_qms"/>
+      <sequenceFlow id="sf_qms_to_pms" sourceRef="task_qms" targetRef="task_post_market"/>
+      <sequenceFlow id="sf_pms_to_label" sourceRef="task_post_market" targetRef="task_ensure_labeling"/>
+      <sequenceFlow id="sf_label_to_incidents" sourceRef="task_ensure_labeling" targetRef="task_record_incidents"/>
+      <sequenceFlow id="sf_incidents_to_xg" sourceRef="task_record_incidents" targetRef="xg_nonconformity"/>
+      <sequenceFlow id="sf_xg_to_corrective" name="Yes" sourceRef="xg_nonconformity" targetRef="task_corrective_action"/>
+      <sequenceFlow id="sf_xg_to_merge" name="No" sourceRef="xg_nonconformity" targetRef="xg_merge_nonconformity"/>
+      <sequenceFlow id="sf_corrective_to_inform" sourceRef="task_corrective_action" targetRef="task_inform_ca_risk"/>
+      <sequenceFlow id="sf_inform_to_merge" sourceRef="task_inform_ca_risk" targetRef="xg_merge_nonconformity"/>
+      <sequenceFlow id="sf_merge_to_provide" sourceRef="xg_merge_nonconformity" targetRef="task_provide_info"/>
+      <sequenceFlow id="sf_provide_to_financial" sourceRef="task_provide_info" targetRef="task_financial_coverage"/>
+      <sequenceFlow id="sf_financial_to_end" sourceRef="task_financial_coverage" targetRef="end_manufacturer"/>
+   </process>
+
+   <!-- ================================================================== -->
+   <!-- COMPETENT AUTHORITY PROCESS                                         -->
+   <!-- ================================================================== -->
+   <process id="process_competent_authority" name="Competent Authority" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="laneset_ca">
+         <lane id="lane_ca" name="">
+            <flowNodeRef>start_ca_receive_doc</flowNodeRef>
+            <flowNodeRef>task_ca_review_doc</flowNodeRef>
+            <flowNodeRef>task_ca_receive_incident</flowNodeRef>
+            <flowNodeRef>task_ca_review_info</flowNodeRef>
+            <flowNodeRef>end_ca</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ca_receive_doc" name="Receive documentation">
+         <outgoing>sf_ca_start_to_review</outgoing>
+         <messageEventDefinition id="msgdef_ca_start"/>
+      </startEvent>
+
+      <task id="task_ca_review_doc" name="Review documentation" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ca_start_to_review</incoming>
+         <outgoing>sf_ca_review_to_incident</outgoing>
+      </task>
+
+      <task id="task_ca_receive_incident" name="Receive incident notification" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ca_review_to_incident</incoming>
+         <outgoing>sf_ca_incident_to_info</outgoing>
+      </task>
+
+      <task id="task_ca_review_info" name="Review information and assess conformity" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>sf_ca_incident_to_info</incoming>
+         <outgoing>sf_ca_info_to_end</outgoing>
+      </task>
+
+      <endEvent id="end_ca" name="Review complete">
+         <incoming>sf_ca_info_to_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ca_start_to_review" sourceRef="start_ca_receive_doc" targetRef="task_ca_review_doc"/>
+      <sequenceFlow id="sf_ca_review_to_incident" sourceRef="task_ca_review_doc" targetRef="task_ca_receive_incident"/>
+      <sequenceFlow id="sf_ca_incident_to_info" sourceRef="task_ca_receive_incident" targetRef="task_ca_review_info"/>
+      <sequenceFlow id="sf_ca_info_to_end" sourceRef="task_ca_review_info" targetRef="end_ca"/>
+   </process>
+
+   <!-- ================================================================== -->
+   <!-- BPMN DIAGRAM (DI)                                                   -->
+   <!-- ================================================================== -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- Manufacturer Pool -->
+         <bpmndi:BPMNShape bpmnElement="participant_manufacturer" id="shape_participant_manufacturer" isHorizontal="true">
+            <omgdc:Bounds height="520.0" width="2260.0" x="60.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_manufacturer" id="shape_lane_manufacturer" isHorizontal="true">
+            <omgdc:Bounds height="520.0" width="2230.0" x="90.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Competent Authority Pool -->
+         <bpmndi:BPMNShape bpmnElement="participant_competent_authority" id="shape_participant_ca" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2260.0" x="60.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ca" id="shape_lane_ca" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2230.0" x="90.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ==================== MANUFACTURER SHAPES ==================== -->
+
+         <!-- Start Event -->
+         <bpmndi:BPMNShape bpmnElement="start_manufacturer" id="shape_start_manufacturer">
+            <omgdc:Bounds height="30.0" width="30.0" x="130.0" y="185.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="120.0" x="85.0" y="220.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Ensure design -->
+         <bpmndi:BPMNShape bpmnElement="task_ensure_design" id="shape_task_ensure_design">
+            <omgdc:Bounds height="80.0" width="120.0" x="200.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Fork -->
+         <bpmndi:BPMNShape bpmnElement="pg_fork1" id="shape_pg_fork1" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Risk management (top branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_risk_mgmt" id="shape_task_risk_mgmt">
+            <omgdc:Bounds height="80.0" width="120.0" x="440.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Clinical evaluation (middle branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_clinical_eval" id="shape_task_clinical_eval">
+            <omgdc:Bounds height="80.0" width="120.0" x="440.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Technical documentation (bottom branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_tech_doc" id="shape_task_tech_doc">
+            <omgdc:Bounds height="80.0" width="120.0" x="440.0" y="280.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Join -->
+         <bpmndi:BPMNShape bpmnElement="pg_join1" id="shape_pg_join1" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: EU declaration -->
+         <bpmndi:BPMNShape bpmnElement="task_eu_declaration" id="shape_task_eu_declaration">
+            <omgdc:Bounds height="80.0" width="120.0" x="680.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: CE marking -->
+         <bpmndi:BPMNShape bpmnElement="task_ce_marking" id="shape_task_ce_marking">
+            <omgdc:Bounds height="80.0" width="120.0" x="840.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: UDI registration -->
+         <bpmndi:BPMNShape bpmnElement="task_udi_registration" id="shape_task_udi_registration">
+            <omgdc:Bounds height="80.0" width="120.0" x="1000.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Keep documentation -->
+         <bpmndi:BPMNShape bpmnElement="task_keep_documentation" id="shape_task_keep_documentation">
+            <omgdc:Bounds height="80.0" width="120.0" x="1160.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: QMS -->
+         <bpmndi:BPMNShape bpmnElement="task_qms" id="shape_task_qms">
+            <omgdc:Bounds height="80.0" width="120.0" x="1160.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Post-market surveillance -->
+         <bpmndi:BPMNShape bpmnElement="task_post_market" id="shape_task_post_market">
+            <omgdc:Bounds height="80.0" width="120.0" x="1000.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Ensure labeling -->
+         <bpmndi:BPMNShape bpmnElement="task_ensure_labeling" id="shape_task_ensure_labeling">
+            <omgdc:Bounds height="80.0" width="120.0" x="840.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Record incidents -->
+         <bpmndi:BPMNShape bpmnElement="task_record_incidents" id="shape_task_record_incidents">
+            <omgdc:Bounds height="80.0" width="120.0" x="680.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- XOR Gateway: Non-conformity? -->
+         <bpmndi:BPMNShape bpmnElement="xg_nonconformity" id="shape_xg_nonconformity" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="540.0" y="400.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="130.0" x="475.0" y="445.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Corrective action -->
+         <bpmndi:BPMNShape bpmnElement="task_corrective_action" id="shape_task_corrective_action">
+            <omgdc:Bounds height="80.0" width="120.0" x="380.0" y="470.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Inform CA -->
+         <bpmndi:BPMNShape bpmnElement="task_inform_ca_risk" id="shape_task_inform_ca_risk">
+            <omgdc:Bounds height="80.0" width="120.0" x="220.0" y="470.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- XOR Merge -->
+         <bpmndi:BPMNShape bpmnElement="xg_merge_nonconformity" id="shape_xg_merge_nonconformity" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="260.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Provide info -->
+         <bpmndi:BPMNShape bpmnElement="task_provide_info" id="shape_task_provide_info">
+            <omgdc:Bounds height="80.0" width="120.0" x="140.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Financial coverage -->
+         <bpmndi:BPMNShape bpmnElement="task_financial_coverage" id="shape_task_financial_coverage">
+            <omgdc:Bounds height="80.0" width="120.0" x="140.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- End Event -->
+         <bpmndi:BPMNShape bpmnElement="end_manufacturer" id="shape_end_manufacturer">
+            <omgdc:Bounds height="28.0" width="28.0" x="186.0" y="155.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="100.0" x="150.0" y="140.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- ==================== COMPETENT AUTHORITY SHAPES ==================== -->
+
+         <bpmndi:BPMNShape bpmnElement="start_ca_receive_doc" id="shape_start_ca_receive_doc">
+            <omgdc:Bounds height="30.0" width="30.0" x="1205.0" y="725.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="130.0" x="1140.0" y="760.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ca_review_doc" id="shape_task_ca_review_doc">
+            <omgdc:Bounds height="80.0" width="120.0" x="1300.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ca_receive_incident" id="shape_task_ca_receive_incident">
+            <omgdc:Bounds height="80.0" width="120.0" x="1480.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_ca_review_info" id="shape_task_ca_review_info">
+            <omgdc:Bounds height="80.0" width="120.0" x="1660.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_ca" id="shape_end_ca">
+            <omgdc:Bounds height="28.0" width="28.0" x="1840.0" y="726.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="14.0" width="90.0" x="1809.0" y="758.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- ==================== MANUFACTURER EDGES ==================== -->
+
+         <bpmndi:BPMNEdge bpmnElement="sf_start_to_design" id="edge_sf_start_to_design">
+            <omgdi:waypoint x="160.0" y="200.0"/>
+            <omgdi:waypoint x="200.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_design_to_fork" id="edge_sf_design_to_fork">
+            <omgdi:waypoint x="320.0" y="200.0"/>
+            <omgdi:waypoint x="360.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_risk" id="edge_sf_fork_to_risk">
+            <omgdi:waypoint x="380.0" y="180.0"/>
+            <omgdi:waypoint x="380.0" y="120.0"/>
+            <omgdi:waypoint x="440.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_clinical" id="edge_sf_fork_to_clinical">
+            <omgdi:waypoint x="400.0" y="200.0"/>
+            <omgdi:waypoint x="440.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_fork_to_techdoc" id="edge_sf_fork_to_techdoc">
+            <omgdi:waypoint x="380.0" y="220.0"/>
+            <omgdi:waypoint x="380.0" y="320.0"/>
+            <omgdi:waypoint x="440.0" y="320.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_risk_to_join" id="edge_sf_risk_to_join">
+            <omgdi:waypoint x="560.0" y="120.0"/>
+            <omgdi:waypoint x="620.0" y="120.0"/>
+            <omgdi:waypoint x="620.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_clinical_to_join" id="edge_sf_clinical_to_join">
+            <omgdi:waypoint x="560.0" y="220.0"/>
+            <omgdi:waypoint x="600.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_techdoc_to_join" id="edge_sf_techdoc_to_join">
+            <omgdi:waypoint x="560.0" y="320.0"/>
+            <omgdi:waypoint x="620.0" y="320.0"/>
+            <omgdi:waypoint x="620.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_join_to_declaration" id="edge_sf_join_to_declaration">
+            <omgdi:waypoint x="640.0" y="200.0"/>
+            <omgdi:waypoint x="680.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_declaration_to_ce" id="edge_sf_declaration_to_ce">
+            <omgdi:waypoint x="800.0" y="200.0"/>
+            <omgdi:waypoint x="840.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ce_to_udi" id="edge_sf_ce_to_udi">
+            <omgdi:waypoint x="960.0" y="200.0"/>
+            <omgdi:waypoint x="1000.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_udi_to_keepdoc" id="edge_sf_udi_to_keepdoc">
+            <omgdi:waypoint x="1120.0" y="200.0"/>
+            <omgdi:waypoint x="1160.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_keepdoc_to_qms" id="edge_sf_keepdoc_to_qms">
+            <omgdi:waypoint x="1220.0" y="240.0"/>
+            <omgdi:waypoint x="1220.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_qms_to_pms" id="edge_sf_qms_to_pms">
+            <omgdi:waypoint x="1160.0" y="420.0"/>
+            <omgdi:waypoint x="1120.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_pms_to_label" id="edge_sf_pms_to_label">
+            <omgdi:waypoint x="1000.0" y="420.0"/>
+            <omgdi:waypoint x="960.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_label_to_incidents" id="edge_sf_label_to_incidents">
+            <omgdi:waypoint x="840.0" y="420.0"/>
+            <omgdi:waypoint x="800.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_incidents_to_xg" id="edge_sf_incidents_to_xg">
+            <omgdi:waypoint x="680.0" y="420.0"/>
+            <omgdi:waypoint x="580.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_xg_to_corrective" id="edge_sf_xg_to_corrective">
+            <omgdi:waypoint x="560.0" y="440.0"/>
+            <omgdi:waypoint x="560.0" y="510.0"/>
+            <omgdi:waypoint x="500.0" y="510.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_xg_to_merge" id="edge_sf_xg_to_merge">
+            <omgdi:waypoint x="540.0" y="420.0"/>
+            <omgdi:waypoint x="300.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_corrective_to_inform" id="edge_sf_corrective_to_inform">
+            <omgdi:waypoint x="380.0" y="510.0"/>
+            <omgdi:waypoint x="340.0" y="510.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_inform_to_merge" id="edge_sf_inform_to_merge">
+            <omgdi:waypoint x="280.0" y="470.0"/>
+            <omgdi:waypoint x="280.0" y="440.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_merge_to_provide" id="edge_sf_merge_to_provide">
+            <omgdi:waypoint x="260.0" y="420.0"/>
+            <omgdi:waypoint x="200.0" y="420.0"/>
+            <omgdi:waypoint x="200.0" y="390.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_provide_to_financial" id="edge_sf_provide_to_financial">
+            <omgdi:waypoint x="200.0" y="310.0"/>
+            <omgdi:waypoint x="200.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_financial_to_end" id="edge_sf_financial_to_end">
+            <omgdi:waypoint x="200.0" y="210.0"/>
+            <omgdi:waypoint x="200.0" y="183.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ==================== COMPETENT AUTHORITY EDGES ==================== -->
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_start_to_review" id="edge_sf_ca_start_to_review">
+            <omgdi:waypoint x="1235.0" y="740.0"/>
+            <omgdi:waypoint x="1300.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_review_to_incident" id="edge_sf_ca_review_to_incident">
+            <omgdi:waypoint x="1420.0" y="740.0"/>
+            <omgdi:waypoint x="1480.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_incident_to_info" id="edge_sf_ca_incident_to_info">
+            <omgdi:waypoint x="1600.0" y="740.0"/>
+            <omgdi:waypoint x="1660.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_info_to_end" id="edge_sf_ca_info_to_end">
+            <omgdi:waypoint x="1780.0" y="740.0"/>
+            <omgdi:waypoint x="1840.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ==================== MESSAGE FLOW EDGES ==================== -->
+
+         <bpmndi:BPMNEdge bpmnElement="msgflow_doc_to_ca" id="edge_msgflow_doc_to_ca">
+            <omgdi:waypoint x="1220.0" y="240.0"/>
+            <omgdi:waypoint x="1220.0" y="725.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="msgflow_info_to_ca" id="edge_msgflow_info_to_ca">
+            <omgdi:waypoint x="200.0" y="390.0"/>
+            <omgdi:waypoint x="200.0" y="740.0"/>
+            <omgdi:waypoint x="1660.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="msgflow_incident_to_ca" id="edge_msgflow_incident_to_ca">
+            <omgdi:waypoint x="280.0" y="550.0"/>
+            <omgdi:waypoint x="280.0" y="740.0"/>
+            <omgdi:waypoint x="1480.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
