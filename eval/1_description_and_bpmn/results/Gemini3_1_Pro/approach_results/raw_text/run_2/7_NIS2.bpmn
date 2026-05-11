@@ -1,0 +1,1159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:signavio="http://www.signavio.com"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="Signavio Process Editor, http://www.signavio.com"
+             exporterVersion="19.2.2"
+             id="sid-d3b24f5a"
+             targetNamespace="http://www.signavio.com"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+    <collaboration id="collab_1">
+        <participant id="p_eie" name="Essential and Important Entity" processRef="pr_eie" />
+        <participant id="p_tsp" name="Trust Service Provider" processRef="pr_tsp" />
+        <participant id="p_ca" name="Competent Authority" processRef="pr_ca" />
+        <participant id="p_csirt" name="CSIRT" processRef="pr_csirt" />
+        <participant id="p_spoc" name="Single Point of Contact" processRef="pr_spoc" />
+        <participant id="p_enisa" name="ENISA" processRef="pr_enisa" />
+        <participant id="p_comm" name="Commission" processRef="pr_comm" />
+        <participant id="p_cg" name="Cooperation Group" processRef="pr_cg" />
+
+        <messageFlow id="mf1" sourceRef="t2_eie" targetRef="catch_notif_csirt" />
+        <messageFlow id="mf2" sourceRef="t2_eie" targetRef="catch_notif_ca" />
+        <messageFlow id="mf3" sourceRef="t9_eie" targetRef="p_csirt" />
+        <messageFlow id="mf4" sourceRef="t9_eie" targetRef="p_ca" />
+        <messageFlow id="mf5" sourceRef="t10_eie" targetRef="p_csirt" />
+        <messageFlow id="mf6" sourceRef="t10_eie" targetRef="p_ca" />
+        <messageFlow id="mf7" sourceRef="t15_eie" targetRef="catch_tech_csirt" />
+        
+        <messageFlow id="mf8" sourceRef="t1_tsp" targetRef="p_csirt" />
+        <messageFlow id="mf9" sourceRef="t1_tsp" targetRef="p_ca" />
+        
+        <messageFlow id="mf10" sourceRef="t6_ca" targetRef="p_csirt" />
+        
+        <messageFlow id="mf11" sourceRef="t3_csirt" targetRef="catch_req_spoc" />
+        <messageFlow id="mf12" sourceRef="t4_csirt" targetRef="catch_req_eie" />
+        <messageFlow id="mf13" sourceRef="t13_csirt" targetRef="p_enisa" />
+        <messageFlow id="mf14" sourceRef="t19_csirt" targetRef="p_spoc" />
+        
+        <messageFlow id="mf15" sourceRef="t3_spoc" targetRef="catch_rep_enisa" />
+        <messageFlow id="mf16" sourceRef="t2_enisa" targetRef="p_cg" />
+        <messageFlow id="mf17" sourceRef="t4_comm" targetRef="catch_draft_cg" />
+    </collaboration>
+
+    <process id="pr_eie" isClosed="false" isExecutable="false" name="Essential and Important Entity">
+        <startEvent id="start_eie" name="significant incident that has a significant impact on the provision of services">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_e1</outgoing>
+        </startEvent>
+        <task id="t1_eie" name="assess whether an incident has caused or is capable of causing severe operational disruption or financial loss...">
+            <incoming>sf_e1</incoming>
+            <outgoing>sf_e2</outgoing>
+        </task>
+        <exclusiveGateway id="gw1_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e2</incoming>
+            <outgoing>sf_e3</outgoing>
+            <outgoing>sf_e4</outgoing>
+        </exclusiveGateway>
+        <task id="t2_eie" name="notify the CSIRT or the competent authority">
+            <incoming>sf_e3</incoming>
+            <outgoing>sf_e5</outgoing>
+        </task>
+        <task id="t3_eie" name="assess whether an incident has caused... or if the significant incident is likely to adversely affect...">
+            <incoming>sf_e4</incoming>
+            <incoming>sf_e5</incoming>
+            <outgoing>sf_e6</outgoing>
+        </task>
+        <exclusiveGateway id="gw2_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e6</incoming>
+            <outgoing>sf_e7</outgoing>
+            <outgoing>sf_e8</outgoing>
+        </exclusiveGateway>
+        <task id="t4_eie" name="notify the recipients of their services">
+            <incoming>sf_e7</incoming>
+            <outgoing>sf_e9</outgoing>
+        </task>
+        <task id="t5_eie" name="assess whether to determine any cross-border impact of the incident">
+            <incoming>sf_e8</incoming>
+            <incoming>sf_e9</incoming>
+            <outgoing>sf_e10</outgoing>
+        </task>
+        <exclusiveGateway id="gw3_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e10</incoming>
+            <outgoing>sf_e11</outgoing>
+            <outgoing>sf_e12</outgoing>
+        </exclusiveGateway>
+        <task id="t6_eie" name="report any information">
+            <incoming>sf_e11</incoming>
+            <outgoing>sf_e13</outgoing>
+        </task>
+        <task id="t7_eie" name="assess whether applicable">
+            <incoming>sf_e12</incoming>
+            <incoming>sf_e13</incoming>
+            <outgoing>sf_e14</outgoing>
+        </task>
+        <exclusiveGateway id="gw4_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e14</incoming>
+            <outgoing>sf_e15</outgoing>
+            <outgoing>sf_e16</outgoing>
+        </exclusiveGateway>
+        <task id="t8_eie" name="communicate to the recipients any measures or remedies to take">
+            <incoming>sf_e15</incoming>
+            <outgoing>sf_e17</outgoing>
+        </task>
+        <task id="t9_eie" name="submit to the CSIRT or the competent authority an early warning">
+            <incoming>sf_e16</incoming>
+            <incoming>sf_e17</incoming>
+            <outgoing>sf_e18</outgoing>
+        </task>
+        <task id="t10_eie" name="submit to the CSIRT or the competent authority an incident notification">
+            <incoming>sf_e18</incoming>
+            <outgoing>sf_e19</outgoing>
+        </task>
+        <intermediateCatchEvent id="catch_req_eie" name="Receive request from CSIRT/CA">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e19</incoming>
+            <outgoing>sf_e20</outgoing>
+            <messageEventDefinition id="med_1"/>
+        </intermediateCatchEvent>
+        <task id="t11_eie" name="submit an intermediate report on relevant status updates">
+            <incoming>sf_e20</incoming>
+            <outgoing>sf_e21</outgoing>
+        </task>
+        <task id="t12_eie" name="submit to the CSIRT or the competent authority a final report">
+            <incoming>sf_e21</incoming>
+            <outgoing>sf_e22</outgoing>
+        </task>
+        <task id="t13_eie" name="assess whether in the event of an ongoing incident at the time of the submission...">
+            <incoming>sf_e22</incoming>
+            <outgoing>sf_e23</outgoing>
+        </task>
+        <exclusiveGateway id="gw5_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e23</incoming>
+            <outgoing>sf_e24</outgoing>
+            <outgoing>sf_e25</outgoing>
+        </exclusiveGateway>
+        <task id="t14_eie" name="provide a progress report at the time of submission...">
+            <incoming>sf_e24</incoming>
+            <outgoing>sf_e26</outgoing>
+        </task>
+        <exclusiveGateway id="gw6_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="May request tech support?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e25</incoming>
+            <incoming>sf_e26</incoming>
+            <outgoing>sf_e27</outgoing>
+            <outgoing>sf_e28</outgoing>
+        </exclusiveGateway>
+        <task id="t15_eie" name="request additional technical support">
+            <incoming>sf_e27</incoming>
+            <outgoing>sf_e29</outgoing>
+        </task>
+        <exclusiveGateway id="gw7_eie" gatewayDirection="Diverging" isMarkerVisible="true" name="May inform public?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e28</incoming>
+            <incoming>sf_e29</incoming>
+            <outgoing>sf_e30</outgoing>
+            <outgoing>sf_e31</outgoing>
+        </exclusiveGateway>
+        <task id="t16_eie" name="inform the public about the significant incident">
+            <incoming>sf_e30</incoming>
+            <outgoing>sf_e32</outgoing>
+        </task>
+        <endEvent id="end_eie" name="reporting completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_e31</incoming>
+            <incoming>sf_e32</incoming>
+        </endEvent>
+
+        <!-- EIE Flows -->
+        <sequenceFlow id="sf_e1" isImmediate="true" sourceRef="start_eie" targetRef="t1_eie" />
+        <sequenceFlow id="sf_e2" isImmediate="true" sourceRef="t1_eie" targetRef="gw1_eie" />
+        <sequenceFlow id="sf_e3" name="yes" isImmediate="true" sourceRef="gw1_eie" targetRef="t2_eie" />
+        <sequenceFlow id="sf_e4" name="no" isImmediate="true" sourceRef="gw1_eie" targetRef="t3_eie" />
+        <sequenceFlow id="sf_e5" isImmediate="true" sourceRef="t2_eie" targetRef="t3_eie" />
+        <sequenceFlow id="sf_e6" isImmediate="true" sourceRef="t3_eie" targetRef="gw2_eie" />
+        <sequenceFlow id="sf_e7" name="yes" isImmediate="true" sourceRef="gw2_eie" targetRef="t4_eie" />
+        <sequenceFlow id="sf_e8" name="no" isImmediate="true" sourceRef="gw2_eie" targetRef="t5_eie" />
+        <sequenceFlow id="sf_e9" isImmediate="true" sourceRef="t4_eie" targetRef="t5_eie" />
+        <sequenceFlow id="sf_e10" isImmediate="true" sourceRef="t5_eie" targetRef="gw3_eie" />
+        <sequenceFlow id="sf_e11" name="yes" isImmediate="true" sourceRef="gw3_eie" targetRef="t6_eie" />
+        <sequenceFlow id="sf_e12" name="no" isImmediate="true" sourceRef="gw3_eie" targetRef="t7_eie" />
+        <sequenceFlow id="sf_e13" isImmediate="true" sourceRef="t6_eie" targetRef="t7_eie" />
+        <sequenceFlow id="sf_e14" isImmediate="true" sourceRef="t7_eie" targetRef="gw4_eie" />
+        <sequenceFlow id="sf_e15" name="yes" isImmediate="true" sourceRef="gw4_eie" targetRef="t8_eie" />
+        <sequenceFlow id="sf_e16" name="no" isImmediate="true" sourceRef="gw4_eie" targetRef="t9_eie" />
+        <sequenceFlow id="sf_e17" isImmediate="true" sourceRef="t8_eie" targetRef="t9_eie" />
+        <sequenceFlow id="sf_e18" isImmediate="true" sourceRef="t9_eie" targetRef="t10_eie" />
+        <sequenceFlow id="sf_e19" isImmediate="true" sourceRef="t10_eie" targetRef="catch_req_eie" />
+        <sequenceFlow id="sf_e20" isImmediate="true" sourceRef="catch_req_eie" targetRef="t11_eie" />
+        <sequenceFlow id="sf_e21" isImmediate="true" sourceRef="t11_eie" targetRef="t12_eie" />
+        <sequenceFlow id="sf_e22" isImmediate="true" sourceRef="t12_eie" targetRef="t13_eie" />
+        <sequenceFlow id="sf_e23" isImmediate="true" sourceRef="t13_eie" targetRef="gw5_eie" />
+        <sequenceFlow id="sf_e24" name="yes" isImmediate="true" sourceRef="gw5_eie" targetRef="t14_eie" />
+        <sequenceFlow id="sf_e25" name="no" isImmediate="true" sourceRef="gw5_eie" targetRef="gw6_eie" />
+        <sequenceFlow id="sf_e26" isImmediate="true" sourceRef="t14_eie" targetRef="gw6_eie" />
+        <sequenceFlow id="sf_e27" name="yes" isImmediate="true" sourceRef="gw6_eie" targetRef="t15_eie" />
+        <sequenceFlow id="sf_e28" name="no" isImmediate="true" sourceRef="gw6_eie" targetRef="gw7_eie" />
+        <sequenceFlow id="sf_e29" isImmediate="true" sourceRef="t15_eie" targetRef="gw7_eie" />
+        <sequenceFlow id="sf_e30" name="yes" isImmediate="true" sourceRef="gw7_eie" targetRef="t16_eie" />
+        <sequenceFlow id="sf_e31" name="no" isImmediate="true" sourceRef="gw7_eie" targetRef="end_eie" />
+        <sequenceFlow id="sf_e32" isImmediate="true" sourceRef="t16_eie" targetRef="end_eie" />
+    </process>
+
+    <process id="pr_tsp" isClosed="false" isExecutable="false" name="Trust Service Provider">
+        <startEvent id="start_tsp" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_t1</outgoing>
+        </startEvent>
+        <task id="t1_tsp" name="notify the CSIRT or the competent authority...">
+            <incoming>sf_t1</incoming>
+            <outgoing>sf_t2</outgoing>
+        </task>
+        <exclusiveGateway id="gw1_tsp" gatewayDirection="Diverging" isMarkerVisible="true" name="May request guidance?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_t2</incoming>
+            <outgoing>sf_t3</outgoing>
+            <outgoing>sf_t4</outgoing>
+        </exclusiveGateway>
+        <task id="t2_tsp" name="request guidance or operational advice...">
+            <incoming>sf_t3</incoming>
+            <outgoing>sf_t5</outgoing>
+        </task>
+        <endEvent id="end_tsp" name="notification completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_t4</incoming>
+            <incoming>sf_t5</incoming>
+        </endEvent>
+
+        <!-- TSP Flows -->
+        <sequenceFlow id="sf_t1" isImmediate="true" sourceRef="start_tsp" targetRef="t1_tsp" />
+        <sequenceFlow id="sf_t2" isImmediate="true" sourceRef="t1_tsp" targetRef="gw1_tsp" />
+        <sequenceFlow id="sf_t3" name="yes" isImmediate="true" sourceRef="gw1_tsp" targetRef="t2_tsp" />
+        <sequenceFlow id="sf_t4" name="no" isImmediate="true" sourceRef="gw1_tsp" targetRef="end_tsp" />
+        <sequenceFlow id="sf_t5" isImmediate="true" sourceRef="t2_tsp" targetRef="end_tsp" />
+    </process>
+
+    <process id="pr_ca" isClosed="false" isExecutable="false" name="Competent Authority">
+        <startEvent id="start_ca" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_ca1</outgoing>
+        </startEvent>
+        <task id="t1_ca" name="ensure that entities notify CSIRT">
+            <incoming>sf_ca1</incoming>
+            <outgoing>sf_ca2</outgoing>
+        </task>
+        <task id="t2_ca" name="ensure entities report information enabling determination of cross-border impact">
+            <incoming>sf_ca2</incoming>
+            <outgoing>sf_ca3</outgoing>
+        </task>
+        <task id="t3_ca" name="assess whether entities notify competent authority">
+            <incoming>sf_ca3</incoming>
+            <outgoing>sf_ca4</outgoing>
+        </task>
+        <exclusiveGateway id="gw1_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca4</incoming>
+            <outgoing>sf_ca5</outgoing>
+            <outgoing>sf_ca6</outgoing>
+        </exclusiveGateway>
+        <task id="t4_ca" name="ensure that competent authority forwards notification to CSIRT upon receipt">
+            <incoming>sf_ca5</incoming>
+            <outgoing>sf_ca7</outgoing>
+        </task>
+        <intermediateCatchEvent id="catch_notif_ca" name="Receive notification">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca6</incoming>
+            <incoming>sf_ca7</incoming>
+            <outgoing>sf_ca8</outgoing>
+            <messageEventDefinition id="med_2"/>
+        </intermediateCatchEvent>
+        <task id="t5_ca" name="assess whether the entities concerned notify the competent authority">
+            <incoming>sf_ca8</incoming>
+            <outgoing>sf_ca9</outgoing>
+        </task>
+        <exclusiveGateway id="gw2_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca9</incoming>
+            <outgoing>sf_ca10</outgoing>
+            <outgoing>sf_ca11</outgoing>
+        </exclusiveGateway>
+        <task id="t6_ca" name="forward the notification to the CSIRT">
+            <incoming>sf_ca10</incoming>
+            <outgoing>sf_ca12</outgoing>
+        </task>
+        <task id="t7_ca" name="assess whether in the case of a cross-border or cross-sectoral significant incident">
+            <incoming>sf_ca11</incoming>
+            <incoming>sf_ca12</incoming>
+            <outgoing>sf_ca13</outgoing>
+        </task>
+        <exclusiveGateway id="gw3_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca13</incoming>
+            <outgoing>sf_ca14</outgoing>
+            <outgoing>sf_ca15</outgoing>
+        </exclusiveGateway>
+        <task id="t8_ca" name="ensure that single points of contact are provided with information">
+            <incoming>sf_ca14</incoming>
+            <outgoing>sf_ca16</outgoing>
+        </task>
+        <task id="t9_ca" name="assess whether applicable">
+            <incoming>sf_ca15</incoming>
+            <incoming>sf_ca16</incoming>
+            <outgoing>sf_ca17</outgoing>
+        </task>
+        <exclusiveGateway id="gw4_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca17</incoming>
+            <outgoing>sf_ca18</outgoing>
+            <outgoing>sf_ca19</outgoing>
+        </exclusiveGateway>
+        <task id="t10_ca" name="ensure that entities communicate measures to recipients affected">
+            <incoming>sf_ca18</incoming>
+            <outgoing>sf_ca20</outgoing>
+        </task>
+        <task id="t11_ca" name="ensure that entities submit early warning to CSIRT">
+            <incoming>sf_ca19</incoming>
+            <incoming>sf_ca20</incoming>
+            <outgoing>sf_ca21</outgoing>
+        </task>
+        <task id="t12_ca" name="ensure that entities submit incident notification to CSIRT">
+            <incoming>sf_ca21</incoming>
+            <outgoing>sf_ca22</outgoing>
+        </task>
+        <task id="t13_ca" name="ensure that entities submit intermediate report to CSIRT">
+            <incoming>sf_ca22</incoming>
+            <outgoing>sf_ca23</outgoing>
+        </task>
+        <task id="t14_ca" name="ensure that entities submit final report to CSIRT">
+            <incoming>sf_ca23</incoming>
+            <outgoing>sf_ca24</outgoing>
+        </task>
+        <task id="t15_ca" name="assess whether incident is ongoing at time of submission of final report">
+            <incoming>sf_ca24</incoming>
+            <outgoing>sf_ca25</outgoing>
+        </task>
+        <exclusiveGateway id="gw5_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca25</incoming>
+            <outgoing>sf_ca26</outgoing>
+            <outgoing>sf_ca27</outgoing>
+        </exclusiveGateway>
+        <task id="t16_ca" name="ensure that entities provide progress report and final report for ongoing incidents">
+            <incoming>sf_ca26</incoming>
+            <outgoing>sf_ca28</outgoing>
+        </task>
+        <task id="t17_ca" name="assess whether the CSIRT is not the initial recipient of the notification and upon request">
+            <incoming>sf_ca27</incoming>
+            <incoming>sf_ca28</incoming>
+            <outgoing>sf_ca29</outgoing>
+        </task>
+        <exclusiveGateway id="gw6_ca" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca29</incoming>
+            <outgoing>sf_ca30</outgoing>
+            <outgoing>sf_ca31</outgoing>
+        </exclusiveGateway>
+        <task id="t18_ca" name="cooperate with the CSIRT on guidance">
+            <incoming>sf_ca30</incoming>
+            <outgoing>sf_ca32</outgoing>
+        </task>
+        <endEvent id="end_ca" name="oversight completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_ca31</incoming>
+            <incoming>sf_ca32</incoming>
+        </endEvent>
+
+        <!-- CA Flows -->
+        <sequenceFlow id="sf_ca1" isImmediate="true" sourceRef="start_ca" targetRef="t1_ca" />
+        <sequenceFlow id="sf_ca2" isImmediate="true" sourceRef="t1_ca" targetRef="t2_ca" />
+        <sequenceFlow id="sf_ca3" isImmediate="true" sourceRef="t2_ca" targetRef="t3_ca" />
+        <sequenceFlow id="sf_ca4" isImmediate="true" sourceRef="t3_ca" targetRef="gw1_ca" />
+        <sequenceFlow id="sf_ca5" name="yes" isImmediate="true" sourceRef="gw1_ca" targetRef="t4_ca" />
+        <sequenceFlow id="sf_ca6" name="no" isImmediate="true" sourceRef="gw1_ca" targetRef="catch_notif_ca" />
+        <sequenceFlow id="sf_ca7" isImmediate="true" sourceRef="t4_ca" targetRef="catch_notif_ca" />
+        <sequenceFlow id="sf_ca8" isImmediate="true" sourceRef="catch_notif_ca" targetRef="t5_ca" />
+        <sequenceFlow id="sf_ca9" isImmediate="true" sourceRef="t5_ca" targetRef="gw2_ca" />
+        <sequenceFlow id="sf_ca10" name="yes" isImmediate="true" sourceRef="gw2_ca" targetRef="t6_ca" />
+        <sequenceFlow id="sf_ca11" name="no" isImmediate="true" sourceRef="gw2_ca" targetRef="t7_ca" />
+        <sequenceFlow id="sf_ca12" isImmediate="true" sourceRef="t6_ca" targetRef="t7_ca" />
+        <sequenceFlow id="sf_ca13" isImmediate="true" sourceRef="t7_ca" targetRef="gw3_ca" />
+        <sequenceFlow id="sf_ca14" name="yes" isImmediate="true" sourceRef="gw3_ca" targetRef="t8_ca" />
+        <sequenceFlow id="sf_ca15" name="no" isImmediate="true" sourceRef="gw3_ca" targetRef="t9_ca" />
+        <sequenceFlow id="sf_ca16" isImmediate="true" sourceRef="t8_ca" targetRef="t9_ca" />
+        <sequenceFlow id="sf_ca17" isImmediate="true" sourceRef="t9_ca" targetRef="gw4_ca" />
+        <sequenceFlow id="sf_ca18" name="yes" isImmediate="true" sourceRef="gw4_ca" targetRef="t10_ca" />
+        <sequenceFlow id="sf_ca19" name="no" isImmediate="true" sourceRef="gw4_ca" targetRef="t11_ca" />
+        <sequenceFlow id="sf_ca20" isImmediate="true" sourceRef="t10_ca" targetRef="t11_ca" />
+        <sequenceFlow id="sf_ca21" isImmediate="true" sourceRef="t11_ca" targetRef="t12_ca" />
+        <sequenceFlow id="sf_ca22" isImmediate="true" sourceRef="t12_ca" targetRef="t13_ca" />
+        <sequenceFlow id="sf_ca23" isImmediate="true" sourceRef="t13_ca" targetRef="t14_ca" />
+        <sequenceFlow id="sf_ca24" isImmediate="true" sourceRef="t14_ca" targetRef="t15_ca" />
+        <sequenceFlow id="sf_ca25" isImmediate="true" sourceRef="t15_ca" targetRef="gw5_ca" />
+        <sequenceFlow id="sf_ca26" name="yes" isImmediate="true" sourceRef="gw5_ca" targetRef="t16_ca" />
+        <sequenceFlow id="sf_ca27" name="no" isImmediate="true" sourceRef="gw5_ca" targetRef="t17_ca" />
+        <sequenceFlow id="sf_ca28" isImmediate="true" sourceRef="t16_ca" targetRef="t17_ca" />
+        <sequenceFlow id="sf_ca29" isImmediate="true" sourceRef="t17_ca" targetRef="gw6_ca" />
+        <sequenceFlow id="sf_ca30" name="yes" isImmediate="true" sourceRef="gw6_ca" targetRef="t18_ca" />
+        <sequenceFlow id="sf_ca31" name="no" isImmediate="true" sourceRef="gw6_ca" targetRef="end_ca" />
+        <sequenceFlow id="sf_ca32" isImmediate="true" sourceRef="t18_ca" targetRef="end_ca" />
+    </process>
+
+    <process id="pr_csirt" isClosed="false" isExecutable="false" name="CSIRT">
+        <startEvent id="start_csirt" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_c1</outgoing>
+        </startEvent>
+        <intermediateCatchEvent id="catch_notif_csirt" name="Receive notification">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c1</incoming>
+            <outgoing>sf_c2</outgoing>
+            <messageEventDefinition id="med_3"/>
+        </intermediateCatchEvent>
+        <task id="t1_csirt" name="determine any cross-border impact of the incident">
+            <incoming>sf_c2</incoming>
+            <outgoing>sf_c3</outgoing>
+        </task>
+        <task id="t2_csirt" name="assess whether in the case of a cross-border or cross-sectoral significant incident">
+            <incoming>sf_c3</incoming>
+            <outgoing>sf_c4</outgoing>
+        </task>
+        <exclusiveGateway id="gw1_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c4</incoming>
+            <outgoing>sf_c5</outgoing>
+            <outgoing>sf_c6</outgoing>
+        </exclusiveGateway>
+        <task id="t3_csirt" name="provide relevant information to Single Point of Contact">
+            <incoming>sf_c5</incoming>
+            <outgoing>sf_c7</outgoing>
+        </task>
+        <exclusiveGateway id="gw2_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="May request intermediate report?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c6</incoming>
+            <incoming>sf_c7</incoming>
+            <outgoing>sf_c8</outgoing>
+            <outgoing>sf_c9</outgoing>
+        </exclusiveGateway>
+        <task id="t4_csirt" name="request an intermediate report on relevant status updates">
+            <incoming>sf_c8</incoming>
+            <outgoing>sf_c10</outgoing>
+        </task>
+        <task id="t5_csirt" name="provide a response to the notifying entity including initial feedback">
+            <incoming>sf_c9</incoming>
+            <incoming>sf_c10</incoming>
+            <outgoing>sf_c11</outgoing>
+        </task>
+        <task id="t6_csirt" name="assess whether upon request of the notifying entity">
+            <incoming>sf_c11</incoming>
+            <outgoing>sf_c12</outgoing>
+        </task>
+        <exclusiveGateway id="gw3_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c12</incoming>
+            <outgoing>sf_c13</outgoing>
+            <outgoing>sf_c14</outgoing>
+        </exclusiveGateway>
+        <task id="t7_csirt" name="provide guidance or operational advice">
+            <incoming>sf_c13</incoming>
+            <outgoing>sf_c15</outgoing>
+        </task>
+        <intermediateCatchEvent id="catch_tech_csirt" name="Receive tech request">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c14</incoming>
+            <incoming>sf_c15</incoming>
+            <outgoing>sf_c16</outgoing>
+            <messageEventDefinition id="med_4"/>
+        </intermediateCatchEvent>
+        <task id="t8_csirt" name="assess whether the entity concerned so requests">
+            <incoming>sf_c16</incoming>
+            <outgoing>sf_c17</outgoing>
+        </task>
+        <exclusiveGateway id="gw4_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c17</incoming>
+            <outgoing>sf_c18</outgoing>
+            <outgoing>sf_c19</outgoing>
+        </exclusiveGateway>
+        <task id="t9_csirt" name="provide additional technical support">
+            <incoming>sf_c18</incoming>
+            <outgoing>sf_c20</outgoing>
+        </task>
+        <task id="t10_csirt" name="assess whether the significant incident is suspected to be of criminal nature">
+            <incoming>sf_c19</incoming>
+            <incoming>sf_c20</incoming>
+            <outgoing>sf_c21</outgoing>
+        </task>
+        <exclusiveGateway id="gw5_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c21</incoming>
+            <outgoing>sf_c22</outgoing>
+            <outgoing>sf_c23</outgoing>
+        </exclusiveGateway>
+        <task id="t11_csirt" name="provide guidance on reporting the significant incident to law enforcement">
+            <incoming>sf_c22</incoming>
+            <outgoing>sf_c24</outgoing>
+        </task>
+        <task id="t12_csirt" name="assess whether appropriate...">
+            <incoming>sf_c23</incoming>
+            <incoming>sf_c24</incoming>
+            <outgoing>sf_c25</outgoing>
+        </task>
+        <exclusiveGateway id="gw6_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c25</incoming>
+            <outgoing>sf_c26</outgoing>
+            <outgoing>sf_c27</outgoing>
+        </exclusiveGateway>
+        <task id="t13_csirt" name="inform the other affected Member States and ENISA...">
+            <incoming>sf_c26</incoming>
+            <outgoing>sf_c28</outgoing>
+        </task>
+        <task id="t14_csirt" name="assess whether when informing other affected Member States and ENISA">
+            <incoming>sf_c27</incoming>
+            <incoming>sf_c28</incoming>
+            <outgoing>sf_c29</outgoing>
+        </task>
+        <exclusiveGateway id="gw7_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c29</incoming>
+            <outgoing>sf_c30</outgoing>
+            <outgoing>sf_c31</outgoing>
+        </exclusiveGateway>
+        <task id="t15_csirt" name="preserve the entity's security, commercial interests...">
+            <incoming>sf_c30</incoming>
+            <outgoing>sf_c32</outgoing>
+        </task>
+        <exclusiveGateway id="gw8_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="May consult entity?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c31</incoming>
+            <incoming>sf_c32</incoming>
+            <outgoing>sf_c33</outgoing>
+            <outgoing>sf_c34</outgoing>
+        </exclusiveGateway>
+        <task id="t16_csirt" name="consult the entity">
+            <incoming>sf_c33</incoming>
+            <outgoing>sf_c35</outgoing>
+        </task>
+        <exclusiveGateway id="gw9_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="May inform public?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c34</incoming>
+            <incoming>sf_c35</incoming>
+            <outgoing>sf_c36</outgoing>
+            <outgoing>sf_c37</outgoing>
+        </exclusiveGateway>
+        <task id="t17_csirt" name="inform the public about the significant incident">
+            <incoming>sf_c36</incoming>
+            <outgoing>sf_c38</outgoing>
+        </task>
+        <exclusiveGateway id="gw10_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="May require entity info?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c37</incoming>
+            <incoming>sf_c38</incoming>
+            <outgoing>sf_c39</outgoing>
+            <outgoing>sf_c40</outgoing>
+        </exclusiveGateway>
+        <task id="t18_csirt" name="require the entity to inform the public about the significant incident">
+            <incoming>sf_c39</incoming>
+            <outgoing>sf_c41</outgoing>
+        </task>
+        <exclusiveGateway id="gw11_csirt" gatewayDirection="Diverging" isMarkerVisible="true" name="May request forward?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c40</incoming>
+            <incoming>sf_c41</incoming>
+            <outgoing>sf_c42</outgoing>
+            <outgoing>sf_c43</outgoing>
+        </exclusiveGateway>
+        <task id="t19_csirt" name="request to forward notifications to the single points of contact...">
+            <incoming>sf_c42</incoming>
+            <outgoing>sf_c44</outgoing>
+        </task>
+        <task id="t20_csirt" name="provide to the competent authorities information about significant incidents">
+            <incoming>sf_c43</incoming>
+            <incoming>sf_c44</incoming>
+            <outgoing>sf_c45</outgoing>
+        </task>
+        <endEvent id="end_csirt" name="incident handling completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_c45</incoming>
+        </endEvent>
+
+        <!-- CSIRT Flows -->
+        <sequenceFlow id="sf_c1" isImmediate="true" sourceRef="start_csirt" targetRef="catch_notif_csirt" />
+        <sequenceFlow id="sf_c2" isImmediate="true" sourceRef="catch_notif_csirt" targetRef="t1_csirt" />
+        <sequenceFlow id="sf_c3" isImmediate="true" sourceRef="t1_csirt" targetRef="t2_csirt" />
+        <sequenceFlow id="sf_c4" isImmediate="true" sourceRef="t2_csirt" targetRef="gw1_csirt" />
+        <sequenceFlow id="sf_c5" name="yes" isImmediate="true" sourceRef="gw1_csirt" targetRef="t3_csirt" />
+        <sequenceFlow id="sf_c6" name="no" isImmediate="true" sourceRef="gw1_csirt" targetRef="gw2_csirt" />
+        <sequenceFlow id="sf_c7" isImmediate="true" sourceRef="t3_csirt" targetRef="gw2_csirt" />
+        <sequenceFlow id="sf_c8" name="yes" isImmediate="true" sourceRef="gw2_csirt" targetRef="t4_csirt" />
+        <sequenceFlow id="sf_c9" name="no" isImmediate="true" sourceRef="gw2_csirt" targetRef="t5_csirt" />
+        <sequenceFlow id="sf_c10" isImmediate="true" sourceRef="t4_csirt" targetRef="t5_csirt" />
+        <sequenceFlow id="sf_c11" isImmediate="true" sourceRef="t5_csirt" targetRef="t6_csirt" />
+        <sequenceFlow id="sf_c12" isImmediate="true" sourceRef="t6_csirt" targetRef="gw3_csirt" />
+        <sequenceFlow id="sf_c13" name="yes" isImmediate="true" sourceRef="gw3_csirt" targetRef="t7_csirt" />
+        <sequenceFlow id="sf_c14" name="no" isImmediate="true" sourceRef="gw3_csirt" targetRef="catch_tech_csirt" />
+        <sequenceFlow id="sf_c15" isImmediate="true" sourceRef="t7_csirt" targetRef="catch_tech_csirt" />
+        <sequenceFlow id="sf_c16" isImmediate="true" sourceRef="catch_tech_csirt" targetRef="t8_csirt" />
+        <sequenceFlow id="sf_c17" isImmediate="true" sourceRef="t8_csirt" targetRef="gw4_csirt" />
+        <sequenceFlow id="sf_c18" name="yes" isImmediate="true" sourceRef="gw4_csirt" targetRef="t9_csirt" />
+        <sequenceFlow id="sf_c19" name="no" isImmediate="true" sourceRef="gw4_csirt" targetRef="t10_csirt" />
+        <sequenceFlow id="sf_c20" isImmediate="true" sourceRef="t9_csirt" targetRef="t10_csirt" />
+        <sequenceFlow id="sf_c21" isImmediate="true" sourceRef="t10_csirt" targetRef="gw5_csirt" />
+        <sequenceFlow id="sf_c22" name="yes" isImmediate="true" sourceRef="gw5_csirt" targetRef="t11_csirt" />
+        <sequenceFlow id="sf_c23" name="no" isImmediate="true" sourceRef="gw5_csirt" targetRef="t12_csirt" />
+        <sequenceFlow id="sf_c24" isImmediate="true" sourceRef="t11_csirt" targetRef="t12_csirt" />
+        <sequenceFlow id="sf_c25" isImmediate="true" sourceRef="t12_csirt" targetRef="gw6_csirt" />
+        <sequenceFlow id="sf_c26" name="yes" isImmediate="true" sourceRef="gw6_csirt" targetRef="t13_csirt" />
+        <sequenceFlow id="sf_c27" name="no" isImmediate="true" sourceRef="gw6_csirt" targetRef="t14_csirt" />
+        <sequenceFlow id="sf_c28" isImmediate="true" sourceRef="t13_csirt" targetRef="t14_csirt" />
+        <sequenceFlow id="sf_c29" isImmediate="true" sourceRef="t14_csirt" targetRef="gw7_csirt" />
+        <sequenceFlow id="sf_c30" name="yes" isImmediate="true" sourceRef="gw7_csirt" targetRef="t15_csirt" />
+        <sequenceFlow id="sf_c31" name="no" isImmediate="true" sourceRef="gw7_csirt" targetRef="gw8_csirt" />
+        <sequenceFlow id="sf_c32" isImmediate="true" sourceRef="t15_csirt" targetRef="gw8_csirt" />
+        <sequenceFlow id="sf_c33" name="yes" isImmediate="true" sourceRef="gw8_csirt" targetRef="t16_csirt" />
+        <sequenceFlow id="sf_c34" name="no" isImmediate="true" sourceRef="gw8_csirt" targetRef="gw9_csirt" />
+        <sequenceFlow id="sf_c35" isImmediate="true" sourceRef="t16_csirt" targetRef="gw9_csirt" />
+        <sequenceFlow id="sf_c36" name="yes" isImmediate="true" sourceRef="gw9_csirt" targetRef="t17_csirt" />
+        <sequenceFlow id="sf_c37" name="no" isImmediate="true" sourceRef="gw9_csirt" targetRef="gw10_csirt" />
+        <sequenceFlow id="sf_c38" isImmediate="true" sourceRef="t17_csirt" targetRef="gw10_csirt" />
+        <sequenceFlow id="sf_c39" name="yes" isImmediate="true" sourceRef="gw10_csirt" targetRef="t18_csirt" />
+        <sequenceFlow id="sf_c40" name="no" isImmediate="true" sourceRef="gw10_csirt" targetRef="gw11_csirt" />
+        <sequenceFlow id="sf_c41" isImmediate="true" sourceRef="t18_csirt" targetRef="gw11_csirt" />
+        <sequenceFlow id="sf_c42" name="yes" isImmediate="true" sourceRef="gw11_csirt" targetRef="t19_csirt" />
+        <sequenceFlow id="sf_c43" name="no" isImmediate="true" sourceRef="gw11_csirt" targetRef="t20_csirt" />
+        <sequenceFlow id="sf_c44" isImmediate="true" sourceRef="t19_csirt" targetRef="t20_csirt" />
+        <sequenceFlow id="sf_c45" isImmediate="true" sourceRef="t20_csirt" targetRef="end_csirt" />
+    </process>
+
+    <process id="pr_spoc" isClosed="false" isExecutable="false" name="Single Point of Contact">
+        <startEvent id="start_spoc" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_s1</outgoing>
+        </startEvent>
+        <intermediateCatchEvent id="catch_req_spoc" name="Receive request">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_s1</incoming>
+            <outgoing>sf_s2</outgoing>
+            <messageEventDefinition id="med_5"/>
+        </intermediateCatchEvent>
+        <task id="t1_spoc" name="assess whether at the request of the CSIRT or the competent authority">
+            <incoming>sf_s2</incoming>
+            <outgoing>sf_s3</outgoing>
+        </task>
+        <exclusiveGateway id="gw1_spoc" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_s3</incoming>
+            <outgoing>sf_s4</outgoing>
+            <outgoing>sf_s5</outgoing>
+        </exclusiveGateway>
+        <task id="t2_spoc" name="forward notifications to the single points of contact of other affected Member States">
+            <incoming>sf_s4</incoming>
+            <outgoing>sf_s6</outgoing>
+        </task>
+        <task id="t3_spoc" name="submit to ENISA a summary report">
+            <incoming>sf_s5</incoming>
+            <incoming>sf_s6</incoming>
+            <outgoing>sf_s7</outgoing>
+        </task>
+        <endEvent id="end_spoc" name="forwarding and reporting completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_s7</incoming>
+        </endEvent>
+
+        <sequenceFlow id="sf_s1" isImmediate="true" sourceRef="start_spoc" targetRef="catch_req_spoc" />
+        <sequenceFlow id="sf_s2" isImmediate="true" sourceRef="catch_req_spoc" targetRef="t1_spoc" />
+        <sequenceFlow id="sf_s3" isImmediate="true" sourceRef="t1_spoc" targetRef="gw1_spoc" />
+        <sequenceFlow id="sf_s4" name="yes" isImmediate="true" sourceRef="gw1_spoc" targetRef="t2_spoc" />
+        <sequenceFlow id="sf_s5" name="no" isImmediate="true" sourceRef="gw1_spoc" targetRef="t3_spoc" />
+        <sequenceFlow id="sf_s6" isImmediate="true" sourceRef="t2_spoc" targetRef="t3_spoc" />
+        <sequenceFlow id="sf_s7" isImmediate="true" sourceRef="t3_spoc" targetRef="end_spoc" />
+    </process>
+
+    <process id="pr_enisa" isClosed="false" isExecutable="false" name="ENISA">
+        <startEvent id="start_enisa" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_en1</outgoing>
+        </startEvent>
+        <intermediateCatchEvent id="catch_rep_enisa" name="Receive summary report">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_en1</incoming>
+            <outgoing>sf_en2</outgoing>
+            <messageEventDefinition id="med_6"/>
+        </intermediateCatchEvent>
+        <exclusiveGateway id="gw1_enisa" gatewayDirection="Diverging" isMarkerVisible="true" name="May adopt tech guidance?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_en2</incoming>
+            <outgoing>sf_en3</outgoing>
+            <outgoing>sf_en4</outgoing>
+        </exclusiveGateway>
+        <task id="t1_enisa" name="adopt technical guidance">
+            <incoming>sf_en3</incoming>
+            <outgoing>sf_en5</outgoing>
+        </task>
+        <task id="t2_enisa" name="inform the Cooperation Group and the CSIRTs network about its findings...">
+            <incoming>sf_en4</incoming>
+            <incoming>sf_en5</incoming>
+            <outgoing>sf_en6</outgoing>
+        </task>
+        <endEvent id="end_enisa" name="findings distribution">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_en6</incoming>
+        </endEvent>
+
+        <sequenceFlow id="sf_en1" isImmediate="true" sourceRef="start_enisa" targetRef="catch_rep_enisa" />
+        <sequenceFlow id="sf_en2" isImmediate="true" sourceRef="catch_rep_enisa" targetRef="gw1_enisa" />
+        <sequenceFlow id="sf_en3" name="yes" isImmediate="true" sourceRef="gw1_enisa" targetRef="t1_enisa" />
+        <sequenceFlow id="sf_en4" name="no" isImmediate="true" sourceRef="gw1_enisa" targetRef="t2_enisa" />
+        <sequenceFlow id="sf_en5" isImmediate="true" sourceRef="t1_enisa" targetRef="t2_enisa" />
+        <sequenceFlow id="sf_en6" isImmediate="true" sourceRef="t2_enisa" targetRef="end_enisa" />
+    </process>
+
+    <process id="pr_comm" isClosed="false" isExecutable="false" name="Commission">
+        <startEvent id="start_comm" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_cm1</outgoing>
+        </startEvent>
+        <exclusiveGateway id="gw1_comm" gatewayDirection="Diverging" isMarkerVisible="true" name="May adopt acts?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cm1</incoming>
+            <outgoing>sf_cm2</outgoing>
+            <outgoing>sf_cm3</outgoing>
+        </exclusiveGateway>
+        <task id="t1_comm" name="adopt implementing acts, specifying the type of information, format...">
+            <incoming>sf_cm2</incoming>
+            <outgoing>sf_cm4</outgoing>
+        </task>
+        <task id="t2_comm" name="adopt implementing acts, specifying the cases in which an incident shall be considered significant">
+            <incoming>sf_cm3</incoming>
+            <incoming>sf_cm4</incoming>
+            <outgoing>sf_cm5</outgoing>
+        </task>
+        <exclusiveGateway id="gw2_comm" gatewayDirection="Diverging" isMarkerVisible="true" name="May adopt acts for EIE?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cm5</incoming>
+            <outgoing>sf_cm6</outgoing>
+            <outgoing>sf_cm7</outgoing>
+        </exclusiveGateway>
+        <task id="t3_comm" name="adopt implementing acts...">
+            <incoming>sf_cm6</incoming>
+            <outgoing>sf_cm8</outgoing>
+        </task>
+        <task id="t4_comm" name="exchange advice and cooperate with the Cooperation Group on the draft">
+            <incoming>sf_cm7</incoming>
+            <incoming>sf_cm8</incoming>
+            <outgoing>sf_cm9</outgoing>
+        </task>
+        <task id="t5_comm" name="assess whether when adopting implementing acts under paragraph 11">
+            <incoming>sf_cm9</incoming>
+            <outgoing>sf_cm10</outgoing>
+        </task>
+        <exclusiveGateway id="gw3_comm" gatewayDirection="Diverging" isMarkerVisible="true" name="If true?">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cm10</incoming>
+            <outgoing>sf_cm11</outgoing>
+            <outgoing>sf_cm12</outgoing>
+        </exclusiveGateway>
+        <task id="t6_comm" name="adopt implementing acts">
+            <incoming>sf_cm11</incoming>
+            <outgoing>sf_cm13</outgoing>
+        </task>
+        <endEvent id="end_comm" name="implementing acts adoption">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cm12</incoming>
+            <incoming>sf_cm13</incoming>
+        </endEvent>
+
+        <sequenceFlow id="sf_cm1" isImmediate="true" sourceRef="start_comm" targetRef="gw1_comm" />
+        <sequenceFlow id="sf_cm2" name="yes" isImmediate="true" sourceRef="gw1_comm" targetRef="t1_comm" />
+        <sequenceFlow id="sf_cm3" name="no" isImmediate="true" sourceRef="gw1_comm" targetRef="t2_comm" />
+        <sequenceFlow id="sf_cm4" isImmediate="true" sourceRef="t1_comm" targetRef="t2_comm" />
+        <sequenceFlow id="sf_cm5" isImmediate="true" sourceRef="t2_comm" targetRef="gw2_comm" />
+        <sequenceFlow id="sf_cm6" name="yes" isImmediate="true" sourceRef="gw2_comm" targetRef="t3_comm" />
+        <sequenceFlow id="sf_cm7" name="no" isImmediate="true" sourceRef="gw2_comm" targetRef="t4_comm" />
+        <sequenceFlow id="sf_cm8" isImmediate="true" sourceRef="t3_comm" targetRef="t4_comm" />
+        <sequenceFlow id="sf_cm9" isImmediate="true" sourceRef="t4_comm" targetRef="t5_comm" />
+        <sequenceFlow id="sf_cm10" isImmediate="true" sourceRef="t5_comm" targetRef="gw3_comm" />
+        <sequenceFlow id="sf_cm11" name="yes" isImmediate="true" sourceRef="gw3_comm" targetRef="t6_comm" />
+        <sequenceFlow id="sf_cm12" name="no" isImmediate="true" sourceRef="gw3_comm" targetRef="end_comm" />
+        <sequenceFlow id="sf_cm13" isImmediate="true" sourceRef="t6_comm" targetRef="end_comm" />
+    </process>
+
+    <process id="pr_cg" isClosed="false" isExecutable="false" name="Cooperation Group">
+        <startEvent id="start_cg" name="Start">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <outgoing>sf_cg1</outgoing>
+        </startEvent>
+        <intermediateCatchEvent id="catch_draft_cg" name="Receive draft">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cg1</incoming>
+            <outgoing>sf_cg2</outgoing>
+            <messageEventDefinition id="med_7"/>
+        </intermediateCatchEvent>
+        <task id="t1_cg" name="exchange advice and cooperate with the Commission on the draft">
+            <incoming>sf_cg2</incoming>
+            <outgoing>sf_cg3</outgoing>
+        </task>
+        <endEvent id="end_cg" name="cooperation completion">
+            <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+            <incoming>sf_cg3</incoming>
+        </endEvent>
+
+        <sequenceFlow id="sf_cg1" isImmediate="true" sourceRef="start_cg" targetRef="catch_draft_cg" />
+        <sequenceFlow id="sf_cg2" isImmediate="true" sourceRef="catch_draft_cg" targetRef="t1_cg" />
+        <sequenceFlow id="sf_cg3" isImmediate="true" sourceRef="t1_cg" targetRef="end_cg" />
+    </process>
+
+    <bpmndi:BPMNDiagram id="diag_1">
+        <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+            <!-- Pool Shapes -->
+            <bpmndi:BPMNShape bpmnElement="p_eie" id="s_p_eie" isHorizontal="true">
+                <omgdc:Bounds height="250.0" width="4000.0" x="100.0" y="100.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_tsp" id="s_p_tsp" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="1000.0" x="100.0" y="400.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_ca" id="s_p_ca" isHorizontal="true">
+                <omgdc:Bounds height="250.0" width="4100.0" x="100.0" y="650.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_csirt" id="s_p_csirt" isHorizontal="true">
+                <omgdc:Bounds height="250.0" width="5300.0" x="100.0" y="950.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_spoc" id="s_p_spoc" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="1200.0" x="100.0" y="1250.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_enisa" id="s_p_enisa" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="1000.0" x="100.0" y="1500.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_comm" id="s_p_comm" isHorizontal="true">
+                <omgdc:Bounds height="200.0" width="1800.0" x="100.0" y="1750.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="p_cg" id="s_p_cg" isHorizontal="true">
+                <omgdc:Bounds height="150.0" width="800.0" x="100.0" y="2000.0"/>
+            </bpmndi:BPMNShape>
+
+            <!-- EIE Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_eie" id="s_start_eie"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="135.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_eie" id="s_t1_eie"><omgdc:Bounds height="80.0" width="100.0" x="300.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_eie" id="s_gw1_eie"><omgdc:Bounds height="40.0" width="40.0" x="450.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_eie" id="s_t2_eie"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3_eie" id="s_t3_eie"><omgdc:Bounds height="80.0" width="100.0" x="750.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw2_eie" id="s_gw2_eie"><omgdc:Bounds height="40.0" width="40.0" x="900.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t4_eie" id="s_t4_eie"><omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t5_eie" id="s_t5_eie"><omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw3_eie" id="s_gw3_eie"><omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t6_eie" id="s_t6_eie"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t7_eie" id="s_t7_eie"><omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw4_eie" id="s_gw4_eie"><omgdc:Bounds height="40.0" width="40.0" x="1800.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t8_eie" id="s_t8_eie"><omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9_eie" id="s_t9_eie"><omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t10_eie" id="s_t10_eie"><omgdc:Bounds height="80.0" width="100.0" x="2250.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_req_eie" id="s_catch_req_eie"><omgdc:Bounds height="30.0" width="30.0" x="2400.0" y="135.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t11_eie" id="s_t11_eie"><omgdc:Bounds height="80.0" width="100.0" x="2550.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t12_eie" id="s_t12_eie"><omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t13_eie" id="s_t13_eie"><omgdc:Bounds height="80.0" width="100.0" x="2850.0" y="110.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw5_eie" id="s_gw5_eie"><omgdc:Bounds height="40.0" width="40.0" x="3000.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t14_eie" id="s_t14_eie"><omgdc:Bounds height="80.0" width="100.0" x="3150.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw6_eie" id="s_gw6_eie"><omgdc:Bounds height="40.0" width="40.0" x="3300.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t15_eie" id="s_t15_eie"><omgdc:Bounds height="80.0" width="100.0" x="3450.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw7_eie" id="s_gw7_eie"><omgdc:Bounds height="40.0" width="40.0" x="3600.0" y="130.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t16_eie" id="s_t16_eie"><omgdc:Bounds height="80.0" width="100.0" x="3750.0" y="210.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_eie" id="s_end_eie"><omgdc:Bounds height="28.0" width="28.0" x="3900.0" y="136.0"/></bpmndi:BPMNShape>
+
+            <!-- TSP Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_tsp" id="s_start_tsp"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="435.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_tsp" id="s_t1_tsp"><omgdc:Bounds height="80.0" width="100.0" x="300.0" y="410.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_tsp" id="s_gw1_tsp"><omgdc:Bounds height="40.0" width="40.0" x="450.0" y="430.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_tsp" id="s_t2_tsp"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="510.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_tsp" id="s_end_tsp"><omgdc:Bounds height="28.0" width="28.0" x="750.0" y="436.0"/></bpmndi:BPMNShape>
+
+            <!-- CA Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_ca" id="s_start_ca"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="685.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_ca" id="s_t1_ca"><omgdc:Bounds height="80.0" width="100.0" x="300.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_ca" id="s_t2_ca"><omgdc:Bounds height="80.0" width="100.0" x="450.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3_ca" id="s_t3_ca"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_ca" id="s_gw1_ca"><omgdc:Bounds height="40.0" width="40.0" x="750.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t4_ca" id="s_t4_ca"><omgdc:Bounds height="80.0" width="100.0" x="900.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_notif_ca" id="s_catch_notif_ca"><omgdc:Bounds height="30.0" width="30.0" x="1050.0" y="685.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t5_ca" id="s_t5_ca"><omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw2_ca" id="s_gw2_ca"><omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t6_ca" id="s_t6_ca"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t7_ca" id="s_t7_ca"><omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw3_ca" id="s_gw3_ca"><omgdc:Bounds height="40.0" width="40.0" x="1800.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t8_ca" id="s_t8_ca"><omgdc:Bounds height="80.0" width="100.0" x="1950.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9_ca" id="s_t9_ca"><omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw4_ca" id="s_gw4_ca"><omgdc:Bounds height="40.0" width="40.0" x="2250.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t10_ca" id="s_t10_ca"><omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t11_ca" id="s_t11_ca"><omgdc:Bounds height="80.0" width="100.0" x="2550.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t12_ca" id="s_t12_ca"><omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t13_ca" id="s_t13_ca"><omgdc:Bounds height="80.0" width="100.0" x="2850.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t14_ca" id="s_t14_ca"><omgdc:Bounds height="80.0" width="100.0" x="3000.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t15_ca" id="s_t15_ca"><omgdc:Bounds height="80.0" width="100.0" x="3150.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw5_ca" id="s_gw5_ca"><omgdc:Bounds height="40.0" width="40.0" x="3300.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t16_ca" id="s_t16_ca"><omgdc:Bounds height="80.0" width="100.0" x="3450.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t17_ca" id="s_t17_ca"><omgdc:Bounds height="80.0" width="100.0" x="3600.0" y="660.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw6_ca" id="s_gw6_ca"><omgdc:Bounds height="40.0" width="40.0" x="3750.0" y="680.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t18_ca" id="s_t18_ca"><omgdc:Bounds height="80.0" width="100.0" x="3900.0" y="760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_ca" id="s_end_ca"><omgdc:Bounds height="28.0" width="28.0" x="4050.0" y="686.0"/></bpmndi:BPMNShape>
+
+            <!-- CSIRT Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_csirt" id="s_start_csirt"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="985.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_notif_csirt" id="s_catch_notif_csirt"><omgdc:Bounds height="30.0" width="30.0" x="300.0" y="985.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_csirt" id="s_t1_csirt"><omgdc:Bounds height="80.0" width="100.0" x="450.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_csirt" id="s_t2_csirt"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_csirt" id="s_gw1_csirt"><omgdc:Bounds height="40.0" width="40.0" x="750.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3_csirt" id="s_t3_csirt"><omgdc:Bounds height="80.0" width="100.0" x="900.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw2_csirt" id="s_gw2_csirt"><omgdc:Bounds height="40.0" width="40.0" x="1050.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t4_csirt" id="s_t4_csirt"><omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t5_csirt" id="s_t5_csirt"><omgdc:Bounds height="80.0" width="100.0" x="1350.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t6_csirt" id="s_t6_csirt"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw3_csirt" id="s_gw3_csirt"><omgdc:Bounds height="40.0" width="40.0" x="1650.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t7_csirt" id="s_t7_csirt"><omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_tech_csirt" id="s_catch_tech_csirt"><omgdc:Bounds height="30.0" width="30.0" x="1950.0" y="985.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t8_csirt" id="s_t8_csirt"><omgdc:Bounds height="80.0" width="100.0" x="2100.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw4_csirt" id="s_gw4_csirt"><omgdc:Bounds height="40.0" width="40.0" x="2250.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t9_csirt" id="s_t9_csirt"><omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t10_csirt" id="s_t10_csirt"><omgdc:Bounds height="80.0" width="100.0" x="2550.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw5_csirt" id="s_gw5_csirt"><omgdc:Bounds height="40.0" width="40.0" x="2700.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t11_csirt" id="s_t11_csirt"><omgdc:Bounds height="80.0" width="100.0" x="2850.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t12_csirt" id="s_t12_csirt"><omgdc:Bounds height="80.0" width="100.0" x="3000.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw6_csirt" id="s_gw6_csirt"><omgdc:Bounds height="40.0" width="40.0" x="3150.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t13_csirt" id="s_t13_csirt"><omgdc:Bounds height="80.0" width="100.0" x="3300.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t14_csirt" id="s_t14_csirt"><omgdc:Bounds height="80.0" width="100.0" x="3450.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw7_csirt" id="s_gw7_csirt"><omgdc:Bounds height="40.0" width="40.0" x="3600.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t15_csirt" id="s_t15_csirt"><omgdc:Bounds height="80.0" width="100.0" x="3750.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw8_csirt" id="s_gw8_csirt"><omgdc:Bounds height="40.0" width="40.0" x="3900.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t16_csirt" id="s_t16_csirt"><omgdc:Bounds height="80.0" width="100.0" x="4050.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw9_csirt" id="s_gw9_csirt"><omgdc:Bounds height="40.0" width="40.0" x="4200.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t17_csirt" id="s_t17_csirt"><omgdc:Bounds height="80.0" width="100.0" x="4350.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw10_csirt" id="s_gw10_csirt"><omgdc:Bounds height="40.0" width="40.0" x="4500.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t18_csirt" id="s_t18_csirt"><omgdc:Bounds height="80.0" width="100.0" x="4650.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw11_csirt" id="s_gw11_csirt"><omgdc:Bounds height="40.0" width="40.0" x="4800.0" y="980.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t19_csirt" id="s_t19_csirt"><omgdc:Bounds height="80.0" width="100.0" x="4950.0" y="1060.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t20_csirt" id="s_t20_csirt"><omgdc:Bounds height="80.0" width="100.0" x="5100.0" y="960.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_csirt" id="s_end_csirt"><omgdc:Bounds height="28.0" width="28.0" x="5250.0" y="986.0"/></bpmndi:BPMNShape>
+
+            <!-- SPoC Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_spoc" id="s_start_spoc"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1285.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_req_spoc" id="s_catch_req_spoc"><omgdc:Bounds height="30.0" width="30.0" x="300.0" y="1285.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_spoc" id="s_t1_spoc"><omgdc:Bounds height="80.0" width="100.0" x="450.0" y="1260.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_spoc" id="s_gw1_spoc"><omgdc:Bounds height="40.0" width="40.0" x="600.0" y="1280.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_spoc" id="s_t2_spoc"><omgdc:Bounds height="80.0" width="100.0" x="750.0" y="1360.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3_spoc" id="s_t3_spoc"><omgdc:Bounds height="80.0" width="100.0" x="900.0" y="1260.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_spoc" id="s_end_spoc"><omgdc:Bounds height="28.0" width="28.0" x="1050.0" y="1286.0"/></bpmndi:BPMNShape>
+
+            <!-- ENISA Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_enisa" id="s_start_enisa"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1535.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_rep_enisa" id="s_catch_rep_enisa"><omgdc:Bounds height="30.0" width="30.0" x="300.0" y="1535.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_enisa" id="s_gw1_enisa"><omgdc:Bounds height="40.0" width="40.0" x="450.0" y="1530.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_enisa" id="s_t1_enisa"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1610.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_enisa" id="s_t2_enisa"><omgdc:Bounds height="80.0" width="100.0" x="750.0" y="1510.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_enisa" id="s_end_enisa"><omgdc:Bounds height="28.0" width="28.0" x="900.0" y="1536.0"/></bpmndi:BPMNShape>
+
+            <!-- COMM Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_comm" id="s_start_comm"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1785.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw1_comm" id="s_gw1_comm"><omgdc:Bounds height="40.0" width="40.0" x="300.0" y="1780.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_comm" id="s_t1_comm"><omgdc:Bounds height="80.0" width="100.0" x="450.0" y="1860.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t2_comm" id="s_t2_comm"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw2_comm" id="s_gw2_comm"><omgdc:Bounds height="40.0" width="40.0" x="750.0" y="1780.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t3_comm" id="s_t3_comm"><omgdc:Bounds height="80.0" width="100.0" x="900.0" y="1860.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t4_comm" id="s_t4_comm"><omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="1760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t5_comm" id="s_t5_comm"><omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="1760.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="gw3_comm" id="s_gw3_comm"><omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="1780.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t6_comm" id="s_t6_comm"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="1860.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_comm" id="s_end_comm"><omgdc:Bounds height="28.0" width="28.0" x="1650.0" y="1786.0"/></bpmndi:BPMNShape>
+
+            <!-- CG Shapes -->
+            <bpmndi:BPMNShape bpmnElement="start_cg" id="s_start_cg"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="2035.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="catch_draft_cg" id="s_catch_draft_cg"><omgdc:Bounds height="30.0" width="30.0" x="300.0" y="2035.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="t1_cg" id="s_t1_cg"><omgdc:Bounds height="80.0" width="100.0" x="450.0" y="2010.0"/></bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end_cg" id="s_end_cg"><omgdc:Bounds height="28.0" width="28.0" x="600.0" y="2036.0"/></bpmndi:BPMNShape>
+
+            <!-- Message Flows -->
+            <bpmndi:BPMNEdge bpmnElement="mf1" id="e_mf1"><omgdi:waypoint x="650.0" y="290.0"/><omgdi:waypoint x="315.0" y="985.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf2" id="e_mf2"><omgdi:waypoint x="650.0" y="290.0"/><omgdi:waypoint x="1065.0" y="685.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf3" id="e_mf3"><omgdi:waypoint x="2150.0" y="190.0"/><omgdi:waypoint x="2150.0" y="950.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf4" id="e_mf4"><omgdi:waypoint x="2150.0" y="190.0"/><omgdi:waypoint x="2150.0" y="650.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf5" id="e_mf5"><omgdi:waypoint x="2300.0" y="190.0"/><omgdi:waypoint x="2300.0" y="950.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf6" id="e_mf6"><omgdi:waypoint x="2300.0" y="190.0"/><omgdi:waypoint x="2300.0" y="650.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf7" id="e_mf7"><omgdi:waypoint x="3500.0" y="290.0"/><omgdi:waypoint x="1965.0" y="985.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf8" id="e_mf8"><omgdi:waypoint x="350.0" y="490.0"/><omgdi:waypoint x="350.0" y="950.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf9" id="e_mf9"><omgdi:waypoint x="350.0" y="490.0"/><omgdi:waypoint x="350.0" y="650.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf10" id="e_mf10"><omgdi:waypoint x="1550.0" y="840.0"/><omgdi:waypoint x="1550.0" y="950.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf11" id="e_mf11"><omgdi:waypoint x="950.0" y="1140.0"/><omgdi:waypoint x="315.0" y="1285.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf12" id="e_mf12"><omgdi:waypoint x="1250.0" y="1060.0"/><omgdi:waypoint x="2415.0" y="165.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf13" id="e_mf13"><omgdi:waypoint x="3350.0" y="1140.0"/><omgdi:waypoint x="3350.0" y="1500.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf14" id="e_mf14"><omgdi:waypoint x="5000.0" y="1140.0"/><omgdi:waypoint x="5000.0" y="1250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf15" id="e_mf15"><omgdi:waypoint x="950.0" y="1340.0"/><omgdi:waypoint x="315.0" y="1535.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf16" id="e_mf16"><omgdi:waypoint x="800.0" y="1590.0"/><omgdi:waypoint x="800.0" y="2000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="mf17" id="e_mf17"><omgdi:waypoint x="1100.0" y="1840.0"/><omgdi:waypoint x="315.0" y="2035.0"/></bpmndi:BPMNEdge>
+
+            <!-- EIE Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_e1" id="e_sf_e1"><omgdi:waypoint x="180.0" y="150.0"/><omgdi:waypoint x="300.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e2" id="e_sf_e2"><omgdi:waypoint x="400.0" y="150.0"/><omgdi:waypoint x="450.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e3" id="e_sf_e3"><omgdi:waypoint x="490.0" y="150.0"/><omgdi:waypoint x="545.0" y="150.0"/><omgdi:waypoint x="545.0" y="250.0"/><omgdi:waypoint x="600.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e4" id="e_sf_e4"><omgdi:waypoint x="490.0" y="150.0"/><omgdi:waypoint x="750.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e5" id="e_sf_e5"><omgdi:waypoint x="700.0" y="250.0"/><omgdi:waypoint x="725.0" y="250.0"/><omgdi:waypoint x="725.0" y="150.0"/><omgdi:waypoint x="750.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e6" id="e_sf_e6"><omgdi:waypoint x="850.0" y="150.0"/><omgdi:waypoint x="900.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e7" id="e_sf_e7"><omgdi:waypoint x="940.0" y="150.0"/><omgdi:waypoint x="995.0" y="150.0"/><omgdi:waypoint x="995.0" y="250.0"/><omgdi:waypoint x="1050.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e8" id="e_sf_e8"><omgdi:waypoint x="940.0" y="150.0"/><omgdi:waypoint x="1200.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e9" id="e_sf_e9"><omgdi:waypoint x="1150.0" y="250.0"/><omgdi:waypoint x="1175.0" y="250.0"/><omgdi:waypoint x="1175.0" y="150.0"/><omgdi:waypoint x="1200.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e10" id="e_sf_e10"><omgdi:waypoint x="1300.0" y="150.0"/><omgdi:waypoint x="1350.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e11" id="e_sf_e11"><omgdi:waypoint x="1390.0" y="150.0"/><omgdi:waypoint x="1445.0" y="150.0"/><omgdi:waypoint x="1445.0" y="250.0"/><omgdi:waypoint x="1500.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e12" id="e_sf_e12"><omgdi:waypoint x="1390.0" y="150.0"/><omgdi:waypoint x="1650.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e13" id="e_sf_e13"><omgdi:waypoint x="1600.0" y="250.0"/><omgdi:waypoint x="1625.0" y="250.0"/><omgdi:waypoint x="1625.0" y="150.0"/><omgdi:waypoint x="1650.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e14" id="e_sf_e14"><omgdi:waypoint x="1750.0" y="150.0"/><omgdi:waypoint x="1800.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e15" id="e_sf_e15"><omgdi:waypoint x="1840.0" y="150.0"/><omgdi:waypoint x="1895.0" y="150.0"/><omgdi:waypoint x="1895.0" y="250.0"/><omgdi:waypoint x="1950.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e16" id="e_sf_e16"><omgdi:waypoint x="1840.0" y="150.0"/><omgdi:waypoint x="2100.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e17" id="e_sf_e17"><omgdi:waypoint x="2050.0" y="250.0"/><omgdi:waypoint x="2075.0" y="250.0"/><omgdi:waypoint x="2075.0" y="150.0"/><omgdi:waypoint x="2100.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e18" id="e_sf_e18"><omgdi:waypoint x="2200.0" y="150.0"/><omgdi:waypoint x="2250.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e19" id="e_sf_e19"><omgdi:waypoint x="2350.0" y="150.0"/><omgdi:waypoint x="2400.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e20" id="e_sf_e20"><omgdi:waypoint x="2430.0" y="150.0"/><omgdi:waypoint x="2550.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e21" id="e_sf_e21"><omgdi:waypoint x="2650.0" y="150.0"/><omgdi:waypoint x="2700.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e22" id="e_sf_e22"><omgdi:waypoint x="2800.0" y="150.0"/><omgdi:waypoint x="2850.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e23" id="e_sf_e23"><omgdi:waypoint x="2950.0" y="150.0"/><omgdi:waypoint x="3000.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e24" id="e_sf_e24"><omgdi:waypoint x="3040.0" y="150.0"/><omgdi:waypoint x="3095.0" y="150.0"/><omgdi:waypoint x="3095.0" y="250.0"/><omgdi:waypoint x="3150.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e25" id="e_sf_e25"><omgdi:waypoint x="3040.0" y="150.0"/><omgdi:waypoint x="3300.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e26" id="e_sf_e26"><omgdi:waypoint x="3250.0" y="250.0"/><omgdi:waypoint x="3275.0" y="250.0"/><omgdi:waypoint x="3275.0" y="150.0"/><omgdi:waypoint x="3300.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e27" id="e_sf_e27"><omgdi:waypoint x="3340.0" y="150.0"/><omgdi:waypoint x="3395.0" y="150.0"/><omgdi:waypoint x="3395.0" y="250.0"/><omgdi:waypoint x="3450.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e28" id="e_sf_e28"><omgdi:waypoint x="3340.0" y="150.0"/><omgdi:waypoint x="3600.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e29" id="e_sf_e29"><omgdi:waypoint x="3550.0" y="250.0"/><omgdi:waypoint x="3575.0" y="250.0"/><omgdi:waypoint x="3575.0" y="150.0"/><omgdi:waypoint x="3600.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e30" id="e_sf_e30"><omgdi:waypoint x="3640.0" y="150.0"/><omgdi:waypoint x="3695.0" y="150.0"/><omgdi:waypoint x="3695.0" y="250.0"/><omgdi:waypoint x="3750.0" y="250.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e31" id="e_sf_e31"><omgdi:waypoint x="3640.0" y="150.0"/><omgdi:waypoint x="3900.0" y="150.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_e32" id="e_sf_e32"><omgdi:waypoint x="3850.0" y="250.0"/><omgdi:waypoint x="3875.0" y="250.0"/><omgdi:waypoint x="3875.0" y="150.0"/><omgdi:waypoint x="3900.0" y="150.0"/></bpmndi:BPMNEdge>
+
+            <!-- TSP Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_t1" id="e_sf_t1"><omgdi:waypoint x="180.0" y="450.0"/><omgdi:waypoint x="300.0" y="450.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t2" id="e_sf_t2"><omgdi:waypoint x="400.0" y="450.0"/><omgdi:waypoint x="450.0" y="450.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t3" id="e_sf_t3"><omgdi:waypoint x="490.0" y="450.0"/><omgdi:waypoint x="545.0" y="450.0"/><omgdi:waypoint x="545.0" y="550.0"/><omgdi:waypoint x="600.0" y="550.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t4" id="e_sf_t4"><omgdi:waypoint x="490.0" y="450.0"/><omgdi:waypoint x="750.0" y="450.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_t5" id="e_sf_t5"><omgdi:waypoint x="700.0" y="550.0"/><omgdi:waypoint x="725.0" y="550.0"/><omgdi:waypoint x="725.0" y="450.0"/><omgdi:waypoint x="750.0" y="450.0"/></bpmndi:BPMNEdge>
+
+            <!-- CA Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_ca1" id="e_sf_ca1"><omgdi:waypoint x="180.0" y="700.0"/><omgdi:waypoint x="300.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca2" id="e_sf_ca2"><omgdi:waypoint x="400.0" y="700.0"/><omgdi:waypoint x="450.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca3" id="e_sf_ca3"><omgdi:waypoint x="550.0" y="700.0"/><omgdi:waypoint x="600.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca4" id="e_sf_ca4"><omgdi:waypoint x="700.0" y="700.0"/><omgdi:waypoint x="750.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca5" id="e_sf_ca5"><omgdi:waypoint x="790.0" y="700.0"/><omgdi:waypoint x="845.0" y="700.0"/><omgdi:waypoint x="845.0" y="800.0"/><omgdi:waypoint x="900.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca6" id="e_sf_ca6"><omgdi:waypoint x="790.0" y="700.0"/><omgdi:waypoint x="1050.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca7" id="e_sf_ca7"><omgdi:waypoint x="1000.0" y="800.0"/><omgdi:waypoint x="1025.0" y="800.0"/><omgdi:waypoint x="1025.0" y="700.0"/><omgdi:waypoint x="1050.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca8" id="e_sf_ca8"><omgdi:waypoint x="1080.0" y="700.0"/><omgdi:waypoint x="1200.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca9" id="e_sf_ca9"><omgdi:waypoint x="1300.0" y="700.0"/><omgdi:waypoint x="1350.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca10" id="e_sf_ca10"><omgdi:waypoint x="1390.0" y="700.0"/><omgdi:waypoint x="1445.0" y="700.0"/><omgdi:waypoint x="1445.0" y="800.0"/><omgdi:waypoint x="1500.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca11" id="e_sf_ca11"><omgdi:waypoint x="1390.0" y="700.0"/><omgdi:waypoint x="1650.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca12" id="e_sf_ca12"><omgdi:waypoint x="1600.0" y="800.0"/><omgdi:waypoint x="1625.0" y="800.0"/><omgdi:waypoint x="1625.0" y="700.0"/><omgdi:waypoint x="1650.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca13" id="e_sf_ca13"><omgdi:waypoint x="1750.0" y="700.0"/><omgdi:waypoint x="1800.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca14" id="e_sf_ca14"><omgdi:waypoint x="1840.0" y="700.0"/><omgdi:waypoint x="1895.0" y="700.0"/><omgdi:waypoint x="1895.0" y="800.0"/><omgdi:waypoint x="1950.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca15" id="e_sf_ca15"><omgdi:waypoint x="1840.0" y="700.0"/><omgdi:waypoint x="2100.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca16" id="e_sf_ca16"><omgdi:waypoint x="2050.0" y="800.0"/><omgdi:waypoint x="2075.0" y="800.0"/><omgdi:waypoint x="2075.0" y="700.0"/><omgdi:waypoint x="2100.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca17" id="e_sf_ca17"><omgdi:waypoint x="2200.0" y="700.0"/><omgdi:waypoint x="2250.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca18" id="e_sf_ca18"><omgdi:waypoint x="2290.0" y="700.0"/><omgdi:waypoint x="2345.0" y="700.0"/><omgdi:waypoint x="2345.0" y="800.0"/><omgdi:waypoint x="2400.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca19" id="e_sf_ca19"><omgdi:waypoint x="2290.0" y="700.0"/><omgdi:waypoint x="2550.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca20" id="e_sf_ca20"><omgdi:waypoint x="2500.0" y="800.0"/><omgdi:waypoint x="2525.0" y="800.0"/><omgdi:waypoint x="2525.0" y="700.0"/><omgdi:waypoint x="2550.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca21" id="e_sf_ca21"><omgdi:waypoint x="2650.0" y="700.0"/><omgdi:waypoint x="2700.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca22" id="e_sf_ca22"><omgdi:waypoint x="2800.0" y="700.0"/><omgdi:waypoint x="2850.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca23" id="e_sf_ca23"><omgdi:waypoint x="2950.0" y="700.0"/><omgdi:waypoint x="3000.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca24" id="e_sf_ca24"><omgdi:waypoint x="3100.0" y="700.0"/><omgdi:waypoint x="3150.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca25" id="e_sf_ca25"><omgdi:waypoint x="3250.0" y="700.0"/><omgdi:waypoint x="3300.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca26" id="e_sf_ca26"><omgdi:waypoint x="3340.0" y="700.0"/><omgdi:waypoint x="3395.0" y="700.0"/><omgdi:waypoint x="3395.0" y="800.0"/><omgdi:waypoint x="3450.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca27" id="e_sf_ca27"><omgdi:waypoint x="3340.0" y="700.0"/><omgdi:waypoint x="3600.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca28" id="e_sf_ca28"><omgdi:waypoint x="3550.0" y="800.0"/><omgdi:waypoint x="3575.0" y="800.0"/><omgdi:waypoint x="3575.0" y="700.0"/><omgdi:waypoint x="3600.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca29" id="e_sf_ca29"><omgdi:waypoint x="3700.0" y="700.0"/><omgdi:waypoint x="3750.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca30" id="e_sf_ca30"><omgdi:waypoint x="3790.0" y="700.0"/><omgdi:waypoint x="3845.0" y="700.0"/><omgdi:waypoint x="3845.0" y="800.0"/><omgdi:waypoint x="3900.0" y="800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca31" id="e_sf_ca31"><omgdi:waypoint x="3790.0" y="700.0"/><omgdi:waypoint x="4050.0" y="700.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_ca32" id="e_sf_ca32"><omgdi:waypoint x="4000.0" y="800.0"/><omgdi:waypoint x="4025.0" y="800.0"/><omgdi:waypoint x="4025.0" y="700.0"/><omgdi:waypoint x="4050.0" y="700.0"/></bpmndi:BPMNEdge>
+
+            <!-- CSIRT Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_c1" id="e_sf_c1"><omgdi:waypoint x="180.0" y="1000.0"/><omgdi:waypoint x="300.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c2" id="e_sf_c2"><omgdi:waypoint x="330.0" y="1000.0"/><omgdi:waypoint x="450.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c3" id="e_sf_c3"><omgdi:waypoint x="550.0" y="1000.0"/><omgdi:waypoint x="600.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c4" id="e_sf_c4"><omgdi:waypoint x="700.0" y="1000.0"/><omgdi:waypoint x="750.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c5" id="e_sf_c5"><omgdi:waypoint x="790.0" y="1000.0"/><omgdi:waypoint x="845.0" y="1000.0"/><omgdi:waypoint x="845.0" y="1100.0"/><omgdi:waypoint x="900.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c6" id="e_sf_c6"><omgdi:waypoint x="790.0" y="1000.0"/><omgdi:waypoint x="1050.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c7" id="e_sf_c7"><omgdi:waypoint x="1000.0" y="1100.0"/><omgdi:waypoint x="1025.0" y="1100.0"/><omgdi:waypoint x="1025.0" y="1000.0"/><omgdi:waypoint x="1050.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c8" id="e_sf_c8"><omgdi:waypoint x="1090.0" y="1000.0"/><omgdi:waypoint x="1145.0" y="1000.0"/><omgdi:waypoint x="1145.0" y="1100.0"/><omgdi:waypoint x="1200.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c9" id="e_sf_c9"><omgdi:waypoint x="1090.0" y="1000.0"/><omgdi:waypoint x="1350.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c10" id="e_sf_c10"><omgdi:waypoint x="1300.0" y="1100.0"/><omgdi:waypoint x="1325.0" y="1100.0"/><omgdi:waypoint x="1325.0" y="1000.0"/><omgdi:waypoint x="1350.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c11" id="e_sf_c11"><omgdi:waypoint x="1450.0" y="1000.0"/><omgdi:waypoint x="1500.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c12" id="e_sf_c12"><omgdi:waypoint x="1600.0" y="1000.0"/><omgdi:waypoint x="1650.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c13" id="e_sf_c13"><omgdi:waypoint x="1690.0" y="1000.0"/><omgdi:waypoint x="1745.0" y="1000.0"/><omgdi:waypoint x="1745.0" y="1100.0"/><omgdi:waypoint x="1800.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c14" id="e_sf_c14"><omgdi:waypoint x="1690.0" y="1000.0"/><omgdi:waypoint x="1950.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c15" id="e_sf_c15"><omgdi:waypoint x="1900.0" y="1100.0"/><omgdi:waypoint x="1925.0" y="1100.0"/><omgdi:waypoint x="1925.0" y="1000.0"/><omgdi:waypoint x="1950.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c16" id="e_sf_c16"><omgdi:waypoint x="1980.0" y="1000.0"/><omgdi:waypoint x="2100.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c17" id="e_sf_c17"><omgdi:waypoint x="2200.0" y="1000.0"/><omgdi:waypoint x="2250.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c18" id="e_sf_c18"><omgdi:waypoint x="2290.0" y="1000.0"/><omgdi:waypoint x="2345.0" y="1000.0"/><omgdi:waypoint x="2345.0" y="1100.0"/><omgdi:waypoint x="2400.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c19" id="e_sf_c19"><omgdi:waypoint x="2290.0" y="1000.0"/><omgdi:waypoint x="2550.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c20" id="e_sf_c20"><omgdi:waypoint x="2500.0" y="1100.0"/><omgdi:waypoint x="2525.0" y="1100.0"/><omgdi:waypoint x="2525.0" y="1000.0"/><omgdi:waypoint x="2550.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c21" id="e_sf_c21"><omgdi:waypoint x="2650.0" y="1000.0"/><omgdi:waypoint x="2700.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c22" id="e_sf_c22"><omgdi:waypoint x="2740.0" y="1000.0"/><omgdi:waypoint x="2795.0" y="1000.0"/><omgdi:waypoint x="2795.0" y="1100.0"/><omgdi:waypoint x="2850.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c23" id="e_sf_c23"><omgdi:waypoint x="2740.0" y="1000.0"/><omgdi:waypoint x="3000.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c24" id="e_sf_c24"><omgdi:waypoint x="2950.0" y="1100.0"/><omgdi:waypoint x="2975.0" y="1100.0"/><omgdi:waypoint x="2975.0" y="1000.0"/><omgdi:waypoint x="3000.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c25" id="e_sf_c25"><omgdi:waypoint x="3100.0" y="1000.0"/><omgdi:waypoint x="3150.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c26" id="e_sf_c26"><omgdi:waypoint x="3190.0" y="1000.0"/><omgdi:waypoint x="3245.0" y="1000.0"/><omgdi:waypoint x="3245.0" y="1100.0"/><omgdi:waypoint x="3300.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c27" id="e_sf_c27"><omgdi:waypoint x="3190.0" y="1000.0"/><omgdi:waypoint x="3450.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c28" id="e_sf_c28"><omgdi:waypoint x="3400.0" y="1100.0"/><omgdi:waypoint x="3425.0" y="1100.0"/><omgdi:waypoint x="3425.0" y="1000.0"/><omgdi:waypoint x="3450.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c29" id="e_sf_c29"><omgdi:waypoint x="3550.0" y="1000.0"/><omgdi:waypoint x="3600.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c30" id="e_sf_c30"><omgdi:waypoint x="3640.0" y="1000.0"/><omgdi:waypoint x="3695.0" y="1000.0"/><omgdi:waypoint x="3695.0" y="1100.0"/><omgdi:waypoint x="3750.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c31" id="e_sf_c31"><omgdi:waypoint x="3640.0" y="1000.0"/><omgdi:waypoint x="3900.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c32" id="e_sf_c32"><omgdi:waypoint x="3850.0" y="1100.0"/><omgdi:waypoint x="3875.0" y="1100.0"/><omgdi:waypoint x="3875.0" y="1000.0"/><omgdi:waypoint x="3900.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c33" id="e_sf_c33"><omgdi:waypoint x="3940.0" y="1000.0"/><omgdi:waypoint x="3995.0" y="1000.0"/><omgdi:waypoint x="3995.0" y="1100.0"/><omgdi:waypoint x="4050.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c34" id="e_sf_c34"><omgdi:waypoint x="3940.0" y="1000.0"/><omgdi:waypoint x="4200.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c35" id="e_sf_c35"><omgdi:waypoint x="4150.0" y="1100.0"/><omgdi:waypoint x="4175.0" y="1100.0"/><omgdi:waypoint x="4175.0" y="1000.0"/><omgdi:waypoint x="4200.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c36" id="e_sf_c36"><omgdi:waypoint x="4240.0" y="1000.0"/><omgdi:waypoint x="4295.0" y="1000.0"/><omgdi:waypoint x="4295.0" y="1100.0"/><omgdi:waypoint x="4350.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c37" id="e_sf_c37"><omgdi:waypoint x="4240.0" y="1000.0"/><omgdi:waypoint x="4500.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c38" id="e_sf_c38"><omgdi:waypoint x="4450.0" y="1100.0"/><omgdi:waypoint x="4475.0" y="1100.0"/><omgdi:waypoint x="4475.0" y="1000.0"/><omgdi:waypoint x="4500.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c39" id="e_sf_c39"><omgdi:waypoint x="4540.0" y="1000.0"/><omgdi:waypoint x="4595.0" y="1000.0"/><omgdi:waypoint x="4595.0" y="1100.0"/><omgdi:waypoint x="4650.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c40" id="e_sf_c40"><omgdi:waypoint x="4540.0" y="1000.0"/><omgdi:waypoint x="4800.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c41" id="e_sf_c41"><omgdi:waypoint x="4750.0" y="1100.0"/><omgdi:waypoint x="4775.0" y="1100.0"/><omgdi:waypoint x="4775.0" y="1000.0"/><omgdi:waypoint x="4800.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c42" id="e_sf_c42"><omgdi:waypoint x="4840.0" y="1000.0"/><omgdi:waypoint x="4895.0" y="1000.0"/><omgdi:waypoint x="4895.0" y="1100.0"/><omgdi:waypoint x="4950.0" y="1100.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c43" id="e_sf_c43"><omgdi:waypoint x="4840.0" y="1000.0"/><omgdi:waypoint x="5100.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c44" id="e_sf_c44"><omgdi:waypoint x="5050.0" y="1100.0"/><omgdi:waypoint x="5075.0" y="1100.0"/><omgdi:waypoint x="5075.0" y="1000.0"/><omgdi:waypoint x="5100.0" y="1000.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_c45" id="e_sf_c45"><omgdi:waypoint x="5200.0" y="1000.0"/><omgdi:waypoint x="5250.0" y="1000.0"/></bpmndi:BPMNEdge>
+
+            <!-- SPoC Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_s1" id="e_sf_s1"><omgdi:waypoint x="180.0" y="1300.0"/><omgdi:waypoint x="300.0" y="1300.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s2" id="e_sf_s2"><omgdi:waypoint x="330.0" y="1300.0"/><omgdi:waypoint x="450.0" y="1300.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s3" id="e_sf_s3"><omgdi:waypoint x="550.0" y="1300.0"/><omgdi:waypoint x="600.0" y="1300.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s4" id="e_sf_s4"><omgdi:waypoint x="640.0" y="1300.0"/><omgdi:waypoint x="695.0" y="1300.0"/><omgdi:waypoint x="695.0" y="1400.0"/><omgdi:waypoint x="750.0" y="1400.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s5" id="e_sf_s5"><omgdi:waypoint x="640.0" y="1300.0"/><omgdi:waypoint x="900.0" y="1300.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s6" id="e_sf_s6"><omgdi:waypoint x="850.0" y="1400.0"/><omgdi:waypoint x="875.0" y="1400.0"/><omgdi:waypoint x="875.0" y="1300.0"/><omgdi:waypoint x="900.0" y="1300.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_s7" id="e_sf_s7"><omgdi:waypoint x="1000.0" y="1300.0"/><omgdi:waypoint x="1050.0" y="1300.0"/></bpmndi:BPMNEdge>
+
+            <!-- ENISA Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_en1" id="e_sf_en1"><omgdi:waypoint x="180.0" y="1550.0"/><omgdi:waypoint x="300.0" y="1550.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_en2" id="e_sf_en2"><omgdi:waypoint x="330.0" y="1550.0"/><omgdi:waypoint x="450.0" y="1550.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_en3" id="e_sf_en3"><omgdi:waypoint x="490.0" y="1550.0"/><omgdi:waypoint x="545.0" y="1550.0"/><omgdi:waypoint x="545.0" y="1650.0"/><omgdi:waypoint x="600.0" y="1650.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_en4" id="e_sf_en4"><omgdi:waypoint x="490.0" y="1550.0"/><omgdi:waypoint x="750.0" y="1550.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_en5" id="e_sf_en5"><omgdi:waypoint x="700.0" y="1650.0"/><omgdi:waypoint x="725.0" y="1650.0"/><omgdi:waypoint x="725.0" y="1550.0"/><omgdi:waypoint x="750.0" y="1550.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_en6" id="e_sf_en6"><omgdi:waypoint x="850.0" y="1550.0"/><omgdi:waypoint x="900.0" y="1550.0"/></bpmndi:BPMNEdge>
+
+            <!-- COMM Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_cm1" id="e_sf_cm1"><omgdi:waypoint x="180.0" y="1800.0"/><omgdi:waypoint x="300.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm2" id="e_sf_cm2"><omgdi:waypoint x="340.0" y="1800.0"/><omgdi:waypoint x="395.0" y="1800.0"/><omgdi:waypoint x="395.0" y="1900.0"/><omgdi:waypoint x="450.0" y="1900.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm3" id="e_sf_cm3"><omgdi:waypoint x="340.0" y="1800.0"/><omgdi:waypoint x="600.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm4" id="e_sf_cm4"><omgdi:waypoint x="550.0" y="1900.0"/><omgdi:waypoint x="575.0" y="1900.0"/><omgdi:waypoint x="575.0" y="1800.0"/><omgdi:waypoint x="600.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm5" id="e_sf_cm5"><omgdi:waypoint x="700.0" y="1800.0"/><omgdi:waypoint x="750.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm6" id="e_sf_cm6"><omgdi:waypoint x="790.0" y="1800.0"/><omgdi:waypoint x="845.0" y="1800.0"/><omgdi:waypoint x="845.0" y="1900.0"/><omgdi:waypoint x="900.0" y="1900.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm7" id="e_sf_cm7"><omgdi:waypoint x="790.0" y="1800.0"/><omgdi:waypoint x="1050.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm8" id="e_sf_cm8"><omgdi:waypoint x="1000.0" y="1900.0"/><omgdi:waypoint x="1025.0" y="1900.0"/><omgdi:waypoint x="1025.0" y="1800.0"/><omgdi:waypoint x="1050.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm9" id="e_sf_cm9"><omgdi:waypoint x="1150.0" y="1800.0"/><omgdi:waypoint x="1200.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm10" id="e_sf_cm10"><omgdi:waypoint x="1300.0" y="1800.0"/><omgdi:waypoint x="1350.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm11" id="e_sf_cm11"><omgdi:waypoint x="1390.0" y="1800.0"/><omgdi:waypoint x="1445.0" y="1800.0"/><omgdi:waypoint x="1445.0" y="1900.0"/><omgdi:waypoint x="1500.0" y="1900.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm12" id="e_sf_cm12"><omgdi:waypoint x="1390.0" y="1800.0"/><omgdi:waypoint x="1650.0" y="1800.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cm13" id="e_sf_cm13"><omgdi:waypoint x="1600.0" y="1900.0"/><omgdi:waypoint x="1625.0" y="1900.0"/><omgdi:waypoint x="1625.0" y="1800.0"/><omgdi:waypoint x="1650.0" y="1800.0"/></bpmndi:BPMNEdge>
+
+            <!-- CG Edges -->
+            <bpmndi:BPMNEdge bpmnElement="sf_cg1" id="e_sf_cg1"><omgdi:waypoint x="180.0" y="2050.0"/><omgdi:waypoint x="300.0" y="2050.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cg2" id="e_sf_cg2"><omgdi:waypoint x="330.0" y="2050.0"/><omgdi:waypoint x="450.0" y="2050.0"/></bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sf_cg3" id="e_sf_cg3"><omgdi:waypoint x="550.0" y="2050.0"/><omgdi:waypoint x="600.0" y="2050.0"/></bpmndi:BPMNEdge>
+
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,1184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collab_1">
+      <participant id="pool_ms" name="Member State" processRef="proc_ms"/>
+      <participant id="pool_sb" name="Supervisory Body" processRef="proc_sb"/>
+      <participant id="pool_comm" name="Commission" processRef="proc_comm"/>
+      <participant id="pool_asb" name="Another Supervisory Body" processRef="proc_asb"/>
+      <participant id="pool_cab" name="Conformity Assessment Body" processRef="proc_cab"/>
+      <participant id="pool_qtsp" name="Qualified Trust Service Provider or Non-qualified Trust Service Provider" processRef="proc_qtsp"/>
+      
+      <messageFlow id="mf_ms_comm" name="" sourceRef="task_ms_3" targetRef="pool_comm"/>
+      <messageFlow id="mf_ms_sb" name="" sourceRef="task_ms_4" targetRef="catch_sb_1"/>
+      <messageFlow id="mf_sb_cab" name="" sourceRef="task_sb_p6" targetRef="catch_cab_1"/>
+      <messageFlow id="mf_sb_qtsp" name="" sourceRef="task_sb_p11" targetRef="catch_qtsp_1"/>
+      <messageFlow id="mf_sb_comm" name="" sourceRef="task_sb_19" targetRef="catch_comm_1"/>
+      <messageFlow id="mf_asb_sb" name="" sourceRef="task_asb_1" targetRef="catch_sb_2"/>
+      <messageFlow id="mf_qtsp_sb" name="" sourceRef="task_qtsp_5" targetRef="catch_sb_3"/>
+      <messageFlow id="mf_sb_qtsp_inform" name="" sourceRef="task_sb_25" targetRef="pool_qtsp"/>
+   </collaboration>
+
+   <!-- Member State Process -->
+   <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="ls_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>start_ms</flowNodeRef>
+            <flowNodeRef>pg_ms_div</flowNodeRef>
+            <flowNodeRef>task_ms_1</flowNodeRef>
+            <flowNodeRef>task_ms_2</flowNodeRef>
+            <flowNodeRef>pg_ms_conv</flowNodeRef>
+            <flowNodeRef>task_ms_3</flowNodeRef>
+            <flowNodeRef>task_ms_4</flowNodeRef>
+            <flowNodeRef>task_ms_5</flowNodeRef>
+            <flowNodeRef>xor_ms_div</flowNodeRef>
+            <flowNodeRef>pg_ms_div2</flowNodeRef>
+            <flowNodeRef>task_ms_6</flowNodeRef>
+            <flowNodeRef>task_ms_7</flowNodeRef>
+            <flowNodeRef>pg_ms_conv2</flowNodeRef>
+            <flowNodeRef>xor_ms_conv</flowNodeRef>
+            <flowNodeRef>end_ms</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_ms" name="need to establish supervision for trust services">
+         <outgoing>seq_ms_1</outgoing>
+      </startEvent>
+      <parallelGateway gatewayDirection="Diverging" id="pg_ms_div" name="">
+         <incoming>seq_ms_1</incoming>
+         <outgoing>seq_ms_2</outgoing>
+         <outgoing>seq_ms_3</outgoing>
+      </parallelGateway>
+      <task completionQuantity="1" id="task_ms_1" isForCompensation="false" name="designate a supervisory body" startQuantity="1">
+         <incoming>seq_ms_2</incoming>
+         <outgoing>seq_ms_4</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_ms_2" isForCompensation="false" name="give the necessary powers and adequate resources to a supervisory body" startQuantity="1">
+         <incoming>seq_ms_3</incoming>
+         <outgoing>seq_ms_5</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_ms_conv" name="">
+         <incoming>seq_ms_4</incoming>
+         <incoming>seq_ms_5</incoming>
+         <outgoing>seq_ms_6</outgoing>
+      </parallelGateway>
+      <task completionQuantity="1" id="task_ms_3" isForCompensation="false" name="notify to the Commission the names and the addresses of the supervisory bodies" startQuantity="1">
+         <incoming>seq_ms_6</incoming>
+         <outgoing>seq_ms_7</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_ms_4" isForCompensation="false" name="require the supervisory body to establish, maintain and update a trust infrastructure if trust infrastructure is required" startQuantity="1">
+         <incoming>seq_ms_7</incoming>
+         <outgoing>seq_ms_8</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_ms_5" isForCompensation="false" name="authorise their supervisory bodies to carry out joint investigations if needed" startQuantity="1">
+         <incoming>seq_ms_8</incoming>
+         <outgoing>seq_ms_9</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_ms_div" isMarkerVisible="true" name="assess whether Member States authorise their supervisory bodies to carry out joint investigations">
+         <incoming>seq_ms_9</incoming>
+         <outgoing>seq_ms_10</outgoing>
+         <outgoing>seq_ms_11</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="pg_ms_div2" name="">
+         <incoming>seq_ms_10</incoming>
+         <outgoing>seq_ms_12</outgoing>
+         <outgoing>seq_ms_13</outgoing>
+      </parallelGateway>
+      <task completionQuantity="1" id="task_ms_6" isForCompensation="false" name="agree upon the arrangements and procedures for such joint actions" startQuantity="1">
+         <incoming>seq_ms_12</incoming>
+         <outgoing>seq_ms_14</outgoing>
+      </task>
+      <task completionQuantity="1" id="task_ms_7" isForCompensation="false" name="establish the arrangements and procedures for such joint actions" startQuantity="1">
+         <incoming>seq_ms_13</incoming>
+         <outgoing>seq_ms_15</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_ms_conv2" name="">
+         <incoming>seq_ms_14</incoming>
+         <incoming>seq_ms_15</incoming>
+         <outgoing>seq_ms_16</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_ms_conv" isMarkerVisible="true" name="">
+         <incoming>seq_ms_16</incoming>
+         <incoming>seq_ms_11</incoming>
+         <outgoing>seq_ms_17</outgoing>
+      </exclusiveGateway>
+      <endEvent id="end_ms" name="Member State supervision established end event">
+         <incoming>seq_ms_17</incoming>
+      </endEvent>
+      <sequenceFlow id="seq_ms_1" isImmediate="true" sourceRef="start_ms" targetRef="pg_ms_div"/>
+      <sequenceFlow id="seq_ms_2" isImmediate="true" sourceRef="pg_ms_div" targetRef="task_ms_1"/>
+      <sequenceFlow id="seq_ms_3" isImmediate="true" sourceRef="pg_ms_div" targetRef="task_ms_2"/>
+      <sequenceFlow id="seq_ms_4" isImmediate="true" sourceRef="task_ms_1" targetRef="pg_ms_conv"/>
+      <sequenceFlow id="seq_ms_5" isImmediate="true" sourceRef="task_ms_2" targetRef="pg_ms_conv"/>
+      <sequenceFlow id="seq_ms_6" isImmediate="true" sourceRef="pg_ms_conv" targetRef="task_ms_3"/>
+      <sequenceFlow id="seq_ms_7" isImmediate="true" sourceRef="task_ms_3" targetRef="task_ms_4"/>
+      <sequenceFlow id="seq_ms_8" isImmediate="true" sourceRef="task_ms_4" targetRef="task_ms_5"/>
+      <sequenceFlow id="seq_ms_9" isImmediate="true" sourceRef="task_ms_5" targetRef="xor_ms_div"/>
+      <sequenceFlow id="seq_ms_10" isImmediate="true" name="If Member States authorise their supervisory bodies to carry out joint investigations" sourceRef="xor_ms_div" targetRef="pg_ms_div2"/>
+      <sequenceFlow id="seq_ms_11" isImmediate="true" name="" sourceRef="xor_ms_div" targetRef="xor_ms_conv"/>
+      <sequenceFlow id="seq_ms_12" isImmediate="true" sourceRef="pg_ms_div2" targetRef="task_ms_6"/>
+      <sequenceFlow id="seq_ms_13" isImmediate="true" sourceRef="pg_ms_div2" targetRef="task_ms_7"/>
+      <sequenceFlow id="seq_ms_14" isImmediate="true" sourceRef="task_ms_6" targetRef="pg_ms_conv2"/>
+      <sequenceFlow id="seq_ms_15" isImmediate="true" sourceRef="task_ms_7" targetRef="pg_ms_conv2"/>
+      <sequenceFlow id="seq_ms_16" isImmediate="true" sourceRef="pg_ms_conv2" targetRef="xor_ms_conv"/>
+      <sequenceFlow id="seq_ms_17" isImmediate="true" sourceRef="xor_ms_conv" targetRef="end_ms"/>
+   </process>
+
+   <!-- Supervisory Body Process -->
+   <process id="proc_sb" isClosed="false" isExecutable="false" name="Supervisory Body" processType="None">
+      <laneSet id="ls_sb">
+         <lane id="lane_sb">
+            <flowNodeRef>start_sb</flowNodeRef>
+            <flowNodeRef>task_sb_1</flowNodeRef>
+            <flowNodeRef>xor_sb_div1</flowNodeRef>
+            <flowNodeRef>task_sb_2</flowNodeRef>
+            <flowNodeRef>xor_sb_conv1</flowNodeRef>
+            <flowNodeRef>pg_sb_div</flowNodeRef>
+            <flowNodeRef>task_sb_p1</flowNodeRef>
+            <flowNodeRef>task_sb_p2</flowNodeRef>
+            <flowNodeRef>task_sb_p3</flowNodeRef>
+            <flowNodeRef>task_sb_p4</flowNodeRef>
+            <flowNodeRef>task_sb_p5</flowNodeRef>
+            <flowNodeRef>task_sb_p6</flowNodeRef>
+            <flowNodeRef>task_sb_p7</flowNodeRef>
+            <flowNodeRef>task_sb_p8</flowNodeRef>
+            <flowNodeRef>task_sb_p9</flowNodeRef>
+            <flowNodeRef>task_sb_p10</flowNodeRef>
+            <flowNodeRef>task_sb_p11</flowNodeRef>
+            <flowNodeRef>pg_sb_conv</flowNodeRef>
+            <flowNodeRef>xor_sb_div2</flowNodeRef>
+            <flowNodeRef>task_sb_14</flowNodeRef>
+            <flowNodeRef>xor_sb_conv2</flowNodeRef>
+            <flowNodeRef>xor_sb_div3</flowNodeRef>
+            <flowNodeRef>task_sb_15</flowNodeRef>
+            <flowNodeRef>xor_sb_conv3</flowNodeRef>
+            <flowNodeRef>catch_sb_1</flowNodeRef>
+            <flowNodeRef>task_sb_16</flowNodeRef>
+            <flowNodeRef>task_sb_17</flowNodeRef>
+            <flowNodeRef>task_sb_18</flowNodeRef>
+            <flowNodeRef>task_sb_19</flowNodeRef>
+            <flowNodeRef>catch_sb_2</flowNodeRef>
+            <flowNodeRef>xor_sb_div4</flowNodeRef>
+            <flowNodeRef>task_sb_20</flowNodeRef>
+            <flowNodeRef>task_sb_21</flowNodeRef>
+            <flowNodeRef>xor_sb_conv4</flowNodeRef>
+            <flowNodeRef>task_sb_22</flowNodeRef>
+            <flowNodeRef>catch_sb_3</flowNodeRef>
+            <flowNodeRef>xor_sb_div5</flowNodeRef>
+            <flowNodeRef>task_sb_23</flowNodeRef>
+            <flowNodeRef>xor_sb_conv5</flowNodeRef>
+            <flowNodeRef>xor_sb_div6</flowNodeRef>
+            <flowNodeRef>pg_sb_div3</flowNodeRef>
+            <flowNodeRef>task_sb_24</flowNodeRef>
+            <flowNodeRef>task_sb_25</flowNodeRef>
+            <flowNodeRef>pg_sb_conv3</flowNodeRef>
+            <flowNodeRef>xor_sb_conv6</flowNodeRef>
+            <flowNodeRef>task_sb_26</flowNodeRef>
+            <flowNodeRef>end_sb</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_sb" name="Start">
+         <outgoing>seq_sb_1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="task_sb_1" isForCompensation="false" name="supervise qualified trust service providers" startQuantity="1">
+         <incoming>seq_sb_1</incoming>
+         <outgoing>seq_sb_2</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div1" isMarkerVisible="true" name="assess whether when informed that those do not meet the requirements">
+         <incoming>seq_sb_2</incoming>
+         <outgoing>seq_sb_3</outgoing>
+         <outgoing>seq_sb_4</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="task_sb_2" isForCompensation="false" name="take action in relation to non-qualified trust service providers" startQuantity="1">
+         <incoming>seq_sb_3</incoming>
+         <outgoing>seq_sb_5</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv1" isMarkerVisible="true" name="">
+         <incoming>seq_sb_5</incoming>
+         <incoming>seq_sb_4</incoming>
+         <outgoing>seq_sb_6</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="pg_sb_div" name="">
+         <incoming>seq_sb_6</incoming>
+         <outgoing>seq_sb_p1_in</outgoing>
+         <outgoing>seq_sb_p2_in</outgoing>
+         <outgoing>seq_sb_p3_in</outgoing>
+         <outgoing>seq_sb_p4_in</outgoing>
+         <outgoing>seq_sb_p5_in</outgoing>
+         <outgoing>seq_sb_p6_in</outgoing>
+         <outgoing>seq_sb_p7_in</outgoing>
+         <outgoing>seq_sb_p8_in</outgoing>
+         <outgoing>seq_sb_p9_in</outgoing>
+         <outgoing>seq_sb_p10_in</outgoing>
+         <outgoing>seq_sb_p11_in</outgoing>
+      </parallelGateway>
+      <task id="task_sb_p1" name="cooperate with other supervisory bodies">
+         <incoming>seq_sb_p1_in</incoming>
+         <outgoing>seq_sb_p1_out</outgoing>
+      </task>
+      <task id="task_sb_p2" name="provide other supervisory bodies with assistance">
+         <incoming>seq_sb_p2_in</incoming>
+         <outgoing>seq_sb_p2_out</outgoing>
+      </task>
+      <task id="task_sb_p3" name="analyse the conformity assessment reports">
+         <incoming>seq_sb_p3_in</incoming>
+         <outgoing>seq_sb_p3_out</outgoing>
+      </task>
+      <task id="task_sb_p4" name="inform other supervisory bodies and the public about breaches of security or loss of integrity">
+         <incoming>seq_sb_p4_in</incoming>
+         <outgoing>seq_sb_p4_out</outgoing>
+      </task>
+      <task id="task_sb_p5" name="carry out audits">
+         <incoming>seq_sb_p5_in</incoming>
+         <outgoing>seq_sb_p5_out</outgoing>
+      </task>
+      <task id="task_sb_p6" name="request a conformity assessment body to perform a conformity assessment">
+         <incoming>seq_sb_p6_in</incoming>
+         <outgoing>seq_sb_p6_out</outgoing>
+      </task>
+      <task id="task_sb_p7" name="cooperate with the data protection authorities">
+         <incoming>seq_sb_p7_in</incoming>
+         <outgoing>seq_sb_p7_out</outgoing>
+      </task>
+      <task id="task_sb_p8" name="grant qualified status to trust service providers">
+         <incoming>seq_sb_p8_in</incoming>
+         <outgoing>seq_sb_p8_out</outgoing>
+      </task>
+      <task id="task_sb_p9" name="withdraw qualified status from trust service providers">
+         <incoming>seq_sb_p9_in</incoming>
+         <outgoing>seq_sb_p9_out</outgoing>
+      </task>
+      <task id="task_sb_p10" name="inform the body responsible for the national trusted list about the status change, except where that body is also the supervisory body">
+         <incoming>seq_sb_p10_in</incoming>
+         <outgoing>seq_sb_p10_out</outgoing>
+      </task>
+      <task id="task_sb_p11" name="require that trust service providers remedy any failure to fulfil the requirements">
+         <incoming>seq_sb_p11_in</incoming>
+         <outgoing>seq_sb_p11_out</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_sb_conv" name="">
+         <incoming>seq_sb_p1_out</incoming>
+         <incoming>seq_sb_p2_out</incoming>
+         <incoming>seq_sb_p3_out</incoming>
+         <incoming>seq_sb_p4_out</incoming>
+         <incoming>seq_sb_p5_out</incoming>
+         <incoming>seq_sb_p6_out</incoming>
+         <incoming>seq_sb_p7_out</incoming>
+         <incoming>seq_sb_p8_out</incoming>
+         <incoming>seq_sb_p9_out</incoming>
+         <incoming>seq_sb_p10_out</incoming>
+         <incoming>seq_sb_p11_out</incoming>
+         <outgoing>seq_sb_7</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div2" isMarkerVisible="true" name="assess whether where personal data protection rules have been breached">
+         <incoming>seq_sb_7</incoming>
+         <outgoing>seq_sb_8</outgoing>
+         <outgoing>seq_sb_9</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_14" name="inform the data protection authorities about the results">
+         <incoming>seq_sb_8</incoming>
+         <outgoing>seq_sb_10</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv2" isMarkerVisible="true" name="">
+         <incoming>seq_sb_10</incoming>
+         <incoming>seq_sb_9</incoming>
+         <outgoing>seq_sb_11</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div3" isMarkerVisible="true" name="assess whether in cases where the qualified trust service provider ceases its activities">
+         <incoming>seq_sb_11</incoming>
+         <outgoing>seq_sb_12</outgoing>
+         <outgoing>seq_sb_13</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_15" name="verify the existence and correct application of provisions on termination plans">
+         <incoming>seq_sb_12</incoming>
+         <outgoing>seq_sb_14</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv3" isMarkerVisible="true" name="">
+         <incoming>seq_sb_14</incoming>
+         <incoming>seq_sb_13</incoming>
+         <outgoing>seq_sb_15</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="catch_sb_1" name="Upon receiving a requirement from the Member State">
+         <incoming>seq_sb_15</incoming>
+         <outgoing>seq_sb_16</outgoing>
+         <messageEventDefinition id="msg_sb_1"/>
+      </intermediateCatchEvent>
+      <task id="task_sb_16" name="establish a trust infrastructure if required by Member State">
+         <incoming>seq_sb_16</incoming>
+         <outgoing>seq_sb_17</outgoing>
+      </task>
+      <task id="task_sb_17" name="maintain a trust infrastructure if required by Member State">
+         <incoming>seq_sb_17</incoming>
+         <outgoing>seq_sb_18</outgoing>
+      </task>
+      <task id="task_sb_18" name="update a trust infrastructure if required by Member State">
+         <incoming>seq_sb_18</incoming>
+         <outgoing>seq_sb_19</outgoing>
+      </task>
+      <task id="task_sb_19" name="By 31 March each year, submit to the Commission a report on its previous year's main activities and a summary of breach notifications">
+         <incoming>seq_sb_19</incoming>
+         <outgoing>seq_sb_20</outgoing>
+      </task>
+      <intermediateCatchEvent id="catch_sb_2" name="Upon receipt of a justified request from another supervisory body">
+         <incoming>seq_sb_20</incoming>
+         <outgoing>seq_sb_21</outgoing>
+         <messageEventDefinition id="msg_sb_2"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div4" isMarkerVisible="true" name="assess whether the supervisory body is not competent...">
+         <incoming>seq_sb_21</incoming>
+         <outgoing>seq_sb_22</outgoing>
+         <outgoing>seq_sb_23</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_20" name="refuse assistance">
+         <incoming>seq_sb_22</incoming>
+         <outgoing>seq_sb_24</outgoing>
+      </task>
+      <task id="task_sb_21" name="provide assistance">
+         <incoming>seq_sb_23</incoming>
+         <outgoing>seq_sb_25</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv4" isMarkerVisible="true" name="">
+         <incoming>seq_sb_24</incoming>
+         <incoming>seq_sb_25</incoming>
+         <outgoing>seq_sb_26</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_22" name="carry out joint investigations if authorised">
+         <incoming>seq_sb_26</incoming>
+         <outgoing>seq_sb_27</outgoing>
+      </task>
+      <intermediateCatchEvent id="catch_sb_3" name="Upon receiving a notification of a breach of security or loss of integrity">
+         <incoming>seq_sb_27</incoming>
+         <outgoing>seq_sb_28</outgoing>
+         <messageEventDefinition id="msg_sb_3"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div5" isMarkerVisible="true" name="assess whether if a breach of security or loss of integrity concerns two or more Member States">
+         <incoming>seq_sb_28</incoming>
+         <outgoing>seq_sb_29</outgoing>
+         <outgoing>seq_sb_30</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_23" name="inform the supervisory bodies in other Member States concerned and ENISA of the significant incident">
+         <incoming>seq_sb_29</incoming>
+         <outgoing>seq_sb_31</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv5" isMarkerVisible="true" name="">
+         <incoming>seq_sb_31</incoming>
+         <incoming>seq_sb_30</incoming>
+         <outgoing>seq_sb_32</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_sb_div6" isMarkerVisible="true" name="assess whether if in the public interest">
+         <incoming>seq_sb_32</incoming>
+         <outgoing>seq_sb_33</outgoing>
+         <outgoing>seq_sb_34</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="pg_sb_div3" name="">
+         <incoming>seq_sb_33</incoming>
+         <outgoing>seq_sb_35</outgoing>
+         <outgoing>seq_sb_36</outgoing>
+      </parallelGateway>
+      <task id="task_sb_24" name="inform the public about the breach of security or loss of integrity">
+         <incoming>seq_sb_35</incoming>
+         <outgoing>seq_sb_37</outgoing>
+      </task>
+      <task id="task_sb_25" name="require the trust service provider to inform the public about the breach">
+         <incoming>seq_sb_36</incoming>
+         <outgoing>seq_sb_38</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_sb_conv3" name="">
+         <incoming>seq_sb_37</incoming>
+         <incoming>seq_sb_38</incoming>
+         <outgoing>seq_sb_39</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_sb_conv6" isMarkerVisible="true" name="">
+         <incoming>seq_sb_39</incoming>
+         <incoming>seq_sb_34</incoming>
+         <outgoing>seq_sb_40</outgoing>
+      </exclusiveGateway>
+      <task id="task_sb_26" name="Once a year, provide ENISA with a summary of notifications of breach">
+         <incoming>seq_sb_40</incoming>
+         <outgoing>seq_sb_41</outgoing>
+      </task>
+      <endEvent id="end_sb" name="supervision completed end event">
+         <incoming>seq_sb_41</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_sb_1" isImmediate="true" sourceRef="start_sb" targetRef="task_sb_1"/>
+      <sequenceFlow id="seq_sb_2" isImmediate="true" sourceRef="task_sb_1" targetRef="xor_sb_div1"/>
+      <sequenceFlow id="seq_sb_3" isImmediate="true" name="If when informed that those do not meet the requirements" sourceRef="xor_sb_div1" targetRef="task_sb_2"/>
+      <sequenceFlow id="seq_sb_4" isImmediate="true" name="" sourceRef="xor_sb_div1" targetRef="xor_sb_conv1"/>
+      <sequenceFlow id="seq_sb_5" isImmediate="true" sourceRef="task_sb_2" targetRef="xor_sb_conv1"/>
+      <sequenceFlow id="seq_sb_6" isImmediate="true" sourceRef="xor_sb_conv1" targetRef="pg_sb_div"/>
+      
+      <sequenceFlow id="seq_sb_p1_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p1"/>
+      <sequenceFlow id="seq_sb_p2_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p2"/>
+      <sequenceFlow id="seq_sb_p3_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p3"/>
+      <sequenceFlow id="seq_sb_p4_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p4"/>
+      <sequenceFlow id="seq_sb_p5_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p5"/>
+      <sequenceFlow id="seq_sb_p6_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p6"/>
+      <sequenceFlow id="seq_sb_p7_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p7"/>
+      <sequenceFlow id="seq_sb_p8_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p8"/>
+      <sequenceFlow id="seq_sb_p9_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p9"/>
+      <sequenceFlow id="seq_sb_p10_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p10"/>
+      <sequenceFlow id="seq_sb_p11_in" isImmediate="true" sourceRef="pg_sb_div" targetRef="task_sb_p11"/>
+      
+      <sequenceFlow id="seq_sb_p1_out" isImmediate="true" sourceRef="task_sb_p1" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p2_out" isImmediate="true" sourceRef="task_sb_p2" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p3_out" isImmediate="true" sourceRef="task_sb_p3" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p4_out" isImmediate="true" sourceRef="task_sb_p4" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p5_out" isImmediate="true" sourceRef="task_sb_p5" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p6_out" isImmediate="true" sourceRef="task_sb_p6" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p7_out" isImmediate="true" sourceRef="task_sb_p7" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p8_out" isImmediate="true" sourceRef="task_sb_p8" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p9_out" isImmediate="true" sourceRef="task_sb_p9" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p10_out" isImmediate="true" sourceRef="task_sb_p10" targetRef="pg_sb_conv"/>
+      <sequenceFlow id="seq_sb_p11_out" isImmediate="true" sourceRef="task_sb_p11" targetRef="pg_sb_conv"/>
+      
+      <sequenceFlow id="seq_sb_7" isImmediate="true" sourceRef="pg_sb_conv" targetRef="xor_sb_div2"/>
+      <sequenceFlow id="seq_sb_8" isImmediate="true" name="If where personal data protection rules have been breached" sourceRef="xor_sb_div2" targetRef="task_sb_14"/>
+      <sequenceFlow id="seq_sb_9" isImmediate="true" name="" sourceRef="xor_sb_div2" targetRef="xor_sb_conv2"/>
+      <sequenceFlow id="seq_sb_10" isImmediate="true" sourceRef="task_sb_14" targetRef="xor_sb_conv2"/>
+      <sequenceFlow id="seq_sb_11" isImmediate="true" sourceRef="xor_sb_conv2" targetRef="xor_sb_div3"/>
+      <sequenceFlow id="seq_sb_12" isImmediate="true" name="If in cases where the qualified trust service provider ceases its activities" sourceRef="xor_sb_div3" targetRef="task_sb_15"/>
+      <sequenceFlow id="seq_sb_13" isImmediate="true" name="" sourceRef="xor_sb_div3" targetRef="xor_sb_conv3"/>
+      <sequenceFlow id="seq_sb_14" isImmediate="true" sourceRef="task_sb_15" targetRef="xor_sb_conv3"/>
+      <sequenceFlow id="seq_sb_15" isImmediate="true" sourceRef="xor_sb_conv3" targetRef="catch_sb_1"/>
+      <sequenceFlow id="seq_sb_16" isImmediate="true" sourceRef="catch_sb_1" targetRef="task_sb_16"/>
+      <sequenceFlow id="seq_sb_17" isImmediate="true" sourceRef="task_sb_16" targetRef="task_sb_17"/>
+      <sequenceFlow id="seq_sb_18" isImmediate="true" sourceRef="task_sb_17" targetRef="task_sb_18"/>
+      <sequenceFlow id="seq_sb_19" isImmediate="true" sourceRef="task_sb_18" targetRef="task_sb_19"/>
+      <sequenceFlow id="seq_sb_20" isImmediate="true" sourceRef="task_sb_19" targetRef="catch_sb_2"/>
+      <sequenceFlow id="seq_sb_21" isImmediate="true" sourceRef="catch_sb_2" targetRef="xor_sb_div4"/>
+      <sequenceFlow id="seq_sb_22" isImmediate="true" name="If the supervisory body is not competent to provide the assistance" sourceRef="xor_sb_div4" targetRef="task_sb_20"/>
+      <sequenceFlow id="seq_sb_23" isImmediate="true" name="If the supervisory body is competent to provide the assistance" sourceRef="xor_sb_div4" targetRef="task_sb_21"/>
+      <sequenceFlow id="seq_sb_24" isImmediate="true" sourceRef="task_sb_20" targetRef="xor_sb_conv4"/>
+      <sequenceFlow id="seq_sb_25" isImmediate="true" sourceRef="task_sb_21" targetRef="xor_sb_conv4"/>
+      <sequenceFlow id="seq_sb_26" isImmediate="true" sourceRef="xor_sb_conv4" targetRef="task_sb_22"/>
+      <sequenceFlow id="seq_sb_27" isImmediate="true" sourceRef="task_sb_22" targetRef="catch_sb_3"/>
+      <sequenceFlow id="seq_sb_28" isImmediate="true" sourceRef="catch_sb_3" targetRef="xor_sb_div5"/>
+      <sequenceFlow id="seq_sb_29" isImmediate="true" name="If if a breach of security or loss of integrity concerns two or more Member States" sourceRef="xor_sb_div5" targetRef="task_sb_23"/>
+      <sequenceFlow id="seq_sb_30" isImmediate="true" name="" sourceRef="xor_sb_div5" targetRef="xor_sb_conv5"/>
+      <sequenceFlow id="seq_sb_31" isImmediate="true" sourceRef="task_sb_23" targetRef="xor_sb_conv5"/>
+      <sequenceFlow id="seq_sb_32" isImmediate="true" sourceRef="xor_sb_conv5" targetRef="xor_sb_div6"/>
+      <sequenceFlow id="seq_sb_33" isImmediate="true" name="If if in the public interest" sourceRef="xor_sb_div6" targetRef="pg_sb_div3"/>
+      <sequenceFlow id="seq_sb_34" isImmediate="true" name="" sourceRef="xor_sb_div6" targetRef="xor_sb_conv6"/>
+      <sequenceFlow id="seq_sb_35" isImmediate="true" sourceRef="pg_sb_div3" targetRef="task_sb_24"/>
+      <sequenceFlow id="seq_sb_36" isImmediate="true" sourceRef="pg_sb_div3" targetRef="task_sb_25"/>
+      <sequenceFlow id="seq_sb_37" isImmediate="true" sourceRef="task_sb_24" targetRef="pg_sb_conv3"/>
+      <sequenceFlow id="seq_sb_38" isImmediate="true" sourceRef="task_sb_25" targetRef="pg_sb_conv3"/>
+      <sequenceFlow id="seq_sb_39" isImmediate="true" sourceRef="pg_sb_conv3" targetRef="xor_sb_conv6"/>
+      <sequenceFlow id="seq_sb_40" isImmediate="true" sourceRef="xor_sb_conv6" targetRef="task_sb_26"/>
+      <sequenceFlow id="seq_sb_41" isImmediate="true" sourceRef="task_sb_26" targetRef="end_sb"/>
+   </process>
+
+   <!-- Commission Process -->
+   <process id="proc_comm" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="ls_comm">
+         <lane id="lane_comm">
+            <flowNodeRef>start_comm</flowNodeRef>
+            <flowNodeRef>catch_comm_1</flowNodeRef>
+            <flowNodeRef>task_comm_1</flowNodeRef>
+            <flowNodeRef>task_comm_2</flowNodeRef>
+            <flowNodeRef>task_comm_3</flowNodeRef>
+            <flowNodeRef>pg_comm_div</flowNodeRef>
+            <flowNodeRef>task_comm_4</flowNodeRef>
+            <flowNodeRef>task_comm_5</flowNodeRef>
+            <flowNodeRef>pg_comm_conv</flowNodeRef>
+            <flowNodeRef>end_comm</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_comm" name="Start">
+         <outgoing>seq_comm_1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="catch_comm_1" name="Upon receiving the annual report">
+         <incoming>seq_comm_1</incoming>
+         <outgoing>seq_comm_2</outgoing>
+         <messageEventDefinition id="msg_comm_1"/>
+      </intermediateCatchEvent>
+      <task id="task_comm_1" name="make the annual report available to Member States">
+         <incoming>seq_comm_2</incoming>
+         <outgoing>seq_comm_3</outgoing>
+      </task>
+      <task id="task_comm_2" name="define the formats and procedures for the report if adjustments needed">
+         <incoming>seq_comm_3</incoming>
+         <outgoing>seq_comm_4</outgoing>
+      </task>
+      <task id="task_comm_3" name="adopt those implementing acts">
+         <incoming>seq_comm_4</incoming>
+         <outgoing>seq_comm_5</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Diverging" id="pg_comm_div" name="">
+         <incoming>seq_comm_5</incoming>
+         <outgoing>seq_comm_6</outgoing>
+         <outgoing>seq_comm_7</outgoing>
+      </parallelGateway>
+      <task id="task_comm_4" name="further specify the measures if specification is required">
+         <incoming>seq_comm_6</incoming>
+         <outgoing>seq_comm_8</outgoing>
+      </task>
+      <task id="task_comm_5" name="define the formats and procedures if specification is required">
+         <incoming>seq_comm_7</incoming>
+         <outgoing>seq_comm_9</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_comm_conv" name="">
+         <incoming>seq_comm_8</incoming>
+         <incoming>seq_comm_9</incoming>
+         <outgoing>seq_comm_10</outgoing>
+      </parallelGateway>
+      <endEvent id="end_comm" name="Commission oversight completed end event">
+         <incoming>seq_comm_10</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_comm_1" isImmediate="true" sourceRef="start_comm" targetRef="catch_comm_1"/>
+      <sequenceFlow id="seq_comm_2" isImmediate="true" sourceRef="catch_comm_1" targetRef="task_comm_1"/>
+      <sequenceFlow id="seq_comm_3" isImmediate="true" sourceRef="task_comm_1" targetRef="task_comm_2"/>
+      <sequenceFlow id="seq_comm_4" isImmediate="true" sourceRef="task_comm_2" targetRef="task_comm_3"/>
+      <sequenceFlow id="seq_comm_5" isImmediate="true" sourceRef="task_comm_3" targetRef="pg_comm_div"/>
+      <sequenceFlow id="seq_comm_6" isImmediate="true" sourceRef="pg_comm_div" targetRef="task_comm_4"/>
+      <sequenceFlow id="seq_comm_7" isImmediate="true" sourceRef="pg_comm_div" targetRef="task_comm_5"/>
+      <sequenceFlow id="seq_comm_8" isImmediate="true" sourceRef="task_comm_4" targetRef="pg_comm_conv"/>
+      <sequenceFlow id="seq_comm_9" isImmediate="true" sourceRef="task_comm_5" targetRef="pg_comm_conv"/>
+      <sequenceFlow id="seq_comm_10" isImmediate="true" sourceRef="pg_comm_conv" targetRef="end_comm"/>
+   </process>
+
+   <!-- Another Supervisory Body Process -->
+   <process id="proc_asb" isClosed="false" isExecutable="false" name="Another Supervisory Body" processType="None">
+      <laneSet id="ls_asb">
+         <lane id="lane_asb">
+            <flowNodeRef>start_asb</flowNodeRef>
+            <flowNodeRef>task_asb_1</flowNodeRef>
+            <flowNodeRef>task_asb_2</flowNodeRef>
+            <flowNodeRef>end_asb</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_asb" name="Start">
+         <outgoing>seq_asb_1</outgoing>
+      </startEvent>
+      <task id="task_asb_1" name="request assistance">
+         <incoming>seq_asb_1</incoming>
+         <outgoing>seq_asb_2</outgoing>
+      </task>
+      <task id="task_asb_2" name="carry out joint investigations if authorised">
+         <incoming>seq_asb_2</incoming>
+         <outgoing>seq_asb_3</outgoing>
+      </task>
+      <endEvent id="end_asb" name="assistance requested end event">
+         <incoming>seq_asb_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_asb_1" isImmediate="true" sourceRef="start_asb" targetRef="task_asb_1"/>
+      <sequenceFlow id="seq_asb_2" isImmediate="true" sourceRef="task_asb_1" targetRef="task_asb_2"/>
+      <sequenceFlow id="seq_asb_3" isImmediate="true" sourceRef="task_asb_2" targetRef="end_asb"/>
+   </process>
+
+   <!-- Conformity Assessment Body Process -->
+   <process id="proc_cab" isClosed="false" isExecutable="false" name="Conformity Assessment Body" processType="None">
+      <laneSet id="ls_cab">
+         <lane id="lane_cab">
+            <flowNodeRef>start_cab</flowNodeRef>
+            <flowNodeRef>catch_cab_1</flowNodeRef>
+            <flowNodeRef>task_cab_1</flowNodeRef>
+            <flowNodeRef>end_cab</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_cab" name="Start">
+         <outgoing>seq_cab_1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="catch_cab_1" name="Upon receiving a request from the Supervisory Body">
+         <incoming>seq_cab_1</incoming>
+         <outgoing>seq_cab_2</outgoing>
+         <messageEventDefinition id="msg_cab_1"/>
+      </intermediateCatchEvent>
+      <task id="task_cab_1" name="perform a conformity assessment of the qualified trust service providers upon request">
+         <incoming>seq_cab_2</incoming>
+         <outgoing>seq_cab_3</outgoing>
+      </task>
+      <endEvent id="end_cab" name="conformity assessment completed end event">
+         <incoming>seq_cab_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_cab_1" isImmediate="true" sourceRef="start_cab" targetRef="catch_cab_1"/>
+      <sequenceFlow id="seq_cab_2" isImmediate="true" sourceRef="catch_cab_1" targetRef="task_cab_1"/>
+      <sequenceFlow id="seq_cab_3" isImmediate="true" sourceRef="task_cab_1" targetRef="end_cab"/>
+   </process>
+
+   <!-- QTSP Process -->
+   <process id="proc_qtsp" isClosed="false" isExecutable="false" name="Qualified Trust Service Provider or Non-qualified Trust Service Provider" processType="None">
+      <laneSet id="ls_qtsp">
+         <lane id="lane_qtsp">
+            <flowNodeRef>start_qtsp</flowNodeRef>
+            <flowNodeRef>pg_qtsp_div1</flowNodeRef>
+            <flowNodeRef>task_qtsp_1</flowNodeRef>
+            <flowNodeRef>task_qtsp_2</flowNodeRef>
+            <flowNodeRef>task_qtsp_3</flowNodeRef>
+            <flowNodeRef>pg_qtsp_conv1</flowNodeRef>
+            <flowNodeRef>catch_qtsp_1</flowNodeRef>
+            <flowNodeRef>task_qtsp_4</flowNodeRef>
+            <flowNodeRef>xor_qtsp_div</flowNodeRef>
+            <flowNodeRef>pg_qtsp_div2</flowNodeRef>
+            <flowNodeRef>task_qtsp_5</flowNodeRef>
+            <flowNodeRef>task_qtsp_6</flowNodeRef>
+            <flowNodeRef>pg_qtsp_conv2</flowNodeRef>
+            <flowNodeRef>xor_qtsp_conv</flowNodeRef>
+            <flowNodeRef>task_qtsp_7</flowNodeRef>
+            <flowNodeRef>end_qtsp</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_qtsp" name="Start">
+         <outgoing>seq_qtsp_1</outgoing>
+      </startEvent>
+      <parallelGateway gatewayDirection="Diverging" id="pg_qtsp_div1" name="">
+         <incoming>seq_qtsp_1</incoming>
+         <outgoing>seq_qtsp_2</outgoing>
+         <outgoing>seq_qtsp_3</outgoing>
+         <outgoing>seq_qtsp_4</outgoing>
+      </parallelGateway>
+      <task id="task_qtsp_1" name="take appropriate technical and organisational measures to manage the risks">
+         <incoming>seq_qtsp_2</incoming>
+         <outgoing>seq_qtsp_5</outgoing>
+      </task>
+      <task id="task_qtsp_2" name="take measures to prevent and minimise the impact of security incidents">
+         <incoming>seq_qtsp_3</incoming>
+         <outgoing>seq_qtsp_6</outgoing>
+      </task>
+      <task id="task_qtsp_3" name="inform stakeholders of the adverse effects of any security incidents">
+         <incoming>seq_qtsp_4</incoming>
+         <outgoing>seq_qtsp_7</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_qtsp_conv1" name="">
+         <incoming>seq_qtsp_5</incoming>
+         <incoming>seq_qtsp_6</incoming>
+         <incoming>seq_qtsp_7</incoming>
+         <outgoing>seq_qtsp_8</outgoing>
+      </parallelGateway>
+      <intermediateCatchEvent id="catch_qtsp_1" name="Upon receiving a requirement from the supervisory body">
+         <incoming>seq_qtsp_8</incoming>
+         <outgoing>seq_qtsp_9</outgoing>
+         <messageEventDefinition id="msg_qtsp_1"/>
+      </intermediateCatchEvent>
+      <task id="task_qtsp_4" name="remedy failures to fulfil requirements if required by supervisory body">
+         <incoming>seq_qtsp_9</incoming>
+         <outgoing>seq_qtsp_10</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="xor_qtsp_div" isMarkerVisible="true" name="assess whether if the breach of security or loss of integrity has a significant impact...">
+         <incoming>seq_qtsp_10</incoming>
+         <outgoing>seq_qtsp_11</outgoing>
+         <outgoing>seq_qtsp_12</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="pg_qtsp_div2" name="">
+         <incoming>seq_qtsp_11</incoming>
+         <outgoing>seq_qtsp_13</outgoing>
+         <outgoing>seq_qtsp_14</outgoing>
+      </parallelGateway>
+      <task id="task_qtsp_5" name="notify the supervisory body and other relevant bodies">
+         <incoming>seq_qtsp_13</incoming>
+         <outgoing>seq_qtsp_15</outgoing>
+      </task>
+      <task id="task_qtsp_6" name="notify the natural or legal person">
+         <incoming>seq_qtsp_14</incoming>
+         <outgoing>seq_qtsp_16</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Converging" id="pg_qtsp_conv2" name="">
+         <incoming>seq_qtsp_15</incoming>
+         <incoming>seq_qtsp_16</incoming>
+         <outgoing>seq_qtsp_17</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Converging" id="xor_qtsp_conv" isMarkerVisible="true" name="">
+         <incoming>seq_qtsp_17</incoming>
+         <incoming>seq_qtsp_12</incoming>
+         <outgoing>seq_qtsp_18</outgoing>
+      </exclusiveGateway>
+      <task id="task_qtsp_7" name="inform the public about the breach of security or loss of integrity if in the public interest, except where trust service provider should inform public only if required by supervisory body">
+         <incoming>seq_qtsp_18</incoming>
+         <outgoing>seq_qtsp_19</outgoing>
+      </task>
+      <endEvent id="end_qtsp" name="trust service provision secured end event">
+         <incoming>seq_qtsp_19</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_qtsp_1" isImmediate="true" sourceRef="start_qtsp" targetRef="pg_qtsp_div1"/>
+      <sequenceFlow id="seq_qtsp_2" isImmediate="true" sourceRef="pg_qtsp_div1" targetRef="task_qtsp_1"/>
+      <sequenceFlow id="seq_qtsp_3" isImmediate="true" sourceRef="pg_qtsp_div1" targetRef="task_qtsp_2"/>
+      <sequenceFlow id="seq_qtsp_4" isImmediate="true" sourceRef="pg_qtsp_div1" targetRef="task_qtsp_3"/>
+      <sequenceFlow id="seq_qtsp_5" isImmediate="true" sourceRef="task_qtsp_1" targetRef="pg_qtsp_conv1"/>
+      <sequenceFlow id="seq_qtsp_6" isImmediate="true" sourceRef="task_qtsp_2" targetRef="pg_qtsp_conv1"/>
+      <sequenceFlow id="seq_qtsp_7" isImmediate="true" sourceRef="task_qtsp_3" targetRef="pg_qtsp_conv1"/>
+      <sequenceFlow id="seq_qtsp_8" isImmediate="true" sourceRef="pg_qtsp_conv1" targetRef="catch_qtsp_1"/>
+      <sequenceFlow id="seq_qtsp_9" isImmediate="true" sourceRef="catch_qtsp_1" targetRef="task_qtsp_4"/>
+      <sequenceFlow id="seq_qtsp_10" isImmediate="true" sourceRef="task_qtsp_4" targetRef="xor_qtsp_div"/>
+      <sequenceFlow id="seq_qtsp_11" isImmediate="true" name="If if the breach of security or loss of integrity has a significant impact on the trust service provided or on the personal data" sourceRef="xor_qtsp_div" targetRef="pg_qtsp_div2"/>
+      <sequenceFlow id="seq_qtsp_12" isImmediate="true" name="" sourceRef="xor_qtsp_div" targetRef="xor_qtsp_conv"/>
+      <sequenceFlow id="seq_qtsp_13" isImmediate="true" sourceRef="pg_qtsp_div2" targetRef="task_qtsp_5"/>
+      <sequenceFlow id="seq_qtsp_14" isImmediate="true" sourceRef="pg_qtsp_div2" targetRef="task_qtsp_6"/>
+      <sequenceFlow id="seq_qtsp_15" isImmediate="true" sourceRef="task_qtsp_5" targetRef="pg_qtsp_conv2"/>
+      <sequenceFlow id="seq_qtsp_16" isImmediate="true" sourceRef="task_qtsp_6" targetRef="pg_qtsp_conv2"/>
+      <sequenceFlow id="seq_qtsp_17" isImmediate="true" sourceRef="pg_qtsp_conv2" targetRef="xor_qtsp_conv"/>
+      <sequenceFlow id="seq_qtsp_18" isImmediate="true" sourceRef="xor_qtsp_conv" targetRef="task_qtsp_7"/>
+      <sequenceFlow id="seq_qtsp_19" isImmediate="true" sourceRef="task_qtsp_7" targetRef="end_qtsp"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <!-- MS Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_ms" id="pool_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="4500.0" x="100.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="4470.0" x="130.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_ms" id="start_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="160.0"/>
+            <bpmndi:BPMNLabel><omgdc:Bounds height="12.0" width="60.0" x="185.0" y="195.0"/></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_ms_div" id="pg_ms_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="280.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_1" id="task_ms_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_2" id="task_ms_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_ms_conv" id="pg_ms_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="480.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_3" id="task_ms_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_4" id="task_ms_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_5" id="task_ms_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_ms_div" id="xor_ms_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1000.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_ms_div2" id="pg_ms_div2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_6" id="task_ms_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_7" id="task_ms_7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_ms_conv2" id="pg_ms_conv2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_ms_conv" id="xor_ms_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1450.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="end_ms_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1550.0" y="161.0"/>
+            <bpmndi:BPMNLabel><omgdc:Bounds height="12.0" width="60.0" x="1534.0" y="195.0"/></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- SB Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_sb" id="pool_sb_gui" isHorizontal="true">
+            <omgdc:Bounds height="1050.0" width="4500.0" x="100.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_sb" id="lane_sb_gui" isHorizontal="true">
+            <omgdc:Bounds height="1050.0" width="4470.0" x="130.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_sb" id="start_sb_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_1" id="task_sb_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="280.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div1" id="xor_sb_div1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_2" id="task_sb_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="520.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv1" id="xor_sb_conv1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_sb_div" id="pg_sb_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="760.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p1" id="task_sb_p1_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="380.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p2" id="task_sb_p2_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p3" id="task_sb_p3_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="540.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p4" id="task_sb_p4_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="620.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p5" id="task_sb_p5_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="700.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p6" id="task_sb_p6_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="780.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p7" id="task_sb_p7_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="860.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p8" id="task_sb_p8_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="940.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p9" id="task_sb_p9_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="1020.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p10" id="task_sb_p10_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="1100.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_p11" id="task_sb_p11_gui"><omgdc:Bounds height="60.0" width="100.0" x="860.0" y="1180.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_sb_conv" id="pg_sb_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1000.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div2" id="xor_sb_div2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_14" id="task_sb_14_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv2" id="xor_sb_conv2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1340.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div3" id="xor_sb_div3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1440.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_15" id="task_sb_15_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1540.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv3" id="xor_sb_conv3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1680.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_sb_1" id="catch_sb_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1780.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_16" id="task_sb_16_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1860.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_17" id="task_sb_17_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_18" id="task_sb_18_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2140.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_19" id="task_sb_19_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2280.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_sb_2" id="catch_sb_2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2420.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div4" id="xor_sb_div4_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2520.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_20" id="task_sb_20_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2620.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_21" id="task_sb_21_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2620.0" y="900.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv4" id="xor_sb_conv4_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2760.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_22" id="task_sb_22_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2860.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_sb_3" id="catch_sb_3_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="3000.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div5" id="xor_sb_div5_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3100.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_23" id="task_sb_23_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3200.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv5" id="xor_sb_conv5_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3340.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_div6" id="xor_sb_div6_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3440.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_sb_div3" id="pg_sb_div3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3540.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_24" id="task_sb_24_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3640.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_25" id="task_sb_25_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3640.0" y="900.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_sb_conv3" id="pg_sb_conv3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3780.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_sb_conv6" id="xor_sb_conv6_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3880.0" y="845.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sb_26" id="task_sb_26_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3980.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_sb" id="end_sb_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="4120.0" y="851.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_comm" id="pool_comm_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="4500.0" x="100.0" y="1450.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_comm" id="lane_comm_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="4470.0" x="130.0" y="1450.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_comm" id="start_comm_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="1550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_comm_1" id="catch_comm_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="280.0" y="1550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_1" id="task_comm_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="1525.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_2" id="task_comm_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="1525.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_3" id="task_comm_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="640.0" y="1525.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_comm_div" id="pg_comm_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="780.0" y="1545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_4" id="task_comm_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="1470.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_5" id="task_comm_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="1580.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_comm_conv" id="pg_comm_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1020.0" y="1545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_comm" id="end_comm_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1120.0" y="1551.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Another SB Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_asb" id="pool_asb_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="4500.0" x="100.0" y="1750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_asb" id="lane_asb_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="4470.0" x="130.0" y="1750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_asb" id="start_asb_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="1835.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_asb_1" id="task_asb_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="280.0" y="1810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_asb_2" id="task_asb_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="420.0" y="1810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_asb" id="end_asb_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="560.0" y="1836.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- CAB Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_cab" id="pool_cab_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="4500.0" x="100.0" y="2000.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_cab" id="lane_cab_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="4470.0" x="130.0" y="2000.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_cab" id="start_cab_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="2085.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_cab_1" id="catch_cab_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="280.0" y="2085.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_cab_1" id="task_cab_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="380.0" y="2060.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_cab" id="end_cab_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="520.0" y="2086.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- QTSP Shapes -->
+         <bpmndi:BPMNShape bpmnElement="pool_qtsp" id="pool_qtsp_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="4500.0" x="100.0" y="2250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_qtsp" id="lane_qtsp_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="4470.0" x="130.0" y="2250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_qtsp" id="start_qtsp_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="2435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_qtsp_div1" id="pg_qtsp_div1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="280.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_1" id="task_qtsp_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="380.0" y="2280.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_2" id="task_qtsp_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="380.0" y="2410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_3" id="task_qtsp_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="380.0" y="2540.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_qtsp_conv1" id="pg_qtsp_conv1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="520.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_qtsp_1" id="catch_qtsp_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="620.0" y="2435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_4" id="task_qtsp_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="720.0" y="2410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_qtsp_div" id="xor_qtsp_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="860.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_qtsp_div2" id="pg_qtsp_div2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="960.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_5" id="task_qtsp_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="2350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_6" id="task_qtsp_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="2500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_qtsp_conv2" id="pg_qtsp_conv2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_qtsp_conv" id="xor_qtsp_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1300.0" y="2430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_qtsp_7" id="task_qtsp_7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="2410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_qtsp" id="end_qtsp_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1550.0" y="2436.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Generating minimal waypoints for edges -->
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_1" id="seq_ms_1_gui"><omgdi:waypoint x="230.0" y="175.0"/><omgdi:waypoint x="280.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_2" id="seq_ms_2_gui"><omgdi:waypoint x="320.0" y="175.0"/><omgdi:waypoint x="350.0" y="120.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_3" id="seq_ms_3_gui"><omgdi:waypoint x="320.0" y="175.0"/><omgdi:waypoint x="350.0" y="240.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_4" id="seq_ms_4_gui"><omgdi:waypoint x="450.0" y="120.0"/><omgdi:waypoint x="480.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_5" id="seq_ms_5_gui"><omgdi:waypoint x="450.0" y="240.0"/><omgdi:waypoint x="480.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_6" id="seq_ms_6_gui"><omgdi:waypoint x="520.0" y="175.0"/><omgdi:waypoint x="550.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_7" id="seq_ms_7_gui"><omgdi:waypoint x="650.0" y="175.0"/><omgdi:waypoint x="700.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_8" id="seq_ms_8_gui"><omgdi:waypoint x="800.0" y="175.0"/><omgdi:waypoint x="850.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_9" id="seq_ms_9_gui"><omgdi:waypoint x="950.0" y="175.0"/><omgdi:waypoint x="1000.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_10" id="seq_ms_10_gui"><omgdi:waypoint x="1040.0" y="175.0"/><omgdi:waypoint x="1100.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_11" id="seq_ms_11_gui"><omgdi:waypoint x="1020.0" y="155.0"/><omgdi:waypoint x="1470.0" y="155.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_12" id="seq_ms_12_gui"><omgdi:waypoint x="1140.0" y="175.0"/><omgdi:waypoint x="1200.0" y="120.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_13" id="seq_ms_13_gui"><omgdi:waypoint x="1140.0" y="175.0"/><omgdi:waypoint x="1200.0" y="240.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_14" id="seq_ms_14_gui"><omgdi:waypoint x="1300.0" y="120.0"/><omgdi:waypoint x="1350.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_15" id="seq_ms_15_gui"><omgdi:waypoint x="1300.0" y="240.0"/><omgdi:waypoint x="1350.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_16" id="seq_ms_16_gui"><omgdi:waypoint x="1390.0" y="175.0"/><omgdi:waypoint x="1450.0" y="175.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ms_17" id="seq_ms_17_gui"><omgdi:waypoint x="1490.0" y="175.0"/><omgdi:waypoint x="1550.0" y="175.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_1" id="seq_sb_1_gui"><omgdi:waypoint x="230.0" y="865.0"/><omgdi:waypoint x="280.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_2" id="seq_sb_2_gui"><omgdi:waypoint x="380.0" y="865.0"/><omgdi:waypoint x="420.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_3" id="seq_sb_3_gui"><omgdi:waypoint x="460.0" y="865.0"/><omgdi:waypoint x="520.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_4" id="seq_sb_4_gui"><omgdi:waypoint x="440.0" y="885.0"/><omgdi:waypoint x="680.0" y="885.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_5" id="seq_sb_5_gui"><omgdi:waypoint x="620.0" y="790.0"/><omgdi:waypoint x="660.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_6" id="seq_sb_6_gui"><omgdi:waypoint x="700.0" y="865.0"/><omgdi:waypoint x="760.0" y="865.0"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p1_in" id="seq_sb_p1_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="410.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p2_in" id="seq_sb_p2_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="490.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p3_in" id="seq_sb_p3_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="570.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p4_in" id="seq_sb_p4_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="650.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p5_in" id="seq_sb_p5_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="730.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p6_in" id="seq_sb_p6_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="810.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p7_in" id="seq_sb_p7_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="890.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p8_in" id="seq_sb_p8_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="970.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p9_in" id="seq_sb_p9_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="1050.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p10_in" id="seq_sb_p10_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="1130.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p11_in" id="seq_sb_p11_in_gui"><omgdi:waypoint x="800.0" y="865.0"/><omgdi:waypoint x="860.0" y="1210.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p1_out" id="seq_sb_p1_out_gui"><omgdi:waypoint x="960.0" y="410.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p2_out" id="seq_sb_p2_out_gui"><omgdi:waypoint x="960.0" y="490.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p3_out" id="seq_sb_p3_out_gui"><omgdi:waypoint x="960.0" y="570.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p4_out" id="seq_sb_p4_out_gui"><omgdi:waypoint x="960.0" y="650.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p5_out" id="seq_sb_p5_out_gui"><omgdi:waypoint x="960.0" y="730.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p6_out" id="seq_sb_p6_out_gui"><omgdi:waypoint x="960.0" y="810.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p7_out" id="seq_sb_p7_out_gui"><omgdi:waypoint x="960.0" y="890.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p8_out" id="seq_sb_p8_out_gui"><omgdi:waypoint x="960.0" y="970.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p9_out" id="seq_sb_p9_out_gui"><omgdi:waypoint x="960.0" y="1050.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p10_out" id="seq_sb_p10_out_gui"><omgdi:waypoint x="960.0" y="1130.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_p11_out" id="seq_sb_p11_out_gui"><omgdi:waypoint x="960.0" y="1210.0"/><omgdi:waypoint x="1000.0" y="865.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_7" id="seq_sb_7_gui"><omgdi:waypoint x="1040.0" y="865.0"/><omgdi:waypoint x="1100.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_8" id="seq_sb_8_gui"><omgdi:waypoint x="1140.0" y="865.0"/><omgdi:waypoint x="1200.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_9" id="seq_sb_9_gui"><omgdi:waypoint x="1120.0" y="885.0"/><omgdi:waypoint x="1360.0" y="885.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_10" id="seq_sb_10_gui"><omgdi:waypoint x="1300.0" y="790.0"/><omgdi:waypoint x="1340.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_11" id="seq_sb_11_gui"><omgdi:waypoint x="1380.0" y="865.0"/><omgdi:waypoint x="1440.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_12" id="seq_sb_12_gui"><omgdi:waypoint x="1480.0" y="865.0"/><omgdi:waypoint x="1540.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_13" id="seq_sb_13_gui"><omgdi:waypoint x="1460.0" y="885.0"/><omgdi:waypoint x="1700.0" y="885.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_14" id="seq_sb_14_gui"><omgdi:waypoint x="1640.0" y="790.0"/><omgdi:waypoint x="1680.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_15" id="seq_sb_15_gui"><omgdi:waypoint x="1720.0" y="865.0"/><omgdi:waypoint x="1780.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_16" id="seq_sb_16_gui"><omgdi:waypoint x="1810.0" y="865.0"/><omgdi:waypoint x="1860.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_17" id="seq_sb_17_gui"><omgdi:waypoint x="1960.0" y="865.0"/><omgdi:waypoint x="2000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_18" id="seq_sb_18_gui"><omgdi:waypoint x="2100.0" y="865.0"/><omgdi:waypoint x="2140.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_19" id="seq_sb_19_gui"><omgdi:waypoint x="2240.0" y="865.0"/><omgdi:waypoint x="2280.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_20" id="seq_sb_20_gui"><omgdi:waypoint x="2380.0" y="865.0"/><omgdi:waypoint x="2420.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_21" id="seq_sb_21_gui"><omgdi:waypoint x="2450.0" y="865.0"/><omgdi:waypoint x="2520.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_22" id="seq_sb_22_gui"><omgdi:waypoint x="2560.0" y="865.0"/><omgdi:waypoint x="2620.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_23" id="seq_sb_23_gui"><omgdi:waypoint x="2560.0" y="865.0"/><omgdi:waypoint x="2620.0" y="940.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_24" id="seq_sb_24_gui"><omgdi:waypoint x="2720.0" y="790.0"/><omgdi:waypoint x="2760.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_25" id="seq_sb_25_gui"><omgdi:waypoint x="2720.0" y="940.0"/><omgdi:waypoint x="2760.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_26" id="seq_sb_26_gui"><omgdi:waypoint x="2800.0" y="865.0"/><omgdi:waypoint x="2860.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_27" id="seq_sb_27_gui"><omgdi:waypoint x="2960.0" y="865.0"/><omgdi:waypoint x="3000.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_28" id="seq_sb_28_gui"><omgdi:waypoint x="3030.0" y="865.0"/><omgdi:waypoint x="3100.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_29" id="seq_sb_29_gui"><omgdi:waypoint x="3140.0" y="865.0"/><omgdi:waypoint x="3200.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_30" id="seq_sb_30_gui"><omgdi:waypoint x="3120.0" y="885.0"/><omgdi:waypoint x="3360.0" y="885.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_31" id="seq_sb_31_gui"><omgdi:waypoint x="3300.0" y="790.0"/><omgdi:waypoint x="3340.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_32" id="seq_sb_32_gui"><omgdi:waypoint x="3380.0" y="865.0"/><omgdi:waypoint x="3440.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_33" id="seq_sb_33_gui"><omgdi:waypoint x="3480.0" y="865.0"/><omgdi:waypoint x="3540.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_34" id="seq_sb_34_gui"><omgdi:waypoint x="3460.0" y="885.0"/><omgdi:waypoint x="3900.0" y="885.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_35" id="seq_sb_35_gui"><omgdi:waypoint x="3580.0" y="865.0"/><omgdi:waypoint x="3640.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_36" id="seq_sb_36_gui"><omgdi:waypoint x="3580.0" y="865.0"/><omgdi:waypoint x="3640.0" y="940.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_37" id="seq_sb_37_gui"><omgdi:waypoint x="3740.0" y="790.0"/><omgdi:waypoint x="3780.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_38" id="seq_sb_38_gui"><omgdi:waypoint x="3740.0" y="940.0"/><omgdi:waypoint x="3780.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_39" id="seq_sb_39_gui"><omgdi:waypoint x="3820.0" y="865.0"/><omgdi:waypoint x="3880.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_40" id="seq_sb_40_gui"><omgdi:waypoint x="3920.0" y="865.0"/><omgdi:waypoint x="3980.0" y="865.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_sb_41" id="seq_sb_41_gui"><omgdi:waypoint x="4080.0" y="865.0"/><omgdi:waypoint x="4120.0" y="865.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_1" id="seq_comm_1_gui"><omgdi:waypoint x="230.0" y="1565.0"/><omgdi:waypoint x="280.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_2" id="seq_comm_2_gui"><omgdi:waypoint x="310.0" y="1565.0"/><omgdi:waypoint x="360.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_3" id="seq_comm_3_gui"><omgdi:waypoint x="460.0" y="1565.0"/><omgdi:waypoint x="500.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_4" id="seq_comm_4_gui"><omgdi:waypoint x="600.0" y="1565.0"/><omgdi:waypoint x="640.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_5" id="seq_comm_5_gui"><omgdi:waypoint x="740.0" y="1565.0"/><omgdi:waypoint x="780.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_6" id="seq_comm_6_gui"><omgdi:waypoint x="820.0" y="1565.0"/><omgdi:waypoint x="880.0" y="1510.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_7" id="seq_comm_7_gui"><omgdi:waypoint x="820.0" y="1565.0"/><omgdi:waypoint x="880.0" y="1620.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_8" id="seq_comm_8_gui"><omgdi:waypoint x="980.0" y="1510.0"/><omgdi:waypoint x="1020.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_9" id="seq_comm_9_gui"><omgdi:waypoint x="980.0" y="1620.0"/><omgdi:waypoint x="1020.0" y="1565.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_10" id="seq_comm_10_gui"><omgdi:waypoint x="1060.0" y="1565.0"/><omgdi:waypoint x="1120.0" y="1565.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_asb_1" id="seq_asb_1_gui"><omgdi:waypoint x="230.0" y="1850.0"/><omgdi:waypoint x="280.0" y="1850.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_asb_2" id="seq_asb_2_gui"><omgdi:waypoint x="380.0" y="1850.0"/><omgdi:waypoint x="420.0" y="1850.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_asb_3" id="seq_asb_3_gui"><omgdi:waypoint x="520.0" y="1850.0"/><omgdi:waypoint x="560.0" y="1850.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_cab_1" id="seq_cab_1_gui"><omgdi:waypoint x="230.0" y="2100.0"/><omgdi:waypoint x="280.0" y="2100.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_cab_2" id="seq_cab_2_gui"><omgdi:waypoint x="310.0" y="2100.0"/><omgdi:waypoint x="380.0" y="2100.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_cab_3" id="seq_cab_3_gui"><omgdi:waypoint x="480.0" y="2100.0"/><omgdi:waypoint x="520.0" y="2100.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_1" id="seq_qtsp_1_gui"><omgdi:waypoint x="230.0" y="2450.0"/><omgdi:waypoint x="280.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_2" id="seq_qtsp_2_gui"><omgdi:waypoint x="320.0" y="2450.0"/><omgdi:waypoint x="380.0" y="2320.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_3" id="seq_qtsp_3_gui"><omgdi:waypoint x="320.0" y="2450.0"/><omgdi:waypoint x="380.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_4" id="seq_qtsp_4_gui"><omgdi:waypoint x="320.0" y="2450.0"/><omgdi:waypoint x="380.0" y="2580.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_5" id="seq_qtsp_5_gui"><omgdi:waypoint x="480.0" y="2320.0"/><omgdi:waypoint x="520.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_6" id="seq_qtsp_6_gui"><omgdi:waypoint x="480.0" y="2450.0"/><omgdi:waypoint x="520.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_7" id="seq_qtsp_7_gui"><omgdi:waypoint x="480.0" y="2580.0"/><omgdi:waypoint x="520.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_8" id="seq_qtsp_8_gui"><omgdi:waypoint x="560.0" y="2450.0"/><omgdi:waypoint x="620.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_9" id="seq_qtsp_9_gui"><omgdi:waypoint x="650.0" y="2450.0"/><omgdi:waypoint x="720.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_10" id="seq_qtsp_10_gui"><omgdi:waypoint x="820.0" y="2450.0"/><omgdi:waypoint x="860.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_11" id="seq_qtsp_11_gui"><omgdi:waypoint x="900.0" y="2450.0"/><omgdi:waypoint x="960.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_12" id="seq_qtsp_12_gui"><omgdi:waypoint x="880.0" y="2470.0"/><omgdi:waypoint x="1320.0" y="2470.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_13" id="seq_qtsp_13_gui"><omgdi:waypoint x="1000.0" y="2450.0"/><omgdi:waypoint x="1060.0" y="2390.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_14" id="seq_qtsp_14_gui"><omgdi:waypoint x="1000.0" y="2450.0"/><omgdi:waypoint x="1060.0" y="2540.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_15" id="seq_qtsp_15_gui"><omgdi:waypoint x="1160.0" y="2390.0"/><omgdi:waypoint x="1200.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_16" id="seq_qtsp_16_gui"><omgdi:waypoint x="1160.0" y="2540.0"/><omgdi:waypoint x="1200.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_17" id="seq_qtsp_17_gui"><omgdi:waypoint x="1240.0" y="2450.0"/><omgdi:waypoint x="1300.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_18" id="seq_qtsp_18_gui"><omgdi:waypoint x="1340.0" y="2450.0"/><omgdi:waypoint x="1400.0" y="2450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_qtsp_19" id="seq_qtsp_19_gui"><omgdi:waypoint x="1500.0" y="2450.0"/><omgdi:waypoint x="1550.0" y="2450.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="mf_ms_comm" id="mf_ms_comm_gui"><omgdi:waypoint x="600.0" y="215.0"/><omgdi:waypoint x="600.0" y="1450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_ms_sb" id="mf_ms_sb_gui"><omgdi:waypoint x="750.0" y="215.0"/><omgdi:waypoint x="1795.0" y="850.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sb_cab" id="mf_sb_cab_gui"><omgdi:waypoint x="910.0" y="840.0"/><omgdi:waypoint x="295.0" y="2085.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sb_qtsp" id="mf_sb_qtsp_gui"><omgdi:waypoint x="910.0" y="1240.0"/><omgdi:waypoint x="635.0" y="2435.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sb_comm" id="mf_sb_comm_gui"><omgdi:waypoint x="2330.0" y="905.0"/><omgdi:waypoint x="295.0" y="1550.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_asb_sb" id="mf_asb_sb_gui"><omgdi:waypoint x="330.0" y="1810.0"/><omgdi:waypoint x="2435.0" y="880.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_qtsp_sb" id="mf_qtsp_sb_gui"><omgdi:waypoint x="1110.0" y="2350.0"/><omgdi:waypoint x="3015.0" y="880.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_sb_qtsp_inform" id="mf_sb_qtsp_inform_gui"><omgdi:waypoint x="3690.0" y="980.0"/><omgdi:waypoint x="3690.0" y="2250.0"/></bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

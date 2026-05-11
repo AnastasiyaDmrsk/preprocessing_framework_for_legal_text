@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor" exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-def-001" targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collab_1">
+      <participant id="Part_Com" name="Commission" processRef="Proc_Com"/>
+      <participant id="Part_ECCG" name="ECCG" processRef="Proc_ECCG"/>
+      <participant id="Part_ENISA" name="ENISA" processRef="Proc_ENISA"/>
+      <participant id="Part_IP" name="Interested Party" processRef="Proc_IP"/>
+      
+      <!-- Message Flows -->
+      <messageFlow id="Msg_Com_Req" sourceRef="Com_T6" targetRef="ENISA_Catch_Com"/>
+      <messageFlow id="Msg_ECCG_Req" sourceRef="ECCG_T3" targetRef="ENISA_Catch_ECCG"/>
+      <messageFlow id="Msg_ECCG_Op" sourceRef="ECCG_T6" targetRef="ENISA_Catch_Op"/>
+      <messageFlow id="Msg_ENISA_Scheme" sourceRef="ENISA_T10" targetRef="Com_Catch_Scheme"/>
+      <messageFlow id="Msg_Com_Rev" sourceRef="Com_T9" targetRef="ENISA_Catch_Rev"/>
+      <messageFlow id="Msg_ECCG_Rev" sourceRef="ECCG_T8" targetRef="ENISA_Catch_Rev"/>
+      <messageFlow id="Msg_IP_Feedback" sourceRef="IP_T2" targetRef="Part_ENISA"/>
+   </collaboration>
+
+   <!-- PROCESS: Commission -->
+   <process id="Proc_Com" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="Com_Start" name="Need to prepare or review scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>Com_SF_1</outgoing>
+      </startEvent>
+      
+      <exclusiveGateway id="Com_GW_Req_Split" name="Determine request type" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>Com_SF_1</incoming>
+         <outgoing>Com_SF_2</outgoing>
+         <outgoing>Com_SF_3</outgoing>
+         <outgoing>Com_SF_4</outgoing>
+         <outgoing>Com_SF_5</outgoing>
+      </exclusiveGateway>
+      
+      <task id="Com_T1" name="Request ENISA to prepare candidate scheme">
+         <incoming>Com_SF_2</incoming>
+         <outgoing>Com_SF_6</outgoing>
+      </task>
+      <task id="Com_T2" name="Request ENISA to review existing scheme">
+         <incoming>Com_SF_3</incoming>
+         <outgoing>Com_SF_7</outgoing>
+      </task>
+      <task id="Com_T3" name="Request ENISA to prepare candidate scheme">
+         <incoming>Com_SF_4</incoming>
+         <outgoing>Com_SF_8</outgoing>
+      </task>
+      <task id="Com_T4" name="Request ENISA to review existing scheme">
+         <incoming>Com_SF_5</incoming>
+         <outgoing>Com_SF_9</outgoing>
+      </task>
+      
+      <exclusiveGateway id="Com_GW_Req_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>Com_SF_6</incoming>
+         <incoming>Com_SF_7</incoming>
+         <incoming>Com_SF_8</incoming>
+         <incoming>Com_SF_9</incoming>
+         <outgoing>Com_SF_10</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway id="Com_GW_Upd_Split" name="Following request under paragraph 2?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>Com_SF_10</incoming>
+         <outgoing>Com_SF_11</outgoing>
+         <outgoing>Com_SF_12</outgoing>
+      </exclusiveGateway>
+
+      <task id="Com_T5" name="Update Union rolling work programme">
+         <incoming>Com_SF_11</incoming>
+         <outgoing>Com_SF_13</outgoing>
+      </task>
+
+      <exclusiveGateway id="Com_GW_Upd_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>Com_SF_12</incoming>
+         <incoming>Com_SF_13</incoming>
+         <outgoing>Com_SF_14</outgoing>
+      </exclusiveGateway>
+
+      <task id="Com_T6" name="Transmit request to prepare/review to ENISA">
+         <incoming>Com_SF_14</incoming>
+         <outgoing>Com_SF_15</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="Com_Catch_Scheme" name="Receive candidate scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>Com_SF_15</incoming>
+         <outgoing>Com_SF_16</outgoing>
+         <messageEventDefinition id="MsgDef_Com_Scheme"/>
+      </intermediateCatchEvent>
+
+      <exclusiveGateway id="Com_GW_Action_Split" name="Action on scheme" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>Com_SF_16</incoming>
+         <outgoing>Com_SF_17</outgoing>
+         <outgoing>Com_SF_18</outgoing>
+      </exclusiveGateway>
+
+      <task id="Com_T7" name="Adopt implementing acts">
+         <incoming>Com_SF_17</incoming>
+         <outgoing>Com_SF_19</outgoing>
+      </task>
+
+      <task id="Com_T8" name="Request ENISA to start process of developing revised scheme">
+         <incoming>Com_SF_18</incoming>
+         <outgoing>Com_SF_20</outgoing>
+      </task>
+      
+      <task id="Com_T9" name="Transmit request to start developing revised scheme to ENISA">
+         <incoming>Com_SF_20</incoming>
+         <outgoing>Com_SF_21</outgoing>
+      </task>
+
+      <exclusiveGateway id="Com_GW_Action_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>Com_SF_19</incoming>
+         <incoming>Com_SF_21</incoming>
+         <outgoing>Com_SF_22</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="Com_End" name="Implementing acts adoption or revision request end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>Com_SF_22</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Com_SF_1" isImmediate="true" sourceRef="Com_Start" targetRef="Com_GW_Req_Split"/>
+      <sequenceFlow id="Com_SF_2" isImmediate="true" name="prepare (rolling WP)" sourceRef="Com_GW_Req_Split" targetRef="Com_T1"/>
+      <sequenceFlow id="Com_SF_3" isImmediate="true" name="review (rolling WP)" sourceRef="Com_GW_Req_Split" targetRef="Com_T2"/>
+      <sequenceFlow id="Com_SF_4" isImmediate="true" name="prepare (justified)" sourceRef="Com_GW_Req_Split" targetRef="Com_T3"/>
+      <sequenceFlow id="Com_SF_5" isImmediate="true" name="review (justified)" sourceRef="Com_GW_Req_Split" targetRef="Com_T4"/>
+      <sequenceFlow id="Com_SF_6" isImmediate="true" sourceRef="Com_T1" targetRef="Com_GW_Req_Merge"/>
+      <sequenceFlow id="Com_SF_7" isImmediate="true" sourceRef="Com_T2" targetRef="Com_GW_Req_Merge"/>
+      <sequenceFlow id="Com_SF_8" isImmediate="true" sourceRef="Com_T3" targetRef="Com_GW_Req_Merge"/>
+      <sequenceFlow id="Com_SF_9" isImmediate="true" sourceRef="Com_T4" targetRef="Com_GW_Req_Merge"/>
+      <sequenceFlow id="Com_SF_10" isImmediate="true" sourceRef="Com_GW_Req_Merge" targetRef="Com_GW_Upd_Split"/>
+      <sequenceFlow id="Com_SF_11" isImmediate="true" name="yes" sourceRef="Com_GW_Upd_Split" targetRef="Com_T5"/>
+      <sequenceFlow id="Com_SF_12" isImmediate="true" name="no" sourceRef="Com_GW_Upd_Split" targetRef="Com_GW_Upd_Merge"/>
+      <sequenceFlow id="Com_SF_13" isImmediate="true" sourceRef="Com_T5" targetRef="Com_GW_Upd_Merge"/>
+      <sequenceFlow id="Com_SF_14" isImmediate="true" sourceRef="Com_GW_Upd_Merge" targetRef="Com_T6"/>
+      <sequenceFlow id="Com_SF_15" isImmediate="true" sourceRef="Com_T6" targetRef="Com_Catch_Scheme"/>
+      <sequenceFlow id="Com_SF_16" isImmediate="true" sourceRef="Com_Catch_Scheme" targetRef="Com_GW_Action_Split"/>
+      <sequenceFlow id="Com_SF_17" isImmediate="true" name="adopt" sourceRef="Com_GW_Action_Split" targetRef="Com_T7"/>
+      <sequenceFlow id="Com_SF_18" isImmediate="true" name="revise" sourceRef="Com_GW_Action_Split" targetRef="Com_T8"/>
+      <sequenceFlow id="Com_SF_19" isImmediate="true" sourceRef="Com_T7" targetRef="Com_GW_Action_Merge"/>
+      <sequenceFlow id="Com_SF_20" isImmediate="true" sourceRef="Com_T8" targetRef="Com_T9"/>
+      <sequenceFlow id="Com_SF_21" isImmediate="true" sourceRef="Com_T9" targetRef="Com_GW_Action_Merge"/>
+      <sequenceFlow id="Com_SF_22" isImmediate="true" sourceRef="Com_GW_Action_Merge" targetRef="Com_End"/>
+   </process>
+
+   <!-- PROCESS: ECCG -->
+   <process id="Proc_ECCG" isClosed="false" isExecutable="false" name="ECCG" processType="None">
+      <startEvent id="ECCG_Start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>ECCG_SF_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway id="ECCG_GW_Req_Split" name="Type of request" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>ECCG_SF_1</incoming>
+         <outgoing>ECCG_SF_2</outgoing>
+         <outgoing>ECCG_SF_3</outgoing>
+      </exclusiveGateway>
+
+      <task id="ECCG_T1" name="Request ENISA to prepare candidate scheme">
+         <incoming>ECCG_SF_2</incoming>
+         <outgoing>ECCG_SF_4</outgoing>
+      </task>
+      
+      <task id="ECCG_T2" name="Request ENISA to review existing scheme">
+         <incoming>ECCG_SF_3</incoming>
+         <outgoing>ECCG_SF_5</outgoing>
+      </task>
+
+      <exclusiveGateway id="ECCG_GW_Req_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ECCG_SF_4</incoming>
+         <incoming>ECCG_SF_5</incoming>
+         <outgoing>ECCG_SF_6</outgoing>
+      </exclusiveGateway>
+
+      <task id="ECCG_T3" name="Transmit request to prepare/review to ENISA">
+         <incoming>ECCG_SF_6</incoming>
+         <outgoing>ECCG_SF_7</outgoing>
+      </task>
+
+      <task id="ECCG_T4" name="Provide ENISA with assistance and expert advice">
+         <incoming>ECCG_SF_7</incoming>
+         <outgoing>ECCG_SF_8</outgoing>
+      </task>
+
+      <task id="ECCG_T5" name="Adopt opinion on candidate scheme">
+         <incoming>ECCG_SF_8</incoming>
+         <outgoing>ECCG_SF_9</outgoing>
+      </task>
+
+      <task id="ECCG_T6" name="Transmit opinion on candidate scheme to ENISA">
+         <incoming>ECCG_SF_9</incoming>
+         <outgoing>ECCG_SF_10</outgoing>
+      </task>
+
+      <exclusiveGateway id="ECCG_GW_Rev_Split" name="Revision necessary?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>ECCG_SF_10</incoming>
+         <outgoing>ECCG_SF_11</outgoing>
+         <outgoing>ECCG_SF_12</outgoing>
+      </exclusiveGateway>
+
+      <task id="ECCG_T7" name="Request ENISA to start process of developing revised scheme">
+         <incoming>ECCG_SF_11</incoming>
+         <outgoing>ECCG_SF_13</outgoing>
+      </task>
+
+      <task id="ECCG_T8" name="Transmit request to start developing to ENISA">
+         <incoming>ECCG_SF_13</incoming>
+         <outgoing>ECCG_SF_14</outgoing>
+      </task>
+
+      <exclusiveGateway id="ECCG_GW_Rev_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ECCG_SF_12</incoming>
+         <incoming>ECCG_SF_14</incoming>
+         <outgoing>ECCG_SF_15</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="ECCG_End" name="Opinion transmission or revision request end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ECCG_SF_15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="ECCG_SF_1" isImmediate="true" sourceRef="ECCG_Start" targetRef="ECCG_GW_Req_Split"/>
+      <sequenceFlow id="ECCG_SF_2" isImmediate="true" name="prepare" sourceRef="ECCG_GW_Req_Split" targetRef="ECCG_T1"/>
+      <sequenceFlow id="ECCG_SF_3" isImmediate="true" name="review" sourceRef="ECCG_GW_Req_Split" targetRef="ECCG_T2"/>
+      <sequenceFlow id="ECCG_SF_4" isImmediate="true" sourceRef="ECCG_T1" targetRef="ECCG_GW_Req_Merge"/>
+      <sequenceFlow id="ECCG_SF_5" isImmediate="true" sourceRef="ECCG_T2" targetRef="ECCG_GW_Req_Merge"/>
+      <sequenceFlow id="ECCG_SF_6" isImmediate="true" sourceRef="ECCG_GW_Req_Merge" targetRef="ECCG_T3"/>
+      <sequenceFlow id="ECCG_SF_7" isImmediate="true" sourceRef="ECCG_T3" targetRef="ECCG_T4"/>
+      <sequenceFlow id="ECCG_SF_8" isImmediate="true" sourceRef="ECCG_T4" targetRef="ECCG_T5"/>
+      <sequenceFlow id="ECCG_SF_9" isImmediate="true" sourceRef="ECCG_T5" targetRef="ECCG_T6"/>
+      <sequenceFlow id="ECCG_SF_10" isImmediate="true" sourceRef="ECCG_T6" targetRef="ECCG_GW_Rev_Split"/>
+      <sequenceFlow id="ECCG_SF_11" isImmediate="true" name="yes" sourceRef="ECCG_GW_Rev_Split" targetRef="ECCG_T7"/>
+      <sequenceFlow id="ECCG_SF_12" isImmediate="true" name="no" sourceRef="ECCG_GW_Rev_Split" targetRef="ECCG_GW_Rev_Merge"/>
+      <sequenceFlow id="ECCG_SF_13" isImmediate="true" sourceRef="ECCG_T7" targetRef="ECCG_T8"/>
+      <sequenceFlow id="ECCG_SF_14" isImmediate="true" sourceRef="ECCG_T8" targetRef="ECCG_GW_Rev_Merge"/>
+      <sequenceFlow id="ECCG_SF_15" isImmediate="true" sourceRef="ECCG_GW_Rev_Merge" targetRef="ECCG_End"/>
+   </process>
+
+   <!-- PROCESS: ENISA -->
+   <process id="Proc_ENISA" isClosed="false" isExecutable="false" name="ENISA" processType="None">
+      <laneSet id="LaneSet_ENISA">
+         <lane id="Lane_Main" name="Main">
+            <flowNodeRef>ENISA_Start</flowNodeRef>
+            <flowNodeRef>ENISA_EBG</flowNodeRef>
+            <flowNodeRef>ENISA_Catch_Com</flowNodeRef>
+            <flowNodeRef>ENISA_Catch_ECCG</flowNodeRef>
+            <flowNodeRef>ENISA_T1_prep_com</flowNodeRef>
+            <flowNodeRef>ENISA_T2_assess</flowNodeRef>
+            <flowNodeRef>ENISA_GW_Refuse</flowNodeRef>
+            <flowNodeRef>ENISA_T4_give_reas</flowNodeRef>
+            <flowNodeRef>ENISA_End_Refuse</flowNodeRef>
+            <flowNodeRef>ENISA_T5_prep_eccg</flowNodeRef>
+            <flowNodeRef>ENISA_GW_Prep_Merge</flowNodeRef>
+            <flowNodeRef>ENISA_AND_Split</flowNodeRef>
+            <flowNodeRef>ENISA_T6_consult</flowNodeRef>
+            <flowNodeRef>ENISA_T7_adhoc</flowNodeRef>
+            <flowNodeRef>ENISA_T8_coop</flowNodeRef>
+            <flowNodeRef>ENISA_AND_Merge</flowNodeRef>
+            <flowNodeRef>ENISA_Catch_Op</flowNodeRef>
+            <flowNodeRef>ENISA_T9_acct</flowNodeRef>
+            <flowNodeRef>ENISA_T10_trans</flowNodeRef>
+            <flowNodeRef>ENISA_EBG_End</flowNodeRef>
+            <flowNodeRef>ENISA_Catch_Timer</flowNodeRef>
+            <flowNodeRef>ENISA_T11_eval</flowNodeRef>
+            <flowNodeRef>ENISA_End_Eval</flowNodeRef>
+            <flowNodeRef>ENISA_Catch_Rev</flowNodeRef>
+            <flowNodeRef>ENISA_T12_rev</flowNodeRef>
+            <flowNodeRef>ENISA_End_Rev</flowNodeRef>
+         </lane>
+         <lane id="Lane_MB" name="Management Board">
+            <flowNodeRef>ENISA_T3_take_dec</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="ENISA_Start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>ENISA_SF_1</outgoing>
+      </startEvent>
+
+      <eventBasedGateway id="ENISA_EBG" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_1</incoming>
+         <outgoing>ENISA_SF_2</outgoing>
+         <outgoing>ENISA_SF_3</outgoing>
+      </eventBasedGateway>
+
+      <intermediateCatchEvent id="ENISA_Catch_Com" name="Receive Commission request">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_2</incoming>
+         <outgoing>ENISA_SF_4</outgoing>
+         <messageEventDefinition id="MsgDef_ENISA_Com"/>
+      </intermediateCatchEvent>
+
+      <intermediateCatchEvent id="ENISA_Catch_ECCG" name="Receive ECCG request">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_3</incoming>
+         <outgoing>ENISA_SF_5</outgoing>
+         <messageEventDefinition id="MsgDef_ENISA_ECCG"/>
+      </intermediateCatchEvent>
+
+      <task id="ENISA_T1_prep_com" name="Prepare candidate scheme">
+         <incoming>ENISA_SF_4</incoming>
+         <outgoing>ENISA_SF_6</outgoing>
+      </task>
+
+      <task id="ENISA_T2_assess" name="Assess whether to refuse request">
+         <incoming>ENISA_SF_5</incoming>
+         <outgoing>ENISA_SF_7</outgoing>
+      </task>
+
+      <exclusiveGateway id="ENISA_GW_Refuse" name="Refuse?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_7</incoming>
+         <outgoing>ENISA_SF_8</outgoing>
+         <outgoing>ENISA_SF_9</outgoing>
+      </exclusiveGateway>
+
+      <task id="ENISA_T3_take_dec" name="Take decision to refuse request">
+         <incoming>ENISA_SF_8</incoming>
+         <outgoing>ENISA_SF_10</outgoing>
+      </task>
+
+      <task id="ENISA_T4_give_reas" name="Give reasons for refusal">
+         <incoming>ENISA_SF_10</incoming>
+         <outgoing>ENISA_SF_11</outgoing>
+      </task>
+
+      <endEvent id="ENISA_End_Refuse" name="Refusal end">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_11</incoming>
+      </endEvent>
+
+      <task id="ENISA_T5_prep_eccg" name="Prepare candidate scheme (ECCG)">
+         <incoming>ENISA_SF_9</incoming>
+         <outgoing>ENISA_SF_12</outgoing>
+      </task>
+
+      <exclusiveGateway id="ENISA_GW_Prep_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ENISA_SF_6</incoming>
+         <incoming>ENISA_SF_12</incoming>
+         <outgoing>ENISA_SF_13</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway id="ENISA_AND_Split" gatewayDirection="Diverging">
+         <incoming>ENISA_SF_13</incoming>
+         <outgoing>ENISA_SF_14</outgoing>
+         <outgoing>ENISA_SF_15</outgoing>
+         <outgoing>ENISA_SF_16</outgoing>
+      </parallelGateway>
+
+      <task id="ENISA_T6_consult" name="Consult relevant stakeholders">
+         <incoming>ENISA_SF_14</incoming>
+         <outgoing>ENISA_SF_17</outgoing>
+      </task>
+
+      <task id="ENISA_T7_adhoc" name="Establish ad hoc working group">
+         <incoming>ENISA_SF_15</incoming>
+         <outgoing>ENISA_SF_18</outgoing>
+      </task>
+
+      <task id="ENISA_T8_coop" name="Cooperate with ECCG">
+         <incoming>ENISA_SF_16</incoming>
+         <outgoing>ENISA_SF_19</outgoing>
+      </task>
+
+      <parallelGateway id="ENISA_AND_Merge" gatewayDirection="Converging">
+         <incoming>ENISA_SF_17</incoming>
+         <incoming>ENISA_SF_18</incoming>
+         <incoming>ENISA_SF_19</incoming>
+         <outgoing>ENISA_SF_20</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="ENISA_Catch_Op" name="Receive opinion">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_20</incoming>
+         <outgoing>ENISA_SF_21</outgoing>
+         <messageEventDefinition id="MsgDef_ENISA_Op"/>
+      </intermediateCatchEvent>
+
+      <task id="ENISA_T9_acct" name="Take utmost account of opinion">
+         <incoming>ENISA_SF_21</incoming>
+         <outgoing>ENISA_SF_22</outgoing>
+      </task>
+
+      <task id="ENISA_T10_trans" name="Transmit candidate scheme to Commission">
+         <incoming>ENISA_SF_22</incoming>
+         <outgoing>ENISA_SF_23</outgoing>
+      </task>
+
+      <eventBasedGateway id="ENISA_EBG_End" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_23</incoming>
+         <outgoing>ENISA_SF_24</outgoing>
+         <outgoing>ENISA_SF_25</outgoing>
+      </eventBasedGateway>
+
+      <intermediateCatchEvent id="ENISA_Catch_Timer" name="5 years passed">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_24</incoming>
+         <outgoing>ENISA_SF_26</outgoing>
+         <timerEventDefinition id="TimerDef_ENISA"/>
+      </intermediateCatchEvent>
+
+      <task id="ENISA_T11_eval" name="Evaluate adopted scheme">
+         <incoming>ENISA_SF_26</incoming>
+         <outgoing>ENISA_SF_27</outgoing>
+      </task>
+
+      <endEvent id="ENISA_End_Eval" name="Evaluation end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_27</incoming>
+      </endEvent>
+
+      <intermediateCatchEvent id="ENISA_Catch_Rev" name="Receive request to develop revised scheme">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_25</incoming>
+         <outgoing>ENISA_SF_28</outgoing>
+         <messageEventDefinition id="MsgDef_ENISA_Rev"/>
+      </intermediateCatchEvent>
+
+      <task id="ENISA_T12_rev" name="Start developing revised candidate scheme">
+         <incoming>ENISA_SF_28</incoming>
+         <outgoing>ENISA_SF_29</outgoing>
+      </task>
+
+      <endEvent id="ENISA_End_Rev" name="Scheme transmission end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>ENISA_SF_29</incoming>
+      </endEvent>
+
+      <sequenceFlow id="ENISA_SF_1" isImmediate="true" sourceRef="ENISA_Start" targetRef="ENISA_EBG"/>
+      <sequenceFlow id="ENISA_SF_2" isImmediate="true" sourceRef="ENISA_EBG" targetRef="ENISA_Catch_Com"/>
+      <sequenceFlow id="ENISA_SF_3" isImmediate="true" sourceRef="ENISA_EBG" targetRef="ENISA_Catch_ECCG"/>
+      <sequenceFlow id="ENISA_SF_4" isImmediate="true" sourceRef="ENISA_Catch_Com" targetRef="ENISA_T1_prep_com"/>
+      <sequenceFlow id="ENISA_SF_5" isImmediate="true" sourceRef="ENISA_Catch_ECCG" targetRef="ENISA_T2_assess"/>
+      <sequenceFlow id="ENISA_SF_6" isImmediate="true" sourceRef="ENISA_T1_prep_com" targetRef="ENISA_GW_Prep_Merge"/>
+      <sequenceFlow id="ENISA_SF_7" isImmediate="true" sourceRef="ENISA_T2_assess" targetRef="ENISA_GW_Refuse"/>
+      <sequenceFlow id="ENISA_SF_8" isImmediate="true" name="refuse" sourceRef="ENISA_GW_Refuse" targetRef="ENISA_T3_take_dec"/>
+      <sequenceFlow id="ENISA_SF_9" isImmediate="true" name="not refuse" sourceRef="ENISA_GW_Refuse" targetRef="ENISA_T5_prep_eccg"/>
+      <sequenceFlow id="ENISA_SF_10" isImmediate="true" sourceRef="ENISA_T3_take_dec" targetRef="ENISA_T4_give_reas"/>
+      <sequenceFlow id="ENISA_SF_11" isImmediate="true" sourceRef="ENISA_T4_give_reas" targetRef="ENISA_End_Refuse"/>
+      <sequenceFlow id="ENISA_SF_12" isImmediate="true" sourceRef="ENISA_T5_prep_eccg" targetRef="ENISA_GW_Prep_Merge"/>
+      <sequenceFlow id="ENISA_SF_13" isImmediate="true" sourceRef="ENISA_GW_Prep_Merge" targetRef="ENISA_AND_Split"/>
+      <sequenceFlow id="ENISA_SF_14" isImmediate="true" sourceRef="ENISA_AND_Split" targetRef="ENISA_T6_consult"/>
+      <sequenceFlow id="ENISA_SF_15" isImmediate="true" sourceRef="ENISA_AND_Split" targetRef="ENISA_T7_adhoc"/>
+      <sequenceFlow id="ENISA_SF_16" isImmediate="true" sourceRef="ENISA_AND_Split" targetRef="ENISA_T8_coop"/>
+      <sequenceFlow id="ENISA_SF_17" isImmediate="true" sourceRef="ENISA_T6_consult" targetRef="ENISA_AND_Merge"/>
+      <sequenceFlow id="ENISA_SF_18" isImmediate="true" sourceRef="ENISA_T7_adhoc" targetRef="ENISA_AND_Merge"/>
+      <sequenceFlow id="ENISA_SF_19" isImmediate="true" sourceRef="ENISA_T8_coop" targetRef="ENISA_AND_Merge"/>
+      <sequenceFlow id="ENISA_SF_20" isImmediate="true" sourceRef="ENISA_AND_Merge" targetRef="ENISA_Catch_Op"/>
+      <sequenceFlow id="ENISA_SF_21" isImmediate="true" sourceRef="ENISA_Catch_Op" targetRef="ENISA_T9_acct"/>
+      <sequenceFlow id="ENISA_SF_22" isImmediate="true" sourceRef="ENISA_T9_acct" targetRef="ENISA_T10_trans"/>
+      <sequenceFlow id="ENISA_SF_23" isImmediate="true" sourceRef="ENISA_T10_trans" targetRef="ENISA_EBG_End"/>
+      <sequenceFlow id="ENISA_SF_24" isImmediate="true" sourceRef="ENISA_EBG_End" targetRef="ENISA_Catch_Timer"/>
+      <sequenceFlow id="ENISA_SF_25" isImmediate="true" sourceRef="ENISA_EBG_End" targetRef="ENISA_Catch_Rev"/>
+      <sequenceFlow id="ENISA_SF_26" isImmediate="true" sourceRef="ENISA_Catch_Timer" targetRef="ENISA_T11_eval"/>
+      <sequenceFlow id="ENISA_SF_27" isImmediate="true" sourceRef="ENISA_T11_eval" targetRef="ENISA_End_Eval"/>
+      <sequenceFlow id="ENISA_SF_28" isImmediate="true" sourceRef="ENISA_Catch_Rev" targetRef="ENISA_T12_rev"/>
+      <sequenceFlow id="ENISA_SF_29" isImmediate="true" sourceRef="ENISA_T12_rev" targetRef="ENISA_End_Rev"/>
+   </process>
+
+   <!-- PROCESS: Interested Party -->
+   <process id="Proc_IP" isClosed="false" isExecutable="false" name="Interested Party" processType="None">
+      <startEvent id="IP_Start" name="Start">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <outgoing>IP_SF_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway id="IP_GW_Split" name="Required?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/></extensionElements>
+         <incoming>IP_SF_1</incoming>
+         <outgoing>IP_SF_2</outgoing>
+         <outgoing>IP_SF_3</outgoing>
+      </exclusiveGateway>
+
+      <task id="IP_T1" name="Provide feedback">
+         <incoming>IP_SF_2</incoming>
+         <outgoing>IP_SF_4</outgoing>
+      </task>
+
+      <exclusiveGateway id="IP_GW_Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>IP_SF_3</incoming>
+         <incoming>IP_SF_4</incoming>
+         <outgoing>IP_SF_5</outgoing>
+      </exclusiveGateway>
+
+      <task id="IP_T2" name="Transmit feedback to ENISA">
+         <incoming>IP_SF_5</incoming>
+         <outgoing>IP_SF_6</outgoing>
+      </task>
+
+      <endEvent id="IP_End" name="Feedback transmission end event">
+         <extensionElements><signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/></extensionElements>
+         <incoming>IP_SF_6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="IP_SF_1" isImmediate="true" sourceRef="IP_Start" targetRef="IP_GW_Split"/>
+      <sequenceFlow id="IP_SF_2" isImmediate="true" name="yes" sourceRef="IP_GW_Split" targetRef="IP_T1"/>
+      <sequenceFlow id="IP_SF_3" isImmediate="true" name="no" sourceRef="IP_GW_Split" targetRef="IP_GW_Merge"/>
+      <sequenceFlow id="IP_SF_4" isImmediate="true" sourceRef="IP_T1" targetRef="IP_GW_Merge"/>
+      <sequenceFlow id="IP_SF_5" isImmediate="true" sourceRef="IP_GW_Merge" targetRef="IP_T2"/>
+      <sequenceFlow id="IP_SF_6" isImmediate="true" sourceRef="IP_T2" targetRef="IP_End"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <!-- Participants (Pools) -->
+         <bpmndi:BPMNShape bpmnElement="Part_Com" id="Part_Com_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="1600.0" x="10.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Part_ECCG" id="Part_ECCG_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1600.0" x="10.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Part_ENISA" id="Part_ENISA_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1600.0" x="10.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <!-- ENISA Lanes -->
+         <bpmndi:BPMNShape bpmnElement="Lane_Main" id="Lane_Main_gui" isHorizontal="true">
+            <omgdc:Bounds height="260.0" width="1570.0" x="40.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MB" id="Lane_MB_gui" isHorizontal="true">
+            <omgdc:Bounds height="140.0" width="1570.0" x="40.0" y="960.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Part_IP" id="Part_IP_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1600.0" x="10.0" y="1120.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Shapes -->
+         <bpmndi:BPMNShape bpmnElement="Com_Start" id="Com_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Req_Split" id="Com_GW_Req_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="130.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T1" id="Com_T1_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="20.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T2" id="Com_T2_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T3" id="Com_T3_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T4" id="Com_T4_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Req_Merge" id="Com_GW_Req_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Upd_Split" id="Com_GW_Upd_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="430.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T5" id="Com_T5_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="510.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Upd_Merge" id="Com_GW_Upd_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T6" id="Com_T6_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="730.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_Catch_Scheme" id="Com_Catch_Scheme_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="880.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Action_Split" id="Com_GW_Action_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="960.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T7" id="Com_T7_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1050.0" y="90.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T8" id="Com_T8_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1050.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_T9" id="Com_T9_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1200.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_GW_Action_Merge" id="Com_GW_Action_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Com_End" id="Com_End_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1440.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ECCG Shapes -->
+         <bpmndi:BPMNShape bpmnElement="ECCG_Start" id="ECCG_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="505.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_GW_Req_Split" id="ECCG_GW_Req_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="130.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T1" id="ECCG_T1_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T2" id="ECCG_T2_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="560.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_GW_Req_Merge" id="ECCG_GW_Req_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T3" id="ECCG_T3_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="430.0" y="490.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T4" id="ECCG_T4_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="570.0" y="490.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T5" id="ECCG_T5_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="710.0" y="490.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T6" id="ECCG_T6_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="850.0" y="490.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_GW_Rev_Split" id="ECCG_GW_Rev_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="990.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T7" id="ECCG_T7_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1080.0" y="560.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_T8" id="ECCG_T8_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1220.0" y="560.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_GW_Rev_Merge" id="ECCG_GW_Rev_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1360.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ECCG_End" id="ECCG_End_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1450.0" y="505.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ENISA Shapes -->
+         <bpmndi:BPMNShape bpmnElement="ENISA_Start" id="ENISA_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_EBG" id="ENISA_EBG_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="120.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_Catch_Com" id="ENISA_Catch_Com_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="755.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_Catch_ECCG" id="ENISA_Catch_ECCG_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="855.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T1_prep_com" id="ENISA_T1_prep_com_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="250.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T2_assess" id="ENISA_T2_assess_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="250.0" y="840.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_GW_Refuse" id="ENISA_GW_Refuse_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="380.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T3_take_dec" id="ENISA_T3_take_dec_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="460.0" y="1000.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T4_give_reas" id="ENISA_T4_give_reas_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="590.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_End_Refuse" id="ENISA_End_Refuse_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="720.0" y="865.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T5_prep_eccg" id="ENISA_T5_prep_eccg_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="460.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_GW_Prep_Merge" id="ENISA_GW_Prep_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="590.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_AND_Split" id="ENISA_AND_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T6_consult" id="ENISA_T6_consult_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="730.0" y="710.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T7_adhoc" id="ENISA_T7_adhoc_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="730.0" y="780.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T8_coop" id="ENISA_T8_coop_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="730.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_AND_Merge" id="ENISA_AND_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="860.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_Catch_Op" id="ENISA_Catch_Op_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="930.0" y="755.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T9_acct" id="ENISA_T9_acct_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="990.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T10_trans" id="ENISA_T10_trans_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1130.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_EBG_End" id="ENISA_EBG_End_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1260.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_Catch_Timer" id="ENISA_Catch_Timer_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1330.0" y="715.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T11_eval" id="ENISA_T11_eval_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1390.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_End_Eval" id="ENISA_End_Eval_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1520.0" y="715.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_Catch_Rev" id="ENISA_Catch_Rev_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1330.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_T12_rev" id="ENISA_T12_rev_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="1390.0" y="790.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ENISA_End_Rev" id="ENISA_End_Rev_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1520.0" y="805.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- IP Shapes -->
+         <bpmndi:BPMNShape bpmnElement="IP_Start" id="IP_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="1205.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="IP_GW_Split" id="IP_GW_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="130.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="IP_T1" id="IP_T1_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="220.0" y="1190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="IP_GW_Merge" id="IP_GW_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="IP_T2" id="IP_T2_gui">
+            <omgdc:Bounds height="60.0" width="100.0" x="440.0" y="1190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="IP_End" id="IP_End_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="580.0" y="1205.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Edges (Generated for completeness, generic orthogonal centers) -->
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_1" id="Com_SF_1_gui"><omgdi:waypoint x="90.0" y="180.0"/><omgdi:waypoint x="130.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_2" id="Com_SF_2_gui"><omgdi:waypoint x="150.0" y="160.0"/><omgdi:waypoint x="150.0" y="50.0"/><omgdi:waypoint x="220.0" y="50.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_3" id="Com_SF_3_gui"><omgdi:waypoint x="170.0" y="180.0"/><omgdi:waypoint x="195.0" y="180.0"/><omgdi:waypoint x="195.0" y="130.0"/><omgdi:waypoint x="220.0" y="130.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_4" id="Com_SF_4_gui"><omgdi:waypoint x="170.0" y="180.0"/><omgdi:waypoint x="195.0" y="180.0"/><omgdi:waypoint x="195.0" y="210.0"/><omgdi:waypoint x="220.0" y="210.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_5" id="Com_SF_5_gui"><omgdi:waypoint x="150.0" y="200.0"/><omgdi:waypoint x="150.0" y="290.0"/><omgdi:waypoint x="220.0" y="290.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_6" id="Com_SF_6_gui"><omgdi:waypoint x="320.0" y="50.0"/><omgdi:waypoint x="380.0" y="50.0"/><omgdi:waypoint x="380.0" y="160.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_7" id="Com_SF_7_gui"><omgdi:waypoint x="320.0" y="130.0"/><omgdi:waypoint x="340.0" y="130.0"/><omgdi:waypoint x="340.0" y="180.0"/><omgdi:waypoint x="360.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_8" id="Com_SF_8_gui"><omgdi:waypoint x="320.0" y="210.0"/><omgdi:waypoint x="340.0" y="210.0"/><omgdi:waypoint x="340.0" y="180.0"/><omgdi:waypoint x="360.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_9" id="Com_SF_9_gui"><omgdi:waypoint x="320.0" y="290.0"/><omgdi:waypoint x="380.0" y="290.0"/><omgdi:waypoint x="380.0" y="200.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_10" id="Com_SF_10_gui"><omgdi:waypoint x="400.0" y="180.0"/><omgdi:waypoint x="430.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_11" id="Com_SF_11_gui"><omgdi:waypoint x="450.0" y="160.0"/><omgdi:waypoint x="450.0" y="80.0"/><omgdi:waypoint x="510.0" y="80.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_12" id="Com_SF_12_gui"><omgdi:waypoint x="470.0" y="180.0"/><omgdi:waypoint x="650.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_13" id="Com_SF_13_gui"><omgdi:waypoint x="610.0" y="80.0"/><omgdi:waypoint x="670.0" y="80.0"/><omgdi:waypoint x="670.0" y="160.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_14" id="Com_SF_14_gui"><omgdi:waypoint x="690.0" y="180.0"/><omgdi:waypoint x="730.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_15" id="Com_SF_15_gui"><omgdi:waypoint x="830.0" y="180.0"/><omgdi:waypoint x="880.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_16" id="Com_SF_16_gui"><omgdi:waypoint x="910.0" y="180.0"/><omgdi:waypoint x="960.0" y="180.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_17" id="Com_SF_17_gui"><omgdi:waypoint x="980.0" y="160.0"/><omgdi:waypoint x="980.0" y="120.0"/><omgdi:waypoint x="1050.0" y="120.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_18" id="Com_SF_18_gui"><omgdi:waypoint x="980.0" y="200.0"/><omgdi:waypoint x="980.0" y="240.0"/><omgdi:waypoint x="1050.0" y="240.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_19" id="Com_SF_19_gui"><omgdi:waypoint x="1150.0" y="120.0"/><omgdi:waypoint x="1370.0" y="120.0"/><omgdi:waypoint x="1370.0" y="160.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_20" id="Com_SF_20_gui"><omgdi:waypoint x="1150.0" y="240.0"/><omgdi:waypoint x="1200.0" y="240.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_21" id="Com_SF_21_gui"><omgdi:waypoint x="1300.0" y="240.0"/><omgdi:waypoint x="1370.0" y="240.0"/><omgdi:waypoint x="1370.0" y="200.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Com_SF_22" id="Com_SF_22_gui"><omgdi:waypoint x="1390.0" y="180.0"/><omgdi:waypoint x="1440.0" y="180.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_1" id="ECCG_SF_1_gui"><omgdi:waypoint x="90.0" y="520.0"/><omgdi:waypoint x="130.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_2" id="ECCG_SF_2_gui"><omgdi:waypoint x="150.0" y="500.0"/><omgdi:waypoint x="150.0" y="450.0"/><omgdi:waypoint x="220.0" y="450.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_3" id="ECCG_SF_3_gui"><omgdi:waypoint x="150.0" y="540.0"/><omgdi:waypoint x="150.0" y="590.0"/><omgdi:waypoint x="220.0" y="590.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_4" id="ECCG_SF_4_gui"><omgdi:waypoint x="320.0" y="450.0"/><omgdi:waypoint x="380.0" y="450.0"/><omgdi:waypoint x="380.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_5" id="ECCG_SF_5_gui"><omgdi:waypoint x="320.0" y="590.0"/><omgdi:waypoint x="380.0" y="590.0"/><omgdi:waypoint x="380.0" y="540.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_6" id="ECCG_SF_6_gui"><omgdi:waypoint x="400.0" y="520.0"/><omgdi:waypoint x="430.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_7" id="ECCG_SF_7_gui"><omgdi:waypoint x="530.0" y="520.0"/><omgdi:waypoint x="570.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_8" id="ECCG_SF_8_gui"><omgdi:waypoint x="670.0" y="520.0"/><omgdi:waypoint x="710.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_9" id="ECCG_SF_9_gui"><omgdi:waypoint x="810.0" y="520.0"/><omgdi:waypoint x="850.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_10" id="ECCG_SF_10_gui"><omgdi:waypoint x="950.0" y="520.0"/><omgdi:waypoint x="990.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_11" id="ECCG_SF_11_gui"><omgdi:waypoint x="1010.0" y="540.0"/><omgdi:waypoint x="1010.0" y="590.0"/><omgdi:waypoint x="1080.0" y="590.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_12" id="ECCG_SF_12_gui"><omgdi:waypoint x="1030.0" y="520.0"/><omgdi:waypoint x="1360.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_13" id="ECCG_SF_13_gui"><omgdi:waypoint x="1180.0" y="590.0"/><omgdi:waypoint x="1220.0" y="590.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_14" id="ECCG_SF_14_gui"><omgdi:waypoint x="1320.0" y="590.0"/><omgdi:waypoint x="1380.0" y="590.0"/><omgdi:waypoint x="1380.0" y="540.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ECCG_SF_15" id="ECCG_SF_15_gui"><omgdi:waypoint x="1400.0" y="520.0"/><omgdi:waypoint x="1450.0" y="520.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_1" id="ENISA_SF_1_gui"><omgdi:waypoint x="90.0" y="820.0"/><omgdi:waypoint x="120.0" y="820.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_2" id="ENISA_SF_2_gui"><omgdi:waypoint x="140.0" y="800.0"/><omgdi:waypoint x="140.0" y="770.0"/><omgdi:waypoint x="190.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_3" id="ENISA_SF_3_gui"><omgdi:waypoint x="140.0" y="840.0"/><omgdi:waypoint x="140.0" y="870.0"/><omgdi:waypoint x="190.0" y="870.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_4" id="ENISA_SF_4_gui"><omgdi:waypoint x="220.0" y="770.0"/><omgdi:waypoint x="250.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_5" id="ENISA_SF_5_gui"><omgdi:waypoint x="220.0" y="870.0"/><omgdi:waypoint x="250.0" y="870.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_6" id="ENISA_SF_6_gui"><omgdi:waypoint x="350.0" y="770.0"/><omgdi:waypoint x="590.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_7" id="ENISA_SF_7_gui"><omgdi:waypoint x="350.0" y="870.0"/><omgdi:waypoint x="380.0" y="870.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_8" id="ENISA_SF_8_gui"><omgdi:waypoint x="400.0" y="890.0"/><omgdi:waypoint x="400.0" y="1030.0"/><omgdi:waypoint x="460.0" y="1030.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_9" id="ENISA_SF_9_gui"><omgdi:waypoint x="400.0" y="850.0"/><omgdi:waypoint x="400.0" y="770.0"/><omgdi:waypoint x="460.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_10" id="ENISA_SF_10_gui"><omgdi:waypoint x="560.0" y="1030.0"/><omgdi:waypoint x="640.0" y="1030.0"/><omgdi:waypoint x="640.0" y="910.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_11" id="ENISA_SF_11_gui"><omgdi:waypoint x="690.0" y="880.0"/><omgdi:waypoint x="720.0" y="880.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_12" id="ENISA_SF_12_gui"><omgdi:waypoint x="560.0" y="770.0"/><omgdi:waypoint x="590.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_13" id="ENISA_SF_13_gui"><omgdi:waypoint x="630.0" y="770.0"/><omgdi:waypoint x="660.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_14" id="ENISA_SF_14_gui"><omgdi:waypoint x="680.0" y="750.0"/><omgdi:waypoint x="680.0" y="740.0"/><omgdi:waypoint x="730.0" y="740.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_15" id="ENISA_SF_15_gui"><omgdi:waypoint x="700.0" y="770.0"/><omgdi:waypoint x="715.0" y="770.0"/><omgdi:waypoint x="715.0" y="810.0"/><omgdi:waypoint x="730.0" y="810.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_16" id="ENISA_SF_16_gui"><omgdi:waypoint x="680.0" y="790.0"/><omgdi:waypoint x="680.0" y="880.0"/><omgdi:waypoint x="730.0" y="880.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_17" id="ENISA_SF_17_gui"><omgdi:waypoint x="830.0" y="740.0"/><omgdi:waypoint x="880.0" y="740.0"/><omgdi:waypoint x="880.0" y="750.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_18" id="ENISA_SF_18_gui"><omgdi:waypoint x="830.0" y="810.0"/><omgdi:waypoint x="845.0" y="810.0"/><omgdi:waypoint x="845.0" y="770.0"/><omgdi:waypoint x="860.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_19" id="ENISA_SF_19_gui"><omgdi:waypoint x="830.0" y="880.0"/><omgdi:waypoint x="880.0" y="880.0"/><omgdi:waypoint x="880.0" y="790.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_20" id="ENISA_SF_20_gui"><omgdi:waypoint x="900.0" y="770.0"/><omgdi:waypoint x="930.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_21" id="ENISA_SF_21_gui"><omgdi:waypoint x="960.0" y="770.0"/><omgdi:waypoint x="990.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_22" id="ENISA_SF_22_gui"><omgdi:waypoint x="1090.0" y="770.0"/><omgdi:waypoint x="1130.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_23" id="ENISA_SF_23_gui"><omgdi:waypoint x="1230.0" y="770.0"/><omgdi:waypoint x="1260.0" y="770.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_24" id="ENISA_SF_24_gui"><omgdi:waypoint x="1280.0" y="750.0"/><omgdi:waypoint x="1280.0" y="730.0"/><omgdi:waypoint x="1330.0" y="730.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_25" id="ENISA_SF_25_gui"><omgdi:waypoint x="1280.0" y="790.0"/><omgdi:waypoint x="1280.0" y="820.0"/><omgdi:waypoint x="1330.0" y="820.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_26" id="ENISA_SF_26_gui"><omgdi:waypoint x="1360.0" y="730.0"/><omgdi:waypoint x="1390.0" y="730.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_27" id="ENISA_SF_27_gui"><omgdi:waypoint x="1490.0" y="730.0"/><omgdi:waypoint x="1520.0" y="730.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_28" id="ENISA_SF_28_gui"><omgdi:waypoint x="1360.0" y="820.0"/><omgdi:waypoint x="1390.0" y="820.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ENISA_SF_29" id="ENISA_SF_29_gui"><omgdi:waypoint x="1490.0" y="820.0"/><omgdi:waypoint x="1520.0" y="820.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_1" id="IP_SF_1_gui"><omgdi:waypoint x="90.0" y="1220.0"/><omgdi:waypoint x="130.0" y="1220.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_2" id="IP_SF_2_gui"><omgdi:waypoint x="170.0" y="1220.0"/><omgdi:waypoint x="220.0" y="1220.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_3" id="IP_SF_3_gui"><omgdi:waypoint x="150.0" y="1240.0"/><omgdi:waypoint x="150.0" y="1280.0"/><omgdi:waypoint x="380.0" y="1280.0"/><omgdi:waypoint x="380.0" y="1240.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_4" id="IP_SF_4_gui"><omgdi:waypoint x="320.0" y="1220.0"/><omgdi:waypoint x="360.0" y="1220.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_5" id="IP_SF_5_gui"><omgdi:waypoint x="400.0" y="1220.0"/><omgdi:waypoint x="440.0" y="1220.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="IP_SF_6" id="IP_SF_6_gui"><omgdi:waypoint x="540.0" y="1220.0"/><omgdi:waypoint x="580.0" y="1220.0"/></bpmndi:BPMNEdge>
+
+         <!-- Message Flow Edges -->
+         <bpmndi:BPMNEdge bpmnElement="Msg_Com_Req" id="Msg_Com_Req_gui"><omgdi:waypoint x="780.0" y="210.0"/><omgdi:waypoint x="780.0" y="300.0"/><omgdi:waypoint x="205.0" y="300.0"/><omgdi:waypoint x="205.0" y="755.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_ECCG_Req" id="Msg_ECCG_Req_gui"><omgdi:waypoint x="480.0" y="550.0"/><omgdi:waypoint x="480.0" y="680.0"/><omgdi:waypoint x="205.0" y="680.0"/><omgdi:waypoint x="205.0" y="855.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_ECCG_Op" id="Msg_ECCG_Op_gui"><omgdi:waypoint x="900.0" y="550.0"/><omgdi:waypoint x="900.0" y="680.0"/><omgdi:waypoint x="945.0" y="680.0"/><omgdi:waypoint x="945.0" y="755.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_ENISA_Scheme" id="Msg_ENISA_Scheme_gui"><omgdi:waypoint x="1180.0" y="740.0"/><omgdi:waypoint x="1180.0" y="300.0"/><omgdi:waypoint x="895.0" y="300.0"/><omgdi:waypoint x="895.0" y="195.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_Com_Rev" id="Msg_Com_Rev_gui"><omgdi:waypoint x="1250.0" y="270.0"/><omgdi:waypoint x="1250.0" y="680.0"/><omgdi:waypoint x="1345.0" y="680.0"/><omgdi:waypoint x="1345.0" y="805.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_ECCG_Rev" id="Msg_ECCG_Rev_gui"><omgdi:waypoint x="1270.0" y="620.0"/><omgdi:waypoint x="1270.0" y="680.0"/><omgdi:waypoint x="1345.0" y="680.0"/><omgdi:waypoint x="1345.0" y="805.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_IP_Feedback" id="Msg_IP_Feedback_gui"><omgdi:waypoint x="490.0" y="1190.0"/><omgdi:waypoint x="490.0" y="1100.0"/></bpmndi:BPMNEdge>
+         
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

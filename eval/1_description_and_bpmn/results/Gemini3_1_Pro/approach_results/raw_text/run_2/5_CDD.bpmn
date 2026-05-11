@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-def-id" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+   <collaboration id="sid-collab-id">
+      <participant id="Pool_MS" name="Member State" processRef="Process_MS" />
+      <participant id="Pool_Cust" name="Customer or Beneficial Owner" processRef="Process_Cust" />
+      <participant id="Pool_OE" name="Obliged Entity" processRef="Process_OE" />
+      <participant id="Pool_FIU" name="FIU" processRef="Process_FIU" />
+      
+      <messageFlow id="MsgFlow_1" name="" sourceRef="Task_OE_3" targetRef="Start_FIU" />
+   </collaboration>
+
+   <process id="Process_MS" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <startEvent id="Start_MS" name="establishment of a business relationship or the carrying out of a transaction">
+         <outgoing>Flow_MS_1</outgoing>
+      </startEvent>
+      <task id="Task_MS_1" name="require verification of the identity before the establishment of a business relationship or the carrying out of the transaction">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_2</outgoing>
+      </task>
+      <task id="Task_MS_2" name="assess whether it is necessary so as not to interrupt the normal conduct of business and where there is little risk of money laundering or terrorist financing">
+         <incoming>Flow_MS_2</incoming>
+         <outgoing>Flow_MS_3</outgoing>
+      </task>
+      <exclusiveGateway id="GW_MS_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="necessary so as not to interrupt normal conduct?">
+         <incoming>Flow_MS_3</incoming>
+         <outgoing>Flow_MS_4</outgoing>
+         <outgoing>Flow_MS_6</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_3" name="allow verification of the identity to be completed during the relationship establishment">
+         <incoming>Flow_MS_4</incoming>
+         <outgoing>Flow_MS_5</outgoing>
+      </task>
+      <exclusiveGateway id="GW_MS_Conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <incoming>Flow_MS_5</incoming>
+         <incoming>Flow_MS_6</incoming>
+         <outgoing>Flow_MS_7</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_4" name="allow the opening of an account provided that there are adequate safeguards in place">
+         <incoming>Flow_MS_7</incoming>
+         <outgoing>Flow_MS_8</outgoing>
+      </task>
+      <task id="Task_MS_5" name="require that obliged entities apply the customer due diligence measures">
+         <incoming>Flow_MS_8</incoming>
+         <outgoing>Flow_MS_9</outgoing>
+      </task>
+      <endEvent id="End_MS" name="regulations established end event">
+         <incoming>Flow_MS_9</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_MS_1" isImmediate="true" sourceRef="Start_MS" targetRef="Task_MS_1" />
+      <sequenceFlow id="Flow_MS_2" isImmediate="true" sourceRef="Task_MS_1" targetRef="Task_MS_2" />
+      <sequenceFlow id="Flow_MS_3" isImmediate="true" sourceRef="Task_MS_2" targetRef="GW_MS_Div" />
+      <sequenceFlow id="Flow_MS_4" name="yes" isImmediate="true" sourceRef="GW_MS_Div" targetRef="Task_MS_3" />
+      <sequenceFlow id="Flow_MS_5" isImmediate="true" sourceRef="Task_MS_3" targetRef="GW_MS_Conv" />
+      <sequenceFlow id="Flow_MS_6" name="no" isImmediate="true" sourceRef="GW_MS_Div" targetRef="GW_MS_Conv" />
+      <sequenceFlow id="Flow_MS_7" isImmediate="true" sourceRef="GW_MS_Conv" targetRef="Task_MS_4" />
+      <sequenceFlow id="Flow_MS_8" isImmediate="true" sourceRef="Task_MS_4" targetRef="Task_MS_5" />
+      <sequenceFlow id="Flow_MS_9" isImmediate="true" sourceRef="Task_MS_5" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_Cust" isClosed="false" isExecutable="false" name="Customer or Beneficial Owner" processType="None">
+      <startEvent id="Start_Cust" name="starts">
+         <outgoing>Flow_Cust_1</outgoing>
+      </startEvent>
+      <task id="Task_Cust_1" name="assess whether verification of the identity is allowed to be completed during the establishment of a business relationship">
+         <incoming>Flow_Cust_1</incoming>
+         <outgoing>Flow_Cust_2</outgoing>
+      </task>
+      <exclusiveGateway id="GW_Cust_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="verification allowed during establishment?">
+         <incoming>Flow_Cust_2</incoming>
+         <outgoing>Flow_Cust_3</outgoing>
+         <outgoing>Flow_Cust_4</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Cust_2" name="verify the identity before the establishment of a business relationship or the carrying out of the transaction">
+         <incoming>Flow_Cust_3</incoming>
+         <outgoing>Flow_Cust_5</outgoing>
+      </task>
+      <task id="Task_Cust_3" name="complete identity verification procedures as soon as practicable after initial contact">
+         <incoming>Flow_Cust_4</incoming>
+         <outgoing>Flow_Cust_6</outgoing>
+      </task>
+      <exclusiveGateway id="GW_Cust_Conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <incoming>Flow_Cust_5</incoming>
+         <incoming>Flow_Cust_6</incoming>
+         <outgoing>Flow_Cust_7</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_Cust" name="identity verified end event">
+         <incoming>Flow_Cust_7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Cust_1" isImmediate="true" sourceRef="Start_Cust" targetRef="Task_Cust_1" />
+      <sequenceFlow id="Flow_Cust_2" isImmediate="true" sourceRef="Task_Cust_1" targetRef="GW_Cust_Div" />
+      <sequenceFlow id="Flow_Cust_3" name="no" isImmediate="true" sourceRef="GW_Cust_Div" targetRef="Task_Cust_2" />
+      <sequenceFlow id="Flow_Cust_4" name="yes" isImmediate="true" sourceRef="GW_Cust_Div" targetRef="Task_Cust_3" />
+      <sequenceFlow id="Flow_Cust_5" isImmediate="true" sourceRef="Task_Cust_2" targetRef="GW_Cust_Conv" />
+      <sequenceFlow id="Flow_Cust_6" isImmediate="true" sourceRef="Task_Cust_3" targetRef="GW_Cust_Conv" />
+      <sequenceFlow id="Flow_Cust_7" isImmediate="true" sourceRef="GW_Cust_Conv" targetRef="End_Cust" />
+   </process>
+
+   <process id="Process_OE" isClosed="false" isExecutable="false" name="Obliged Entity" processType="None">
+      <startEvent id="Start_OE" name="starts">
+         <outgoing>Flow_OE_1</outgoing>
+      </startEvent>
+      <task id="Task_OE_1" name="apply the customer due diligence measures">
+         <incoming>Flow_OE_1</incoming>
+         <outgoing>Flow_OE_2</outgoing>
+      </task>
+      <task id="Task_OE_2" name="assess whether an obliged entity is unable to comply with the customer due diligence requirements">
+         <incoming>Flow_OE_2</incoming>
+         <outgoing>Flow_OE_3</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OE_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="unable to comply?">
+         <incoming>Flow_OE_3</incoming>
+         <outgoing>Flow_OE_4</outgoing>
+         <outgoing>Flow_OE_17</outgoing>
+      </exclusiveGateway>
+      <parallelGateway id="GW_OE_Para_Div" gatewayDirection="Diverging" name="Parallel Start">
+         <incoming>Flow_OE_4</incoming>
+         <outgoing>Flow_OE_5</outgoing>
+         <outgoing>Flow_OE_6</outgoing>
+         <outgoing>Flow_OE_7</outgoing>
+         <outgoing>Flow_OE_8</outgoing>
+         <outgoing>Flow_OE_9</outgoing>
+      </parallelGateway>
+      <task id="Task_OE_P1" name="not carry out a transaction through a bank account, except where the entity is a notary...">
+         <incoming>Flow_OE_5</incoming>
+         <outgoing>Flow_OE_10</outgoing>
+      </task>
+      <task id="Task_OE_P2" name="not establish a business relationship, except where the entity is a notary...">
+         <incoming>Flow_OE_6</incoming>
+         <outgoing>Flow_OE_11</outgoing>
+      </task>
+      <task id="Task_OE_P3" name="not carry out the transaction, except where the entity is a notary...">
+         <incoming>Flow_OE_7</incoming>
+         <outgoing>Flow_OE_12</outgoing>
+      </task>
+      <task id="Task_OE_P4" name="terminate the business relationship, except where the entity is a notary...">
+         <incoming>Flow_OE_8</incoming>
+         <outgoing>Flow_OE_13</outgoing>
+      </task>
+      <task id="Task_OE_P5" name="consider making a suspicious transaction report to the FIU, except where the entity is a notary...">
+         <incoming>Flow_OE_9</incoming>
+         <outgoing>Flow_OE_14</outgoing>
+      </task>
+      <parallelGateway id="GW_OE_Para_Conv" gatewayDirection="Converging" name="Parallel End">
+         <incoming>Flow_OE_10</incoming>
+         <incoming>Flow_OE_11</incoming>
+         <incoming>Flow_OE_12</incoming>
+         <incoming>Flow_OE_13</incoming>
+         <incoming>Flow_OE_14</incoming>
+         <outgoing>Flow_OE_15</outgoing>
+      </parallelGateway>
+      <task id="Task_OE_3" name="transmit a suspicious transaction report to the FIU">
+         <incoming>Flow_OE_15</incoming>
+         <outgoing>Flow_OE_16</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OE_Conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge">
+         <incoming>Flow_OE_16</incoming>
+         <incoming>Flow_OE_17</incoming>
+         <outgoing>Flow_OE_18</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_OE" name="customer due diligence applied end event">
+         <incoming>Flow_OE_18</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_OE_1" isImmediate="true" sourceRef="Start_OE" targetRef="Task_OE_1" />
+      <sequenceFlow id="Flow_OE_2" isImmediate="true" sourceRef="Task_OE_1" targetRef="Task_OE_2" />
+      <sequenceFlow id="Flow_OE_3" isImmediate="true" sourceRef="Task_OE_2" targetRef="GW_OE_Div" />
+      <sequenceFlow id="Flow_OE_4" name="yes" isImmediate="true" sourceRef="GW_OE_Div" targetRef="GW_OE_Para_Div" />
+      <sequenceFlow id="Flow_OE_5" isImmediate="true" sourceRef="GW_OE_Para_Div" targetRef="Task_OE_P1" />
+      <sequenceFlow id="Flow_OE_6" isImmediate="true" sourceRef="GW_OE_Para_Div" targetRef="Task_OE_P2" />
+      <sequenceFlow id="Flow_OE_7" isImmediate="true" sourceRef="GW_OE_Para_Div" targetRef="Task_OE_P3" />
+      <sequenceFlow id="Flow_OE_8" isImmediate="true" sourceRef="GW_OE_Para_Div" targetRef="Task_OE_P4" />
+      <sequenceFlow id="Flow_OE_9" isImmediate="true" sourceRef="GW_OE_Para_Div" targetRef="Task_OE_P5" />
+      <sequenceFlow id="Flow_OE_10" isImmediate="true" sourceRef="Task_OE_P1" targetRef="GW_OE_Para_Conv" />
+      <sequenceFlow id="Flow_OE_11" isImmediate="true" sourceRef="Task_OE_P2" targetRef="GW_OE_Para_Conv" />
+      <sequenceFlow id="Flow_OE_12" isImmediate="true" sourceRef="Task_OE_P3" targetRef="GW_OE_Para_Conv" />
+      <sequenceFlow id="Flow_OE_13" isImmediate="true" sourceRef="Task_OE_P4" targetRef="GW_OE_Para_Conv" />
+      <sequenceFlow id="Flow_OE_14" isImmediate="true" sourceRef="Task_OE_P5" targetRef="GW_OE_Para_Conv" />
+      <sequenceFlow id="Flow_OE_15" isImmediate="true" sourceRef="GW_OE_Para_Conv" targetRef="Task_OE_3" />
+      <sequenceFlow id="Flow_OE_16" isImmediate="true" sourceRef="Task_OE_3" targetRef="GW_OE_Conv" />
+      <sequenceFlow id="Flow_OE_17" name="no" isImmediate="true" sourceRef="GW_OE_Div" targetRef="GW_OE_Conv" />
+      <sequenceFlow id="Flow_OE_18" isImmediate="true" sourceRef="GW_OE_Conv" targetRef="End_OE" />
+   </process>
+
+   <process id="Process_FIU" isClosed="false" isExecutable="false" name="FIU" processType="None">
+      <startEvent id="Start_FIU" isInterrupting="true" name="receive a suspicious transaction report">
+         <outgoing>Flow_FIU_1</outgoing>
+         <messageEventDefinition id="MsgDef_1"/>
+      </startEvent>
+      <endEvent id="End_FIU" name="report received end event">
+         <incoming>Flow_FIU_1</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="Flow_FIU_1" isImmediate="true" sourceRef="Start_FIU" targetRef="End_FIU" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab-id" id="BPMNPlane_1">
+         
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="Pool_MS" id="Pool_MS_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1200.0" x="100.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_Cust" id="Pool_Cust_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1200.0" x="100.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_OE" id="Pool_OE_gui" isHorizontal="true">
+            <omgdc:Bounds height="600.0" width="1300.0" x="100.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_FIU" id="Pool_FIU_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1200.0" x="100.0" y="1260.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE NODES -->
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Start_MS_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="185.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1" id="Task_MS_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_2" id="Task_MS_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_MS_Div" id="GW_MS_Div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="130.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_3" id="Task_MS_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_MS_Conv" id="GW_MS_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="780.0" y="130.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_4" id="Task_MS_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_5" id="Task_MS_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1030.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="End_MS_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1180.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- CUSTOMER NODES -->
+         <bpmndi:BPMNShape bpmnElement="Start_Cust" id="Start_Cust_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="185.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Cust_1" id="Task_Cust_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Cust_Div" id="GW_Cust_Div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Cust_2" id="Task_Cust_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Cust_3" id="Task_Cust_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="510.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_Cust_Conv" id="GW_Cust_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Cust" id="End_Cust_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="750.0" y="435.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- OBLIGED ENTITY NODES -->
+         <bpmndi:BPMNShape bpmnElement="Start_OE" id="Start_OE_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="185.0" y="835.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_1" id="Task_OE_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_2" id="Task_OE_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OE_Div" id="GW_OE_Div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OE_Para_Div" id="GW_OE_Para_Div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_P1" id="Task_OE_P1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_P2" id="Task_OE_P2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="710.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_P3" id="Task_OE_P3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_P4" id="Task_OE_P4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_P5" id="Task_OE_P5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="1010.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OE_Para_Conv" id="GW_OE_Para_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="900.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OE_3" id="Task_OE_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="810.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OE_Conv" id="GW_OE_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1150.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_OE" id="End_OE_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1250.0" y="835.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- FIU NODES -->
+         <bpmndi:BPMNShape bpmnElement="Start_FIU" id="Start_FIU_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1035.0" y="1310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_FIU" id="End_FIU_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1150.0" y="1310.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1" id="Flow_MS_1_gui">
+            <omgdi:waypoint x="215.0" y="150.0"/>
+            <omgdi:waypoint x="250.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_2" id="Flow_MS_2_gui">
+            <omgdi:waypoint x="350.0" y="150.0"/>
+            <omgdi:waypoint x="400.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_3" id="Flow_MS_3_gui">
+            <omgdi:waypoint x="500.0" y="150.0"/>
+            <omgdi:waypoint x="530.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_4" id="Flow_MS_4_gui">
+            <omgdi:waypoint x="570.0" y="150.0"/>
+            <omgdi:waypoint x="630.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_5" id="Flow_MS_5_gui">
+            <omgdi:waypoint x="730.0" y="150.0"/>
+            <omgdi:waypoint x="780.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_6" id="Flow_MS_6_gui">
+            <omgdi:waypoint x="550.0" y="170.0"/>
+            <omgdi:waypoint x="550.0" y="220.0"/>
+            <omgdi:waypoint x="800.0" y="220.0"/>
+            <omgdi:waypoint x="800.0" y="170.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_7" id="Flow_MS_7_gui">
+            <omgdi:waypoint x="820.0" y="150.0"/>
+            <omgdi:waypoint x="880.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_8" id="Flow_MS_8_gui">
+            <omgdi:waypoint x="980.0" y="150.0"/>
+            <omgdi:waypoint x="1030.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_9" id="Flow_MS_9_gui">
+            <omgdi:waypoint x="1130.0" y="150.0"/>
+            <omgdi:waypoint x="1180.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- CUSTOMER EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_1" id="Flow_Cust_1_gui">
+            <omgdi:waypoint x="215.0" y="450.0"/>
+            <omgdi:waypoint x="250.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_2" id="Flow_Cust_2_gui">
+            <omgdi:waypoint x="350.0" y="450.0"/>
+            <omgdi:waypoint x="400.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_3" id="Flow_Cust_3_gui">
+            <omgdi:waypoint x="420.0" y="430.0"/>
+            <omgdi:waypoint x="420.0" y="350.0"/>
+            <omgdi:waypoint x="500.0" y="350.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_4" id="Flow_Cust_4_gui">
+            <omgdi:waypoint x="420.0" y="470.0"/>
+            <omgdi:waypoint x="420.0" y="550.0"/>
+            <omgdi:waypoint x="500.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_5" id="Flow_Cust_5_gui">
+            <omgdi:waypoint x="600.0" y="350.0"/>
+            <omgdi:waypoint x="670.0" y="350.0"/>
+            <omgdi:waypoint x="670.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_6" id="Flow_Cust_6_gui">
+            <omgdi:waypoint x="600.0" y="550.0"/>
+            <omgdi:waypoint x="670.0" y="550.0"/>
+            <omgdi:waypoint x="670.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Cust_7" id="Flow_Cust_7_gui">
+            <omgdi:waypoint x="690.0" y="450.0"/>
+            <omgdi:waypoint x="750.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- OBLIGED ENTITY EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_1" id="Flow_OE_1_gui">
+            <omgdi:waypoint x="215.0" y="850.0"/>
+            <omgdi:waypoint x="250.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_2" id="Flow_OE_2_gui">
+            <omgdi:waypoint x="350.0" y="850.0"/>
+            <omgdi:waypoint x="400.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_3" id="Flow_OE_3_gui">
+            <omgdi:waypoint x="500.0" y="850.0"/>
+            <omgdi:waypoint x="550.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_4" id="Flow_OE_4_gui">
+            <omgdi:waypoint x="590.0" y="850.0"/>
+            <omgdi:waypoint x="650.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_5" id="Flow_OE_5_gui">
+            <omgdi:waypoint x="670.0" y="830.0"/>
+            <omgdi:waypoint x="670.0" y="650.0"/>
+            <omgdi:waypoint x="750.0" y="650.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_6" id="Flow_OE_6_gui">
+            <omgdi:waypoint x="670.0" y="830.0"/>
+            <omgdi:waypoint x="670.0" y="750.0"/>
+            <omgdi:waypoint x="750.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_7" id="Flow_OE_7_gui">
+            <omgdi:waypoint x="690.0" y="850.0"/>
+            <omgdi:waypoint x="750.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_8" id="Flow_OE_8_gui">
+            <omgdi:waypoint x="670.0" y="870.0"/>
+            <omgdi:waypoint x="670.0" y="950.0"/>
+            <omgdi:waypoint x="750.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_9" id="Flow_OE_9_gui">
+            <omgdi:waypoint x="670.0" y="870.0"/>
+            <omgdi:waypoint x="670.0" y="1050.0"/>
+            <omgdi:waypoint x="750.0" y="1050.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_10" id="Flow_OE_10_gui">
+            <omgdi:waypoint x="850.0" y="650.0"/>
+            <omgdi:waypoint x="920.0" y="650.0"/>
+            <omgdi:waypoint x="920.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_11" id="Flow_OE_11_gui">
+            <omgdi:waypoint x="850.0" y="750.0"/>
+            <omgdi:waypoint x="920.0" y="750.0"/>
+            <omgdi:waypoint x="920.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_12" id="Flow_OE_12_gui">
+            <omgdi:waypoint x="850.0" y="850.0"/>
+            <omgdi:waypoint x="900.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_13" id="Flow_OE_13_gui">
+            <omgdi:waypoint x="850.0" y="950.0"/>
+            <omgdi:waypoint x="920.0" y="950.0"/>
+            <omgdi:waypoint x="920.0" y="870.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_14" id="Flow_OE_14_gui">
+            <omgdi:waypoint x="850.0" y="1050.0"/>
+            <omgdi:waypoint x="920.0" y="1050.0"/>
+            <omgdi:waypoint x="920.0" y="870.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_15" id="Flow_OE_15_gui">
+            <omgdi:waypoint x="940.0" y="850.0"/>
+            <omgdi:waypoint x="1000.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_16" id="Flow_OE_16_gui">
+            <omgdi:waypoint x="1100.0" y="850.0"/>
+            <omgdi:waypoint x="1150.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_17" id="Flow_OE_17_gui">
+            <omgdi:waypoint x="570.0" y="870.0"/>
+            <omgdi:waypoint x="570.0" y="1150.0"/>
+            <omgdi:waypoint x="1170.0" y="1150.0"/>
+            <omgdi:waypoint x="1170.0" y="870.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_OE_18" id="Flow_OE_18_gui">
+            <omgdi:waypoint x="1190.0" y="850.0"/>
+            <omgdi:waypoint x="1250.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- FIU EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_FIU_1" id="Flow_FIU_1_gui">
+            <omgdi:waypoint x="1065.0" y="1325.0"/>
+            <omgdi:waypoint x="1150.0" y="1325.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOW EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="MsgFlow_1" id="MsgFlow_1_gui">
+            <omgdi:waypoint x="1050.0" y="890.0"/>
+            <omgdi:waypoint x="1050.0" y="1310.0"/>
+         </bpmndi:BPMNEdge>
+         
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

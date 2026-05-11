@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             id="sid-data-breach-notification" 
+             targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="Collaboration_1">
+      <participant id="Participant_Processor" name="Processor" processRef="Process_Processor">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_Controller" name="Controller" processRef="Process_Controller">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_SA" name="Supervisory Authority" processRef="Process_SA">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <messageFlow id="Msg_1" sourceRef="Task_P1" targetRef="Start_Controller">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="Msg_2" sourceRef="Task_C2" targetRef="Catch_SA_1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <process id="Process_Processor" isClosed="false" isExecutable="true" name="Processor" processType="None">
+      <laneSet id="LaneSet_Processor">
+         <lane id="Lane_Processor">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>Start_Processor</flowNodeRef>
+            <flowNodeRef>Task_P1</flowNodeRef>
+            <flowNodeRef>End_Processor</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="Start_Processor" name="becoming aware of a personal data breach">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_P1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="Task_P1" isForCompensation="false" name="notify the controller of a personal data breach" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+         <incoming>Flow_P1</incoming>
+         <outgoing>Flow_P2</outgoing>
+      </task>
+      <endEvent id="End_Processor" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_P2</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_P1" isImmediate="true" sourceRef="Start_Processor" targetRef="Task_P1"/>
+      <sequenceFlow id="Flow_P2" isImmediate="true" sourceRef="Task_P1" targetRef="End_Processor"/>
+   </process>
+
+   <process id="Process_Controller" isClosed="false" isExecutable="true" name="Controller" processType="None">
+      <laneSet id="LaneSet_Controller">
+         <lane id="Lane_Controller">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>Start_Controller</flowNodeRef>
+            <flowNodeRef>Task_C1</flowNodeRef>
+            <flowNodeRef>GW_C1_split</flowNodeRef>
+            <flowNodeRef>Task_C2</flowNodeRef>
+            <flowNodeRef>GW_C1_merge</flowNodeRef>
+            <flowNodeRef>Task_C3</flowNodeRef>
+            <flowNodeRef>GW_C2_split</flowNodeRef>
+            <flowNodeRef>Task_C4</flowNodeRef>
+            <flowNodeRef>GW_C2_merge</flowNodeRef>
+            <flowNodeRef>GW_C3_split</flowNodeRef>
+            <flowNodeRef>Task_C5</flowNodeRef>
+            <flowNodeRef>GW_C3_merge</flowNodeRef>
+            <flowNodeRef>Task_C6</flowNodeRef>
+            <flowNodeRef>Task_C7</flowNodeRef>
+            <flowNodeRef>GW_C4_split</flowNodeRef>
+            <flowNodeRef>Task_C8</flowNodeRef>
+            <flowNodeRef>GW_C4_merge</flowNodeRef>
+            <flowNodeRef>Task_C9</flowNodeRef>
+            <flowNodeRef>GW_C5_split</flowNodeRef>
+            <flowNodeRef>Task_C10</flowNodeRef>
+            <flowNodeRef>GW_C5_merge</flowNodeRef>
+            <flowNodeRef>End_Controller</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="Start_Controller" name="becoming aware of a personal data breach or upon receiving the notification">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_C1</outgoing>
+      </startEvent>
+      <task completionQuantity="1" id="Task_C1" isForCompensation="false" name="assess whether the personal data breach is unlikely to result in a risk" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C1</incoming>
+         <outgoing>Flow_C2</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_C1_split" isMarkerVisible="true" name="Is likely to result in a risk?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_C2</incoming>
+         <outgoing>Flow_C3</outgoing>
+         <outgoing>Flow_C5</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C2" isForCompensation="false" name="notify the personal data breach to the supervisory authority" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C3</incoming>
+         <outgoing>Flow_C4</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_C1_merge" isMarkerVisible="true">
+         <incoming>Flow_C4</incoming>
+         <incoming>Flow_C5</incoming>
+         <outgoing>Flow_C6</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C3" isForCompensation="false" name="assess whether the notification is not made within 72 hours" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C6</incoming>
+         <outgoing>Flow_C7</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_C2_split" isMarkerVisible="true" name="Not made within 72h?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_C7</incoming>
+         <outgoing>Flow_C8</outgoing>
+         <outgoing>Flow_C10</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C4" isForCompensation="false" name="accompany the notification with reasons for the delay" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C8</incoming>
+         <outgoing>Flow_C9</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_C2_merge" isMarkerVisible="true">
+         <incoming>Flow_C9</incoming>
+         <incoming>Flow_C10</incoming>
+         <outgoing>Flow_C11</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_C3_split" isMarkerVisible="true" name="Not possible to provide all info?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_C11</incoming>
+         <outgoing>Flow_C12</outgoing>
+         <outgoing>Flow_C14</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C5" isForCompensation="false" name="provide the information" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C12</incoming>
+         <outgoing>Flow_C13</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_C3_merge" isMarkerVisible="true">
+         <incoming>Flow_C13</incoming>
+         <incoming>Flow_C14</incoming>
+         <outgoing>Flow_C15</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C6" isForCompensation="false" name="document any personal data breaches" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C15</incoming>
+         <outgoing>Flow_C16</outgoing>
+      </task>
+      <task completionQuantity="1" id="Task_C7" isForCompensation="false" name="assess whether the data breach is likely to result in a high risk" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C16</incoming>
+         <outgoing>Flow_C17</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_C4_split" isMarkerVisible="true" name="Likely to result in a high risk?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_C17</incoming>
+         <outgoing>Flow_C18</outgoing>
+         <outgoing>Flow_C20</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C8" isForCompensation="false" name="communicate the personal data breach to the data subject" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C18</incoming>
+         <outgoing>Flow_C19</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_C4_merge" isMarkerVisible="true">
+         <incoming>Flow_C19</incoming>
+         <incoming>Flow_C20</incoming>
+         <outgoing>Flow_C21</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C9" isForCompensation="false" name="assess whether communication would involve disproportionate effort" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C21</incoming>
+         <outgoing>Flow_C22</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_C5_split" isMarkerVisible="true" name="Involve disproportionate effort?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_C22</incoming>
+         <outgoing>Flow_C23</outgoing>
+         <outgoing>Flow_C25</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_C10" isForCompensation="false" name="carry out a public communication or similar measure" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_C23</incoming>
+         <outgoing>Flow_C24</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_C5_merge" isMarkerVisible="true">
+         <incoming>Flow_C24</incoming>
+         <incoming>Flow_C25</incoming>
+         <outgoing>Flow_C26</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_Controller" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_C26</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_C1" isImmediate="true" sourceRef="Start_Controller" targetRef="Task_C1"/>
+      <sequenceFlow id="Flow_C2" isImmediate="true" sourceRef="Task_C1" targetRef="GW_C1_split"/>
+      <sequenceFlow id="Flow_C3" isImmediate="true" name="likely to result in a risk, except where unlikely" sourceRef="GW_C1_split" targetRef="Task_C2"/>
+      <sequenceFlow id="Flow_C4" isImmediate="true" sourceRef="Task_C2" targetRef="GW_C1_merge"/>
+      <sequenceFlow id="Flow_C5" isImmediate="true" name="unlikely to result in a risk" sourceRef="GW_C1_split" targetRef="GW_C1_merge"/>
+      <sequenceFlow id="Flow_C6" isImmediate="true" sourceRef="GW_C1_merge" targetRef="Task_C3"/>
+      <sequenceFlow id="Flow_C7" isImmediate="true" sourceRef="Task_C3" targetRef="GW_C2_split"/>
+      <sequenceFlow id="Flow_C8" isImmediate="true" name="notification is not made within 72 hours" sourceRef="GW_C2_split" targetRef="Task_C4"/>
+      <sequenceFlow id="Flow_C9" isImmediate="true" sourceRef="Task_C4" targetRef="GW_C2_merge"/>
+      <sequenceFlow id="Flow_C10" isImmediate="true" name="notification is made within 72 hours" sourceRef="GW_C2_split" targetRef="GW_C2_merge"/>
+      <sequenceFlow id="Flow_C11" isImmediate="true" sourceRef="GW_C2_merge" targetRef="GW_C3_split"/>
+      <sequenceFlow id="Flow_C12" isImmediate="true" name="not possible to provide all info at the same time" sourceRef="GW_C3_split" targetRef="Task_C5"/>
+      <sequenceFlow id="Flow_C13" isImmediate="true" sourceRef="Task_C5" targetRef="GW_C3_merge"/>
+      <sequenceFlow id="Flow_C14" isImmediate="true" name="possible" sourceRef="GW_C3_split" targetRef="GW_C3_merge"/>
+      <sequenceFlow id="Flow_C15" isImmediate="true" sourceRef="GW_C3_merge" targetRef="Task_C6"/>
+      <sequenceFlow id="Flow_C16" isImmediate="true" sourceRef="Task_C6" targetRef="Task_C7"/>
+      <sequenceFlow id="Flow_C17" isImmediate="true" sourceRef="Task_C7" targetRef="GW_C4_split"/>
+      <sequenceFlow id="Flow_C18" isImmediate="true" name="likely high risk, except where technical measures, subsequent measures, or disproportionate effort apply" sourceRef="GW_C4_split" targetRef="Task_C8"/>
+      <sequenceFlow id="Flow_C19" isImmediate="true" sourceRef="Task_C8" targetRef="GW_C4_merge"/>
+      <sequenceFlow id="Flow_C20" isImmediate="true" name="not likely to result in a high risk" sourceRef="GW_C4_split" targetRef="GW_C4_merge"/>
+      <sequenceFlow id="Flow_C21" isImmediate="true" sourceRef="GW_C4_merge" targetRef="Task_C9"/>
+      <sequenceFlow id="Flow_C22" isImmediate="true" sourceRef="Task_C9" targetRef="GW_C5_split"/>
+      <sequenceFlow id="Flow_C23" isImmediate="true" name="communication would involve disproportionate effort" sourceRef="GW_C5_split" targetRef="Task_C10"/>
+      <sequenceFlow id="Flow_C24" isImmediate="true" sourceRef="Task_C10" targetRef="GW_C5_merge"/>
+      <sequenceFlow id="Flow_C25" isImmediate="true" name="would not involve disproportionate effort" sourceRef="GW_C5_split" targetRef="GW_C5_merge"/>
+      <sequenceFlow id="Flow_C26" isImmediate="true" sourceRef="GW_C5_merge" targetRef="End_Controller"/>
+   </process>
+
+   <process id="Process_SA" isClosed="false" isExecutable="true" name="Supervisory Authority" processType="None">
+      <laneSet id="LaneSet_SA">
+         <lane id="Lane_SA">
+            <extensionElements>
+               <signavio:signavioMetaData metaKey="bgcolor" metaValue=""/>
+               <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+            </extensionElements>
+            <flowNodeRef>Start_SA</flowNodeRef>
+            <flowNodeRef>Catch_SA_1</flowNodeRef>
+            <flowNodeRef>Task_SA1</flowNodeRef>
+            <flowNodeRef>Task_SA2</flowNodeRef>
+            <flowNodeRef>Task_SA3</flowNodeRef>
+            <flowNodeRef>GW_SA1_split</flowNodeRef>
+            <flowNodeRef>Task_SA4</flowNodeRef>
+            <flowNodeRef>Task_SA5</flowNodeRef>
+            <flowNodeRef>GW_SA1_merge</flowNodeRef>
+            <flowNodeRef>End_SA</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="Start_SA" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_SA1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="Catch_SA_1" name="Receive the notification from the Controller">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_SA1</incoming>
+         <outgoing>Flow_SA2</outgoing>
+         <messageEventDefinition id="MsgDef_1"/>
+      </intermediateCatchEvent>
+      <task completionQuantity="1" id="Task_SA1" isForCompensation="false" name="verify compliance" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_SA2</incoming>
+         <outgoing>Flow_SA3</outgoing>
+      </task>
+      <task completionQuantity="1" id="Task_SA2" isForCompensation="false" name="consider the likelihood of the data breach resulting in a high risk" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_SA3</incoming>
+         <outgoing>Flow_SA4</outgoing>
+      </task>
+      <task completionQuantity="1" id="Task_SA3" isForCompensation="false" name="assess whether the controller has not already communicated and whether likely high risk" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_SA4</incoming>
+         <outgoing>Flow_SA5</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="GW_SA1_split" isMarkerVisible="true" name="Conditions met?">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>Flow_SA5</incoming>
+         <outgoing>Flow_SA6</outgoing>
+         <outgoing>Flow_SA7</outgoing>
+         <outgoing>Flow_SA10</outgoing>
+      </exclusiveGateway>
+      <task completionQuantity="1" id="Task_SA4" isForCompensation="false" name="require the controller to communicate the data breach to the data subject" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_SA6</incoming>
+         <outgoing>Flow_SA8</outgoing>
+      </task>
+      <task completionQuantity="1" id="Task_SA5" isForCompensation="false" name="decide that any of the conditions are met" startQuantity="1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/>
+         </extensionElements>
+         <incoming>Flow_SA7</incoming>
+         <outgoing>Flow_SA9</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="GW_SA1_merge" isMarkerVisible="true">
+         <incoming>Flow_SA8</incoming>
+         <incoming>Flow_SA9</incoming>
+         <incoming>Flow_SA10</incoming>
+         <outgoing>Flow_SA11</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_SA" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_SA11</incoming>
+      </endEvent>
+      <sequenceFlow id="Flow_SA1" isImmediate="true" sourceRef="Start_SA" targetRef="Catch_SA_1"/>
+      <sequenceFlow id="Flow_SA2" isImmediate="true" sourceRef="Catch_SA_1" targetRef="Task_SA1"/>
+      <sequenceFlow id="Flow_SA3" isImmediate="true" sourceRef="Task_SA1" targetRef="Task_SA2"/>
+      <sequenceFlow id="Flow_SA4" isImmediate="true" sourceRef="Task_SA2" targetRef="Task_SA3"/>
+      <sequenceFlow id="Flow_SA5" isImmediate="true" sourceRef="Task_SA3" targetRef="GW_SA1_split"/>
+      <sequenceFlow id="Flow_SA6" isImmediate="true" name="not already communicated and likely high risk, except where conditions referred to in paragraph 3 are met" sourceRef="GW_SA1_split" targetRef="Task_SA4"/>
+      <sequenceFlow id="Flow_SA7" isImmediate="true" name="not already communicated and likely high risk" sourceRef="GW_SA1_split" targetRef="Task_SA5"/>
+      <sequenceFlow id="Flow_SA8" isImmediate="true" sourceRef="Task_SA4" targetRef="GW_SA1_merge"/>
+      <sequenceFlow id="Flow_SA9" isImmediate="true" sourceRef="Task_SA5" targetRef="GW_SA1_merge"/>
+      <sequenceFlow id="Flow_SA10" isImmediate="true" name="already communicated or not high risk" sourceRef="GW_SA1_split" targetRef="GW_SA1_merge"/>
+      <sequenceFlow id="Flow_SA11" isImmediate="true" sourceRef="GW_SA1_merge" targetRef="End_SA"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+         <bpmndi:BPMNShape bpmnElement="Participant_Processor" id="Participant_Processor_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2580.0" x="10.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Controller" id="Participant_Controller_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="2580.0" x="10.0" y="170.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_SA" id="Participant_SA_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="2580.0" x="10.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="Lane_Processor" id="Lane_Processor_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2550.0" x="40.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_Processor" id="Start_Processor_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_P1" id="Task_P1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Processor" id="End_Processor_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="360.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Lane_Controller" id="Lane_Controller_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="2550.0" x="40.0" y="170.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_Controller" id="Start_Controller_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C1" id="Task_C1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C1_split" id="GW_C1_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="330.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C2" id="Task_C2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="420.0" y="190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C1_merge" id="GW_C1_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="560.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C3" id="Task_C3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C2_split" id="GW_C2_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C4" id="Task_C4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="890.0" y="190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C2_merge" id="GW_C2_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1030.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C3_split" id="GW_C3_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1120.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C5" id="Task_C5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1210.0" y="190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C3_merge" id="GW_C3_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C6" id="Task_C6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1440.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C7" id="Task_C7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1590.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C4_split" id="GW_C4_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1740.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C8" id="Task_C8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1830.0" y="190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C4_merge" id="GW_C4_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1970.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C9" id="Task_C9_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2060.0" y="275.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C5_split" id="GW_C5_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2210.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_C10" id="Task_C10_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2300.0" y="190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_C5_merge" id="GW_C5_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2440.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Controller" id="End_Controller_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2530.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Lane_SA" id="Lane_SA_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="2550.0" x="40.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_SA" id="Start_SA_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_SA_1" id="Catch_SA_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="455.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA1" id="Task_SA1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="520.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA2" id="Task_SA2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="670.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA3" id="Task_SA3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_SA1_split" id="GW_SA1_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="970.0" y="635.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA4" id="Task_SA4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SA5" id="Task_SA5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_SA1_merge" id="GW_SA1_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1220.0" y="635.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_SA" id="End_SA_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1320.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_P1" id="Flow_P1_gui">
+            <omgdi:waypoint x="130.0" y="85.0"/>
+            <omgdi:waypoint x="200.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_P2" id="Flow_P2_gui">
+            <omgdi:waypoint x="300.0" y="85.0"/>
+            <omgdi:waypoint x="360.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_C1" id="Flow_C1_gui">
+            <omgdi:waypoint x="130.0" y="315.0"/>
+            <omgdi:waypoint x="180.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C2" id="Flow_C2_gui">
+            <omgdi:waypoint x="280.0" y="315.0"/>
+            <omgdi:waypoint x="330.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C3" id="Flow_C3_gui">
+            <omgdi:waypoint x="350.0" y="295.0"/>
+            <omgdi:waypoint x="350.0" y="230.0"/>
+            <omgdi:waypoint x="420.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C4" id="Flow_C4_gui">
+            <omgdi:waypoint x="520.0" y="230.0"/>
+            <omgdi:waypoint x="580.0" y="230.0"/>
+            <omgdi:waypoint x="580.0" y="295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C5" id="Flow_C5_gui">
+            <omgdi:waypoint x="370.0" y="315.0"/>
+            <omgdi:waypoint x="560.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C6" id="Flow_C6_gui">
+            <omgdi:waypoint x="600.0" y="315.0"/>
+            <omgdi:waypoint x="650.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C7" id="Flow_C7_gui">
+            <omgdi:waypoint x="750.0" y="315.0"/>
+            <omgdi:waypoint x="800.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C8" id="Flow_C8_gui">
+            <omgdi:waypoint x="820.0" y="295.0"/>
+            <omgdi:waypoint x="820.0" y="230.0"/>
+            <omgdi:waypoint x="890.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C9" id="Flow_C9_gui">
+            <omgdi:waypoint x="990.0" y="230.0"/>
+            <omgdi:waypoint x="1050.0" y="230.0"/>
+            <omgdi:waypoint x="1050.0" y="295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C10" id="Flow_C10_gui">
+            <omgdi:waypoint x="840.0" y="315.0"/>
+            <omgdi:waypoint x="1030.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C11" id="Flow_C11_gui">
+            <omgdi:waypoint x="1070.0" y="315.0"/>
+            <omgdi:waypoint x="1120.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C12" id="Flow_C12_gui">
+            <omgdi:waypoint x="1140.0" y="295.0"/>
+            <omgdi:waypoint x="1140.0" y="230.0"/>
+            <omgdi:waypoint x="1210.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C13" id="Flow_C13_gui">
+            <omgdi:waypoint x="1310.0" y="230.0"/>
+            <omgdi:waypoint x="1370.0" y="230.0"/>
+            <omgdi:waypoint x="1370.0" y="295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C14" id="Flow_C14_gui">
+            <omgdi:waypoint x="1160.0" y="315.0"/>
+            <omgdi:waypoint x="1350.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C15" id="Flow_C15_gui">
+            <omgdi:waypoint x="1390.0" y="315.0"/>
+            <omgdi:waypoint x="1440.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C16" id="Flow_C16_gui">
+            <omgdi:waypoint x="1540.0" y="315.0"/>
+            <omgdi:waypoint x="1590.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C17" id="Flow_C17_gui">
+            <omgdi:waypoint x="1690.0" y="315.0"/>
+            <omgdi:waypoint x="1740.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C18" id="Flow_C18_gui">
+            <omgdi:waypoint x="1760.0" y="295.0"/>
+            <omgdi:waypoint x="1760.0" y="230.0"/>
+            <omgdi:waypoint x="1830.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C19" id="Flow_C19_gui">
+            <omgdi:waypoint x="1930.0" y="230.0"/>
+            <omgdi:waypoint x="1990.0" y="230.0"/>
+            <omgdi:waypoint x="1990.0" y="295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C20" id="Flow_C20_gui">
+            <omgdi:waypoint x="1780.0" y="315.0"/>
+            <omgdi:waypoint x="1970.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C21" id="Flow_C21_gui">
+            <omgdi:waypoint x="2010.0" y="315.0"/>
+            <omgdi:waypoint x="2060.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C22" id="Flow_C22_gui">
+            <omgdi:waypoint x="2160.0" y="315.0"/>
+            <omgdi:waypoint x="2210.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C23" id="Flow_C23_gui">
+            <omgdi:waypoint x="2230.0" y="295.0"/>
+            <omgdi:waypoint x="2230.0" y="230.0"/>
+            <omgdi:waypoint x="2300.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C24" id="Flow_C24_gui">
+            <omgdi:waypoint x="2400.0" y="230.0"/>
+            <omgdi:waypoint x="2460.0" y="230.0"/>
+            <omgdi:waypoint x="2460.0" y="295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C25" id="Flow_C25_gui">
+            <omgdi:waypoint x="2250.0" y="315.0"/>
+            <omgdi:waypoint x="2440.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_C26" id="Flow_C26_gui">
+            <omgdi:waypoint x="2480.0" y="315.0"/>
+            <omgdi:waypoint x="2530.0" y="315.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA1" id="Flow_SA1_gui">
+            <omgdi:waypoint x="130.0" y="655.0"/>
+            <omgdi:waypoint x="455.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA2" id="Flow_SA2_gui">
+            <omgdi:waypoint x="485.0" y="655.0"/>
+            <omgdi:waypoint x="520.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA3" id="Flow_SA3_gui">
+            <omgdi:waypoint x="620.0" y="655.0"/>
+            <omgdi:waypoint x="670.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA4" id="Flow_SA4_gui">
+            <omgdi:waypoint x="770.0" y="655.0"/>
+            <omgdi:waypoint x="820.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA5" id="Flow_SA5_gui">
+            <omgdi:waypoint x="920.0" y="655.0"/>
+            <omgdi:waypoint x="970.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA6" id="Flow_SA6_gui">
+            <omgdi:waypoint x="990.0" y="635.0"/>
+            <omgdi:waypoint x="990.0" y="560.0"/>
+            <omgdi:waypoint x="1060.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA7" id="Flow_SA7_gui">
+            <omgdi:waypoint x="1010.0" y="655.0"/>
+            <omgdi:waypoint x="1060.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA8" id="Flow_SA8_gui">
+            <omgdi:waypoint x="1160.0" y="560.0"/>
+            <omgdi:waypoint x="1240.0" y="560.0"/>
+            <omgdi:waypoint x="1240.0" y="635.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA9" id="Flow_SA9_gui">
+            <omgdi:waypoint x="1160.0" y="655.0"/>
+            <omgdi:waypoint x="1220.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA10" id="Flow_SA10_gui">
+            <omgdi:waypoint x="990.0" y="675.0"/>
+            <omgdi:waypoint x="990.0" y="730.0"/>
+            <omgdi:waypoint x="1240.0" y="730.0"/>
+            <omgdi:waypoint x="1240.0" y="675.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SA11" id="Flow_SA11_gui">
+            <omgdi:waypoint x="1260.0" y="655.0"/>
+            <omgdi:waypoint x="1320.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Msg_1" id="Msg_1_gui">
+            <omgdi:waypoint x="250.0" y="125.0"/>
+            <omgdi:waypoint x="250.0" y="215.0"/>
+            <omgdi:waypoint x="115.0" y="215.0"/>
+            <omgdi:waypoint x="115.0" y="300.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_2" id="Msg_2_gui">
+            <omgdi:waypoint x="470.0" y="270.0"/>
+            <omgdi:waypoint x="470.0" y="640.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

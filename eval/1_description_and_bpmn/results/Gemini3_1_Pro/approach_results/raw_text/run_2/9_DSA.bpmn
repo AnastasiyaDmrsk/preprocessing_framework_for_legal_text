@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-process-model" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="sid-collab">
+      <participant id="part_dsc" name="Digital Services Coordinator" processRef="process_dsc" />
+      <participant id="part_opp" name="Online Platform Provider" processRef="process_opp" />
+      <participant id="part_tf" name="Trusted Flagger" processRef="process_tf" />
+      <participant id="part_c" name="Commission" processRef="process_c" />
+      <participant id="part_cob" name="Commission or Board" processRef="process_cob" />
+      <participant id="part_b" name="Board" processRef="process_b" />
+      
+      <messageFlow id="mf_tf_dsc" name="" sourceRef="tf_task_2" targetRef="dsc_catch_1" />
+      <messageFlow id="mf_opp_dsc" name="" sourceRef="opp_task_5" targetRef="dsc_catch_2" />
+      <messageFlow id="mf_dsc_c" name="" sourceRef="dsc_task_2" targetRef="c_start" />
+      <messageFlow id="mf_dsc_b" name="" sourceRef="dsc_task_2" targetRef="b_start" />
+      <messageFlow id="mf_dsc_tf" name="" sourceRef="dsc_task_7" targetRef="tf_catch_1" />
+   </collaboration>
+
+   <process id="process_dsc" isClosed="false" isExecutable="false" name="Digital Services Coordinator" processType="None">
+      <laneSet id="ls_dsc">
+         <lane id="lane_dsc">
+            <flowNodeRef>dsc_start</flowNodeRef>
+            <flowNodeRef>dsc_gw_1</flowNodeRef>
+            <flowNodeRef>dsc_task_1</flowNodeRef>
+            <flowNodeRef>dsc_catch_1</flowNodeRef>
+            <flowNodeRef>dsc_task_2</flowNodeRef>
+            <flowNodeRef>dsc_catch_2</flowNodeRef>
+            <flowNodeRef>dsc_gw_2</flowNodeRef>
+            <flowNodeRef>dsc_task_4</flowNodeRef>
+            <flowNodeRef>dsc_task_5</flowNodeRef>
+            <flowNodeRef>dsc_task_6</flowNodeRef>
+            <flowNodeRef>dsc_task_7</flowNodeRef>
+            <flowNodeRef>dsc_gw_3</flowNodeRef>
+            <flowNodeRef>dsc_task_8</flowNodeRef>
+            <flowNodeRef>dsc_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="dsc_start" name="Start">
+         <outgoing>sf_dsc_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="dsc_gw_1" name="applicant established and meets conditions?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_dsc_1</incoming>
+         <outgoing>sf_dsc_2</outgoing>
+      </exclusiveGateway>
+      <task id="dsc_task_1" name="award status of trusted flagger">
+         <incoming>sf_dsc_2</incoming>
+         <outgoing>sf_dsc_3</outgoing>
+      </task>
+      <intermediateCatchEvent id="dsc_catch_1" name="Receive reports">
+         <incoming>sf_dsc_3</incoming>
+         <outgoing>sf_dsc_4</outgoing>
+         <messageEventDefinition id="med_dsc_1" />
+      </intermediateCatchEvent>
+      <task id="dsc_task_2" name="communicate to Commission and Board names, addresses">
+         <incoming>sf_dsc_4</incoming>
+         <outgoing>sf_dsc_5</outgoing>
+      </task>
+      <intermediateCatchEvent id="dsc_catch_2" name="Receive information">
+         <incoming>sf_dsc_5</incoming>
+         <outgoing>sf_dsc_6</outgoing>
+         <messageEventDefinition id="med_dsc_2" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="dsc_gw_2" name="legitimate reasons to open investigation?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_dsc_6</incoming>
+         <outgoing>sf_dsc_7</outgoing>
+      </exclusiveGateway>
+      <task id="dsc_task_4" name="suspend status of trusted flagger">
+         <incoming>sf_dsc_7</incoming>
+         <outgoing>sf_dsc_8</outgoing>
+      </task>
+      <task id="dsc_task_5" name="carry out investigation">
+         <incoming>sf_dsc_8</incoming>
+         <outgoing>sf_dsc_9</outgoing>
+      </task>
+      <task id="dsc_task_6" name="afford entity opportunity to react">
+         <incoming>sf_dsc_9</incoming>
+         <outgoing>sf_dsc_10</outgoing>
+      </task>
+      <task id="dsc_task_7" name="transmit opportunity to react">
+         <incoming>sf_dsc_10</incoming>
+         <outgoing>sf_dsc_11</outgoing>
+      </task>
+      <exclusiveGateway id="dsc_gw_3" name="entity no longer meets conditions?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_dsc_11</incoming>
+         <outgoing>sf_dsc_12</outgoing>
+      </exclusiveGateway>
+      <task id="dsc_task_8" name="revoke trusted flagger status">
+         <incoming>sf_dsc_12</incoming>
+         <outgoing>sf_dsc_13</outgoing>
+      </task>
+      <endEvent id="dsc_end" name="evaluation completed">
+         <incoming>sf_dsc_13</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_dsc_1" sourceRef="dsc_start" targetRef="dsc_gw_1" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_2" name="yes" sourceRef="dsc_gw_1" targetRef="dsc_task_1" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_3" sourceRef="dsc_task_1" targetRef="dsc_catch_1" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_4" sourceRef="dsc_catch_1" targetRef="dsc_task_2" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_5" sourceRef="dsc_task_2" targetRef="dsc_catch_2" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_6" sourceRef="dsc_catch_2" targetRef="dsc_gw_2" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_7" name="yes" sourceRef="dsc_gw_2" targetRef="dsc_task_4" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_8" sourceRef="dsc_task_4" targetRef="dsc_task_5" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_9" sourceRef="dsc_task_5" targetRef="dsc_task_6" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_10" sourceRef="dsc_task_6" targetRef="dsc_task_7" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_11" sourceRef="dsc_task_7" targetRef="dsc_gw_3" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_12" name="yes" sourceRef="dsc_gw_3" targetRef="dsc_task_8" isImmediate="true" />
+      <sequenceFlow id="sf_dsc_13" sourceRef="dsc_task_8" targetRef="dsc_end" isImmediate="true" />
+   </process>
+
+   <process id="process_opp" isClosed="false" isExecutable="false" name="Online Platform Provider" processType="None">
+      <laneSet id="ls_opp">
+         <lane id="lane_opp">
+            <flowNodeRef>opp_start</flowNodeRef>
+            <flowNodeRef>opp_task_1</flowNodeRef>
+            <flowNodeRef>opp_gw_1</flowNodeRef>
+            <flowNodeRef>opp_gw_split</flowNodeRef>
+            <flowNodeRef>opp_task_2</flowNodeRef>
+            <flowNodeRef>opp_task_3</flowNodeRef>
+            <flowNodeRef>opp_task_4</flowNodeRef>
+            <flowNodeRef>opp_gw_merge</flowNodeRef>
+            <flowNodeRef>opp_gw_3</flowNodeRef>
+            <flowNodeRef>opp_task_5</flowNodeRef>
+            <flowNodeRef>opp_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="opp_start" name="Start">
+         <outgoing>sf_opp_1</outgoing>
+      </startEvent>
+      <task id="opp_task_1" name="take necessary measures for notices">
+         <incoming>sf_opp_1</incoming>
+         <outgoing>sf_opp_2</outgoing>
+      </task>
+      <exclusiveGateway id="opp_gw_1" name="notices within expertise and mechanisms?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_opp_2</incoming>
+         <outgoing>sf_opp_3</outgoing>
+      </exclusiveGateway>
+      <parallelGateway id="opp_gw_split" name="Parallel Split" gatewayDirection="Diverging">
+         <incoming>sf_opp_3</incoming>
+         <outgoing>sf_opp_4</outgoing>
+         <outgoing>sf_opp_5</outgoing>
+         <outgoing>sf_opp_6</outgoing>
+      </parallelGateway>
+      <task id="opp_task_2" name="give priority for notices">
+         <incoming>sf_opp_4</incoming>
+         <outgoing>sf_opp_7</outgoing>
+      </task>
+      <task id="opp_task_3" name="process notices">
+         <incoming>sf_opp_5</incoming>
+         <outgoing>sf_opp_8</outgoing>
+      </task>
+      <task id="opp_task_4" name="decide upon notices">
+         <incoming>sf_opp_6</incoming>
+         <outgoing>sf_opp_9</outgoing>
+      </task>
+      <parallelGateway id="opp_gw_merge" name="Parallel Merge" gatewayDirection="Converging">
+         <incoming>sf_opp_7</incoming>
+         <incoming>sf_opp_8</incoming>
+         <incoming>sf_opp_9</incoming>
+         <outgoing>sf_opp_10</outgoing>
+      </parallelGateway>
+      <exclusiveGateway id="opp_gw_3" name="flagger submitted imprecise notices?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_opp_10</incoming>
+         <outgoing>sf_opp_11</outgoing>
+      </exclusiveGateway>
+      <task id="opp_task_5" name="communicate information to Digital Services Coordinator">
+         <incoming>sf_opp_11</incoming>
+         <outgoing>sf_opp_12</outgoing>
+      </task>
+      <endEvent id="opp_end" name="notices processed">
+         <incoming>sf_opp_12</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_opp_1" sourceRef="opp_start" targetRef="opp_task_1" isImmediate="true" />
+      <sequenceFlow id="sf_opp_2" sourceRef="opp_task_1" targetRef="opp_gw_1" isImmediate="true" />
+      <sequenceFlow id="sf_opp_3" name="yes" sourceRef="opp_gw_1" targetRef="opp_gw_split" isImmediate="true" />
+      <sequenceFlow id="sf_opp_4" sourceRef="opp_gw_split" targetRef="opp_task_2" isImmediate="true" />
+      <sequenceFlow id="sf_opp_5" sourceRef="opp_gw_split" targetRef="opp_task_3" isImmediate="true" />
+      <sequenceFlow id="sf_opp_6" sourceRef="opp_gw_split" targetRef="opp_task_4" isImmediate="true" />
+      <sequenceFlow id="sf_opp_7" sourceRef="opp_task_2" targetRef="opp_gw_merge" isImmediate="true" />
+      <sequenceFlow id="sf_opp_8" sourceRef="opp_task_3" targetRef="opp_gw_merge" isImmediate="true" />
+      <sequenceFlow id="sf_opp_9" sourceRef="opp_task_4" targetRef="opp_gw_merge" isImmediate="true" />
+      <sequenceFlow id="sf_opp_10" sourceRef="opp_gw_merge" targetRef="opp_gw_3" isImmediate="true" />
+      <sequenceFlow id="sf_opp_11" name="yes" sourceRef="opp_gw_3" targetRef="opp_task_5" isImmediate="true" />
+      <sequenceFlow id="sf_opp_12" sourceRef="opp_task_5" targetRef="opp_end" isImmediate="true" />
+   </process>
+
+   <process id="process_tf" isClosed="false" isExecutable="false" name="Trusted Flagger" processType="None">
+      <laneSet id="ls_tf">
+         <lane id="lane_tf">
+            <flowNodeRef>tf_start</flowNodeRef>
+            <flowNodeRef>tf_task_1</flowNodeRef>
+            <flowNodeRef>tf_task_2</flowNodeRef>
+            <flowNodeRef>tf_task_3</flowNodeRef>
+            <flowNodeRef>tf_catch_1</flowNodeRef>
+            <flowNodeRef>tf_task_4</flowNodeRef>
+            <flowNodeRef>tf_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="tf_start" name="Start">
+         <outgoing>sf_tf_1</outgoing>
+      </startEvent>
+      <task id="tf_task_1" name="publish reports on notices submitted">
+         <incoming>sf_tf_1</incoming>
+         <outgoing>sf_tf_2</outgoing>
+      </task>
+      <task id="tf_task_2" name="send reports to Digital Services Coordinator">
+         <incoming>sf_tf_2</incoming>
+         <outgoing>sf_tf_3</outgoing>
+      </task>
+      <task id="tf_task_3" name="make reports publicly available">
+         <incoming>sf_tf_3</incoming>
+         <outgoing>sf_tf_4</outgoing>
+      </task>
+      <intermediateCatchEvent id="tf_catch_1" name="Receive opportunity to react">
+         <incoming>sf_tf_4</incoming>
+         <outgoing>sf_tf_5</outgoing>
+         <messageEventDefinition id="med_tf_1" />
+      </intermediateCatchEvent>
+      <task id="tf_task_4" name="react to investigation findings">
+         <incoming>sf_tf_5</incoming>
+         <outgoing>sf_tf_6</outgoing>
+      </task>
+      <endEvent id="tf_end" name="reporting and investigation reaction completed">
+         <incoming>sf_tf_6</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_tf_1" sourceRef="tf_start" targetRef="tf_task_1" isImmediate="true" />
+      <sequenceFlow id="sf_tf_2" sourceRef="tf_task_1" targetRef="tf_task_2" isImmediate="true" />
+      <sequenceFlow id="sf_tf_3" sourceRef="tf_task_2" targetRef="tf_task_3" isImmediate="true" />
+      <sequenceFlow id="sf_tf_4" sourceRef="tf_task_3" targetRef="tf_catch_1" isImmediate="true" />
+      <sequenceFlow id="sf_tf_5" sourceRef="tf_catch_1" targetRef="tf_task_4" isImmediate="true" />
+      <sequenceFlow id="sf_tf_6" sourceRef="tf_task_4" targetRef="tf_end" isImmediate="true" />
+   </process>
+
+   <process id="process_c" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="ls_c">
+         <lane id="lane_c">
+            <flowNodeRef>c_start</flowNodeRef>
+            <flowNodeRef>c_task_1</flowNodeRef>
+            <flowNodeRef>c_task_2</flowNodeRef>
+            <flowNodeRef>c_gw_1</flowNodeRef>
+            <flowNodeRef>c_task_3</flowNodeRef>
+            <flowNodeRef>c_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="c_start" name="Receive names, addresses, and status">
+         <outgoing>sf_c_1</outgoing>
+         <messageEventDefinition id="med_c_start" />
+      </startEvent>
+      <task id="c_task_1" name="publish information in publicly available database">
+         <incoming>sf_c_1</incoming>
+         <outgoing>sf_c_2</outgoing>
+      </task>
+      <task id="c_task_2" name="keep database up to date">
+         <incoming>sf_c_2</incoming>
+         <outgoing>sf_c_3</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw_1" name="guidelines necessary?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_c_3</incoming>
+         <outgoing>sf_c_4</outgoing>
+      </exclusiveGateway>
+      <task id="c_task_3" name="issue guidelines after consulting Board">
+         <incoming>sf_c_4</incoming>
+         <outgoing>sf_c_5</outgoing>
+      </task>
+      <endEvent id="c_end" name="database and guidelines updated">
+         <incoming>sf_c_5</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_c_1" sourceRef="c_start" targetRef="c_task_1" isImmediate="true" />
+      <sequenceFlow id="sf_c_2" sourceRef="c_task_1" targetRef="c_task_2" isImmediate="true" />
+      <sequenceFlow id="sf_c_3" sourceRef="c_task_2" targetRef="c_gw_1" isImmediate="true" />
+      <sequenceFlow id="sf_c_4" name="yes" sourceRef="c_gw_1" targetRef="c_task_3" isImmediate="true" />
+      <sequenceFlow id="sf_c_5" sourceRef="c_task_3" targetRef="c_end" isImmediate="true" />
+   </process>
+
+   <process id="process_cob" isClosed="false" isExecutable="false" name="Commission or Board" processType="None">
+      <laneSet id="ls_cob">
+         <lane id="lane_cob">
+            <flowNodeRef>cob_start</flowNodeRef>
+            <flowNodeRef>cob_task_1</flowNodeRef>
+            <flowNodeRef>cob_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="cob_start" name="Start">
+         <outgoing>sf_cob_1</outgoing>
+      </startEvent>
+      <task id="cob_task_1" name="consult before issuing guidelines">
+         <incoming>sf_cob_1</incoming>
+         <outgoing>sf_cob_2</outgoing>
+      </task>
+      <endEvent id="cob_end" name="consultation completed">
+         <incoming>sf_cob_2</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_cob_1" sourceRef="cob_start" targetRef="cob_task_1" isImmediate="true" />
+      <sequenceFlow id="sf_cob_2" sourceRef="cob_task_1" targetRef="cob_end" isImmediate="true" />
+   </process>
+
+   <process id="process_b" isClosed="false" isExecutable="false" name="Board" processType="None">
+      <laneSet id="ls_b">
+         <lane id="lane_b">
+            <flowNodeRef>b_start</flowNodeRef>
+            <flowNodeRef>b_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="b_start" name="Receive names, addresses, and status">
+         <outgoing>sf_b_1</outgoing>
+         <messageEventDefinition id="med_b_start" />
+      </startEvent>
+      <endEvent id="b_end" name="process ended">
+         <incoming>sf_b_1</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_b_1" sourceRef="b_start" targetRef="b_end" isImmediate="true" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab" id="BPMNPlane_1">
+         
+         <!-- PARTICIPANTS & LANES -->
+         <bpmndi:BPMNShape bpmnElement="part_dsc" id="part_dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1800.0" x="50.0" y="100.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_dsc" id="lane_dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1770.0" x="80.0" y="100.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_opp" id="part_opp_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1150.0" x="50.0" y="350.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_opp" id="lane_opp_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="1120.0" x="80.0" y="350.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_tf" id="part_tf_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1750.0" x="50.0" y="800.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_tf" id="lane_tf_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1720.0" x="80.0" y="800.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_c" id="part_c_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1300.0" x="50.0" y="1050.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_c" id="lane_c_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1270.0" x="80.0" y="1050.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_cob" id="part_cob_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="450.0" x="50.0" y="1300.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_cob" id="lane_cob_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="420.0" x="80.0" y="1300.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_b" id="part_b_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="750.0" x="50.0" y="1550.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_b" id="lane_b_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="720.0" x="80.0" y="1550.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- DSC ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="dsc_start" id="dsc_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="185.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="140.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_gw_1" id="dsc_gw_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="180.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="245.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_1" id="dsc_task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_catch_1" id="dsc_catch_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="500.0" y="185.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="490.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_2" id="dsc_task_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_catch_2" id="dsc_catch_2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="750.0" y="185.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="740.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_gw_2" id="dsc_gw_2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="180.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="845.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_4" id="dsc_task_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_5" id="dsc_task_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_6" id="dsc_task_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_7" id="dsc_task_7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_gw_3" id="dsc_gw_3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1550.0" y="180.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1545.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_task_8" id="dsc_task_8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="160.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="dsc_end" id="dsc_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1800.0" y="185.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1790.0" y="220.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- OPP ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="opp_start" id="opp_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="535.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="140.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_task_1" id="opp_task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="510.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_gw_1" id="opp_gw_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="530.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="395.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_gw_split" id="opp_gw_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="530.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="495.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_task_2" id="opp_task_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="410.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_task_3" id="opp_task_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="510.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_task_4" id="opp_task_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="610.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_gw_merge" id="opp_gw_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="530.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="745.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_gw_3" id="opp_gw_3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="530.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="845.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_task_5" id="opp_task_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="510.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="opp_end" id="opp_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1100.0" y="535.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1090.0" y="570.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- TF ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="tf_start" id="tf_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="885.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="140.0" y="920.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_task_1" id="tf_task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="860.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_task_2" id="tf_task_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="860.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_task_3" id="tf_task_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="860.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_catch_1" id="tf_catch_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1400.0" y="885.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1390.0" y="920.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_task_4" id="tf_task_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="860.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="tf_end" id="tf_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1650.0" y="885.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1640.0" y="920.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- C ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="c_start" id="c_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="600.0" y="1135.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="590.0" y="1170.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_task_1" id="c_task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="1110.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_task_2" id="c_task_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="1110.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_1" id="c_gw_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1000.0" y="1130.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="995.0" y="1170.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_task_3" id="c_task_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="1110.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_end" id="c_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1250.0" y="1135.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="1240.0" y="1170.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- COB ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="cob_start" id="cob_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1385.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="140.0" y="1420.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cob_task_1" id="cob_task_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1360.0" />
+            <bpmndi:BPMNLabel />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="cob_end" id="cob_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="400.0" y="1385.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="390.0" y="1420.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+         <!-- B ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="b_start" id="b_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="600.0" y="1635.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="590.0" y="1670.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="b_end" id="b_end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="700.0" y="1635.0" />
+            <bpmndi:BPMNLabel><omgdc:Bounds height="15.0" width="50.0" x="690.0" y="1670.0" /></bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+
+
+         <!-- SEQUENCE FLOW EDGES: DSC -->
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_1" id="sf_dsc_1_gui">
+            <omgdi:waypoint x="180.0" y="200.0" />
+            <omgdi:waypoint x="250.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_2" id="sf_dsc_2_gui">
+            <omgdi:waypoint x="290.0" y="200.0" />
+            <omgdi:waypoint x="350.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_3" id="sf_dsc_3_gui">
+            <omgdi:waypoint x="450.0" y="200.0" />
+            <omgdi:waypoint x="500.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_4" id="sf_dsc_4_gui">
+            <omgdi:waypoint x="530.0" y="200.0" />
+            <omgdi:waypoint x="600.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_5" id="sf_dsc_5_gui">
+            <omgdi:waypoint x="700.0" y="200.0" />
+            <omgdi:waypoint x="750.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_6" id="sf_dsc_6_gui">
+            <omgdi:waypoint x="780.0" y="200.0" />
+            <omgdi:waypoint x="850.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_7" id="sf_dsc_7_gui">
+            <omgdi:waypoint x="890.0" y="200.0" />
+            <omgdi:waypoint x="950.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_8" id="sf_dsc_8_gui">
+            <omgdi:waypoint x="1050.0" y="200.0" />
+            <omgdi:waypoint x="1100.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_9" id="sf_dsc_9_gui">
+            <omgdi:waypoint x="1200.0" y="200.0" />
+            <omgdi:waypoint x="1250.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_10" id="sf_dsc_10_gui">
+            <omgdi:waypoint x="1350.0" y="200.0" />
+            <omgdi:waypoint x="1400.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_11" id="sf_dsc_11_gui">
+            <omgdi:waypoint x="1500.0" y="200.0" />
+            <omgdi:waypoint x="1550.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_12" id="sf_dsc_12_gui">
+            <omgdi:waypoint x="1590.0" y="200.0" />
+            <omgdi:waypoint x="1650.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_13" id="sf_dsc_13_gui">
+            <omgdi:waypoint x="1750.0" y="200.0" />
+            <omgdi:waypoint x="1800.0" y="200.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- SEQUENCE FLOW EDGES: OPP -->
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_1" id="sf_opp_1_gui">
+            <omgdi:waypoint x="180.0" y="550.0" />
+            <omgdi:waypoint x="250.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_2" id="sf_opp_2_gui">
+            <omgdi:waypoint x="350.0" y="550.0" />
+            <omgdi:waypoint x="400.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_3" id="sf_opp_3_gui">
+            <omgdi:waypoint x="440.0" y="550.0" />
+            <omgdi:waypoint x="500.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_4" id="sf_opp_4_gui">
+            <omgdi:waypoint x="520.0" y="530.0" />
+            <omgdi:waypoint x="520.0" y="450.0" />
+            <omgdi:waypoint x="600.0" y="450.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_5" id="sf_opp_5_gui">
+            <omgdi:waypoint x="540.0" y="550.0" />
+            <omgdi:waypoint x="600.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_6" id="sf_opp_6_gui">
+            <omgdi:waypoint x="520.0" y="570.0" />
+            <omgdi:waypoint x="520.0" y="650.0" />
+            <omgdi:waypoint x="600.0" y="650.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_7" id="sf_opp_7_gui">
+            <omgdi:waypoint x="700.0" y="450.0" />
+            <omgdi:waypoint x="770.0" y="450.0" />
+            <omgdi:waypoint x="770.0" y="530.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_8" id="sf_opp_8_gui">
+            <omgdi:waypoint x="700.0" y="550.0" />
+            <omgdi:waypoint x="750.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_9" id="sf_opp_9_gui">
+            <omgdi:waypoint x="700.0" y="650.0" />
+            <omgdi:waypoint x="770.0" y="650.0" />
+            <omgdi:waypoint x="770.0" y="570.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_10" id="sf_opp_10_gui">
+            <omgdi:waypoint x="790.0" y="550.0" />
+            <omgdi:waypoint x="850.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_11" id="sf_opp_11_gui">
+            <omgdi:waypoint x="890.0" y="550.0" />
+            <omgdi:waypoint x="950.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_opp_12" id="sf_opp_12_gui">
+            <omgdi:waypoint x="1050.0" y="550.0" />
+            <omgdi:waypoint x="1100.0" y="550.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- SEQUENCE FLOW EDGES: TF -->
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_1" id="sf_tf_1_gui">
+            <omgdi:waypoint x="180.0" y="900.0" />
+            <omgdi:waypoint x="250.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_2" id="sf_tf_2_gui">
+            <omgdi:waypoint x="350.0" y="900.0" />
+            <omgdi:waypoint x="400.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_3" id="sf_tf_3_gui">
+            <omgdi:waypoint x="500.0" y="900.0" />
+            <omgdi:waypoint x="550.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_4" id="sf_tf_4_gui">
+            <omgdi:waypoint x="650.0" y="900.0" />
+            <omgdi:waypoint x="1400.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_5" id="sf_tf_5_gui">
+            <omgdi:waypoint x="1430.0" y="900.0" />
+            <omgdi:waypoint x="1500.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_6" id="sf_tf_6_gui">
+            <omgdi:waypoint x="1600.0" y="900.0" />
+            <omgdi:waypoint x="1650.0" y="900.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- SEQUENCE FLOW EDGES: C -->
+         <bpmndi:BPMNEdge bpmnElement="sf_c_1" id="sf_c_1_gui">
+            <omgdi:waypoint x="630.0" y="1150.0" />
+            <omgdi:waypoint x="700.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c_2" id="sf_c_2_gui">
+            <omgdi:waypoint x="800.0" y="1150.0" />
+            <omgdi:waypoint x="850.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c_3" id="sf_c_3_gui">
+            <omgdi:waypoint x="950.0" y="1150.0" />
+            <omgdi:waypoint x="1000.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c_4" id="sf_c_4_gui">
+            <omgdi:waypoint x="1040.0" y="1150.0" />
+            <omgdi:waypoint x="1100.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c_5" id="sf_c_5_gui">
+            <omgdi:waypoint x="1200.0" y="1150.0" />
+            <omgdi:waypoint x="1250.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- SEQUENCE FLOW EDGES: COB -->
+         <bpmndi:BPMNEdge bpmnElement="sf_cob_1" id="sf_cob_1_gui">
+            <omgdi:waypoint x="180.0" y="1400.0" />
+            <omgdi:waypoint x="250.0" y="1400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cob_2" id="sf_cob_2_gui">
+            <omgdi:waypoint x="350.0" y="1400.0" />
+            <omgdi:waypoint x="400.0" y="1400.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- SEQUENCE FLOW EDGES: B -->
+         <bpmndi:BPMNEdge bpmnElement="sf_b_1" id="sf_b_1_gui">
+            <omgdi:waypoint x="630.0" y="1650.0" />
+            <omgdi:waypoint x="700.0" y="1650.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOW EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="mf_tf_dsc" id="mf_tf_dsc_gui">
+            <omgdi:waypoint x="450.0" y="860.0" />
+            <omgdi:waypoint x="450.0" y="500.0" />
+            <omgdi:waypoint x="515.0" y="500.0" />
+            <omgdi:waypoint x="515.0" y="215.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_opp_dsc" id="mf_opp_dsc_gui">
+            <omgdi:waypoint x="1000.0" y="510.0" />
+            <omgdi:waypoint x="1000.0" y="350.0" />
+            <omgdi:waypoint x="765.0" y="350.0" />
+            <omgdi:waypoint x="765.0" y="215.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_dsc_c" id="mf_dsc_c_gui">
+            <omgdi:waypoint x="650.0" y="240.0" />
+            <omgdi:waypoint x="650.0" y="600.0" />
+            <omgdi:waypoint x="615.0" y="600.0" />
+            <omgdi:waypoint x="615.0" y="1135.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_dsc_b" id="mf_dsc_b_gui">
+            <omgdi:waypoint x="650.0" y="240.0" />
+            <omgdi:waypoint x="670.0" y="240.0" />
+            <omgdi:waypoint x="670.0" y="1600.0" />
+            <omgdi:waypoint x="615.0" y="1600.0" />
+            <omgdi:waypoint x="615.0" y="1635.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_dsc_tf" id="mf_dsc_tf_gui">
+            <omgdi:waypoint x="1450.0" y="240.0" />
+            <omgdi:waypoint x="1450.0" y="500.0" />
+            <omgdi:waypoint x="1415.0" y="500.0" />
+            <omgdi:waypoint x="1415.0" y="885.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

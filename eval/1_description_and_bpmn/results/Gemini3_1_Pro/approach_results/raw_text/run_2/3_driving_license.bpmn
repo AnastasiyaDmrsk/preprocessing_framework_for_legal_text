@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collaboration_1">
+      <participant id="Participant_Applicant" name="Applicant" processRef="Process_Applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_MemberState" name="Member State" processRef="Process_MemberState">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <messageFlow id="MessageFlow_1" name="guidelines adopted" sourceRef="Task_MS_InfComm1" targetRef="CatchEvent_Comm_1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="MessageFlow_2" name="public awareness campaigns developed" sourceRef="Task_MS_InfComm2" targetRef="CatchEvent_Comm_2">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <process id="Process_Applicant" isClosed="false" isExecutable="false" name="Applicant" processType="None">
+      <startEvent id="StartEvent_App" name="application for the issuance or renewal of a driving licence">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_App_1</outgoing>
+      </startEvent>
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_App_Split1" isMarkerVisible="true" name="assess whether a driving licence is issued for the first time or renewed...">
+         <incoming>Flow_App_1</incoming>
+         <outgoing>Flow_App_Split1_Yes</outgoing>
+         <outgoing>Flow_App_Split1_Exc1</outgoing>
+         <outgoing>Flow_App_Split1_Exc2</outgoing>
+         <outgoing>Flow_App_Split1_No</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_App_Med" isForCompensation="false" name="undergo a medical examination" startQuantity="1">
+         <incoming>Flow_App_Split1_Yes</incoming>
+         <outgoing>Flow_App_Task1_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_App_Merge1" isMarkerVisible="true" name="">
+         <incoming>Flow_App_Task1_Out</incoming>
+         <incoming>Flow_App_Split1_Exc1</incoming>
+         <incoming>Flow_App_Split1_Exc2</incoming>
+         <incoming>Flow_App_Split1_No</incoming>
+         <outgoing>Flow_App_2</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_App_Split2" isMarkerVisible="true" name="assess whether a self-assessment form is required...">
+         <incoming>Flow_App_2</incoming>
+         <outgoing>Flow_App_Split2_Yes</outgoing>
+         <outgoing>Flow_App_Split2_No</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_App_Self" isForCompensation="false" name="fill in a self-assessment form" startQuantity="1">
+         <incoming>Flow_App_Split2_Yes</incoming>
+         <outgoing>Flow_App_Task2_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_App_Merge2" isMarkerVisible="true" name="">
+         <incoming>Flow_App_Task2_Out</incoming>
+         <incoming>Flow_App_Split2_No</incoming>
+         <outgoing>Flow_App_3</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="EndEvent_App" name="End">
+         <incoming>Flow_App_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_App_1" isImmediate="true" sourceRef="StartEvent_App" targetRef="Gateway_App_Split1"/>
+      <sequenceFlow id="Flow_App_Split1_Yes" isImmediate="true" name="yes" sourceRef="Gateway_App_Split1" targetRef="Task_App_Med"/>
+      <sequenceFlow id="Flow_App_Split1_Exc1" isImmediate="true" name="except where for category AM" sourceRef="Gateway_App_Split1" targetRef="Gateway_App_Merge1"/>
+      <sequenceFlow id="Flow_App_Split1_Exc2" isImmediate="true" name="except where alternative measures are used" sourceRef="Gateway_App_Split1" targetRef="Gateway_App_Merge1"/>
+      <sequenceFlow id="Flow_App_Split1_No" isImmediate="true" name="no" sourceRef="Gateway_App_Split1" targetRef="Gateway_App_Merge1"/>
+      <sequenceFlow id="Flow_App_Task1_Out" isImmediate="true" sourceRef="Task_App_Med" targetRef="Gateway_App_Merge1"/>
+      <sequenceFlow id="Flow_App_2" isImmediate="true" sourceRef="Gateway_App_Merge1" targetRef="Gateway_App_Split2"/>
+      <sequenceFlow id="Flow_App_Split2_Yes" isImmediate="true" name="yes" sourceRef="Gateway_App_Split2" targetRef="Task_App_Self"/>
+      <sequenceFlow id="Flow_App_Split2_No" isImmediate="true" name="no" sourceRef="Gateway_App_Split2" targetRef="Gateway_App_Merge2"/>
+      <sequenceFlow id="Flow_App_Task2_Out" isImmediate="true" sourceRef="Task_App_Self" targetRef="Gateway_App_Merge2"/>
+      <sequenceFlow id="Flow_App_3" isImmediate="true" sourceRef="Gateway_App_Merge2" targetRef="EndEvent_App"/>
+   </process>
+
+   <process id="Process_MemberState" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <startEvent id="StartEvent_MS" name="Start">
+         <outgoing>Flow_MS_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split1" isMarkerVisible="true" name="except where applies to AM...">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_S1_Yes</outgoing>
+         <outgoing>Flow_MS_S1_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_EnsureMed" name="ensure that applicants undergo a medical examination before a driving licence is issued for the first time">
+         <incoming>Flow_MS_S1_No</incoming>
+         <outgoing>Flow_MS_T1_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge1" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T1_Out</incoming>
+         <incoming>Flow_MS_S1_Yes</incoming>
+         <outgoing>Flow_MS_2</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split2" isMarkerVisible="true" name="except where for category AM...">
+         <incoming>Flow_MS_2</incoming>
+         <outgoing>Flow_MS_S2_Yes</outgoing>
+         <outgoing>Flow_MS_S2_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_ReqMed" name="require a medical examination for driving licences of categories C...">
+         <incoming>Flow_MS_S2_No</incoming>
+         <outgoing>Flow_MS_T2_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge2" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T2_Out</incoming>
+         <incoming>Flow_MS_S2_Yes</incoming>
+         <outgoing>Flow_MS_3</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_ReqSelf" name="require the applicant to fill in a self-assessment form for driving licence categories AM...">
+         <incoming>Flow_MS_3</incoming>
+         <outgoing>Flow_MS_4</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split3" isMarkerVisible="true" name="if required instead of a medical examination...">
+         <incoming>Flow_MS_4</incoming>
+         <outgoing>Flow_MS_S3_Yes</outgoing>
+         <outgoing>Flow_MS_S3_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_EstSys" name="establish a national system of assessment of fitness to drive...">
+         <incoming>Flow_MS_S3_Yes</incoming>
+         <outgoing>Flow_MS_T3_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge3" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T3_Out</incoming>
+         <incoming>Flow_MS_S3_No</incoming>
+         <outgoing>Flow_MS_5</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split4" isMarkerVisible="true" name="for non-compliance...">
+         <incoming>Flow_MS_5</incoming>
+         <outgoing>Flow_MS_S4_Yes</outgoing>
+         <outgoing>Flow_MS_S4_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_ProvMeas" name="provide for appropriate measures to address non-compliance...">
+         <incoming>Flow_MS_S4_Yes</incoming>
+         <outgoing>Flow_MS_T4_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge4" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T4_Out</incoming>
+         <incoming>Flow_MS_S4_No</incoming>
+         <outgoing>Flow_MS_6</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split5" isMarkerVisible="true" name="if the Member State has established a national system...">
+         <incoming>Flow_MS_6</incoming>
+         <outgoing>Flow_MS_S5_Yes</outgoing>
+         <outgoing>Flow_MS_S5_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_AppSys" name="apply the national system to monitor">
+         <incoming>Flow_MS_S5_Yes</incoming>
+         <outgoing>Flow_MS_T5_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge5" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T5_Out</incoming>
+         <incoming>Flow_MS_S5_No</incoming>
+         <outgoing>Flow_MS_7</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split6" isMarkerVisible="true" name="assess whether the applicant is likely to have the medical conditions">
+         <incoming>Flow_MS_7</incoming>
+         <outgoing>Flow_MS_S6_Yes</outgoing>
+         <outgoing>Flow_MS_S6_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_EnsMed" name="ensure that the applicant undergoes a medical examination">
+         <incoming>Flow_MS_S6_Yes</incoming>
+         <outgoing>Flow_MS_T6_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge6" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T6_Out</incoming>
+         <incoming>Flow_MS_S6_No</incoming>
+         <outgoing>Flow_MS_8</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split7" isMarkerVisible="true" name="if awareness is required">
+         <incoming>Flow_MS_8</incoming>
+         <outgoing>Flow_MS_S7_Yes</outgoing>
+         <outgoing>Flow_MS_S7_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_Aware" name="take measures to raise awareness">
+         <incoming>Flow_MS_S7_Yes</incoming>
+         <outgoing>Flow_MS_T7_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge7" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T7_Out</incoming>
+         <incoming>Flow_MS_S7_No</incoming>
+         <outgoing>Flow_MS_9</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split8" isMarkerVisible="true" name="if knowledge improvement is required">
+         <incoming>Flow_MS_9</incoming>
+         <outgoing>Flow_MS_S8_Yes</outgoing>
+         <outgoing>Flow_MS_S8_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_Know" name="take measures to improve the knowledge of the health sector">
+         <incoming>Flow_MS_S8_Yes</incoming>
+         <outgoing>Flow_MS_T8_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge8" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T8_Out</incoming>
+         <incoming>Flow_MS_S8_No</incoming>
+         <outgoing>Flow_MS_10</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split9" isMarkerVisible="true" name="if adopting of guidelines is required">
+         <incoming>Flow_MS_10</incoming>
+         <outgoing>Flow_MS_S9_Yes</outgoing>
+         <outgoing>Flow_MS_S9_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_Adopt" name="adopt guidelines for medical practitioners">
+         <incoming>Flow_MS_S9_Yes</incoming>
+         <outgoing>Flow_MS_T9_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge9" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T9_Out</incoming>
+         <incoming>Flow_MS_S9_No</incoming>
+         <outgoing>Flow_MS_11</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split10" isMarkerVisible="true" name="If the Member State adopts guidelines...">
+         <incoming>Flow_MS_11</incoming>
+         <outgoing>Flow_MS_S10_Yes</outgoing>
+         <outgoing>Flow_MS_S10_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_InfComm1" name="inform the Commission of guidelines adopted">
+         <incoming>Flow_MS_S10_Yes</incoming>
+         <outgoing>Flow_MS_T10_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge10" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T10_Out</incoming>
+         <incoming>Flow_MS_S10_No</incoming>
+         <outgoing>Flow_MS_12</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split11" isMarkerVisible="true" name="if awareness campaigns are required">
+         <incoming>Flow_MS_12</incoming>
+         <outgoing>Flow_MS_S11_Yes</outgoing>
+         <outgoing>Flow_MS_S11_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_DevCamp" name="develop public awareness campaigns">
+         <incoming>Flow_MS_S11_Yes</incoming>
+         <outgoing>Flow_MS_T11_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge11" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T11_Out</incoming>
+         <incoming>Flow_MS_S11_No</incoming>
+         <outgoing>Flow_MS_13</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split12" isMarkerVisible="true" name="If the Member State develops public awareness campaigns">
+         <incoming>Flow_MS_13</incoming>
+         <outgoing>Flow_MS_S12_Yes</outgoing>
+         <outgoing>Flow_MS_S12_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_InfComm2" name="inform the Commission of any public awareness campaigns developed">
+         <incoming>Flow_MS_S12_Yes</incoming>
+         <outgoing>Flow_MS_T12_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge12" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T12_Out</incoming>
+         <incoming>Flow_MS_S12_No</incoming>
+         <outgoing>Flow_MS_14</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="Gateway_MS_Split13" isMarkerVisible="true" name="if stricter standards are required">
+         <incoming>Flow_MS_14</incoming>
+         <outgoing>Flow_MS_S13_Yes</outgoing>
+         <outgoing>Flow_MS_S13_No</outgoing>
+      </exclusiveGateway>
+
+      <task id="Task_MS_SetStand" name="set standards stricter than those set out in Annex III">
+         <incoming>Flow_MS_S13_Yes</incoming>
+         <outgoing>Flow_MS_T13_Out</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="Gateway_MS_Merge13" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_T13_Out</incoming>
+         <incoming>Flow_MS_S13_No</incoming>
+         <outgoing>Flow_MS_15</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="EndEvent_MS" name="End">
+         <incoming>Flow_MS_15</incoming>
+      </endEvent>
+
+      <!-- Flows for Member State Process -->
+      <sequenceFlow id="Flow_MS_1" isImmediate="true" sourceRef="StartEvent_MS" targetRef="Gateway_MS_Split1"/>
+      <sequenceFlow id="Flow_MS_S1_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split1" targetRef="Gateway_MS_Merge1"/>
+      <sequenceFlow id="Flow_MS_S1_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split1" targetRef="Task_MS_EnsureMed"/>
+      <sequenceFlow id="Flow_MS_T1_Out" isImmediate="true" sourceRef="Task_MS_EnsureMed" targetRef="Gateway_MS_Merge1"/>
+      <sequenceFlow id="Flow_MS_2" isImmediate="true" sourceRef="Gateway_MS_Merge1" targetRef="Gateway_MS_Split2"/>
+      
+      <sequenceFlow id="Flow_MS_S2_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split2" targetRef="Gateway_MS_Merge2"/>
+      <sequenceFlow id="Flow_MS_S2_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split2" targetRef="Task_MS_ReqMed"/>
+      <sequenceFlow id="Flow_MS_T2_Out" isImmediate="true" sourceRef="Task_MS_ReqMed" targetRef="Gateway_MS_Merge2"/>
+      <sequenceFlow id="Flow_MS_3" isImmediate="true" sourceRef="Gateway_MS_Merge2" targetRef="Task_MS_ReqSelf"/>
+      <sequenceFlow id="Flow_MS_4" isImmediate="true" sourceRef="Task_MS_ReqSelf" targetRef="Gateway_MS_Split3"/>
+      
+      <sequenceFlow id="Flow_MS_S3_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split3" targetRef="Task_MS_EstSys"/>
+      <sequenceFlow id="Flow_MS_S3_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split3" targetRef="Gateway_MS_Merge3"/>
+      <sequenceFlow id="Flow_MS_T3_Out" isImmediate="true" sourceRef="Task_MS_EstSys" targetRef="Gateway_MS_Merge3"/>
+      <sequenceFlow id="Flow_MS_5" isImmediate="true" sourceRef="Gateway_MS_Merge3" targetRef="Gateway_MS_Split4"/>
+
+      <sequenceFlow id="Flow_MS_S4_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split4" targetRef="Task_MS_ProvMeas"/>
+      <sequenceFlow id="Flow_MS_S4_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split4" targetRef="Gateway_MS_Merge4"/>
+      <sequenceFlow id="Flow_MS_T4_Out" isImmediate="true" sourceRef="Task_MS_ProvMeas" targetRef="Gateway_MS_Merge4"/>
+      <sequenceFlow id="Flow_MS_6" isImmediate="true" sourceRef="Gateway_MS_Merge4" targetRef="Gateway_MS_Split5"/>
+
+      <sequenceFlow id="Flow_MS_S5_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split5" targetRef="Task_MS_AppSys"/>
+      <sequenceFlow id="Flow_MS_S5_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split5" targetRef="Gateway_MS_Merge5"/>
+      <sequenceFlow id="Flow_MS_T5_Out" isImmediate="true" sourceRef="Task_MS_AppSys" targetRef="Gateway_MS_Merge5"/>
+      <sequenceFlow id="Flow_MS_7" isImmediate="true" sourceRef="Gateway_MS_Merge5" targetRef="Gateway_MS_Split6"/>
+
+      <sequenceFlow id="Flow_MS_S6_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split6" targetRef="Task_MS_EnsMed"/>
+      <sequenceFlow id="Flow_MS_S6_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split6" targetRef="Gateway_MS_Merge6"/>
+      <sequenceFlow id="Flow_MS_T6_Out" isImmediate="true" sourceRef="Task_MS_EnsMed" targetRef="Gateway_MS_Merge6"/>
+      <sequenceFlow id="Flow_MS_8" isImmediate="true" sourceRef="Gateway_MS_Merge6" targetRef="Gateway_MS_Split7"/>
+
+      <sequenceFlow id="Flow_MS_S7_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split7" targetRef="Task_MS_Aware"/>
+      <sequenceFlow id="Flow_MS_S7_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split7" targetRef="Gateway_MS_Merge7"/>
+      <sequenceFlow id="Flow_MS_T7_Out" isImmediate="true" sourceRef="Task_MS_Aware" targetRef="Gateway_MS_Merge7"/>
+      <sequenceFlow id="Flow_MS_9" isImmediate="true" sourceRef="Gateway_MS_Merge7" targetRef="Gateway_MS_Split8"/>
+
+      <sequenceFlow id="Flow_MS_S8_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split8" targetRef="Task_MS_Know"/>
+      <sequenceFlow id="Flow_MS_S8_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split8" targetRef="Gateway_MS_Merge8"/>
+      <sequenceFlow id="Flow_MS_T8_Out" isImmediate="true" sourceRef="Task_MS_Know" targetRef="Gateway_MS_Merge8"/>
+      <sequenceFlow id="Flow_MS_10" isImmediate="true" sourceRef="Gateway_MS_Merge8" targetRef="Gateway_MS_Split9"/>
+
+      <sequenceFlow id="Flow_MS_S9_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split9" targetRef="Task_MS_Adopt"/>
+      <sequenceFlow id="Flow_MS_S9_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split9" targetRef="Gateway_MS_Merge9"/>
+      <sequenceFlow id="Flow_MS_T9_Out" isImmediate="true" sourceRef="Task_MS_Adopt" targetRef="Gateway_MS_Merge9"/>
+      <sequenceFlow id="Flow_MS_11" isImmediate="true" sourceRef="Gateway_MS_Merge9" targetRef="Gateway_MS_Split10"/>
+
+      <sequenceFlow id="Flow_MS_S10_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split10" targetRef="Task_MS_InfComm1"/>
+      <sequenceFlow id="Flow_MS_S10_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split10" targetRef="Gateway_MS_Merge10"/>
+      <sequenceFlow id="Flow_MS_T10_Out" isImmediate="true" sourceRef="Task_MS_InfComm1" targetRef="Gateway_MS_Merge10"/>
+      <sequenceFlow id="Flow_MS_12" isImmediate="true" sourceRef="Gateway_MS_Merge10" targetRef="Gateway_MS_Split11"/>
+
+      <sequenceFlow id="Flow_MS_S11_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split11" targetRef="Task_MS_DevCamp"/>
+      <sequenceFlow id="Flow_MS_S11_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split11" targetRef="Gateway_MS_Merge11"/>
+      <sequenceFlow id="Flow_MS_T11_Out" isImmediate="true" sourceRef="Task_MS_DevCamp" targetRef="Gateway_MS_Merge11"/>
+      <sequenceFlow id="Flow_MS_13" isImmediate="true" sourceRef="Gateway_MS_Merge11" targetRef="Gateway_MS_Split12"/>
+
+      <sequenceFlow id="Flow_MS_S12_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split12" targetRef="Task_MS_InfComm2"/>
+      <sequenceFlow id="Flow_MS_S12_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split12" targetRef="Gateway_MS_Merge12"/>
+      <sequenceFlow id="Flow_MS_T12_Out" isImmediate="true" sourceRef="Task_MS_InfComm2" targetRef="Gateway_MS_Merge12"/>
+      <sequenceFlow id="Flow_MS_14" isImmediate="true" sourceRef="Gateway_MS_Merge12" targetRef="Gateway_MS_Split13"/>
+
+      <sequenceFlow id="Flow_MS_S13_Yes" isImmediate="true" name="yes" sourceRef="Gateway_MS_Split13" targetRef="Task_MS_SetStand"/>
+      <sequenceFlow id="Flow_MS_S13_No" isImmediate="true" name="no" sourceRef="Gateway_MS_Split13" targetRef="Gateway_MS_Merge13"/>
+      <sequenceFlow id="Flow_MS_T13_Out" isImmediate="true" sourceRef="Task_MS_SetStand" targetRef="Gateway_MS_Merge13"/>
+      <sequenceFlow id="Flow_MS_15" isImmediate="true" sourceRef="Gateway_MS_Merge13" targetRef="EndEvent_MS"/>
+   </process>
+
+   <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="StartEvent_Comm" name="Start">
+         <outgoing>Flow_Comm_1</outgoing>
+      </startEvent>
+
+      <parallelGateway gatewayDirection="Diverging" id="Gateway_Comm_Split" name="">
+         <incoming>Flow_Comm_1</incoming>
+         <outgoing>Flow_Comm_S_B1</outgoing>
+         <outgoing>Flow_Comm_S_B2</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="CatchEvent_Comm_1" name="Upon being informed of guidelines adopted">
+         <incoming>Flow_Comm_S_B1</incoming>
+         <outgoing>Flow_Comm_C1_Out</outgoing>
+         <messageEventDefinition id="MsgDef_1"/>
+      </intermediateCatchEvent>
+
+      <task id="Task_Comm_1" name="make available to the other Member States the guidelines adopted">
+         <incoming>Flow_Comm_C1_Out</incoming>
+         <outgoing>Flow_Comm_T1_Out</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="CatchEvent_Comm_2" name="Upon being informed of any public awareness campaigns developed">
+         <incoming>Flow_Comm_S_B2</incoming>
+         <outgoing>Flow_Comm_C2_Out</outgoing>
+         <messageEventDefinition id="MsgDef_2"/>
+      </intermediateCatchEvent>
+
+      <task id="Task_Comm_2" name="make available to the other Member States the information">
+         <incoming>Flow_Comm_C2_Out</incoming>
+         <outgoing>Flow_Comm_T2_Out</outgoing>
+      </task>
+
+      <parallelGateway gatewayDirection="Converging" id="Gateway_Comm_Merge" name="">
+         <incoming>Flow_Comm_T1_Out</incoming>
+         <incoming>Flow_Comm_T2_Out</incoming>
+         <outgoing>Flow_Comm_2</outgoing>
+      </parallelGateway>
+
+      <endEvent id="EndEvent_Comm" name="End">
+         <incoming>Flow_Comm_2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Comm_1" isImmediate="true" sourceRef="StartEvent_Comm" targetRef="Gateway_Comm_Split"/>
+      <sequenceFlow id="Flow_Comm_S_B1" isImmediate="true" sourceRef="Gateway_Comm_Split" targetRef="CatchEvent_Comm_1"/>
+      <sequenceFlow id="Flow_Comm_C1_Out" isImmediate="true" sourceRef="CatchEvent_Comm_1" targetRef="Task_Comm_1"/>
+      <sequenceFlow id="Flow_Comm_T1_Out" isImmediate="true" sourceRef="Task_Comm_1" targetRef="Gateway_Comm_Merge"/>
+      <sequenceFlow id="Flow_Comm_S_B2" isImmediate="true" sourceRef="Gateway_Comm_Split" targetRef="CatchEvent_Comm_2"/>
+      <sequenceFlow id="Flow_Comm_C2_Out" isImmediate="true" sourceRef="CatchEvent_Comm_2" targetRef="Task_Comm_2"/>
+      <sequenceFlow id="Flow_Comm_T2_Out" isImmediate="true" sourceRef="Task_Comm_2" targetRef="Gateway_Comm_Merge"/>
+      <sequenceFlow id="Flow_Comm_2" isImmediate="true" sourceRef="Gateway_Comm_Merge" targetRef="EndEvent_Comm"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collaboration_1" id="BPMNPlane_1">
+         
+         <!-- Participant Pools -->
+         <bpmndi:BPMNShape bpmnElement="Participant_Applicant" id="Shape_Participant_Applicant" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="4250.0" x="100.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_MemberState" id="Shape_Participant_MemberState" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="4250.0" x="100.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_Commission" id="Shape_Participant_Commission" isHorizontal="true">
+            <omgdc:Bounds height="320.0" width="4250.0" x="100.0" y="670.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Applicant Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_App" id="Shape_StartEvent_App">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_App_Split1" id="Shape_Gateway_App_Split1">
+            <omgdc:Bounds height="40.0" width="40.0" x="220.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_App_Med" id="Shape_Task_App_Med">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_App_Merge1" id="Shape_Gateway_App_Merge1">
+            <omgdc:Bounds height="40.0" width="40.0" x="440.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_App_Split2" id="Shape_Gateway_App_Split2">
+            <omgdc:Bounds height="40.0" width="40.0" x="520.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_App_Self" id="Shape_Task_App_Self">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_App_Merge2" id="Shape_Gateway_App_Merge2">
+            <omgdc:Bounds height="40.0" width="40.0" x="740.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_App" id="Shape_EndEvent_App">
+            <omgdc:Bounds height="30.0" width="30.0" x="820.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Applicant Edges -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_1" id="Edge_Flow_App_1">
+            <omgdi:waypoint x="180.0" y="200.0"/>
+            <omgdi:waypoint x="220.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split1_Yes" id="Edge_Flow_App_Split1_Yes">
+            <omgdi:waypoint x="260.0" y="200.0"/>
+            <omgdi:waypoint x="300.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split1_Exc1" id="Edge_Flow_App_Split1_Exc1">
+            <omgdi:waypoint x="240.0" y="220.0"/>
+            <omgdi:waypoint x="240.0" y="260.0"/>
+            <omgdi:waypoint x="460.0" y="260.0"/>
+            <omgdi:waypoint x="460.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split1_Exc2" id="Edge_Flow_App_Split1_Exc2">
+            <omgdi:waypoint x="240.0" y="220.0"/>
+            <omgdi:waypoint x="240.0" y="290.0"/>
+            <omgdi:waypoint x="460.0" y="290.0"/>
+            <omgdi:waypoint x="460.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split1_No" id="Edge_Flow_App_Split1_No">
+            <omgdi:waypoint x="240.0" y="180.0"/>
+            <omgdi:waypoint x="240.0" y="130.0"/>
+            <omgdi:waypoint x="460.0" y="130.0"/>
+            <omgdi:waypoint x="460.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Task1_Out" id="Edge_Flow_App_Task1_Out">
+            <omgdi:waypoint x="400.0" y="200.0"/>
+            <omgdi:waypoint x="440.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_2" id="Edge_Flow_App_2">
+            <omgdi:waypoint x="480.0" y="200.0"/>
+            <omgdi:waypoint x="520.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split2_Yes" id="Edge_Flow_App_Split2_Yes">
+            <omgdi:waypoint x="560.0" y="200.0"/>
+            <omgdi:waypoint x="600.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Split2_No" id="Edge_Flow_App_Split2_No">
+            <omgdi:waypoint x="540.0" y="220.0"/>
+            <omgdi:waypoint x="540.0" y="260.0"/>
+            <omgdi:waypoint x="760.0" y="260.0"/>
+            <omgdi:waypoint x="760.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_Task2_Out" id="Edge_Flow_App_Task2_Out">
+            <omgdi:waypoint x="700.0" y="200.0"/>
+            <omgdi:waypoint x="740.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_3" id="Edge_Flow_App_3">
+            <omgdi:waypoint x="780.0" y="200.0"/>
+            <omgdi:waypoint x="820.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Member State Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_MS" id="Shape_StartEvent_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split1" id="Shape_Gateway_MS_Split1"><omgdc:Bounds height="40.0" width="40.0" x="220.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_EnsureMed" id="Shape_Task_MS_EnsureMed"><omgdc:Bounds height="80.0" width="100.0" x="300.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge1" id="Shape_Gateway_MS_Merge1"><omgdc:Bounds height="40.0" width="40.0" x="440.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split2" id="Shape_Gateway_MS_Split2"><omgdc:Bounds height="40.0" width="40.0" x="520.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_ReqMed" id="Shape_Task_MS_ReqMed"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge2" id="Shape_Gateway_MS_Merge2"><omgdc:Bounds height="40.0" width="40.0" x="740.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Task_MS_ReqSelf" id="Shape_Task_MS_ReqSelf"><omgdc:Bounds height="80.0" width="100.0" x="820.0" y="460.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split3" id="Shape_Gateway_MS_Split3"><omgdc:Bounds height="40.0" width="40.0" x="960.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_EstSys" id="Shape_Task_MS_EstSys"><omgdc:Bounds height="80.0" width="100.0" x="1040.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge3" id="Shape_Gateway_MS_Merge3"><omgdc:Bounds height="40.0" width="40.0" x="1180.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split4" id="Shape_Gateway_MS_Split4"><omgdc:Bounds height="40.0" width="40.0" x="1260.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_ProvMeas" id="Shape_Task_MS_ProvMeas"><omgdc:Bounds height="80.0" width="100.0" x="1340.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge4" id="Shape_Gateway_MS_Merge4"><omgdc:Bounds height="40.0" width="40.0" x="1480.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split5" id="Shape_Gateway_MS_Split5"><omgdc:Bounds height="40.0" width="40.0" x="1560.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_AppSys" id="Shape_Task_MS_AppSys"><omgdc:Bounds height="80.0" width="100.0" x="1640.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge5" id="Shape_Gateway_MS_Merge5"><omgdc:Bounds height="40.0" width="40.0" x="1780.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split6" id="Shape_Gateway_MS_Split6"><omgdc:Bounds height="40.0" width="40.0" x="1860.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_EnsMed" id="Shape_Task_MS_EnsMed"><omgdc:Bounds height="80.0" width="100.0" x="1940.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge6" id="Shape_Gateway_MS_Merge6"><omgdc:Bounds height="40.0" width="40.0" x="2080.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split7" id="Shape_Gateway_MS_Split7"><omgdc:Bounds height="40.0" width="40.0" x="2160.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_Aware" id="Shape_Task_MS_Aware"><omgdc:Bounds height="80.0" width="100.0" x="2240.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge7" id="Shape_Gateway_MS_Merge7"><omgdc:Bounds height="40.0" width="40.0" x="2380.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split8" id="Shape_Gateway_MS_Split8"><omgdc:Bounds height="40.0" width="40.0" x="2460.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_Know" id="Shape_Task_MS_Know"><omgdc:Bounds height="80.0" width="100.0" x="2540.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge8" id="Shape_Gateway_MS_Merge8"><omgdc:Bounds height="40.0" width="40.0" x="2680.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split9" id="Shape_Gateway_MS_Split9"><omgdc:Bounds height="40.0" width="40.0" x="2760.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_Adopt" id="Shape_Task_MS_Adopt"><omgdc:Bounds height="80.0" width="100.0" x="2840.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge9" id="Shape_Gateway_MS_Merge9"><omgdc:Bounds height="40.0" width="40.0" x="2980.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split10" id="Shape_Gateway_MS_Split10"><omgdc:Bounds height="40.0" width="40.0" x="3060.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_InfComm1" id="Shape_Task_MS_InfComm1"><omgdc:Bounds height="80.0" width="100.0" x="3140.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge10" id="Shape_Gateway_MS_Merge10"><omgdc:Bounds height="40.0" width="40.0" x="3280.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split11" id="Shape_Gateway_MS_Split11"><omgdc:Bounds height="40.0" width="40.0" x="3360.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_DevCamp" id="Shape_Task_MS_DevCamp"><omgdc:Bounds height="80.0" width="100.0" x="3440.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge11" id="Shape_Gateway_MS_Merge11"><omgdc:Bounds height="40.0" width="40.0" x="3580.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split12" id="Shape_Gateway_MS_Split12"><omgdc:Bounds height="40.0" width="40.0" x="3660.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_InfComm2" id="Shape_Task_MS_InfComm2"><omgdc:Bounds height="80.0" width="100.0" x="3740.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge12" id="Shape_Gateway_MS_Merge12"><omgdc:Bounds height="40.0" width="40.0" x="3880.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Split13" id="Shape_Gateway_MS_Split13"><omgdc:Bounds height="40.0" width="40.0" x="3960.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_SetStand" id="Shape_Task_MS_SetStand"><omgdc:Bounds height="80.0" width="100.0" x="4040.0" y="460.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_MS_Merge13" id="Shape_Gateway_MS_Merge13"><omgdc:Bounds height="40.0" width="40.0" x="4180.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="EndEvent_MS" id="Shape_EndEvent_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="4260.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Member State Edges (Straight and Bypasses) -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1" id="Edge_Flow_MS_1"><omgdi:waypoint x="180.0" y="500.0"/><omgdi:waypoint x="220.0" y="500.0"/></bpmndi:BPMNEdge>
+         
+         <!-- Split 1 (Special: No goes straight to Task, Yes bypasses) -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S1_No" id="Edge_Flow_MS_S1_No"><omgdi:waypoint x="260.0" y="500.0"/><omgdi:waypoint x="300.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S1_Yes" id="Edge_Flow_MS_S1_Yes"><omgdi:waypoint x="240.0" y="520.0"/><omgdi:waypoint x="240.0" y="570.0"/><omgdi:waypoint x="460.0" y="570.0"/><omgdi:waypoint x="460.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T1_Out" id="Edge_Flow_MS_T1_Out"><omgdi:waypoint x="400.0" y="500.0"/><omgdi:waypoint x="440.0" y="500.0"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_2" id="Edge_Flow_MS_2"><omgdi:waypoint x="480.0" y="500.0"/><omgdi:waypoint x="520.0" y="500.0"/></bpmndi:BPMNEdge>
+         
+         <!-- Split 2 (Special: No goes straight to Task, Yes bypasses) -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S2_No" id="Edge_Flow_MS_S2_No"><omgdi:waypoint x="560.0" y="500.0"/><omgdi:waypoint x="600.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S2_Yes" id="Edge_Flow_MS_S2_Yes"><omgdi:waypoint x="540.0" y="520.0"/><omgdi:waypoint x="540.0" y="570.0"/><omgdi:waypoint x="760.0" y="570.0"/><omgdi:waypoint x="760.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T2_Out" id="Edge_Flow_MS_T2_Out"><omgdi:waypoint x="700.0" y="500.0"/><omgdi:waypoint x="740.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_3" id="Edge_Flow_MS_3"><omgdi:waypoint x="780.0" y="500.0"/><omgdi:waypoint x="820.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_4" id="Edge_Flow_MS_4"><omgdi:waypoint x="920.0" y="500.0"/><omgdi:waypoint x="960.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <!-- Standard splits 3 to 13 (Yes goes straight, No bypasses) -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S3_Yes" id="Edge_Flow_MS_S3_Yes"><omgdi:waypoint x="1000.0" y="500.0"/><omgdi:waypoint x="1040.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S3_No" id="Edge_Flow_MS_S3_No"><omgdi:waypoint x="980.0" y="520.0"/><omgdi:waypoint x="980.0" y="570.0"/><omgdi:waypoint x="1200.0" y="570.0"/><omgdi:waypoint x="1200.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T3_Out" id="Edge_Flow_MS_T3_Out"><omgdi:waypoint x="1140.0" y="500.0"/><omgdi:waypoint x="1180.0" y="500.0"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_5" id="Edge_Flow_MS_5"><omgdi:waypoint x="1220.0" y="500.0"/><omgdi:waypoint x="1260.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S4_Yes" id="Edge_Flow_MS_S4_Yes"><omgdi:waypoint x="1300.0" y="500.0"/><omgdi:waypoint x="1340.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S4_No" id="Edge_Flow_MS_S4_No"><omgdi:waypoint x="1280.0" y="520.0"/><omgdi:waypoint x="1280.0" y="570.0"/><omgdi:waypoint x="1500.0" y="570.0"/><omgdi:waypoint x="1500.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T4_Out" id="Edge_Flow_MS_T4_Out"><omgdi:waypoint x="1440.0" y="500.0"/><omgdi:waypoint x="1480.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_6" id="Edge_Flow_MS_6"><omgdi:waypoint x="1520.0" y="500.0"/><omgdi:waypoint x="1560.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S5_Yes" id="Edge_Flow_MS_S5_Yes"><omgdi:waypoint x="1600.0" y="500.0"/><omgdi:waypoint x="1640.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S5_No" id="Edge_Flow_MS_S5_No"><omgdi:waypoint x="1580.0" y="520.0"/><omgdi:waypoint x="1580.0" y="570.0"/><omgdi:waypoint x="1800.0" y="570.0"/><omgdi:waypoint x="1800.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T5_Out" id="Edge_Flow_MS_T5_Out"><omgdi:waypoint x="1740.0" y="500.0"/><omgdi:waypoint x="1780.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_7" id="Edge_Flow_MS_7"><omgdi:waypoint x="1820.0" y="500.0"/><omgdi:waypoint x="1860.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S6_Yes" id="Edge_Flow_MS_S6_Yes"><omgdi:waypoint x="1900.0" y="500.0"/><omgdi:waypoint x="1940.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S6_No" id="Edge_Flow_MS_S6_No"><omgdi:waypoint x="1880.0" y="520.0"/><omgdi:waypoint x="1880.0" y="570.0"/><omgdi:waypoint x="2100.0" y="570.0"/><omgdi:waypoint x="2100.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T6_Out" id="Edge_Flow_MS_T6_Out"><omgdi:waypoint x="2040.0" y="500.0"/><omgdi:waypoint x="2080.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_8" id="Edge_Flow_MS_8"><omgdi:waypoint x="2120.0" y="500.0"/><omgdi:waypoint x="2160.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S7_Yes" id="Edge_Flow_MS_S7_Yes"><omgdi:waypoint x="2200.0" y="500.0"/><omgdi:waypoint x="2240.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S7_No" id="Edge_Flow_MS_S7_No"><omgdi:waypoint x="2180.0" y="520.0"/><omgdi:waypoint x="2180.0" y="570.0"/><omgdi:waypoint x="2400.0" y="570.0"/><omgdi:waypoint x="2400.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T7_Out" id="Edge_Flow_MS_T7_Out"><omgdi:waypoint x="2340.0" y="500.0"/><omgdi:waypoint x="2380.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_9" id="Edge_Flow_MS_9"><omgdi:waypoint x="2420.0" y="500.0"/><omgdi:waypoint x="2460.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S8_Yes" id="Edge_Flow_MS_S8_Yes"><omgdi:waypoint x="2500.0" y="500.0"/><omgdi:waypoint x="2540.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S8_No" id="Edge_Flow_MS_S8_No"><omgdi:waypoint x="2480.0" y="520.0"/><omgdi:waypoint x="2480.0" y="570.0"/><omgdi:waypoint x="2700.0" y="570.0"/><omgdi:waypoint x="2700.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T8_Out" id="Edge_Flow_MS_T8_Out"><omgdi:waypoint x="2640.0" y="500.0"/><omgdi:waypoint x="2680.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_10" id="Edge_Flow_MS_10"><omgdi:waypoint x="2720.0" y="500.0"/><omgdi:waypoint x="2760.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S9_Yes" id="Edge_Flow_MS_S9_Yes"><omgdi:waypoint x="2800.0" y="500.0"/><omgdi:waypoint x="2840.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S9_No" id="Edge_Flow_MS_S9_No"><omgdi:waypoint x="2780.0" y="520.0"/><omgdi:waypoint x="2780.0" y="570.0"/><omgdi:waypoint x="3000.0" y="570.0"/><omgdi:waypoint x="3000.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T9_Out" id="Edge_Flow_MS_T9_Out"><omgdi:waypoint x="2940.0" y="500.0"/><omgdi:waypoint x="2980.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_11" id="Edge_Flow_MS_11"><omgdi:waypoint x="3020.0" y="500.0"/><omgdi:waypoint x="3060.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S10_Yes" id="Edge_Flow_MS_S10_Yes"><omgdi:waypoint x="3100.0" y="500.0"/><omgdi:waypoint x="3140.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S10_No" id="Edge_Flow_MS_S10_No"><omgdi:waypoint x="3080.0" y="520.0"/><omgdi:waypoint x="3080.0" y="570.0"/><omgdi:waypoint x="3300.0" y="570.0"/><omgdi:waypoint x="3300.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T10_Out" id="Edge_Flow_MS_T10_Out"><omgdi:waypoint x="3240.0" y="500.0"/><omgdi:waypoint x="3280.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_12" id="Edge_Flow_MS_12"><omgdi:waypoint x="3320.0" y="500.0"/><omgdi:waypoint x="3360.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S11_Yes" id="Edge_Flow_MS_S11_Yes"><omgdi:waypoint x="3400.0" y="500.0"/><omgdi:waypoint x="3440.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S11_No" id="Edge_Flow_MS_S11_No"><omgdi:waypoint x="3380.0" y="520.0"/><omgdi:waypoint x="3380.0" y="570.0"/><omgdi:waypoint x="3600.0" y="570.0"/><omgdi:waypoint x="3600.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T11_Out" id="Edge_Flow_MS_T11_Out"><omgdi:waypoint x="3540.0" y="500.0"/><omgdi:waypoint x="3580.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_13" id="Edge_Flow_MS_13"><omgdi:waypoint x="3620.0" y="500.0"/><omgdi:waypoint x="3660.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S12_Yes" id="Edge_Flow_MS_S12_Yes"><omgdi:waypoint x="3700.0" y="500.0"/><omgdi:waypoint x="3740.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S12_No" id="Edge_Flow_MS_S12_No"><omgdi:waypoint x="3680.0" y="520.0"/><omgdi:waypoint x="3680.0" y="570.0"/><omgdi:waypoint x="3900.0" y="570.0"/><omgdi:waypoint x="3900.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T12_Out" id="Edge_Flow_MS_T12_Out"><omgdi:waypoint x="3840.0" y="500.0"/><omgdi:waypoint x="3880.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_14" id="Edge_Flow_MS_14"><omgdi:waypoint x="3920.0" y="500.0"/><omgdi:waypoint x="3960.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S13_Yes" id="Edge_Flow_MS_S13_Yes"><omgdi:waypoint x="4000.0" y="500.0"/><omgdi:waypoint x="4040.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_S13_No" id="Edge_Flow_MS_S13_No"><omgdi:waypoint x="3980.0" y="520.0"/><omgdi:waypoint x="3980.0" y="570.0"/><omgdi:waypoint x="4200.0" y="570.0"/><omgdi:waypoint x="4200.0" y="520.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_T13_Out" id="Edge_Flow_MS_T13_Out"><omgdi:waypoint x="4140.0" y="500.0"/><omgdi:waypoint x="4180.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_15" id="Edge_Flow_MS_15"><omgdi:waypoint x="4220.0" y="500.0"/><omgdi:waypoint x="4260.0" y="500.0"/></bpmndi:BPMNEdge>
+
+
+         <!-- Commission Elements -->
+         <bpmndi:BPMNShape bpmnElement="StartEvent_Comm" id="Shape_StartEvent_Comm"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="885.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Comm_Split" id="Shape_Gateway_Comm_Split"><omgdc:Bounds height="40.0" width="40.0" x="220.0" y="880.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="CatchEvent_Comm_1" id="Shape_CatchEvent_Comm_1"><omgdc:Bounds height="30.0" width="30.0" x="3175.0" y="800.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Comm_1" id="Shape_Task_Comm_1"><omgdc:Bounds height="80.0" width="100.0" x="3260.0" y="780.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="CatchEvent_Comm_2" id="Shape_CatchEvent_Comm_2"><omgdc:Bounds height="30.0" width="30.0" x="3775.0" y="960.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Comm_2" id="Shape_Task_Comm_2"><omgdc:Bounds height="80.0" width="100.0" x="3860.0" y="940.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Gateway_Comm_Merge" id="Shape_Gateway_Comm_Merge"><omgdc:Bounds height="40.0" width="40.0" x="4080.0" y="880.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="EndEvent_Comm" id="Shape_EndEvent_Comm"><omgdc:Bounds height="30.0" width="30.0" x="4160.0" y="885.0"/></bpmndi:BPMNShape>
+
+         <!-- Commission Edges -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_1" id="Edge_Flow_Comm_1"><omgdi:waypoint x="180.0" y="900.0"/><omgdi:waypoint x="220.0" y="900.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_S_B1" id="Edge_Flow_Comm_S_B1"><omgdi:waypoint x="260.0" y="900.0"/><omgdi:waypoint x="280.0" y="900.0"/><omgdi:waypoint x="280.0" y="815.0"/><omgdi:waypoint x="3175.0" y="815.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_C1_Out" id="Edge_Flow_Comm_C1_Out"><omgdi:waypoint x="3205.0" y="815.0"/><omgdi:waypoint x="3260.0" y="820.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_T1_Out" id="Edge_Flow_Comm_T1_Out"><omgdi:waypoint x="3360.0" y="820.0"/><omgdi:waypoint x="4060.0" y="820.0"/><omgdi:waypoint x="4060.0" y="900.0"/><omgdi:waypoint x="4080.0" y="900.0"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_S_B2" id="Edge_Flow_Comm_S_B2"><omgdi:waypoint x="260.0" y="900.0"/><omgdi:waypoint x="280.0" y="900.0"/><omgdi:waypoint x="280.0" y="975.0"/><omgdi:waypoint x="3775.0" y="975.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_C2_Out" id="Edge_Flow_Comm_C2_Out"><omgdi:waypoint x="3805.0" y="975.0"/><omgdi:waypoint x="3860.0" y="980.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_T2_Out" id="Edge_Flow_Comm_T2_Out"><omgdi:waypoint x="3960.0" y="980.0"/><omgdi:waypoint x="4060.0" y="980.0"/><omgdi:waypoint x="4060.0" y="900.0"/><omgdi:waypoint x="4080.0" y="900.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Flow_Comm_2" id="Edge_Flow_Comm_2"><omgdi:waypoint x="4120.0" y="900.0"/><omgdi:waypoint x="4160.0" y="900.0"/></bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_1" id="Edge_MessageFlow_1">
+            <omgdi:waypoint x="3190.0" y="540.0"/>
+            <omgdi:waypoint x="3190.0" y="800.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MessageFlow_2" id="Edge_MessageFlow_2">
+            <omgdi:waypoint x="3790.0" y="540.0"/>
+            <omgdi:waypoint x="3790.0" y="960.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
