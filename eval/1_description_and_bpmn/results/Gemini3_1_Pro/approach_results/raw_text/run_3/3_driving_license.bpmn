@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor" 
+             exporterVersion="19.2.2" 
+             id="sid-driving-licence-process" 
+             targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+   <collaboration id="sid-collab">
+      <participant id="sid-app" name="Applicant" processRef="process_app">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-ms" name="Member State" processRef="process_ms">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-com" name="Commission" processRef="process_com">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+
+      <messageFlow id="mf1" sourceRef="sid-MS_Task11" targetRef="sid-Com_Catch1"/>
+      <messageFlow id="mf2" sourceRef="sid-MS_Task13" targetRef="sid-Com_Catch2"/>
+      <messageFlow id="mf3" sourceRef="sid-Com_Task1" targetRef="sid-ms"/>
+      <messageFlow id="mf4" sourceRef="sid-Com_Task2" targetRef="sid-ms"/>
+   </collaboration>
+
+   <!-- APPLICANT PROCESS -->
+   <process id="process_app" name="Applicant" isExecutable="false">
+      <laneSet id="laneSet_app">
+         <lane id="lane_app">
+            <flowNodeRef>sid-App_Start</flowNodeRef>
+            <flowNodeRef>sid-App_GW1_Split</flowNodeRef>
+            <flowNodeRef>sid-App_Task1</flowNodeRef>
+            <flowNodeRef>sid-App_GW1_Merge</flowNodeRef>
+            <flowNodeRef>sid-App_GW2_Split</flowNodeRef>
+            <flowNodeRef>sid-App_Task2</flowNodeRef>
+            <flowNodeRef>sid-App_GW2_Merge</flowNodeRef>
+            <flowNodeRef>sid-App_End</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="sid-App_Start" name="Start application for the issuance or renewal of a driving licence">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+         <outgoing>sf_app_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway id="sid-App_GW1_Split" isMarkerVisible="true" gatewayDirection="Diverging">
+         <outgoing>sf_app_gw1_yes</outgoing>
+         <outgoing>sf_app_gw1_no</outgoing>
+      </exclusiveGateway>
+
+      <task id="sid-App_Task1" name="undergo a medical examination">
+         <extensionElements><signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/></extensionElements>
+         <incoming>sf_app_gw1_yes</incoming>
+         <outgoing>sf_app_t1_out</outgoing>
+      </task>
+
+      <exclusiveGateway id="sid-App_GW1_Merge" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>sf_app_t1_out</incoming>
+         <incoming>sf_app_gw1_no</incoming>
+         <outgoing>sf_app_2</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway id="sid-App_GW2_Split" isMarkerVisible="true" gatewayDirection="Diverging">
+         <incoming>sf_app_2</incoming>
+         <outgoing>sf_app_gw2_yes</outgoing>
+         <outgoing>sf_app_gw2_no</outgoing>
+      </exclusiveGateway>
+
+      <task id="sid-App_Task2" name="fill in a self-assessment form">
+         <extensionElements><signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc"/></extensionElements>
+         <incoming>sf_app_gw2_yes</incoming>
+         <outgoing>sf_app_t2_out</outgoing>
+      </task>
+
+      <exclusiveGateway id="sid-App_GW2_Merge" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>sf_app_t2_out</incoming>
+         <incoming>sf_app_gw2_no</incoming>
+         <outgoing>sf_app_3</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="sid-App_End" name="End">
+         <extensionElements><signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/></extensionElements>
+         <incoming>sf_app_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_app_1" isImmediate="true" sourceRef="sid-App_Start" targetRef="sid-App_GW1_Split"/>
+      <sequenceFlow id="sf_app_gw1_yes" name="yes" isImmediate="true" sourceRef="sid-App_GW1_Split" targetRef="sid-App_Task1"/>
+      <sequenceFlow id="sf_app_gw1_no" name="no" isImmediate="true" sourceRef="sid-App_GW1_Split" targetRef="sid-App_GW1_Merge"/>
+      <sequenceFlow id="sf_app_t1_out" isImmediate="true" sourceRef="sid-App_Task1" targetRef="sid-App_GW1_Merge"/>
+      <sequenceFlow id="sf_app_2" isImmediate="true" sourceRef="sid-App_GW1_Merge" targetRef="sid-App_GW2_Split"/>
+      <sequenceFlow id="sf_app_gw2_yes" name="yes" isImmediate="true" sourceRef="sid-App_GW2_Split" targetRef="sid-App_Task2"/>
+      <sequenceFlow id="sf_app_gw2_no" name="no" isImmediate="true" sourceRef="sid-App_GW2_Split" targetRef="sid-App_GW2_Merge"/>
+      <sequenceFlow id="sf_app_t2_out" isImmediate="true" sourceRef="sid-App_Task2" targetRef="sid-App_GW2_Merge"/>
+      <sequenceFlow id="sf_app_3" isImmediate="true" sourceRef="sid-App_GW2_Merge" targetRef="sid-App_End"/>
+   </process>
+
+   <!-- MEMBER STATE PROCESS -->
+   <process id="process_ms" name="Member State" isExecutable="false">
+      <laneSet id="laneSet_ms">
+         <lane id="lane_ms">
+            <!-- Included implicitly for abbreviation, flowNodeRefs below apply here -->
+         </lane>
+      </laneSet>
+
+      <startEvent id="sid-MS_Start" name="Start">
+         <outgoing>sf_ms_start_out</outgoing>
+      </startEvent>
+
+      <!-- Block 1 -->
+      <exclusiveGateway id="sid-MS_GW1_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_start_out</incoming><outgoing>sf_ms_gw1_yes</outgoing><outgoing>sf_ms_gw1_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task1" name="ensure that applicants undergo a medical examination"><incoming>sf_ms_gw1_yes</incoming><outgoing>sf_ms_t1_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW1_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t1_out</incoming><incoming>sf_ms_gw1_no</incoming><outgoing>sf_ms_2</outgoing></exclusiveGateway>
+
+      <!-- Block 2 -->
+      <exclusiveGateway id="sid-MS_GW2_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_2</incoming><outgoing>sf_ms_gw2_yes</outgoing><outgoing>sf_ms_gw2_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task2" name="require a medical examination"><incoming>sf_ms_gw2_yes</incoming><outgoing>sf_ms_t2_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW2_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t2_out</incoming><incoming>sf_ms_gw2_no</incoming><outgoing>sf_ms_3</outgoing></exclusiveGateway>
+
+      <!-- Block 3 -->
+      <exclusiveGateway id="sid-MS_GW3_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_3</incoming><outgoing>sf_ms_gw3_yes</outgoing><outgoing>sf_ms_gw3_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task3" name="require the applicant to fill in a self-assessment form"><incoming>sf_ms_gw3_yes</incoming><outgoing>sf_ms_t3_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW3_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t3_out</incoming><incoming>sf_ms_gw3_no</incoming><outgoing>sf_ms_4</outgoing></exclusiveGateway>
+
+      <!-- Block 4 -->
+      <exclusiveGateway id="sid-MS_GW4_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_4</incoming><outgoing>sf_ms_gw4_yes</outgoing><outgoing>sf_ms_gw4_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task4" name="establish a national system of assessment of fitness to drive"><incoming>sf_ms_gw4_yes</incoming><outgoing>sf_ms_t4_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW4_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t4_out</incoming><incoming>sf_ms_gw4_no</incoming><outgoing>sf_ms_5</outgoing></exclusiveGateway>
+
+      <!-- Block 5 -->
+      <exclusiveGateway id="sid-MS_GW5_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_5</incoming><outgoing>sf_ms_gw5_yes</outgoing><outgoing>sf_ms_gw5_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task5" name="provide for appropriate measures to address non-compliance"><incoming>sf_ms_gw5_yes</incoming><outgoing>sf_ms_t5_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW5_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t5_out</incoming><incoming>sf_ms_gw5_no</incoming><outgoing>sf_ms_6</outgoing></exclusiveGateway>
+
+      <!-- Block 6 -->
+      <exclusiveGateway id="sid-MS_GW6_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_6</incoming><outgoing>sf_ms_gw6_yes</outgoing><outgoing>sf_ms_gw6_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task6" name="apply the national system to monitor"><incoming>sf_ms_gw6_yes</incoming><outgoing>sf_ms_t6_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW6_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t6_out</incoming><incoming>sf_ms_gw6_no</incoming><outgoing>sf_ms_7</outgoing></exclusiveGateway>
+
+      <!-- Block 7 -->
+      <exclusiveGateway id="sid-MS_GW7_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_7</incoming><outgoing>sf_ms_gw7_yes</outgoing><outgoing>sf_ms_gw7_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task7" name="ensure that the applicant undergoes a medical examination"><incoming>sf_ms_gw7_yes</incoming><outgoing>sf_ms_t7_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW7_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t7_out</incoming><incoming>sf_ms_gw7_no</incoming><outgoing>sf_ms_8</outgoing></exclusiveGateway>
+
+      <!-- Block 8 -->
+      <exclusiveGateway id="sid-MS_GW8_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_8</incoming><outgoing>sf_ms_gw8_yes</outgoing><outgoing>sf_ms_gw8_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task8" name="take measures to raise awareness"><incoming>sf_ms_gw8_yes</incoming><outgoing>sf_ms_t8_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW8_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t8_out</incoming><incoming>sf_ms_gw8_no</incoming><outgoing>sf_ms_9</outgoing></exclusiveGateway>
+
+      <!-- Block 9 -->
+      <exclusiveGateway id="sid-MS_GW9_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_9</incoming><outgoing>sf_ms_gw9_yes</outgoing><outgoing>sf_ms_gw9_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task9" name="take measures to improve the knowledge of the health sector"><incoming>sf_ms_gw9_yes</incoming><outgoing>sf_ms_t9_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW9_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t9_out</incoming><incoming>sf_ms_gw9_no</incoming><outgoing>sf_ms_10</outgoing></exclusiveGateway>
+
+      <!-- Block 10 -->
+      <exclusiveGateway id="sid-MS_GW10_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_10</incoming><outgoing>sf_ms_gw10_yes</outgoing><outgoing>sf_ms_gw10_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task10" name="adopt guidelines for medical practitioners"><incoming>sf_ms_gw10_yes</incoming><outgoing>sf_ms_t10_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW10_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t10_out</incoming><incoming>sf_ms_gw10_no</incoming><outgoing>sf_ms_11</outgoing></exclusiveGateway>
+
+      <!-- Block 11 -->
+      <exclusiveGateway id="sid-MS_GW11_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_11</incoming><outgoing>sf_ms_gw11_yes</outgoing><outgoing>sf_ms_gw11_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task11" name="notify guidelines adopted to the Commission"><incoming>sf_ms_gw11_yes</incoming><outgoing>sf_ms_t11_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW11_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t11_out</incoming><incoming>sf_ms_gw11_no</incoming><outgoing>sf_ms_12</outgoing></exclusiveGateway>
+
+      <!-- Block 12 -->
+      <exclusiveGateway id="sid-MS_GW12_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_12</incoming><outgoing>sf_ms_gw12_yes</outgoing><outgoing>sf_ms_gw12_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task12" name="develop public awareness campaigns"><incoming>sf_ms_gw12_yes</incoming><outgoing>sf_ms_t12_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW12_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t12_out</incoming><incoming>sf_ms_gw12_no</incoming><outgoing>sf_ms_13</outgoing></exclusiveGateway>
+
+      <!-- Block 13 -->
+      <exclusiveGateway id="sid-MS_GW13_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_13</incoming><outgoing>sf_ms_gw13_yes</outgoing><outgoing>sf_ms_gw13_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task13" name="notify any public awareness campaigns developed to the Commission"><incoming>sf_ms_gw13_yes</incoming><outgoing>sf_ms_t13_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW13_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t13_out</incoming><incoming>sf_ms_gw13_no</incoming><outgoing>sf_ms_14</outgoing></exclusiveGateway>
+
+      <!-- Block 14 -->
+      <exclusiveGateway id="sid-MS_GW14_Split" isMarkerVisible="true" gatewayDirection="Diverging"><incoming>sf_ms_14</incoming><outgoing>sf_ms_gw14_yes</outgoing><outgoing>sf_ms_gw14_no</outgoing></exclusiveGateway>
+      <task id="sid-MS_Task14" name="set standards stricter than those set out in Annex III"><incoming>sf_ms_gw14_yes</incoming><outgoing>sf_ms_t14_out</outgoing></task>
+      <exclusiveGateway id="sid-MS_GW14_Merge" isMarkerVisible="true" gatewayDirection="Converging"><incoming>sf_ms_t14_out</incoming><incoming>sf_ms_gw14_no</incoming><outgoing>sf_ms_end_in</outgoing></exclusiveGateway>
+
+      <endEvent id="sid-MS_End" name="End">
+         <incoming>sf_ms_end_in</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ms_start_out" isImmediate="true" sourceRef="sid-MS_Start" targetRef="sid-MS_GW1_Split"/>
+      <sequenceFlow id="sf_ms_gw1_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW1_Split" targetRef="sid-MS_Task1"/>
+      <sequenceFlow id="sf_ms_gw1_no" name="no" isImmediate="true" sourceRef="sid-MS_GW1_Split" targetRef="sid-MS_GW1_Merge"/>
+      <sequenceFlow id="sf_ms_t1_out" isImmediate="true" sourceRef="sid-MS_Task1" targetRef="sid-MS_GW1_Merge"/>
+      <sequenceFlow id="sf_ms_2" isImmediate="true" sourceRef="sid-MS_GW1_Merge" targetRef="sid-MS_GW2_Split"/>
+      
+      <sequenceFlow id="sf_ms_gw2_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW2_Split" targetRef="sid-MS_Task2"/>
+      <sequenceFlow id="sf_ms_gw2_no" name="no" isImmediate="true" sourceRef="sid-MS_GW2_Split" targetRef="sid-MS_GW2_Merge"/>
+      <sequenceFlow id="sf_ms_t2_out" isImmediate="true" sourceRef="sid-MS_Task2" targetRef="sid-MS_GW2_Merge"/>
+      <sequenceFlow id="sf_ms_3" isImmediate="true" sourceRef="sid-MS_GW2_Merge" targetRef="sid-MS_GW3_Split"/>
+
+      <sequenceFlow id="sf_ms_gw3_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW3_Split" targetRef="sid-MS_Task3"/>
+      <sequenceFlow id="sf_ms_gw3_no" name="no" isImmediate="true" sourceRef="sid-MS_GW3_Split" targetRef="sid-MS_GW3_Merge"/>
+      <sequenceFlow id="sf_ms_t3_out" isImmediate="true" sourceRef="sid-MS_Task3" targetRef="sid-MS_GW3_Merge"/>
+      <sequenceFlow id="sf_ms_4" isImmediate="true" sourceRef="sid-MS_GW3_Merge" targetRef="sid-MS_GW4_Split"/>
+
+      <sequenceFlow id="sf_ms_gw4_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW4_Split" targetRef="sid-MS_Task4"/>
+      <sequenceFlow id="sf_ms_gw4_no" name="no" isImmediate="true" sourceRef="sid-MS_GW4_Split" targetRef="sid-MS_GW4_Merge"/>
+      <sequenceFlow id="sf_ms_t4_out" isImmediate="true" sourceRef="sid-MS_Task4" targetRef="sid-MS_GW4_Merge"/>
+      <sequenceFlow id="sf_ms_5" isImmediate="true" sourceRef="sid-MS_GW4_Merge" targetRef="sid-MS_GW5_Split"/>
+
+      <sequenceFlow id="sf_ms_gw5_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW5_Split" targetRef="sid-MS_Task5"/>
+      <sequenceFlow id="sf_ms_gw5_no" name="no" isImmediate="true" sourceRef="sid-MS_GW5_Split" targetRef="sid-MS_GW5_Merge"/>
+      <sequenceFlow id="sf_ms_t5_out" isImmediate="true" sourceRef="sid-MS_Task5" targetRef="sid-MS_GW5_Merge"/>
+      <sequenceFlow id="sf_ms_6" isImmediate="true" sourceRef="sid-MS_GW5_Merge" targetRef="sid-MS_GW6_Split"/>
+
+      <sequenceFlow id="sf_ms_gw6_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW6_Split" targetRef="sid-MS_Task6"/>
+      <sequenceFlow id="sf_ms_gw6_no" name="no" isImmediate="true" sourceRef="sid-MS_GW6_Split" targetRef="sid-MS_GW6_Merge"/>
+      <sequenceFlow id="sf_ms_t6_out" isImmediate="true" sourceRef="sid-MS_Task6" targetRef="sid-MS_GW6_Merge"/>
+      <sequenceFlow id="sf_ms_7" isImmediate="true" sourceRef="sid-MS_GW6_Merge" targetRef="sid-MS_GW7_Split"/>
+
+      <sequenceFlow id="sf_ms_gw7_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW7_Split" targetRef="sid-MS_Task7"/>
+      <sequenceFlow id="sf_ms_gw7_no" name="no" isImmediate="true" sourceRef="sid-MS_GW7_Split" targetRef="sid-MS_GW7_Merge"/>
+      <sequenceFlow id="sf_ms_t7_out" isImmediate="true" sourceRef="sid-MS_Task7" targetRef="sid-MS_GW7_Merge"/>
+      <sequenceFlow id="sf_ms_8" isImmediate="true" sourceRef="sid-MS_GW7_Merge" targetRef="sid-MS_GW8_Split"/>
+
+      <sequenceFlow id="sf_ms_gw8_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW8_Split" targetRef="sid-MS_Task8"/>
+      <sequenceFlow id="sf_ms_gw8_no" name="no" isImmediate="true" sourceRef="sid-MS_GW8_Split" targetRef="sid-MS_GW8_Merge"/>
+      <sequenceFlow id="sf_ms_t8_out" isImmediate="true" sourceRef="sid-MS_Task8" targetRef="sid-MS_GW8_Merge"/>
+      <sequenceFlow id="sf_ms_9" isImmediate="true" sourceRef="sid-MS_GW8_Merge" targetRef="sid-MS_GW9_Split"/>
+
+      <sequenceFlow id="sf_ms_gw9_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW9_Split" targetRef="sid-MS_Task9"/>
+      <sequenceFlow id="sf_ms_gw9_no" name="no" isImmediate="true" sourceRef="sid-MS_GW9_Split" targetRef="sid-MS_GW9_Merge"/>
+      <sequenceFlow id="sf_ms_t9_out" isImmediate="true" sourceRef="sid-MS_Task9" targetRef="sid-MS_GW9_Merge"/>
+      <sequenceFlow id="sf_ms_10" isImmediate="true" sourceRef="sid-MS_GW9_Merge" targetRef="sid-MS_GW10_Split"/>
+
+      <sequenceFlow id="sf_ms_gw10_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW10_Split" targetRef="sid-MS_Task10"/>
+      <sequenceFlow id="sf_ms_gw10_no" name="no" isImmediate="true" sourceRef="sid-MS_GW10_Split" targetRef="sid-MS_GW10_Merge"/>
+      <sequenceFlow id="sf_ms_t10_out" isImmediate="true" sourceRef="sid-MS_Task10" targetRef="sid-MS_GW10_Merge"/>
+      <sequenceFlow id="sf_ms_11" isImmediate="true" sourceRef="sid-MS_GW10_Merge" targetRef="sid-MS_GW11_Split"/>
+
+      <sequenceFlow id="sf_ms_gw11_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW11_Split" targetRef="sid-MS_Task11"/>
+      <sequenceFlow id="sf_ms_gw11_no" name="no" isImmediate="true" sourceRef="sid-MS_GW11_Split" targetRef="sid-MS_GW11_Merge"/>
+      <sequenceFlow id="sf_ms_t11_out" isImmediate="true" sourceRef="sid-MS_Task11" targetRef="sid-MS_GW11_Merge"/>
+      <sequenceFlow id="sf_ms_12" isImmediate="true" sourceRef="sid-MS_GW11_Merge" targetRef="sid-MS_GW12_Split"/>
+
+      <sequenceFlow id="sf_ms_gw12_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW12_Split" targetRef="sid-MS_Task12"/>
+      <sequenceFlow id="sf_ms_gw12_no" name="no" isImmediate="true" sourceRef="sid-MS_GW12_Split" targetRef="sid-MS_GW12_Merge"/>
+      <sequenceFlow id="sf_ms_t12_out" isImmediate="true" sourceRef="sid-MS_Task12" targetRef="sid-MS_GW12_Merge"/>
+      <sequenceFlow id="sf_ms_13" isImmediate="true" sourceRef="sid-MS_GW12_Merge" targetRef="sid-MS_GW13_Split"/>
+
+      <sequenceFlow id="sf_ms_gw13_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW13_Split" targetRef="sid-MS_Task13"/>
+      <sequenceFlow id="sf_ms_gw13_no" name="no" isImmediate="true" sourceRef="sid-MS_GW13_Split" targetRef="sid-MS_GW13_Merge"/>
+      <sequenceFlow id="sf_ms_t13_out" isImmediate="true" sourceRef="sid-MS_Task13" targetRef="sid-MS_GW13_Merge"/>
+      <sequenceFlow id="sf_ms_14" isImmediate="true" sourceRef="sid-MS_GW13_Merge" targetRef="sid-MS_GW14_Split"/>
+
+      <sequenceFlow id="sf_ms_gw14_yes" name="yes" isImmediate="true" sourceRef="sid-MS_GW14_Split" targetRef="sid-MS_Task14"/>
+      <sequenceFlow id="sf_ms_gw14_no" name="no" isImmediate="true" sourceRef="sid-MS_GW14_Split" targetRef="sid-MS_GW14_Merge"/>
+      <sequenceFlow id="sf_ms_t14_out" isImmediate="true" sourceRef="sid-MS_Task14" targetRef="sid-MS_GW14_Merge"/>
+      <sequenceFlow id="sf_ms_end_in" isImmediate="true" sourceRef="sid-MS_GW14_Merge" targetRef="sid-MS_End"/>
+   </process>
+
+   <!-- COMMISSION PROCESS -->
+   <process id="process_com" name="Commission" isExecutable="false">
+      <laneSet id="laneSet_com">
+         <lane id="lane_com">
+            <flowNodeRef>sid-Com_Start</flowNodeRef>
+            <flowNodeRef>sid-Com_Catch1</flowNodeRef>
+            <flowNodeRef>sid-Com_Task1</flowNodeRef>
+            <flowNodeRef>sid-Com_Catch2</flowNodeRef>
+            <flowNodeRef>sid-Com_Task2</flowNodeRef>
+            <flowNodeRef>sid-Com_End</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="sid-Com_Start" name="Start">
+         <outgoing>sf_com_1</outgoing>
+      </startEvent>
+
+      <intermediateCatchEvent id="sid-Com_Catch1" name="Receive guidelines adopted">
+         <outgoing>sf_com_2</outgoing>
+         <incoming>sf_com_1</incoming>
+         <messageEventDefinition id="med_com_1"/>
+      </intermediateCatchEvent>
+
+      <task id="sid-Com_Task1" name="make available to the other Member States the guidelines adopted">
+         <incoming>sf_com_2</incoming>
+         <outgoing>sf_com_3</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="sid-Com_Catch2" name="Receive any public awareness campaigns developed">
+         <outgoing>sf_com_4</outgoing>
+         <incoming>sf_com_3</incoming>
+         <messageEventDefinition id="med_com_2"/>
+      </intermediateCatchEvent>
+
+      <task id="sid-Com_Task2" name="make available to the other Member States the information">
+         <incoming>sf_com_4</incoming>
+         <outgoing>sf_com_5</outgoing>
+      </task>
+
+      <endEvent id="sid-Com_End" name="End">
+         <incoming>sf_com_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_com_1" isImmediate="true" sourceRef="sid-Com_Start" targetRef="sid-Com_Catch1"/>
+      <sequenceFlow id="sf_com_2" isImmediate="true" sourceRef="sid-Com_Catch1" targetRef="sid-Com_Task1"/>
+      <sequenceFlow id="sf_com_3" isImmediate="true" sourceRef="sid-Com_Task1" targetRef="sid-Com_Catch2"/>
+      <sequenceFlow id="sf_com_4" isImmediate="true" sourceRef="sid-Com_Catch2" targetRef="sid-Com_Task2"/>
+      <sequenceFlow id="sf_com_5" isImmediate="true" sourceRef="sid-Com_Task2" targetRef="sid-Com_End"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="sid-diag-1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab" id="sid-plane-1">
+         
+         <bpmndi:BPMNShape bpmnElement="sid-app" id="sid-app_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3800.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_app" id="lane_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3770.0" x="80.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="sid-App_Start" id="sid-App_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="150.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_GW1_Split" id="sid-App_GW1_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="145.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_Task1" id="sid-App_Task1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="280.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_GW1_Merge" id="sid-App_GW1_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="145.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_GW2_Split" id="sid-App_GW2_Split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="520.0" y="145.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_Task2" id="sid-App_Task2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_GW2_Merge" id="sid-App_GW2_Merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="740.0" y="145.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-App_End" id="sid-App_End_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="840.0" y="151.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_app_1" id="sf_app_1_gui">
+            <omgdi:waypoint x="150.0" y="165.0"/><omgdi:waypoint x="200.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_gw1_yes" id="sf_app_gw1_yes_gui">
+            <omgdi:waypoint x="220.0" y="145.0"/><omgdi:waypoint x="220.0" y="120.0"/><omgdi:waypoint x="280.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_gw1_no" id="sf_app_gw1_no_gui">
+            <omgdi:waypoint x="240.0" y="165.0"/><omgdi:waypoint x="420.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_t1_out" id="sf_app_t1_out_gui">
+            <omgdi:waypoint x="380.0" y="120.0"/><omgdi:waypoint x="440.0" y="120.0"/><omgdi:waypoint x="440.0" y="145.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_2" id="sf_app_2_gui">
+            <omgdi:waypoint x="460.0" y="165.0"/><omgdi:waypoint x="520.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_gw2_yes" id="sf_app_gw2_yes_gui">
+            <omgdi:waypoint x="540.0" y="145.0"/><omgdi:waypoint x="540.0" y="120.0"/><omgdi:waypoint x="600.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_gw2_no" id="sf_app_gw2_no_gui">
+            <omgdi:waypoint x="560.0" y="165.0"/><omgdi:waypoint x="740.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_t2_out" id="sf_app_t2_out_gui">
+            <omgdi:waypoint x="700.0" y="120.0"/><omgdi:waypoint x="760.0" y="120.0"/><omgdi:waypoint x="760.0" y="145.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_3" id="sf_app_3_gui">
+            <omgdi:waypoint x="780.0" y="165.0"/><omgdi:waypoint x="840.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="sid-ms" id="sid-ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3800.0" x="50.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3770.0" x="80.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Start" id="sid-MS_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW1_Split" id="sid-MS_GW1_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="200.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task1" id="sid-MS_Task1_gui"><omgdc:Bounds height="80.0" width="100.0" x="280.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW1_Merge" id="sid-MS_GW1_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="420.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW2_Split" id="sid-MS_GW2_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="440.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task2" id="sid-MS_Task2_gui"><omgdc:Bounds height="80.0" width="100.0" x="520.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW2_Merge" id="sid-MS_GW2_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="660.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW3_Split" id="sid-MS_GW3_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="680.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task3" id="sid-MS_Task3_gui"><omgdc:Bounds height="80.0" width="100.0" x="760.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW3_Merge" id="sid-MS_GW3_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="900.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW4_Split" id="sid-MS_GW4_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="920.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task4" id="sid-MS_Task4_gui"><omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW4_Merge" id="sid-MS_GW4_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="1140.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW5_Split" id="sid-MS_GW5_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="1160.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task5" id="sid-MS_Task5_gui"><omgdc:Bounds height="80.0" width="100.0" x="1240.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW5_Merge" id="sid-MS_GW5_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="1380.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW6_Split" id="sid-MS_GW6_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="1400.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task6" id="sid-MS_Task6_gui"><omgdc:Bounds height="80.0" width="100.0" x="1480.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW6_Merge" id="sid-MS_GW6_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="1620.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW7_Split" id="sid-MS_GW7_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="1640.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task7" id="sid-MS_Task7_gui"><omgdc:Bounds height="80.0" width="100.0" x="1720.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW7_Merge" id="sid-MS_GW7_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="1860.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW8_Split" id="sid-MS_GW8_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="1880.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task8" id="sid-MS_Task8_gui"><omgdc:Bounds height="80.0" width="100.0" x="1960.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW8_Merge" id="sid-MS_GW8_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="2100.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW9_Split" id="sid-MS_GW9_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="2120.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task9" id="sid-MS_Task9_gui"><omgdc:Bounds height="80.0" width="100.0" x="2200.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW9_Merge" id="sid-MS_GW9_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="2340.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW10_Split" id="sid-MS_GW10_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="2360.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task10" id="sid-MS_Task10_gui"><omgdc:Bounds height="80.0" width="100.0" x="2440.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW10_Merge" id="sid-MS_GW10_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="2580.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW11_Split" id="sid-MS_GW11_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="2600.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task11" id="sid-MS_Task11_gui"><omgdc:Bounds height="80.0" width="100.0" x="2680.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW11_Merge" id="sid-MS_GW11_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="2820.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW12_Split" id="sid-MS_GW12_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="2840.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task12" id="sid-MS_Task12_gui"><omgdc:Bounds height="80.0" width="100.0" x="2920.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW12_Merge" id="sid-MS_GW12_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="3060.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW13_Split" id="sid-MS_GW13_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="3080.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task13" id="sid-MS_Task13_gui"><omgdc:Bounds height="80.0" width="100.0" x="3160.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW13_Merge" id="sid-MS_GW13_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="3300.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW14_Split" id="sid-MS_GW14_Split_gui"><omgdc:Bounds height="40.0" width="40.0" x="3320.0" y="480.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_Task14" id="sid-MS_Task14_gui"><omgdc:Bounds height="80.0" width="100.0" x="3400.0" y="400.0"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS_GW14_Merge" id="sid-MS_GW14_Merge_gui"><omgdc:Bounds height="40.0" width="40.0" x="3540.0" y="480.0"/></bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-MS_End" id="sid-MS_End_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="3600.0" y="486.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_start_out" id="sf_ms_start_out_gui"><omgdi:waypoint x="150.0" y="500.0"/><omgdi:waypoint x="200.0" y="500.0"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw1_yes" id="sf_ms_gw1_yes_gui"><omgdi:waypoint x="220.0" y="480.0"/><omgdi:waypoint x="220.0" y="440.0"/><omgdi:waypoint x="280.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw1_no" id="sf_ms_gw1_no_gui"><omgdi:waypoint x="240.0" y="500.0"/><omgdi:waypoint x="420.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t1_out" id="sf_ms_t1_out_gui"><omgdi:waypoint x="380.0" y="440.0"/><omgdi:waypoint x="440.0" y="440.0"/><omgdi:waypoint x="440.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_2" id="sf_ms_2_gui"><omgdi:waypoint x="460.0" y="500.0"/><omgdi:waypoint x="440.0" y="500.0"/></bpmndi:BPMNEdge> 
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw2_yes" id="sf_ms_gw2_yes_gui"><omgdi:waypoint x="460.0" y="480.0"/><omgdi:waypoint x="460.0" y="440.0"/><omgdi:waypoint x="520.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw2_no" id="sf_ms_gw2_no_gui"><omgdi:waypoint x="480.0" y="500.0"/><omgdi:waypoint x="660.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t2_out" id="sf_ms_t2_out_gui"><omgdi:waypoint x="620.0" y="440.0"/><omgdi:waypoint x="680.0" y="440.0"/><omgdi:waypoint x="680.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_3" id="sf_ms_3_gui"><omgdi:waypoint x="700.0" y="500.0"/><omgdi:waypoint x="680.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw3_yes" id="sf_ms_gw3_yes_gui"><omgdi:waypoint x="700.0" y="480.0"/><omgdi:waypoint x="700.0" y="440.0"/><omgdi:waypoint x="760.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw3_no" id="sf_ms_gw3_no_gui"><omgdi:waypoint x="720.0" y="500.0"/><omgdi:waypoint x="900.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t3_out" id="sf_ms_t3_out_gui"><omgdi:waypoint x="860.0" y="440.0"/><omgdi:waypoint x="920.0" y="440.0"/><omgdi:waypoint x="920.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_4" id="sf_ms_4_gui"><omgdi:waypoint x="940.0" y="500.0"/><omgdi:waypoint x="920.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw4_yes" id="sf_ms_gw4_yes_gui"><omgdi:waypoint x="940.0" y="480.0"/><omgdi:waypoint x="940.0" y="440.0"/><omgdi:waypoint x="1000.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw4_no" id="sf_ms_gw4_no_gui"><omgdi:waypoint x="960.0" y="500.0"/><omgdi:waypoint x="1140.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t4_out" id="sf_ms_t4_out_gui"><omgdi:waypoint x="1100.0" y="440.0"/><omgdi:waypoint x="1160.0" y="440.0"/><omgdi:waypoint x="1160.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_5" id="sf_ms_5_gui"><omgdi:waypoint x="1180.0" y="500.0"/><omgdi:waypoint x="1160.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw5_yes" id="sf_ms_gw5_yes_gui"><omgdi:waypoint x="1180.0" y="480.0"/><omgdi:waypoint x="1180.0" y="440.0"/><omgdi:waypoint x="1240.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw5_no" id="sf_ms_gw5_no_gui"><omgdi:waypoint x="1200.0" y="500.0"/><omgdi:waypoint x="1380.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t5_out" id="sf_ms_t5_out_gui"><omgdi:waypoint x="1340.0" y="440.0"/><omgdi:waypoint x="1400.0" y="440.0"/><omgdi:waypoint x="1400.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_6" id="sf_ms_6_gui"><omgdi:waypoint x="1420.0" y="500.0"/><omgdi:waypoint x="1400.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw6_yes" id="sf_ms_gw6_yes_gui"><omgdi:waypoint x="1420.0" y="480.0"/><omgdi:waypoint x="1420.0" y="440.0"/><omgdi:waypoint x="1480.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw6_no" id="sf_ms_gw6_no_gui"><omgdi:waypoint x="1440.0" y="500.0"/><omgdi:waypoint x="1620.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t6_out" id="sf_ms_t6_out_gui"><omgdi:waypoint x="1580.0" y="440.0"/><omgdi:waypoint x="1640.0" y="440.0"/><omgdi:waypoint x="1640.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_7" id="sf_ms_7_gui"><omgdi:waypoint x="1660.0" y="500.0"/><omgdi:waypoint x="1640.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw7_yes" id="sf_ms_gw7_yes_gui"><omgdi:waypoint x="1660.0" y="480.0"/><omgdi:waypoint x="1660.0" y="440.0"/><omgdi:waypoint x="1720.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw7_no" id="sf_ms_gw7_no_gui"><omgdi:waypoint x="1680.0" y="500.0"/><omgdi:waypoint x="1860.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t7_out" id="sf_ms_t7_out_gui"><omgdi:waypoint x="1820.0" y="440.0"/><omgdi:waypoint x="1880.0" y="440.0"/><omgdi:waypoint x="1880.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_8" id="sf_ms_8_gui"><omgdi:waypoint x="1900.0" y="500.0"/><omgdi:waypoint x="1880.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw8_yes" id="sf_ms_gw8_yes_gui"><omgdi:waypoint x="1900.0" y="480.0"/><omgdi:waypoint x="1900.0" y="440.0"/><omgdi:waypoint x="1960.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw8_no" id="sf_ms_gw8_no_gui"><omgdi:waypoint x="1920.0" y="500.0"/><omgdi:waypoint x="2100.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t8_out" id="sf_ms_t8_out_gui"><omgdi:waypoint x="2060.0" y="440.0"/><omgdi:waypoint x="2120.0" y="440.0"/><omgdi:waypoint x="2120.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_9" id="sf_ms_9_gui"><omgdi:waypoint x="2140.0" y="500.0"/><omgdi:waypoint x="2120.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw9_yes" id="sf_ms_gw9_yes_gui"><omgdi:waypoint x="2140.0" y="480.0"/><omgdi:waypoint x="2140.0" y="440.0"/><omgdi:waypoint x="2200.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw9_no" id="sf_ms_gw9_no_gui"><omgdi:waypoint x="2160.0" y="500.0"/><omgdi:waypoint x="2340.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t9_out" id="sf_ms_t9_out_gui"><omgdi:waypoint x="2300.0" y="440.0"/><omgdi:waypoint x="2360.0" y="440.0"/><omgdi:waypoint x="2360.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_10" id="sf_ms_10_gui"><omgdi:waypoint x="2380.0" y="500.0"/><omgdi:waypoint x="2360.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw10_yes" id="sf_ms_gw10_yes_gui"><omgdi:waypoint x="2380.0" y="480.0"/><omgdi:waypoint x="2380.0" y="440.0"/><omgdi:waypoint x="2440.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw10_no" id="sf_ms_gw10_no_gui"><omgdi:waypoint x="2400.0" y="500.0"/><omgdi:waypoint x="2580.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t10_out" id="sf_ms_t10_out_gui"><omgdi:waypoint x="2540.0" y="440.0"/><omgdi:waypoint x="2600.0" y="440.0"/><omgdi:waypoint x="2600.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_11" id="sf_ms_11_gui"><omgdi:waypoint x="2620.0" y="500.0"/><omgdi:waypoint x="2600.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw11_yes" id="sf_ms_gw11_yes_gui"><omgdi:waypoint x="2620.0" y="480.0"/><omgdi:waypoint x="2620.0" y="440.0"/><omgdi:waypoint x="2680.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw11_no" id="sf_ms_gw11_no_gui"><omgdi:waypoint x="2640.0" y="500.0"/><omgdi:waypoint x="2820.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t11_out" id="sf_ms_t11_out_gui"><omgdi:waypoint x="2780.0" y="440.0"/><omgdi:waypoint x="2840.0" y="440.0"/><omgdi:waypoint x="2840.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_12" id="sf_ms_12_gui"><omgdi:waypoint x="2860.0" y="500.0"/><omgdi:waypoint x="2840.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw12_yes" id="sf_ms_gw12_yes_gui"><omgdi:waypoint x="2860.0" y="480.0"/><omgdi:waypoint x="2860.0" y="440.0"/><omgdi:waypoint x="2920.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw12_no" id="sf_ms_gw12_no_gui"><omgdi:waypoint x="2880.0" y="500.0"/><omgdi:waypoint x="3060.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t12_out" id="sf_ms_t12_out_gui"><omgdi:waypoint x="3020.0" y="440.0"/><omgdi:waypoint x="3080.0" y="440.0"/><omgdi:waypoint x="3080.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_13" id="sf_ms_13_gui"><omgdi:waypoint x="3100.0" y="500.0"/><omgdi:waypoint x="3080.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw13_yes" id="sf_ms_gw13_yes_gui"><omgdi:waypoint x="3100.0" y="480.0"/><omgdi:waypoint x="3100.0" y="440.0"/><omgdi:waypoint x="3160.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw13_no" id="sf_ms_gw13_no_gui"><omgdi:waypoint x="3120.0" y="500.0"/><omgdi:waypoint x="3300.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t13_out" id="sf_ms_t13_out_gui"><omgdi:waypoint x="3260.0" y="440.0"/><omgdi:waypoint x="3320.0" y="440.0"/><omgdi:waypoint x="3320.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_14" id="sf_ms_14_gui"><omgdi:waypoint x="3340.0" y="500.0"/><omgdi:waypoint x="3320.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw14_yes" id="sf_ms_gw14_yes_gui"><omgdi:waypoint x="3340.0" y="480.0"/><omgdi:waypoint x="3340.0" y="440.0"/><omgdi:waypoint x="3400.0" y="440.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_gw14_no" id="sf_ms_gw14_no_gui"><omgdi:waypoint x="3360.0" y="500.0"/><omgdi:waypoint x="3540.0" y="500.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_t14_out" id="sf_ms_t14_out_gui"><omgdi:waypoint x="3500.0" y="440.0"/><omgdi:waypoint x="3560.0" y="440.0"/><omgdi:waypoint x="3560.0" y="480.0"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_end_in" id="sf_ms_end_in_gui"><omgdi:waypoint x="3580.0" y="500.0"/><omgdi:waypoint x="3600.0" y="500.0"/></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="sid-com" id="sid-com_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3800.0" x="50.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_com" id="lane_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3770.0" x="80.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="sid-Com_Start" id="sid-Com_Start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2600.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-Com_Catch1" id="sid-Com_Catch1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2715.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-Com_Task1" id="sid-Com_Task1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2800.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-Com_Catch2" id="sid-Com_Catch2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="3195.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-Com_Task2" id="sid-Com_Task2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3280.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-Com_End" id="sid-Com_End_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="3430.0" y="826.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_com_1" id="sf_com_1_gui">
+            <omgdi:waypoint x="2630.0" y="840.0"/><omgdi:waypoint x="2715.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_2" id="sf_com_2_gui">
+            <omgdi:waypoint x="2745.0" y="840.0"/><omgdi:waypoint x="2800.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_3" id="sf_com_3_gui">
+            <omgdi:waypoint x="2900.0" y="840.0"/><omgdi:waypoint x="3195.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_4" id="sf_com_4_gui">
+            <omgdi:waypoint x="3225.0" y="840.0"/><omgdi:waypoint x="3280.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_5" id="sf_com_5_gui">
+            <omgdi:waypoint x="3380.0" y="840.0"/><omgdi:waypoint x="3430.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="mf1" id="mf1_gui">
+            <omgdi:waypoint x="2730.0" y="480.0"/><omgdi:waypoint x="2730.0" y="825.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf2" id="mf2_gui">
+            <omgdi:waypoint x="3210.0" y="480.0"/><omgdi:waypoint x="3210.0" y="825.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf3" id="mf3_gui">
+            <omgdi:waypoint x="2850.0" y="800.0"/><omgdi:waypoint x="2850.0" y="650.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf4" id="mf4_gui">
+            <omgdi:waypoint x="3330.0" y="800.0"/><omgdi:waypoint x="3330.0" y="650.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

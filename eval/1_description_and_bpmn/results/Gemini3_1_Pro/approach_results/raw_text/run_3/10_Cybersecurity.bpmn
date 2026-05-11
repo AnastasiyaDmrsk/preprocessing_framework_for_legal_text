@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor" 
+             exporterVersion="19.2.2" 
+             id="sid-main" 
+             targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="collab_1">
+      <participant id="Participant_Commission" name="Commission" processRef="Process_Commission"/>
+      <participant id="Participant_ECCG" name="ECCG" processRef="Process_ECCG"/>
+      <participant id="Participant_ENISA" name="ENISA" processRef="Process_ENISA"/>
+      <participant id="Participant_IP" name="Interested Party" processRef="Process_IP"/>
+      
+      <messageFlow id="m_c_to_enisa" sourceRef="c_transmit" targetRef="en_start"/>
+      <messageFlow id="m_e_to_enisa" sourceRef="e_transmit" targetRef="en_start"/>
+      <messageFlow id="m_enisa_to_c" sourceRef="en_transmit_cand" targetRef="c_catch_scheme"/>
+      <messageFlow id="m_enisa_to_e" sourceRef="en_coop" targetRef="e_catch_notif"/>
+      <messageFlow id="m_e_to_enisa_op" sourceRef="e_transmit_opinion" targetRef="en_catch_opinion"/>
+      <messageFlow id="m_c_to_enisa_rev" sourceRef="c_transmit_revise" targetRef="en_catch_rev_req"/>
+      <messageFlow id="m_e_to_enisa_rev" sourceRef="e_transmit_revise" targetRef="en_catch_rev_req"/>
+      <!-- Target participant when no specific receiving element exists -->
+      <messageFlow id="m_ip_to_enisa" sourceRef="ip_transmit" targetRef="Participant_ENISA"/>
+   </collaboration>
+
+   <process id="Process_Commission" isClosed="false" isExecutable="true" name="Commission" processType="None">
+      <startEvent id="c_start" name="identification of a need for a new or reviewed European cybersecurity certification scheme">
+         <outgoing>c_sf_1</outgoing>
+      </startEvent>
+      <task id="c_assess_1" name="assess whether the scheme is on the basis of the Union rolling work programme">
+         <incoming>c_sf_1</incoming>
+         <outgoing>c_sf_2</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw_1_div" gatewayDirection="Diverging" isMarkerVisible="true" name="Is on the basis?">
+         <incoming>c_sf_2</incoming>
+         <outgoing>c_sf_gw1_y</outgoing>
+         <outgoing>c_sf_gw1_n</outgoing>
+      </exclusiveGateway>
+      
+      <task id="c_req_prep" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>c_sf_gw1_y</incoming>
+         <outgoing>c_sf_3</outgoing>
+      </task>
+      <task id="c_req_rev" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>c_sf_3</incoming>
+         <outgoing>c_sf_4</outgoing>
+      </task>
+      
+      <task id="c_assess_2" name="assess whether the scheme is in duly justified cases and not included in programme">
+         <incoming>c_sf_gw1_n</incoming>
+         <outgoing>c_sf_5</outgoing>
+      </task>
+      <exclusiveGateway id="c_gw_2_div" gatewayDirection="Diverging" isMarkerVisible="true" name="In justified cases?">
+         <incoming>c_sf_5</incoming>
+         <outgoing>c_sf_gw2_y</outgoing>
+         <outgoing>c_sf_gw2_n</outgoing>
+      </exclusiveGateway>
+      <task id="c_req_prep_2" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>c_sf_gw2_y</incoming>
+         <outgoing>c_sf_6</outgoing>
+      </task>
+      <task id="c_req_rev_2" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>c_sf_6</incoming>
+         <outgoing>c_sf_7</outgoing>
+      </task>
+      <task id="c_update_prog" name="update the Union rolling work programme">
+         <incoming>c_sf_7</incoming>
+         <outgoing>c_sf_8</outgoing>
+      </task>
+      
+      <exclusiveGateway id="c_gw_1_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge paths">
+         <incoming>c_sf_4</incoming>
+         <incoming>c_sf_8</incoming>
+         <incoming>c_sf_gw2_n</incoming>
+         <outgoing>c_sf_9</outgoing>
+      </exclusiveGateway>
+      
+      <task id="c_transmit" name="transmit the request to ENISA">
+         <incoming>c_sf_9</incoming>
+         <outgoing>c_sf_10</outgoing>
+      </task>
+      <intermediateCatchEvent id="c_catch_scheme" name="Upon receiving the candidate scheme">
+         <incoming>c_sf_10</incoming>
+         <outgoing>c_sf_11</outgoing>
+         <messageEventDefinition id="msg_def_c_1"/>
+      </intermediateCatchEvent>
+      <task id="c_adopt" name="adopt implementing acts">
+         <incoming>c_sf_11</incoming>
+         <outgoing>c_sf_12</outgoing>
+      </task>
+      
+      <exclusiveGateway id="c_gw_3_div" gatewayDirection="Diverging" isMarkerVisible="true" name="If necessary?">
+         <incoming>c_sf_12</incoming>
+         <outgoing>c_sf_gw3_y</outgoing>
+         <outgoing>c_sf_gw3_n</outgoing>
+      </exclusiveGateway>
+      <task id="c_req_revise" name="request ENISA to start the process of developing a revised candidate scheme">
+         <incoming>c_sf_gw3_y</incoming>
+         <outgoing>c_sf_13</outgoing>
+      </task>
+      <task id="c_transmit_revise" name="transmit the request for a revised candidate scheme to ENISA">
+         <incoming>c_sf_13</incoming>
+         <outgoing>c_sf_14</outgoing>
+      </task>
+      
+      <exclusiveGateway id="c_gw_3_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge Revise">
+         <incoming>c_sf_14</incoming>
+         <incoming>c_sf_gw3_n</incoming>
+         <outgoing>c_sf_15</outgoing>
+      </exclusiveGateway>
+      <endEvent id="c_end" name="scheme adoption or revision request end event">
+         <incoming>c_sf_15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="c_sf_1" isImmediate="true" sourceRef="c_start" targetRef="c_assess_1"/>
+      <sequenceFlow id="c_sf_2" isImmediate="true" sourceRef="c_assess_1" targetRef="c_gw_1_div"/>
+      <sequenceFlow id="c_sf_gw1_y" isImmediate="true" name="yes" sourceRef="c_gw_1_div" targetRef="c_req_prep"/>
+      <sequenceFlow id="c_sf_gw1_n" isImmediate="true" name="no" sourceRef="c_gw_1_div" targetRef="c_assess_2"/>
+      <sequenceFlow id="c_sf_3" isImmediate="true" sourceRef="c_req_prep" targetRef="c_req_rev"/>
+      <sequenceFlow id="c_sf_4" isImmediate="true" sourceRef="c_req_rev" targetRef="c_gw_1_conv"/>
+      <sequenceFlow id="c_sf_5" isImmediate="true" sourceRef="c_assess_2" targetRef="c_gw_2_div"/>
+      <sequenceFlow id="c_sf_gw2_y" isImmediate="true" name="yes" sourceRef="c_gw_2_div" targetRef="c_req_prep_2"/>
+      <sequenceFlow id="c_sf_gw2_n" isImmediate="true" name="no" sourceRef="c_gw_2_div" targetRef="c_gw_1_conv"/>
+      <sequenceFlow id="c_sf_6" isImmediate="true" sourceRef="c_req_prep_2" targetRef="c_req_rev_2"/>
+      <sequenceFlow id="c_sf_7" isImmediate="true" sourceRef="c_req_rev_2" targetRef="c_update_prog"/>
+      <sequenceFlow id="c_sf_8" isImmediate="true" sourceRef="c_update_prog" targetRef="c_gw_1_conv"/>
+      <sequenceFlow id="c_sf_9" isImmediate="true" sourceRef="c_gw_1_conv" targetRef="c_transmit"/>
+      <sequenceFlow id="c_sf_10" isImmediate="true" sourceRef="c_transmit" targetRef="c_catch_scheme"/>
+      <sequenceFlow id="c_sf_11" isImmediate="true" sourceRef="c_catch_scheme" targetRef="c_adopt"/>
+      <sequenceFlow id="c_sf_12" isImmediate="true" sourceRef="c_adopt" targetRef="c_gw_3_div"/>
+      <sequenceFlow id="c_sf_gw3_y" isImmediate="true" name="yes" sourceRef="c_gw_3_div" targetRef="c_req_revise"/>
+      <sequenceFlow id="c_sf_gw3_n" isImmediate="true" name="no" sourceRef="c_gw_3_div" targetRef="c_gw_3_conv"/>
+      <sequenceFlow id="c_sf_13" isImmediate="true" sourceRef="c_req_revise" targetRef="c_transmit_revise"/>
+      <sequenceFlow id="c_sf_14" isImmediate="true" sourceRef="c_transmit_revise" targetRef="c_gw_3_conv"/>
+      <sequenceFlow id="c_sf_15" isImmediate="true" sourceRef="c_gw_3_conv" targetRef="c_end"/>
+   </process>
+
+   <process id="Process_ECCG" isClosed="false" isExecutable="true" name="ECCG" processType="None">
+      <startEvent id="e_start" name="Start ECCG">
+         <outgoing>e_sf_1</outgoing>
+      </startEvent>
+      <task id="e_assess_1" name="assess whether the scheme is in duly justified cases and not included in programme">
+         <incoming>e_sf_1</incoming>
+         <outgoing>e_sf_2</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_1_div" gatewayDirection="Diverging" isMarkerVisible="true" name="Justified cases?">
+         <incoming>e_sf_2</incoming>
+         <outgoing>e_sf_gw1_y</outgoing>
+         <outgoing>e_sf_gw1_n</outgoing>
+      </exclusiveGateway>
+      <task id="e_req_prep" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>e_sf_gw1_y</incoming>
+         <outgoing>e_sf_3</outgoing>
+      </task>
+      <task id="e_req_rev" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>e_sf_3</incoming>
+         <outgoing>e_sf_4</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_1_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge prep">
+         <incoming>e_sf_4</incoming>
+         <incoming>e_sf_gw1_n</incoming>
+         <outgoing>e_sf_5</outgoing>
+      </exclusiveGateway>
+      <task id="e_transmit" name="transmit the request to ENISA">
+         <incoming>e_sf_5</incoming>
+         <outgoing>e_sf_6</outgoing>
+      </task>
+      <intermediateCatchEvent id="e_catch_notif" name="Upon receiving notification of preparation">
+         <incoming>e_sf_6</incoming>
+         <outgoing>e_sf_7</outgoing>
+         <messageEventDefinition id="msg_def_e_1"/>
+      </intermediateCatchEvent>
+      <task id="e_provide_assist" name="provide ENISA with assistance and expert advice">
+         <incoming>e_sf_7</incoming>
+         <outgoing>e_sf_8</outgoing>
+      </task>
+      <task id="e_adopt_opinion" name="adopt an opinion on the candidate scheme">
+         <incoming>e_sf_8</incoming>
+         <outgoing>e_sf_9</outgoing>
+      </task>
+      <task id="e_transmit_opinion" name="transmit the opinion to ENISA">
+         <incoming>e_sf_9</incoming>
+         <outgoing>e_sf_10</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_2_div" gatewayDirection="Diverging" isMarkerVisible="true" name="Necessary?">
+         <incoming>e_sf_10</incoming>
+         <outgoing>e_sf_gw2_y</outgoing>
+         <outgoing>e_sf_gw2_n</outgoing>
+      </exclusiveGateway>
+      <task id="e_req_revise" name="request ENISA to start process of revising">
+         <incoming>e_sf_gw2_y</incoming>
+         <outgoing>e_sf_11</outgoing>
+      </task>
+      <task id="e_transmit_revise" name="transmit the request for a revised candidate scheme to ENISA">
+         <incoming>e_sf_11</incoming>
+         <outgoing>e_sf_12</outgoing>
+      </task>
+      <exclusiveGateway id="e_gw_2_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge revise">
+         <incoming>e_sf_12</incoming>
+         <incoming>e_sf_gw2_n</incoming>
+         <outgoing>e_sf_13</outgoing>
+      </exclusiveGateway>
+      <endEvent id="e_end" name="scheme opinion or revision request end event">
+         <incoming>e_sf_13</incoming>
+      </endEvent>
+
+      <sequenceFlow id="e_sf_1" isImmediate="true" sourceRef="e_start" targetRef="e_assess_1"/>
+      <sequenceFlow id="e_sf_2" isImmediate="true" sourceRef="e_assess_1" targetRef="e_gw_1_div"/>
+      <sequenceFlow id="e_sf_gw1_y" isImmediate="true" name="yes" sourceRef="e_gw_1_div" targetRef="e_req_prep"/>
+      <sequenceFlow id="e_sf_gw1_n" isImmediate="true" name="no" sourceRef="e_gw_1_div" targetRef="e_gw_1_conv"/>
+      <sequenceFlow id="e_sf_3" isImmediate="true" sourceRef="e_req_prep" targetRef="e_req_rev"/>
+      <sequenceFlow id="e_sf_4" isImmediate="true" sourceRef="e_req_rev" targetRef="e_gw_1_conv"/>
+      <sequenceFlow id="e_sf_5" isImmediate="true" sourceRef="e_gw_1_conv" targetRef="e_transmit"/>
+      <sequenceFlow id="e_sf_6" isImmediate="true" sourceRef="e_transmit" targetRef="e_catch_notif"/>
+      <sequenceFlow id="e_sf_7" isImmediate="true" sourceRef="e_catch_notif" targetRef="e_provide_assist"/>
+      <sequenceFlow id="e_sf_8" isImmediate="true" sourceRef="e_provide_assist" targetRef="e_adopt_opinion"/>
+      <sequenceFlow id="e_sf_9" isImmediate="true" sourceRef="e_adopt_opinion" targetRef="e_transmit_opinion"/>
+      <sequenceFlow id="e_sf_10" isImmediate="true" sourceRef="e_transmit_opinion" targetRef="e_gw_2_div"/>
+      <sequenceFlow id="e_sf_gw2_y" isImmediate="true" name="yes" sourceRef="e_gw_2_div" targetRef="e_req_revise"/>
+      <sequenceFlow id="e_sf_gw2_n" isImmediate="true" name="no" sourceRef="e_gw_2_div" targetRef="e_gw_2_conv"/>
+      <sequenceFlow id="e_sf_11" isImmediate="true" sourceRef="e_req_revise" targetRef="e_transmit_revise"/>
+      <sequenceFlow id="e_sf_12" isImmediate="true" sourceRef="e_transmit_revise" targetRef="e_gw_2_conv"/>
+      <sequenceFlow id="e_sf_13" isImmediate="true" sourceRef="e_gw_2_conv" targetRef="e_end"/>
+   </process>
+
+   <process id="Process_ENISA" isClosed="false" isExecutable="true" name="ENISA" processType="None">
+      <laneSet id="ls_enisa">
+         <lane id="Lane_ENISA" name="ENISA">
+            <flowNodeRef>en_start</flowNodeRef>
+            <flowNodeRef>en_assess_src</flowNodeRef>
+            <flowNodeRef>en_gw_1_div</flowNodeRef>
+            <flowNodeRef>en_prep_c</flowNodeRef>
+            <flowNodeRef>en_gw_2_div</flowNodeRef>
+            <flowNodeRef>en_prep_e</flowNodeRef>
+            <flowNodeRef>en_give_reasons</flowNodeRef>
+            <flowNodeRef>en_gw_3_conv</flowNodeRef>
+            <flowNodeRef>en_gw_4_div_and</flowNodeRef>
+            <flowNodeRef>en_consult</flowNodeRef>
+            <flowNodeRef>en_establish</flowNodeRef>
+            <flowNodeRef>en_coop</flowNodeRef>
+            <flowNodeRef>en_gw_5_conv_and</flowNodeRef>
+            <flowNodeRef>en_catch_opinion</flowNodeRef>
+            <flowNodeRef>en_take_account</flowNodeRef>
+            <flowNodeRef>en_transmit_cand</flowNodeRef>
+            <flowNodeRef>en_evaluate</flowNodeRef>
+            <flowNodeRef>en_catch_rev_req</flowNodeRef>
+            <flowNodeRef>en_start_rev</flowNodeRef>
+            <flowNodeRef>en_gw_skip_conv</flowNodeRef>
+            <flowNodeRef>en_end</flowNodeRef>
+         </lane>
+         <lane id="Lane_MB" name="Management Board">
+            <flowNodeRef>mb_take_decision</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="en_start" name="Upon receiving the request">
+         <outgoing>en_sf_1</outgoing>
+         <messageEventDefinition id="msg_def_en_1"/>
+      </startEvent>
+      <task id="en_assess_src" name="assess whether the request is from the Commission or the ECCG">
+         <incoming>en_sf_1</incoming>
+         <outgoing>en_sf_2</outgoing>
+      </task>
+      <exclusiveGateway id="en_gw_1_div" gatewayDirection="Diverging" isMarkerVisible="true" name="Source?">
+         <incoming>en_sf_2</incoming>
+         <outgoing>en_sf_gw1_c</outgoing>
+         <outgoing>en_sf_gw1_e</outgoing>
+      </exclusiveGateway>
+      
+      <task id="en_prep_c" name="prepare a candidate cybersecurity certification scheme">
+         <incoming>en_sf_gw1_c</incoming>
+         <outgoing>en_sf_3</outgoing>
+      </task>
+      
+      <exclusiveGateway id="en_gw_2_div" gatewayDirection="Diverging" isMarkerVisible="true" name="Refuse ECCG request?">
+         <incoming>en_sf_gw1_e</incoming>
+         <outgoing>en_sf_gw2_p</outgoing>
+         <outgoing>en_sf_gw2_r</outgoing>
+      </exclusiveGateway>
+      <task id="en_prep_e" name="prepare a candidate cybersecurity certification scheme">
+         <incoming>en_sf_gw2_p</incoming>
+         <outgoing>en_sf_4</outgoing>
+      </task>
+      <task id="en_give_reasons" name="give reasons for refusal">
+         <incoming>en_sf_gw2_r</incoming>
+         <outgoing>en_sf_5</outgoing>
+      </task>
+      <task id="mb_take_decision" name="take decision to refuse a request">
+         <incoming>en_sf_5</incoming>
+         <outgoing>en_sf_skip</outgoing>
+      </task>
+
+      <exclusiveGateway id="en_gw_3_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge preparation">
+         <incoming>en_sf_3</incoming>
+         <incoming>en_sf_4</incoming>
+         <outgoing>en_sf_6</outgoing>
+      </exclusiveGateway>
+      
+      <parallelGateway id="en_gw_4_div_and" gatewayDirection="Diverging" name="Parallel activities">
+         <incoming>en_sf_6</incoming>
+         <outgoing>en_sf_p1</outgoing>
+         <outgoing>en_sf_p2</outgoing>
+         <outgoing>en_sf_p3</outgoing>
+      </parallelGateway>
+      <task id="en_consult" name="consult all relevant stakeholders">
+         <incoming>en_sf_p1</incoming>
+         <outgoing>en_sf_p1_out</outgoing>
+      </task>
+      <task id="en_establish" name="establish an ad hoc working group">
+         <incoming>en_sf_p2</incoming>
+         <outgoing>en_sf_p2_out</outgoing>
+      </task>
+      <task id="en_coop" name="cooperate with the ECCG">
+         <incoming>en_sf_p3</incoming>
+         <outgoing>en_sf_p3_out</outgoing>
+      </task>
+      <parallelGateway id="en_gw_5_conv_and" gatewayDirection="Converging" name="Merge activities">
+         <incoming>en_sf_p1_out</incoming>
+         <incoming>en_sf_p2_out</incoming>
+         <incoming>en_sf_p3_out</incoming>
+         <outgoing>en_sf_7</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="en_catch_opinion" name="Upon receiving the opinion from the ECCG">
+         <incoming>en_sf_7</incoming>
+         <outgoing>en_sf_8</outgoing>
+         <messageEventDefinition id="msg_def_en_2"/>
+      </intermediateCatchEvent>
+      <task id="en_take_account" name="take utmost account of the ECCG opinion">
+         <incoming>en_sf_8</incoming>
+         <outgoing>en_sf_9</outgoing>
+      </task>
+      <task id="en_transmit_cand" name="transmit the candidate scheme to the Commission">
+         <incoming>en_sf_9</incoming>
+         <outgoing>en_sf_10</outgoing>
+      </task>
+      <task id="en_evaluate" name="evaluate each adopted European cybersecurity certification scheme">
+         <incoming>en_sf_10</incoming>
+         <outgoing>en_sf_11</outgoing>
+      </task>
+      <intermediateCatchEvent id="en_catch_rev_req" name="Upon receiving a request from Commission or ECCG">
+         <incoming>en_sf_11</incoming>
+         <outgoing>en_sf_12</outgoing>
+         <messageEventDefinition id="msg_def_en_3"/>
+      </intermediateCatchEvent>
+      <task id="en_start_rev" name="start developing a revised candidate scheme">
+         <incoming>en_sf_12</incoming>
+         <outgoing>en_sf_13</outgoing>
+      </task>
+      
+      <exclusiveGateway id="en_gw_skip_conv" gatewayDirection="Converging" isMarkerVisible="true" name="Merge refusal path">
+         <incoming>en_sf_13</incoming>
+         <incoming>en_sf_skip</incoming>
+         <outgoing>en_sf_14</outgoing>
+      </exclusiveGateway>
+      <endEvent id="en_end" name="candidate scheme evaluation or revision start end event">
+         <incoming>en_sf_14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="en_sf_1" isImmediate="true" sourceRef="en_start" targetRef="en_assess_src"/>
+      <sequenceFlow id="en_sf_2" isImmediate="true" sourceRef="en_assess_src" targetRef="en_gw_1_div"/>
+      <sequenceFlow id="en_sf_gw1_c" isImmediate="true" name="Commission" sourceRef="en_gw_1_div" targetRef="en_prep_c"/>
+      <sequenceFlow id="en_sf_gw1_e" isImmediate="true" name="ECCG" sourceRef="en_gw_1_div" targetRef="en_gw_2_div"/>
+      <sequenceFlow id="en_sf_3" isImmediate="true" sourceRef="en_prep_c" targetRef="en_gw_3_conv"/>
+      <sequenceFlow id="en_sf_gw2_p" isImmediate="true" name="prepare" sourceRef="en_gw_2_div" targetRef="en_prep_e"/>
+      <sequenceFlow id="en_sf_gw2_r" isImmediate="true" name="refuse" sourceRef="en_gw_2_div" targetRef="en_give_reasons"/>
+      <sequenceFlow id="en_sf_4" isImmediate="true" sourceRef="en_prep_e" targetRef="en_gw_3_conv"/>
+      <sequenceFlow id="en_sf_5" isImmediate="true" sourceRef="en_give_reasons" targetRef="mb_take_decision"/>
+      <sequenceFlow id="en_sf_skip" isImmediate="true" sourceRef="mb_take_decision" targetRef="en_gw_skip_conv"/>
+      <sequenceFlow id="en_sf_6" isImmediate="true" sourceRef="en_gw_3_conv" targetRef="en_gw_4_div_and"/>
+      <sequenceFlow id="en_sf_p1" isImmediate="true" sourceRef="en_gw_4_div_and" targetRef="en_consult"/>
+      <sequenceFlow id="en_sf_p2" isImmediate="true" sourceRef="en_gw_4_div_and" targetRef="en_establish"/>
+      <sequenceFlow id="en_sf_p3" isImmediate="true" sourceRef="en_gw_4_div_and" targetRef="en_coop"/>
+      <sequenceFlow id="en_sf_p1_out" isImmediate="true" sourceRef="en_consult" targetRef="en_gw_5_conv_and"/>
+      <sequenceFlow id="en_sf_p2_out" isImmediate="true" sourceRef="en_establish" targetRef="en_gw_5_conv_and"/>
+      <sequenceFlow id="en_sf_p3_out" isImmediate="true" sourceRef="en_coop" targetRef="en_gw_5_conv_and"/>
+      <sequenceFlow id="en_sf_7" isImmediate="true" sourceRef="en_gw_5_conv_and" targetRef="en_catch_opinion"/>
+      <sequenceFlow id="en_sf_8" isImmediate="true" sourceRef="en_catch_opinion" targetRef="en_take_account"/>
+      <sequenceFlow id="en_sf_9" isImmediate="true" sourceRef="en_take_account" targetRef="en_transmit_cand"/>
+      <sequenceFlow id="en_sf_10" isImmediate="true" sourceRef="en_transmit_cand" targetRef="en_evaluate"/>
+      <sequenceFlow id="en_sf_11" isImmediate="true" sourceRef="en_evaluate" targetRef="en_catch_rev_req"/>
+      <sequenceFlow id="en_sf_12" isImmediate="true" sourceRef="en_catch_rev_req" targetRef="en_start_rev"/>
+      <sequenceFlow id="en_sf_13" isImmediate="true" sourceRef="en_start_rev" targetRef="en_gw_skip_conv"/>
+      <sequenceFlow id="en_sf_14" isImmediate="true" sourceRef="en_gw_skip_conv" targetRef="en_end"/>
+   </process>
+
+   <process id="Process_IP" isClosed="false" isExecutable="true" name="Interested Party" processType="None">
+      <startEvent id="ip_start" name="Start">
+         <outgoing>ip_sf_1</outgoing>
+      </startEvent>
+      <task id="ip_provide_feedback" name="provide feedback">
+         <incoming>ip_sf_1</incoming>
+         <outgoing>ip_sf_2</outgoing>
+      </task>
+      <task id="ip_transmit" name="transmit the feedback to ENISA">
+         <incoming>ip_sf_2</incoming>
+         <outgoing>ip_sf_3</outgoing>
+      </task>
+      <endEvent id="ip_end" name="feedback provision end event">
+         <incoming>ip_sf_3</incoming>
+      </endEvent>
+      <sequenceFlow id="ip_sf_1" isImmediate="true" sourceRef="ip_start" targetRef="ip_provide_feedback"/>
+      <sequenceFlow id="ip_sf_2" isImmediate="true" sourceRef="ip_provide_feedback" targetRef="ip_transmit"/>
+      <sequenceFlow id="ip_sf_3" isImmediate="true" sourceRef="ip_transmit" targetRef="ip_end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="Diagram_Main">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="Plane_Main">
+         
+         <bpmndi:BPMNShape bpmnElement="Participant_Commission" id="Shape_Participant_Commission" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2000.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_ECCG" id="Shape_Participant_ECCG" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2000.0" x="50.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_ENISA" id="Shape_Participant_ENISA" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="2000.0" x="50.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Participant_IP" id="Shape_Participant_IP" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="2000.0" x="50.0" y="1030.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="Lane_ENISA" id="Shape_Lane_ENISA" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1970.0" x="80.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MB" id="Shape_Lane_MB" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1970.0" x="80.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Nodes -->
+         <bpmndi:BPMNShape bpmnElement="c_start" id="Shape_c_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_assess_1" id="Shape_c_assess_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="220.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_1_div" id="Shape_c_gw_1_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="360.0" y="165.0"/>
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="11.0" width="50.0" x="350.0" y="200.0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_req_prep" id="Shape_c_req_prep">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_req_rev" id="Shape_c_req_rev">
+            <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_assess_2" id="Shape_c_assess_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_2_div" id="Shape_c_gw_2_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="570.0" y="225.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_req_prep_2" id="Shape_c_req_prep_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="640.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_req_rev_2" id="Shape_c_req_rev_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="760.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_update_prog" id="Shape_c_update_prog">
+            <omgdc:Bounds height="80.0" width="100.0" x="880.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_1_conv" id="Shape_c_gw_1_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="1020.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_transmit" id="Shape_c_transmit">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_catch_scheme" id="Shape_c_catch_scheme">
+            <omgdc:Bounds height="30.0" width="30.0" x="1250.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_adopt" id="Shape_c_adopt">
+            <omgdc:Bounds height="80.0" width="100.0" x="1330.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_3_div" id="Shape_c_gw_3_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="1480.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_req_revise" id="Shape_c_req_revise">
+            <omgdc:Bounds height="80.0" width="100.0" x="1560.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_transmit_revise" id="Shape_c_transmit_revise">
+            <omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_gw_3_conv" id="Shape_c_gw_3_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="1850.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="c_end" id="Shape_c_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="1930.0" y="165.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ECCG Nodes -->
+         <bpmndi:BPMNShape bpmnElement="e_start" id="Shape_e_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_assess_1" id="Shape_e_assess_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="220.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_1_div" id="Shape_e_gw_1_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="360.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_req_prep" id="Shape_e_req_prep">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="390.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_req_rev" id="Shape_e_req_rev">
+            <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="390.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_1_conv" id="Shape_e_gw_1_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="710.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_transmit" id="Shape_e_transmit">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_catch_notif" id="Shape_e_catch_notif">
+            <omgdc:Bounds height="30.0" width="30.0" x="950.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_provide_assist" id="Shape_e_provide_assist">
+            <omgdc:Bounds height="80.0" width="100.0" x="1030.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_adopt_opinion" id="Shape_e_adopt_opinion">
+            <omgdc:Bounds height="80.0" width="100.0" x="1170.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_transmit_opinion" id="Shape_e_transmit_opinion">
+            <omgdc:Bounds height="80.0" width="100.0" x="1310.0" y="430.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_2_div" id="Shape_e_gw_2_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="1460.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_req_revise" id="Shape_e_req_revise">
+            <omgdc:Bounds height="80.0" width="100.0" x="1540.0" y="390.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_transmit_revise" id="Shape_e_transmit_revise">
+            <omgdc:Bounds height="80.0" width="100.0" x="1680.0" y="390.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_gw_2_conv" id="Shape_e_gw_2_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="1830.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="e_end" id="Shape_e_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="1910.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ENISA Nodes -->
+         <bpmndi:BPMNShape bpmnElement="en_start" id="Shape_en_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_assess_src" id="Shape_en_assess_src">
+            <omgdc:Bounds height="80.0" width="100.0" x="220.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_1_div" id="Shape_en_gw_1_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="360.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_prep_c" id="Shape_en_prep_c">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_2_div" id="Shape_en_gw_2_div">
+            <omgdc:Bounds height="30.0" width="30.0" x="430.0" y="720.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_prep_e" id="Shape_en_prep_e">
+            <omgdc:Bounds height="80.0" width="100.0" x="510.0" y="695.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_give_reasons" id="Shape_en_give_reasons">
+            <omgdc:Bounds height="80.0" width="100.0" x="510.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="mb_take_decision" id="Shape_mb_take_decision">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_3_conv" id="Shape_en_gw_3_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="650.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_4_div_and" id="Shape_en_gw_4_div_and">
+            <omgdc:Bounds height="30.0" width="30.0" x="730.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_consult" id="Shape_en_consult">
+            <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_establish" id="Shape_en_establish">
+            <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="695.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_coop" id="Shape_en_coop">
+            <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="790.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_5_conv_and" id="Shape_en_gw_5_conv_and">
+            <omgdc:Bounds height="30.0" width="30.0" x="950.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_opinion" id="Shape_en_catch_opinion">
+            <omgdc:Bounds height="30.0" width="30.0" x="1030.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_take_account" id="Shape_en_take_account">
+            <omgdc:Bounds height="80.0" width="100.0" x="1110.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_transmit_cand" id="Shape_en_transmit_cand">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_evaluate" id="Shape_en_evaluate">
+            <omgdc:Bounds height="80.0" width="100.0" x="1390.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_catch_rev_req" id="Shape_en_catch_rev_req">
+            <omgdc:Bounds height="30.0" width="30.0" x="1530.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_start_rev" id="Shape_en_start_rev">
+            <omgdc:Bounds height="80.0" width="100.0" x="1610.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_gw_skip_conv" id="Shape_en_gw_skip_conv">
+            <omgdc:Bounds height="30.0" width="30.0" x="1750.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="en_end" id="Shape_en_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="1830.0" y="665.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Interested Party Nodes -->
+         <bpmndi:BPMNShape bpmnElement="ip_start" id="Shape_ip_start">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1065.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_provide_feedback" id="Shape_ip_provide_feedback">
+            <omgdc:Bounds height="80.0" width="100.0" x="220.0" y="1040.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_transmit" id="Shape_ip_transmit">
+            <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="1040.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip_end" id="Shape_ip_end">
+            <omgdc:Bounds height="30.0" width="30.0" x="500.0" y="1065.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Edges for Commission -->
+         <bpmndi:BPMNEdge bpmnElement="c_sf_1" id="Edge_c_sf_1">
+            <omgdi:waypoint x="180.0" y="180.0"/>
+            <omgdi:waypoint x="220.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_2" id="Edge_c_sf_2">
+            <omgdi:waypoint x="320.0" y="180.0"/>
+            <omgdi:waypoint x="360.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw1_y" id="Edge_c_sf_gw1_y">
+            <omgdi:waypoint x="390.0" y="180.0"/>
+            <omgdi:waypoint x="410.0" y="180.0"/>
+            <omgdi:waypoint x="410.0" y="140.0"/>
+            <omgdi:waypoint x="430.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw1_n" id="Edge_c_sf_gw1_n">
+            <omgdi:waypoint x="390.0" y="180.0"/>
+            <omgdi:waypoint x="410.0" y="180.0"/>
+            <omgdi:waypoint x="410.0" y="240.0"/>
+            <omgdi:waypoint x="430.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_3" id="Edge_c_sf_3">
+            <omgdi:waypoint x="530.0" y="140.0"/>
+            <omgdi:waypoint x="570.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_4" id="Edge_c_sf_4">
+            <omgdi:waypoint x="670.0" y="140.0"/>
+            <omgdi:waypoint x="1035.0" y="140.0"/>
+            <omgdi:waypoint x="1035.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_5" id="Edge_c_sf_5">
+            <omgdi:waypoint x="530.0" y="240.0"/>
+            <omgdi:waypoint x="570.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw2_y" id="Edge_c_sf_gw2_y">
+            <omgdi:waypoint x="600.0" y="240.0"/>
+            <omgdi:waypoint x="640.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw2_n" id="Edge_c_sf_gw2_n">
+            <omgdi:waypoint x="585.0" y="255.0"/>
+            <omgdi:waypoint x="585.0" y="290.0"/>
+            <omgdi:waypoint x="1035.0" y="290.0"/>
+            <omgdi:waypoint x="1035.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_6" id="Edge_c_sf_6">
+            <omgdi:waypoint x="740.0" y="240.0"/>
+            <omgdi:waypoint x="760.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_7" id="Edge_c_sf_7">
+            <omgdi:waypoint x="860.0" y="240.0"/>
+            <omgdi:waypoint x="880.0" y="240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_8" id="Edge_c_sf_8">
+            <omgdi:waypoint x="980.0" y="240.0"/>
+            <omgdi:waypoint x="1035.0" y="240.0"/>
+            <omgdi:waypoint x="1035.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_9" id="Edge_c_sf_9">
+            <omgdi:waypoint x="1050.0" y="180.0"/>
+            <omgdi:waypoint x="1100.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_10" id="Edge_c_sf_10">
+            <omgdi:waypoint x="1200.0" y="180.0"/>
+            <omgdi:waypoint x="1250.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_11" id="Edge_c_sf_11">
+            <omgdi:waypoint x="1280.0" y="180.0"/>
+            <omgdi:waypoint x="1330.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_12" id="Edge_c_sf_12">
+            <omgdi:waypoint x="1430.0" y="180.0"/>
+            <omgdi:waypoint x="1480.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw3_y" id="Edge_c_sf_gw3_y">
+            <omgdi:waypoint x="1510.0" y="180.0"/>
+            <omgdi:waypoint x="1530.0" y="180.0"/>
+            <omgdi:waypoint x="1530.0" y="140.0"/>
+            <omgdi:waypoint x="1560.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_gw3_n" id="Edge_c_sf_gw3_n">
+            <omgdi:waypoint x="1495.0" y="195.0"/>
+            <omgdi:waypoint x="1495.0" y="220.0"/>
+            <omgdi:waypoint x="1865.0" y="220.0"/>
+            <omgdi:waypoint x="1865.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_13" id="Edge_c_sf_13">
+            <omgdi:waypoint x="1660.0" y="140.0"/>
+            <omgdi:waypoint x="1700.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_14" id="Edge_c_sf_14">
+            <omgdi:waypoint x="1800.0" y="140.0"/>
+            <omgdi:waypoint x="1865.0" y="140.0"/>
+            <omgdi:waypoint x="1865.0" y="165.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="c_sf_15" id="Edge_c_sf_15">
+            <omgdi:waypoint x="1880.0" y="180.0"/>
+            <omgdi:waypoint x="1930.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for ECCG -->
+         <bpmndi:BPMNEdge bpmnElement="e_sf_1" id="Edge_e_sf_1">
+            <omgdi:waypoint x="180.0" y="470.0"/>
+            <omgdi:waypoint x="220.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_2" id="Edge_e_sf_2">
+            <omgdi:waypoint x="320.0" y="470.0"/>
+            <omgdi:waypoint x="360.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_gw1_y" id="Edge_e_sf_gw1_y">
+            <omgdi:waypoint x="390.0" y="470.0"/>
+            <omgdi:waypoint x="410.0" y="470.0"/>
+            <omgdi:waypoint x="410.0" y="430.0"/>
+            <omgdi:waypoint x="430.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_gw1_n" id="Edge_e_sf_gw1_n">
+            <omgdi:waypoint x="375.0" y="485.0"/>
+            <omgdi:waypoint x="375.0" y="520.0"/>
+            <omgdi:waypoint x="725.0" y="520.0"/>
+            <omgdi:waypoint x="725.0" y="485.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_3" id="Edge_e_sf_3">
+            <omgdi:waypoint x="530.0" y="430.0"/>
+            <omgdi:waypoint x="570.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_4" id="Edge_e_sf_4">
+            <omgdi:waypoint x="670.0" y="430.0"/>
+            <omgdi:waypoint x="725.0" y="430.0"/>
+            <omgdi:waypoint x="725.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_5" id="Edge_e_sf_5">
+            <omgdi:waypoint x="740.0" y="470.0"/>
+            <omgdi:waypoint x="800.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_6" id="Edge_e_sf_6">
+            <omgdi:waypoint x="900.0" y="470.0"/>
+            <omgdi:waypoint x="950.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_7" id="Edge_e_sf_7">
+            <omgdi:waypoint x="980.0" y="470.0"/>
+            <omgdi:waypoint x="1030.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_8" id="Edge_e_sf_8">
+            <omgdi:waypoint x="1130.0" y="470.0"/>
+            <omgdi:waypoint x="1170.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_9" id="Edge_e_sf_9">
+            <omgdi:waypoint x="1270.0" y="470.0"/>
+            <omgdi:waypoint x="1310.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_10" id="Edge_e_sf_10">
+            <omgdi:waypoint x="1410.0" y="470.0"/>
+            <omgdi:waypoint x="1460.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_gw2_y" id="Edge_e_sf_gw2_y">
+            <omgdi:waypoint x="1490.0" y="470.0"/>
+            <omgdi:waypoint x="1510.0" y="470.0"/>
+            <omgdi:waypoint x="1510.0" y="430.0"/>
+            <omgdi:waypoint x="1540.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_gw2_n" id="Edge_e_sf_gw2_n">
+            <omgdi:waypoint x="1475.0" y="485.0"/>
+            <omgdi:waypoint x="1475.0" y="520.0"/>
+            <omgdi:waypoint x="1845.0" y="520.0"/>
+            <omgdi:waypoint x="1845.0" y="485.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_11" id="Edge_e_sf_11">
+            <omgdi:waypoint x="1640.0" y="430.0"/>
+            <omgdi:waypoint x="1680.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_12" id="Edge_e_sf_12">
+            <omgdi:waypoint x="1780.0" y="430.0"/>
+            <omgdi:waypoint x="1845.0" y="430.0"/>
+            <omgdi:waypoint x="1845.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="e_sf_13" id="Edge_e_sf_13">
+            <omgdi:waypoint x="1860.0" y="470.0"/>
+            <omgdi:waypoint x="1910.0" y="470.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for ENISA -->
+         <bpmndi:BPMNEdge bpmnElement="en_sf_1" id="Edge_en_sf_1">
+            <omgdi:waypoint x="180.0" y="680.0"/>
+            <omgdi:waypoint x="220.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_2" id="Edge_en_sf_2">
+            <omgdi:waypoint x="320.0" y="680.0"/>
+            <omgdi:waypoint x="360.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_gw1_c" id="Edge_en_sf_gw1_c">
+            <omgdi:waypoint x="390.0" y="680.0"/>
+            <omgdi:waypoint x="410.0" y="680.0"/>
+            <omgdi:waypoint x="410.0" y="640.0"/>
+            <omgdi:waypoint x="430.0" y="640.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_gw1_e" id="Edge_en_sf_gw1_e">
+            <omgdi:waypoint x="375.0" y="695.0"/>
+            <omgdi:waypoint x="375.0" y="735.0"/>
+            <omgdi:waypoint x="430.0" y="735.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_3" id="Edge_en_sf_3">
+            <omgdi:waypoint x="530.0" y="640.0"/>
+            <omgdi:waypoint x="665.0" y="640.0"/>
+            <omgdi:waypoint x="665.0" y="640.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_gw2_p" id="Edge_en_sf_gw2_p">
+            <omgdi:waypoint x="460.0" y="735.0"/>
+            <omgdi:waypoint x="510.0" y="735.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_gw2_r" id="Edge_en_sf_gw2_r">
+            <omgdi:waypoint x="445.0" y="750.0"/>
+            <omgdi:waypoint x="445.0" y="840.0"/>
+            <omgdi:waypoint x="510.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_4" id="Edge_en_sf_4">
+            <omgdi:waypoint x="610.0" y="735.0"/>
+            <omgdi:waypoint x="665.0" y="735.0"/>
+            <omgdi:waypoint x="665.0" y="670.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_5" id="Edge_en_sf_5">
+            <omgdi:waypoint x="610.0" y="840.0"/>
+            <omgdi:waypoint x="630.0" y="840.0"/>
+            <omgdi:waypoint x="630.0" y="930.0"/>
+            <omgdi:waypoint x="650.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_skip" id="Edge_en_sf_skip">
+            <omgdi:waypoint x="750.0" y="930.0"/>
+            <omgdi:waypoint x="1765.0" y="930.0"/>
+            <omgdi:waypoint x="1765.0" y="695.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_6" id="Edge_en_sf_6">
+            <omgdi:waypoint x="680.0" y="655.0"/>
+            <omgdi:waypoint x="730.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p1" id="Edge_en_sf_p1">
+            <omgdi:waypoint x="760.0" y="655.0"/>
+            <omgdi:waypoint x="785.0" y="655.0"/>
+            <omgdi:waypoint x="785.0" y="640.0"/>
+            <omgdi:waypoint x="810.0" y="640.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p2" id="Edge_en_sf_p2">
+            <omgdi:waypoint x="745.0" y="670.0"/>
+            <omgdi:waypoint x="745.0" y="735.0"/>
+            <omgdi:waypoint x="810.0" y="735.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p3" id="Edge_en_sf_p3">
+            <omgdi:waypoint x="745.0" y="670.0"/>
+            <omgdi:waypoint x="745.0" y="830.0"/>
+            <omgdi:waypoint x="810.0" y="830.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p1_out" id="Edge_en_sf_p1_out">
+            <omgdi:waypoint x="910.0" y="640.0"/>
+            <omgdi:waypoint x="930.0" y="640.0"/>
+            <omgdi:waypoint x="930.0" y="655.0"/>
+            <omgdi:waypoint x="950.0" y="655.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p2_out" id="Edge_en_sf_p2_out">
+            <omgdi:waypoint x="910.0" y="735.0"/>
+            <omgdi:waypoint x="965.0" y="735.0"/>
+            <omgdi:waypoint x="965.0" y="670.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_p3_out" id="Edge_en_sf_p3_out">
+            <omgdi:waypoint x="910.0" y="830.0"/>
+            <omgdi:waypoint x="965.0" y="830.0"/>
+            <omgdi:waypoint x="965.0" y="670.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_7" id="Edge_en_sf_7">
+            <omgdi:waypoint x="980.0" y="655.0"/>
+            <omgdi:waypoint x="1030.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_8" id="Edge_en_sf_8">
+            <omgdi:waypoint x="1060.0" y="680.0"/>
+            <omgdi:waypoint x="1110.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_9" id="Edge_en_sf_9">
+            <omgdi:waypoint x="1210.0" y="680.0"/>
+            <omgdi:waypoint x="1250.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_10" id="Edge_en_sf_10">
+            <omgdi:waypoint x="1350.0" y="680.0"/>
+            <omgdi:waypoint x="1390.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_11" id="Edge_en_sf_11">
+            <omgdi:waypoint x="1490.0" y="680.0"/>
+            <omgdi:waypoint x="1530.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_12" id="Edge_en_sf_12">
+            <omgdi:waypoint x="1560.0" y="680.0"/>
+            <omgdi:waypoint x="1610.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_13" id="Edge_en_sf_13">
+            <omgdi:waypoint x="1710.0" y="680.0"/>
+            <omgdi:waypoint x="1750.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="en_sf_14" id="Edge_en_sf_14">
+            <omgdi:waypoint x="1780.0" y="680.0"/>
+            <omgdi:waypoint x="1830.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for IP -->
+         <bpmndi:BPMNEdge bpmnElement="ip_sf_1" id="Edge_ip_sf_1">
+            <omgdi:waypoint x="180.0" y="1080.0"/>
+            <omgdi:waypoint x="220.0" y="1080.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ip_sf_2" id="Edge_ip_sf_2">
+            <omgdi:waypoint x="320.0" y="1080.0"/>
+            <omgdi:waypoint x="360.0" y="1080.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ip_sf_3" id="Edge_ip_sf_3">
+            <omgdi:waypoint x="460.0" y="1080.0"/>
+            <omgdi:waypoint x="500.0" y="1080.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="m_c_to_enisa" id="Edge_m_c_to_enisa">
+            <omgdi:waypoint x="1150.0" y="220.0"/>
+            <omgdi:waypoint x="1150.0" y="300.0"/>
+            <omgdi:waypoint x="165.0" y="300.0"/>
+            <omgdi:waypoint x="165.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_e_to_enisa" id="Edge_m_e_to_enisa">
+            <omgdi:waypoint x="850.0" y="510.0"/>
+            <omgdi:waypoint x="850.0" y="550.0"/>
+            <omgdi:waypoint x="165.0" y="550.0"/>
+            <omgdi:waypoint x="165.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_enisa_to_c" id="Edge_m_enisa_to_c">
+            <omgdi:waypoint x="1300.0" y="640.0"/>
+            <omgdi:waypoint x="1300.0" y="400.0"/>
+            <omgdi:waypoint x="1265.0" y="400.0"/>
+            <omgdi:waypoint x="1265.0" y="195.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_enisa_to_e" id="Edge_m_enisa_to_e">
+            <omgdi:waypoint x="860.0" y="790.0"/>
+            <omgdi:waypoint x="860.0" y="550.0"/>
+            <omgdi:waypoint x="965.0" y="550.0"/>
+            <omgdi:waypoint x="965.0" y="485.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_e_to_enisa_op" id="Edge_m_e_to_enisa_op">
+            <omgdi:waypoint x="1360.0" y="510.0"/>
+            <omgdi:waypoint x="1360.0" y="580.0"/>
+            <omgdi:waypoint x="1045.0" y="580.0"/>
+            <omgdi:waypoint x="1045.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_c_to_enisa_rev" id="Edge_m_c_to_enisa_rev">
+            <omgdi:waypoint x="1750.0" y="180.0"/>
+            <omgdi:waypoint x="1750.0" y="400.0"/>
+            <omgdi:waypoint x="1545.0" y="400.0"/>
+            <omgdi:waypoint x="1545.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_e_to_enisa_rev" id="Edge_m_e_to_enisa_rev">
+            <omgdi:waypoint x="1730.0" y="470.0"/>
+            <omgdi:waypoint x="1730.0" y="550.0"/>
+            <omgdi:waypoint x="1545.0" y="550.0"/>
+            <omgdi:waypoint x="1545.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="m_ip_to_enisa" id="Edge_m_ip_to_enisa">
+            <omgdi:waypoint x="410.0" y="1040.0"/>
+            <omgdi:waypoint x="410.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

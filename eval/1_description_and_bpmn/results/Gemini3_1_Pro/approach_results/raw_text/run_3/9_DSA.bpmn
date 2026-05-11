@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="Collaboration_1">
+      <participant id="Pool_OPP" name="Online Platform Provider" processRef="Proc_OPP">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_DSC" name="Digital Services Coordinator" processRef="Proc_DSC">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_TF" name="Trusted Flagger" processRef="Proc_TF">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_COM" name="Commission" processRef="Proc_COM">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_BRD" name="Board" processRef="Proc_BRD">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+
+      <messageFlow id="Msg_1" name="" sourceRef="Task_OPP_5" targetRef="Catch_DSC_2"/>
+      <messageFlow id="Msg_2" name="" sourceRef="Task_DSC_2" targetRef="Catch_COM_1"/>
+      <messageFlow id="Msg_3" name="" sourceRef="Task_DSC_2" targetRef="Catch_BRD_1"/>
+      <messageFlow id="Msg_4" name="" sourceRef="Task_TF_2" targetRef="Catch_DSC_1"/>
+      <messageFlow id="Msg_5" name="" sourceRef="Task_DSC_5" targetRef="Catch_TF_1"/>
+   </collaboration>
+
+   <process id="Proc_OPP" isClosed="false" isExecutable="false" name="Online Platform Provider" processType="None">
+      <laneSet id="LaneSet_OPP">
+         <lane id="Lane_OPP">
+            <flowNodeRef>Start_OPP</flowNodeRef>
+            <flowNodeRef>Task_OPP_1</flowNodeRef>
+            <flowNodeRef>GW_OPP_1</flowNodeRef>
+            <flowNodeRef>Task_OPP_2</flowNodeRef>
+            <flowNodeRef>Task_OPP_3</flowNodeRef>
+            <flowNodeRef>GW_OPP_1_Conv</flowNodeRef>
+            <flowNodeRef>GW_OPP_2</flowNodeRef>
+            <flowNodeRef>Task_OPP_4</flowNodeRef>
+            <flowNodeRef>GW_OPP_2_Conv</flowNodeRef>
+            <flowNodeRef>GW_OPP_3</flowNodeRef>
+            <flowNodeRef>Task_OPP_5</flowNodeRef>
+            <flowNodeRef>GW_OPP_3_Conv</flowNodeRef>
+            <flowNodeRef>End_OPP</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="Start_OPP" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Seq_OPP_1</outgoing>
+      </startEvent>
+      <task id="Task_OPP_1" name="take the necessary technical and organisational measures for notices">
+         <incoming>Seq_OPP_1</incoming>
+         <outgoing>Seq_OPP_2</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OPP_1" name="assess whether notices are submitted within their designated area of expertise..." isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_OPP_2</incoming>
+         <outgoing>Seq_OPP_3</outgoing>
+         <outgoing>Seq_OPP_6</outgoing>
+      </exclusiveGateway>
+      <task id="Task_OPP_2" name="give priority for notices">
+         <incoming>Seq_OPP_3</incoming>
+         <outgoing>Seq_OPP_4</outgoing>
+      </task>
+      <task id="Task_OPP_3" name="process notices">
+         <incoming>Seq_OPP_4</incoming>
+         <outgoing>Seq_OPP_5</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OPP_1_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_OPP_5</incoming>
+         <incoming>Seq_OPP_6</incoming>
+         <outgoing>Seq_OPP_7</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="GW_OPP_2" name="assess whether notices acting within their designated area of expertise..." isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_OPP_7</incoming>
+         <outgoing>Seq_OPP_8</outgoing>
+         <outgoing>Seq_OPP_10</outgoing>
+      </exclusiveGateway>
+      <task id="Task_OPP_4" name="decide upon notices">
+         <incoming>Seq_OPP_8</incoming>
+         <outgoing>Seq_OPP_9</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OPP_2_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_OPP_9</incoming>
+         <incoming>Seq_OPP_10</incoming>
+         <outgoing>Seq_OPP_11</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="GW_OPP_3" name="assess whether a trusted flagger has submitted insufficiently precise..." isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_OPP_11</incoming>
+         <outgoing>Seq_OPP_12</outgoing>
+         <outgoing>Seq_OPP_14</outgoing>
+      </exclusiveGateway>
+      <task id="Task_OPP_5" name="communicate information to the Digital Services Coordinator">
+         <incoming>Seq_OPP_12</incoming>
+         <outgoing>Seq_OPP_13</outgoing>
+      </task>
+      <exclusiveGateway id="GW_OPP_3_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_OPP_13</incoming>
+         <incoming>Seq_OPP_14</incoming>
+         <outgoing>Seq_OPP_15</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_OPP" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_OPP_15</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Seq_OPP_1" sourceRef="Start_OPP" targetRef="Task_OPP_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_2" sourceRef="Task_OPP_1" targetRef="GW_OPP_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_3" name="yes" sourceRef="GW_OPP_1" targetRef="Task_OPP_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_4" sourceRef="Task_OPP_2" targetRef="Task_OPP_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_5" sourceRef="Task_OPP_3" targetRef="GW_OPP_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_6" name="no" sourceRef="GW_OPP_1" targetRef="GW_OPP_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_7" sourceRef="GW_OPP_1_Conv" targetRef="GW_OPP_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_8" name="yes" sourceRef="GW_OPP_2" targetRef="Task_OPP_4" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_9" sourceRef="Task_OPP_4" targetRef="GW_OPP_2_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_10" name="no" sourceRef="GW_OPP_2" targetRef="GW_OPP_2_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_11" sourceRef="GW_OPP_2_Conv" targetRef="GW_OPP_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_12" name="yes" sourceRef="GW_OPP_3" targetRef="Task_OPP_5" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_13" sourceRef="Task_OPP_5" targetRef="GW_OPP_3_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_14" name="no" sourceRef="GW_OPP_3" targetRef="GW_OPP_3_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_OPP_15" sourceRef="GW_OPP_3_Conv" targetRef="End_OPP" isImmediate="true"/>
+   </process>
+
+   <process id="Proc_DSC" isClosed="false" isExecutable="false" name="Digital Services Coordinator" processType="None">
+      <laneSet id="LaneSet_DSC">
+         <lane id="Lane_DSC">
+            <flowNodeRef>Start_DSC</flowNodeRef>
+            <flowNodeRef>GW_DSC_1</flowNodeRef>
+            <flowNodeRef>Task_DSC_1</flowNodeRef>
+            <flowNodeRef>GW_DSC_1_Conv</flowNodeRef>
+            <flowNodeRef>GW_DSC_2</flowNodeRef>
+            <flowNodeRef>Task_DSC_2</flowNodeRef>
+            <flowNodeRef>GW_DSC_2_Conv</flowNodeRef>
+            <flowNodeRef>Catch_DSC_1</flowNodeRef>
+            <flowNodeRef>Catch_DSC_2</flowNodeRef>
+            <flowNodeRef>GW_DSC_3</flowNodeRef>
+            <flowNodeRef>Task_DSC_3</flowNodeRef>
+            <flowNodeRef>Task_DSC_4</flowNodeRef>
+            <flowNodeRef>Task_DSC_5</flowNodeRef>
+            <flowNodeRef>GW_DSC_3_Conv</flowNodeRef>
+            <flowNodeRef>GW_DSC_4</flowNodeRef>
+            <flowNodeRef>Task_DSC_6</flowNodeRef>
+            <flowNodeRef>GW_DSC_4_Conv</flowNodeRef>
+            <flowNodeRef>End_DSC</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_DSC" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Seq_DSC_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="GW_DSC_1" name="assess whether upon application by any entity, the applicant is established..." isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_1</incoming>
+         <outgoing>Seq_DSC_2</outgoing>
+         <outgoing>Seq_DSC_4</outgoing>
+      </exclusiveGateway>
+      <task id="Task_DSC_1" name="award the status of trusted flagger">
+         <incoming>Seq_DSC_2</incoming>
+         <outgoing>Seq_DSC_3</outgoing>
+      </task>
+      <exclusiveGateway id="GW_DSC_1_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_DSC_3</incoming>
+         <incoming>Seq_DSC_4</incoming>
+         <outgoing>Seq_DSC_5</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="GW_DSC_2" name="assess whether it is following award... or following suspension..." isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_5</incoming>
+         <outgoing>Seq_DSC_6</outgoing>
+         <outgoing>Seq_DSC_8</outgoing>
+      </exclusiveGateway>
+      <task id="Task_DSC_2" name="communicate to the Commission and the Board the names...">
+         <incoming>Seq_DSC_6</incoming>
+         <outgoing>Seq_DSC_7</outgoing>
+      </task>
+      <exclusiveGateway id="GW_DSC_2_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_DSC_7</incoming>
+         <incoming>Seq_DSC_8</incoming>
+         <outgoing>Seq_DSC_9</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="Catch_DSC_1" name="Receive reports from the Trusted Flagger">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_9</incoming>
+         <outgoing>Seq_DSC_10</outgoing>
+         <messageEventDefinition id="MsgDef_DSC_1"/>
+      </intermediateCatchEvent>
+      <intermediateCatchEvent id="Catch_DSC_2" name="Receive information from an Online Platform Provider">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_10</incoming>
+         <outgoing>Seq_DSC_11</outgoing>
+         <messageEventDefinition id="MsgDef_DSC_2"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="GW_DSC_3" name="assess whether legitimate reasons to open an investigation" isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_11</incoming>
+         <outgoing>Seq_DSC_12</outgoing>
+         <outgoing>Seq_DSC_16</outgoing>
+      </exclusiveGateway>
+      <task id="Task_DSC_3" name="suspend the status of trusted flagger">
+         <incoming>Seq_DSC_12</incoming>
+         <outgoing>Seq_DSC_13</outgoing>
+      </task>
+      <task id="Task_DSC_4" name="carry out the investigation without undue delay">
+         <incoming>Seq_DSC_13</incoming>
+         <outgoing>Seq_DSC_14</outgoing>
+      </task>
+      <task id="Task_DSC_5" name="afford the entity an opportunity to react to the investigation findings">
+         <incoming>Seq_DSC_14</incoming>
+         <outgoing>Seq_DSC_15</outgoing>
+      </task>
+      <exclusiveGateway id="GW_DSC_3_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_DSC_15</incoming>
+         <incoming>Seq_DSC_16</incoming>
+         <outgoing>Seq_DSC_17</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="GW_DSC_4" name="assess whether the entity no longer meets the conditions" isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_17</incoming>
+         <outgoing>Seq_DSC_18</outgoing>
+         <outgoing>Seq_DSC_20</outgoing>
+      </exclusiveGateway>
+      <task id="Task_DSC_6" name="revoke the trusted flagger status">
+         <incoming>Seq_DSC_18</incoming>
+         <outgoing>Seq_DSC_19</outgoing>
+      </task>
+      <exclusiveGateway id="GW_DSC_4_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_DSC_19</incoming>
+         <incoming>Seq_DSC_20</incoming>
+         <outgoing>Seq_DSC_21</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_DSC" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_DSC_21</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Seq_DSC_1" sourceRef="Start_DSC" targetRef="GW_DSC_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_2" name="yes" sourceRef="GW_DSC_1" targetRef="Task_DSC_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_3" sourceRef="Task_DSC_1" targetRef="GW_DSC_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_4" name="no" sourceRef="GW_DSC_1" targetRef="GW_DSC_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_5" sourceRef="GW_DSC_1_Conv" targetRef="GW_DSC_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_6" name="yes" sourceRef="GW_DSC_2" targetRef="Task_DSC_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_7" sourceRef="Task_DSC_2" targetRef="GW_DSC_2_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_8" name="no" sourceRef="GW_DSC_2" targetRef="GW_DSC_2_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_9" sourceRef="GW_DSC_2_Conv" targetRef="Catch_DSC_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_10" sourceRef="Catch_DSC_1" targetRef="Catch_DSC_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_11" sourceRef="Catch_DSC_2" targetRef="GW_DSC_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_12" name="yes" sourceRef="GW_DSC_3" targetRef="Task_DSC_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_13" sourceRef="Task_DSC_3" targetRef="Task_DSC_4" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_14" sourceRef="Task_DSC_4" targetRef="Task_DSC_5" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_15" sourceRef="Task_DSC_5" targetRef="GW_DSC_3_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_16" name="no" sourceRef="GW_DSC_3" targetRef="GW_DSC_3_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_17" sourceRef="GW_DSC_3_Conv" targetRef="GW_DSC_4" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_18" name="yes" sourceRef="GW_DSC_4" targetRef="Task_DSC_6" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_19" sourceRef="Task_DSC_6" targetRef="GW_DSC_4_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_20" name="no" sourceRef="GW_DSC_4" targetRef="GW_DSC_4_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_DSC_21" sourceRef="GW_DSC_4_Conv" targetRef="End_DSC" isImmediate="true"/>
+   </process>
+
+   <process id="Proc_TF" isClosed="false" isExecutable="false" name="Trusted Flagger" processType="None">
+      <laneSet id="LaneSet_TF">
+         <lane id="Lane_TF">
+            <flowNodeRef>Start_TF</flowNodeRef>
+            <flowNodeRef>Task_TF_1</flowNodeRef>
+            <flowNodeRef>Task_TF_2</flowNodeRef>
+            <flowNodeRef>Task_TF_3</flowNodeRef>
+            <flowNodeRef>Catch_TF_1</flowNodeRef>
+            <flowNodeRef>Task_TF_4</flowNodeRef>
+            <flowNodeRef>End_TF</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_TF" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Seq_TF_1</outgoing>
+      </startEvent>
+      <task id="Task_TF_1" name="publish reports on notices submitted">
+         <incoming>Seq_TF_1</incoming>
+         <outgoing>Seq_TF_2</outgoing>
+      </task>
+      <task id="Task_TF_2" name="send reports to the Digital Services Coordinator">
+         <incoming>Seq_TF_2</incoming>
+         <outgoing>Seq_TF_3</outgoing>
+      </task>
+      <task id="Task_TF_3" name="make reports publicly available">
+         <incoming>Seq_TF_3</incoming>
+         <outgoing>Seq_TF_4</outgoing>
+      </task>
+      <intermediateCatchEvent id="Catch_TF_1" name="Receive an opportunity to react">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_TF_4</incoming>
+         <outgoing>Seq_TF_5</outgoing>
+         <messageEventDefinition id="MsgDef_TF_1"/>
+      </intermediateCatchEvent>
+      <task id="Task_TF_4" name="react to the investigation findings">
+         <incoming>Seq_TF_5</incoming>
+         <outgoing>Seq_TF_6</outgoing>
+      </task>
+      <endEvent id="End_TF" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_TF_6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Seq_TF_1" sourceRef="Start_TF" targetRef="Task_TF_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_TF_2" sourceRef="Task_TF_1" targetRef="Task_TF_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_TF_3" sourceRef="Task_TF_2" targetRef="Task_TF_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_TF_4" sourceRef="Task_TF_3" targetRef="Catch_TF_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_TF_5" sourceRef="Catch_TF_1" targetRef="Task_TF_4" isImmediate="true"/>
+      <sequenceFlow id="Seq_TF_6" sourceRef="Task_TF_4" targetRef="End_TF" isImmediate="true"/>
+   </process>
+
+   <process id="Proc_COM" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="LaneSet_COM">
+         <lane id="Lane_COM">
+            <flowNodeRef>Start_COM</flowNodeRef>
+            <flowNodeRef>Catch_COM_1</flowNodeRef>
+            <flowNodeRef>Task_COM_1</flowNodeRef>
+            <flowNodeRef>Task_COM_2</flowNodeRef>
+            <flowNodeRef>Task_COM_3</flowNodeRef>
+            <flowNodeRef>GW_COM_1</flowNodeRef>
+            <flowNodeRef>Task_COM_4</flowNodeRef>
+            <flowNodeRef>GW_COM_1_Conv</flowNodeRef>
+            <flowNodeRef>End_COM</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_COM" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Seq_COM_1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="Catch_COM_1" name="Receive the names, addresses...">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_COM_1</incoming>
+         <outgoing>Seq_COM_2</outgoing>
+         <messageEventDefinition id="MsgDef_COM_1"/>
+      </intermediateCatchEvent>
+      <task id="Task_COM_1" name="publish information in a publicly available database">
+         <incoming>Seq_COM_2</incoming>
+         <outgoing>Seq_COM_3</outgoing>
+      </task>
+      <task id="Task_COM_2" name="keep database up to date">
+         <incoming>Seq_COM_3</incoming>
+         <outgoing>Seq_COM_4</outgoing>
+      </task>
+      <task id="Task_COM_3" name="consult">
+         <incoming>Seq_COM_4</incoming>
+         <outgoing>Seq_COM_5</outgoing>
+      </task>
+      <exclusiveGateway id="GW_COM_1" name="assess whether necessary" isMarkerVisible="true" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_COM_5</incoming>
+         <outgoing>Seq_COM_6</outgoing>
+         <outgoing>Seq_COM_8</outgoing>
+      </exclusiveGateway>
+      <task id="Task_COM_4" name="issue guidelines after consulting the Board">
+         <incoming>Seq_COM_6</incoming>
+         <outgoing>Seq_COM_7</outgoing>
+      </task>
+      <exclusiveGateway id="GW_COM_1_Conv" name="" isMarkerVisible="true" gatewayDirection="Converging">
+         <incoming>Seq_COM_7</incoming>
+         <incoming>Seq_COM_8</incoming>
+         <outgoing>Seq_COM_9</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_COM" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_COM_9</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Seq_COM_1" sourceRef="Start_COM" targetRef="Catch_COM_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_2" sourceRef="Catch_COM_1" targetRef="Task_COM_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_3" sourceRef="Task_COM_1" targetRef="Task_COM_2" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_4" sourceRef="Task_COM_2" targetRef="Task_COM_3" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_5" sourceRef="Task_COM_3" targetRef="GW_COM_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_6" name="yes" sourceRef="GW_COM_1" targetRef="Task_COM_4" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_7" sourceRef="Task_COM_4" targetRef="GW_COM_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_8" name="no" sourceRef="GW_COM_1" targetRef="GW_COM_1_Conv" isImmediate="true"/>
+      <sequenceFlow id="Seq_COM_9" sourceRef="GW_COM_1_Conv" targetRef="End_COM" isImmediate="true"/>
+   </process>
+
+   <process id="Proc_BRD" isClosed="false" isExecutable="false" name="Board" processType="None">
+      <laneSet id="LaneSet_BRD">
+         <lane id="Lane_BRD">
+            <flowNodeRef>Start_BRD</flowNodeRef>
+            <flowNodeRef>Catch_BRD_1</flowNodeRef>
+            <flowNodeRef>Task_BRD_1</flowNodeRef>
+            <flowNodeRef>End_BRD</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_BRD" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Seq_BRD_1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="Catch_BRD_1" name="Receive the names, addresses...">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_BRD_1</incoming>
+         <outgoing>Seq_BRD_2</outgoing>
+         <messageEventDefinition id="MsgDef_BRD_1"/>
+      </intermediateCatchEvent>
+      <task id="Task_BRD_1" name="consult">
+         <incoming>Seq_BRD_2</incoming>
+         <outgoing>Seq_BRD_3</outgoing>
+      </task>
+      <endEvent id="End_BRD" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Seq_BRD_3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Seq_BRD_1" sourceRef="Start_BRD" targetRef="Catch_BRD_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_BRD_2" sourceRef="Catch_BRD_1" targetRef="Task_BRD_1" isImmediate="true"/>
+      <sequenceFlow id="Seq_BRD_3" sourceRef="Task_BRD_1" targetRef="End_BRD" isImmediate="true"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collaboration_1" id="BPMNPlane_1">
+         
+         <bpmndi:BPMNShape bpmnElement="Pool_OPP" id="Pool_OPP_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1500.0" x="30.0" y="30.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_OPP" id="Start_OPP_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OPP_1" id="Task_OPP_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="150.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_1" id="GW_OPP_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="290.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OPP_2" id="Task_OPP_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="370.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OPP_3" id="Task_OPP_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="510.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_1_Conv" id="GW_OPP_1_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_2" id="GW_OPP_2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="730.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OPP_4" id="Task_OPP_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_2_Conv" id="GW_OPP_2_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="950.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_3" id="GW_OPP_3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1030.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_OPP_5" id="Task_OPP_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1110.0" y="55.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_OPP_3_Conv" id="GW_OPP_3_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1250.0" y="155.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_OPP" id="End_OPP_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1330.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_1" id="Seq_OPP_1_gui">
+            <omgdi:waypoint x="110.0" y="175.0"/>
+            <omgdi:waypoint x="150.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_2" id="Seq_OPP_2_gui">
+            <omgdi:waypoint x="250.0" y="175.0"/>
+            <omgdi:waypoint x="290.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_3" id="Seq_OPP_3_gui">
+            <omgdi:waypoint x="310.0" y="155.0"/>
+            <omgdi:waypoint x="310.0" y="95.0"/>
+            <omgdi:waypoint x="370.0" y="95.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_4" id="Seq_OPP_4_gui">
+            <omgdi:waypoint x="470.0" y="95.0"/>
+            <omgdi:waypoint x="510.0" y="95.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_5" id="Seq_OPP_5_gui">
+            <omgdi:waypoint x="610.0" y="95.0"/>
+            <omgdi:waypoint x="670.0" y="95.0"/>
+            <omgdi:waypoint x="670.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_6" id="Seq_OPP_6_gui">
+            <omgdi:waypoint x="330.0" y="175.0"/>
+            <omgdi:waypoint x="650.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_7" id="Seq_OPP_7_gui">
+            <omgdi:waypoint x="690.0" y="175.0"/>
+            <omgdi:waypoint x="730.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_8" id="Seq_OPP_8_gui">
+            <omgdi:waypoint x="750.0" y="155.0"/>
+            <omgdi:waypoint x="750.0" y="95.0"/>
+            <omgdi:waypoint x="810.0" y="95.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_9" id="Seq_OPP_9_gui">
+            <omgdi:waypoint x="910.0" y="95.0"/>
+            <omgdi:waypoint x="970.0" y="95.0"/>
+            <omgdi:waypoint x="970.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_10" id="Seq_OPP_10_gui">
+            <omgdi:waypoint x="770.0" y="175.0"/>
+            <omgdi:waypoint x="950.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_11" id="Seq_OPP_11_gui">
+            <omgdi:waypoint x="990.0" y="175.0"/>
+            <omgdi:waypoint x="1030.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_12" id="Seq_OPP_12_gui">
+            <omgdi:waypoint x="1050.0" y="155.0"/>
+            <omgdi:waypoint x="1050.0" y="95.0"/>
+            <omgdi:waypoint x="1110.0" y="95.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_13" id="Seq_OPP_13_gui">
+            <omgdi:waypoint x="1210.0" y="95.0"/>
+            <omgdi:waypoint x="1270.0" y="95.0"/>
+            <omgdi:waypoint x="1270.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_14" id="Seq_OPP_14_gui">
+            <omgdi:waypoint x="1070.0" y="175.0"/>
+            <omgdi:waypoint x="1250.0" y="175.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_OPP_15" id="Seq_OPP_15_gui">
+            <omgdi:waypoint x="1290.0" y="175.0"/>
+            <omgdi:waypoint x="1330.0" y="174.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Pool_DSC" id="Pool_DSC_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2100.0" x="30.0" y="330.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_DSC" id="Start_DSC_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_1" id="GW_DSC_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_1" id="Task_DSC_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="230.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_1_Conv" id="GW_DSC_1_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="370.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_2" id="GW_DSC_2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_2" id="Task_DSC_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="530.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_2_Conv" id="GW_DSC_2_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="670.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_DSC_1" id="Catch_DSC_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="750.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_DSC_2" id="Catch_DSC_2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="830.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_3" id="GW_DSC_3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="910.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_3" id="Task_DSC_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="990.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_4" id="Task_DSC_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1130.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_5" id="Task_DSC_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1270.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_3_Conv" id="GW_DSC_3_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1410.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_4" id="GW_DSC_4_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1490.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_DSC_6" id="Task_DSC_6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1570.0" y="355.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_DSC_4_Conv" id="GW_DSC_4_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1710.0" y="455.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_DSC" id="End_DSC_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1790.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_1" id="Seq_DSC_1_gui">
+            <omgdi:waypoint x="110.0" y="475.0"/>
+            <omgdi:waypoint x="150.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_2" id="Seq_DSC_2_gui">
+            <omgdi:waypoint x="170.0" y="455.0"/>
+            <omgdi:waypoint x="170.0" y="395.0"/>
+            <omgdi:waypoint x="230.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_3" id="Seq_DSC_3_gui">
+            <omgdi:waypoint x="330.0" y="395.0"/>
+            <omgdi:waypoint x="390.0" y="395.0"/>
+            <omgdi:waypoint x="390.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_4" id="Seq_DSC_4_gui">
+            <omgdi:waypoint x="190.0" y="475.0"/>
+            <omgdi:waypoint x="370.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_5" id="Seq_DSC_5_gui">
+            <omgdi:waypoint x="410.0" y="475.0"/>
+            <omgdi:waypoint x="450.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_6" id="Seq_DSC_6_gui">
+            <omgdi:waypoint x="470.0" y="455.0"/>
+            <omgdi:waypoint x="470.0" y="395.0"/>
+            <omgdi:waypoint x="530.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_7" id="Seq_DSC_7_gui">
+            <omgdi:waypoint x="630.0" y="395.0"/>
+            <omgdi:waypoint x="690.0" y="395.0"/>
+            <omgdi:waypoint x="690.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_8" id="Seq_DSC_8_gui">
+            <omgdi:waypoint x="490.0" y="475.0"/>
+            <omgdi:waypoint x="670.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_9" id="Seq_DSC_9_gui">
+            <omgdi:waypoint x="710.0" y="475.0"/>
+            <omgdi:waypoint x="750.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_10" id="Seq_DSC_10_gui">
+            <omgdi:waypoint x="780.0" y="475.0"/>
+            <omgdi:waypoint x="830.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_11" id="Seq_DSC_11_gui">
+            <omgdi:waypoint x="860.0" y="475.0"/>
+            <omgdi:waypoint x="910.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_12" id="Seq_DSC_12_gui">
+            <omgdi:waypoint x="930.0" y="455.0"/>
+            <omgdi:waypoint x="930.0" y="395.0"/>
+            <omgdi:waypoint x="990.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_13" id="Seq_DSC_13_gui">
+            <omgdi:waypoint x="1090.0" y="395.0"/>
+            <omgdi:waypoint x="1130.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_14" id="Seq_DSC_14_gui">
+            <omgdi:waypoint x="1230.0" y="395.0"/>
+            <omgdi:waypoint x="1270.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_15" id="Seq_DSC_15_gui">
+            <omgdi:waypoint x="1370.0" y="395.0"/>
+            <omgdi:waypoint x="1430.0" y="395.0"/>
+            <omgdi:waypoint x="1430.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_16" id="Seq_DSC_16_gui">
+            <omgdi:waypoint x="950.0" y="475.0"/>
+            <omgdi:waypoint x="1410.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_17" id="Seq_DSC_17_gui">
+            <omgdi:waypoint x="1450.0" y="475.0"/>
+            <omgdi:waypoint x="1490.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_18" id="Seq_DSC_18_gui">
+            <omgdi:waypoint x="1510.0" y="455.0"/>
+            <omgdi:waypoint x="1510.0" y="395.0"/>
+            <omgdi:waypoint x="1570.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_19" id="Seq_DSC_19_gui">
+            <omgdi:waypoint x="1670.0" y="395.0"/>
+            <omgdi:waypoint x="1730.0" y="395.0"/>
+            <omgdi:waypoint x="1730.0" y="455.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_20" id="Seq_DSC_20_gui">
+            <omgdi:waypoint x="1530.0" y="475.0"/>
+            <omgdi:waypoint x="1710.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_DSC_21" id="Seq_DSC_21_gui">
+            <omgdi:waypoint x="1750.0" y="475.0"/>
+            <omgdi:waypoint x="1790.0" y="474.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Pool_TF" id="Pool_TF_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1500.0" x="30.0" y="630.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_TF" id="Start_TF_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TF_1" id="Task_TF_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="150.0" y="735.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TF_2" id="Task_TF_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="290.0" y="735.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TF_3" id="Task_TF_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="735.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_TF_1" id="Catch_TF_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="570.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_TF_4" id="Task_TF_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="735.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_TF" id="End_TF_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="790.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_1" id="Seq_TF_1_gui">
+            <omgdi:waypoint x="110.0" y="775.0"/>
+            <omgdi:waypoint x="150.0" y="775.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_2" id="Seq_TF_2_gui">
+            <omgdi:waypoint x="250.0" y="775.0"/>
+            <omgdi:waypoint x="290.0" y="775.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_3" id="Seq_TF_3_gui">
+            <omgdi:waypoint x="390.0" y="775.0"/>
+            <omgdi:waypoint x="430.0" y="775.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_4" id="Seq_TF_4_gui">
+            <omgdi:waypoint x="530.0" y="775.0"/>
+            <omgdi:waypoint x="570.0" y="775.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_5" id="Seq_TF_5_gui">
+            <omgdi:waypoint x="600.0" y="775.0"/>
+            <omgdi:waypoint x="650.0" y="775.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_TF_6" id="Seq_TF_6_gui">
+            <omgdi:waypoint x="750.0" y="775.0"/>
+            <omgdi:waypoint x="790.0" y="774.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Pool_COM" id="Pool_COM_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1500.0" x="30.0" y="930.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_COM" id="Start_COM_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_COM_1" id="Catch_COM_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_1" id="Task_COM_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="230.0" y="1035.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_2" id="Task_COM_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="370.0" y="1035.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_3" id="Task_COM_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="510.0" y="1035.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_COM_1" id="GW_COM_1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="1055.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_COM_4" id="Task_COM_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="955.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW_COM_1_Conv" id="GW_COM_1_Conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="870.0" y="1055.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_COM" id="End_COM_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="950.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_1" id="Seq_COM_1_gui">
+            <omgdi:waypoint x="110.0" y="1075.0"/>
+            <omgdi:waypoint x="150.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_2" id="Seq_COM_2_gui">
+            <omgdi:waypoint x="180.0" y="1075.0"/>
+            <omgdi:waypoint x="230.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_3" id="Seq_COM_3_gui">
+            <omgdi:waypoint x="330.0" y="1075.0"/>
+            <omgdi:waypoint x="370.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_4" id="Seq_COM_4_gui">
+            <omgdi:waypoint x="470.0" y="1075.0"/>
+            <omgdi:waypoint x="510.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_5" id="Seq_COM_5_gui">
+            <omgdi:waypoint x="610.0" y="1075.0"/>
+            <omgdi:waypoint x="650.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_6" id="Seq_COM_6_gui">
+            <omgdi:waypoint x="670.0" y="1055.0"/>
+            <omgdi:waypoint x="670.0" y="995.0"/>
+            <omgdi:waypoint x="730.0" y="995.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_7" id="Seq_COM_7_gui">
+            <omgdi:waypoint x="830.0" y="995.0"/>
+            <omgdi:waypoint x="890.0" y="995.0"/>
+            <omgdi:waypoint x="890.0" y="1055.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_8" id="Seq_COM_8_gui">
+            <omgdi:waypoint x="690.0" y="1075.0"/>
+            <omgdi:waypoint x="870.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_COM_9" id="Seq_COM_9_gui">
+            <omgdi:waypoint x="910.0" y="1075.0"/>
+            <omgdi:waypoint x="950.0" y="1074.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNShape bpmnElement="Pool_BRD" id="Pool_BRD_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1000.0" x="30.0" y="1230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Start_BRD" id="Start_BRD_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="1360.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_BRD_1" id="Catch_BRD_1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1360.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_BRD_1" id="Task_BRD_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="230.0" y="1335.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_BRD" id="End_BRD_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="370.0" y="1360.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="Seq_BRD_1" id="Seq_BRD_1_gui">
+            <omgdi:waypoint x="110.0" y="1375.0"/>
+            <omgdi:waypoint x="150.0" y="1375.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_BRD_2" id="Seq_BRD_2_gui">
+            <omgdi:waypoint x="180.0" y="1375.0"/>
+            <omgdi:waypoint x="230.0" y="1375.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Seq_BRD_3" id="Seq_BRD_3_gui">
+            <omgdi:waypoint x="330.0" y="1375.0"/>
+            <omgdi:waypoint x="370.0" y="1374.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="Msg_1" id="Msg_1_gui">
+            <omgdi:waypoint x="1160.0" y="135.0"/>
+            <omgdi:waypoint x="845.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_2" id="Msg_2_gui">
+            <omgdi:waypoint x="580.0" y="435.0"/>
+            <omgdi:waypoint x="165.0" y="1060.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_3" id="Msg_3_gui">
+            <omgdi:waypoint x="580.0" y="435.0"/>
+            <omgdi:waypoint x="165.0" y="1360.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_4" id="Msg_4_gui">
+            <omgdi:waypoint x="340.0" y="735.0"/>
+            <omgdi:waypoint x="765.0" y="490.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Msg_5" id="Msg_5_gui">
+            <omgdi:waypoint x="1320.0" y="435.0"/>
+            <omgdi:waypoint x="585.0" y="760.0"/>
+         </bpmndi:BPMNEdge>
+         
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

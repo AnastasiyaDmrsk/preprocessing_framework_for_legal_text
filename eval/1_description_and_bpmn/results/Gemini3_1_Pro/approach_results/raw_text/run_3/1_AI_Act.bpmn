@@ -1,0 +1,912 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:signavio="http://www.signavio.com"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             exporter="Signavio Process Editor, http://www.signavio.com"
+             exporterVersion="19.2.2"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             id="sid-doc-id"
+             targetNamespace="http://www.signavio.com"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="sid-collab">
+      <participant id="sid-pool-sme" name="SME" processRef="sid-process-sme">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-board" name="Board" processRef="sid-process-board">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-ms" name="Member State" processRef="sid-process-ms">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-aio" name="AI Office" processRef="sid-process-aio">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+
+      <messageFlow id="sid-mf-sme-ms" sourceRef="sid-sme-transmit" targetRef="sid-ms-catch-int">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="sid-mf-board-aio" sourceRef="sid-board-transmit" targetRef="sid-aio-catch-req">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <!-- PROCESS: SME -->
+   <process id="sid-process-sme" isClosed="false" isExecutable="false" name="SME" processType="None">
+      <laneSet id="sid-laneSet-sme">
+         <lane id="sid-lane-sme">
+            <flowNodeRef>sid-sme-start</flowNodeRef>
+            <flowNodeRef>sid-sme-xor-s</flowNodeRef>
+            <flowNodeRef>sid-sme-share</flowNodeRef>
+            <flowNodeRef>sid-sme-transmit</flowNodeRef>
+            <flowNodeRef>sid-sme-xor-j</flowNodeRef>
+            <flowNodeRef>sid-sme-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-sme-start" name="Start">
+         <outgoing>sid-sme-f1</outgoing>
+      </startEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-sme-xor-s" isMarkerVisible="true">
+         <incoming>sid-sme-f1</incoming>
+         <outgoing>sid-sme-f2</outgoing>
+         <outgoing>sid-sme-f3</outgoing>
+      </exclusiveGateway>
+      <task id="sid-sme-share" name="share interests and needs">
+         <incoming>sid-sme-f2</incoming>
+         <outgoing>sid-sme-f4</outgoing>
+      </task>
+      <task id="sid-sme-transmit" name="transmit interests and needs">
+         <incoming>sid-sme-f4</incoming>
+         <outgoing>sid-sme-f5</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-sme-xor-j" isMarkerVisible="true">
+         <incoming>sid-sme-f3</incoming>
+         <incoming>sid-sme-f5</incoming>
+         <outgoing>sid-sme-f6</outgoing>
+      </exclusiveGateway>
+      <endEvent id="sid-sme-end" name="End">
+         <incoming>sid-sme-f6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sid-sme-f1" isImmediate="true" sourceRef="sid-sme-start" targetRef="sid-sme-xor-s"/>
+      <sequenceFlow id="sid-sme-f2" isImmediate="true" name="required" sourceRef="sid-sme-xor-s" targetRef="sid-sme-share"/>
+      <sequenceFlow id="sid-sme-f3" isImmediate="true" name="not required" sourceRef="sid-sme-xor-s" targetRef="sid-sme-xor-j"/>
+      <sequenceFlow id="sid-sme-f4" isImmediate="true" sourceRef="sid-sme-share" targetRef="sid-sme-transmit"/>
+      <sequenceFlow id="sid-sme-f5" isImmediate="true" sourceRef="sid-sme-transmit" targetRef="sid-sme-xor-j"/>
+      <sequenceFlow id="sid-sme-f6" isImmediate="true" sourceRef="sid-sme-xor-j" targetRef="sid-sme-end"/>
+   </process>
+
+   <!-- PROCESS: Board -->
+   <process id="sid-process-board" isClosed="false" isExecutable="false" name="Board" processType="None">
+      <laneSet id="sid-laneSet-board">
+         <lane id="sid-lane-board">
+            <flowNodeRef>sid-board-start</flowNodeRef>
+            <flowNodeRef>sid-board-xor-s</flowNodeRef>
+            <flowNodeRef>sid-board-req</flowNodeRef>
+            <flowNodeRef>sid-board-transmit</flowNodeRef>
+            <flowNodeRef>sid-board-xor-j</flowNodeRef>
+            <flowNodeRef>sid-board-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-board-start" name="Start">
+         <outgoing>sid-board-f1</outgoing>
+      </startEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-board-xor-s" isMarkerVisible="true">
+         <incoming>sid-board-f1</incoming>
+         <outgoing>sid-board-f2</outgoing>
+         <outgoing>sid-board-f3</outgoing>
+      </exclusiveGateway>
+      <task id="sid-board-req" name="request standardised templates">
+         <incoming>sid-board-f2</incoming>
+         <outgoing>sid-board-f4</outgoing>
+      </task>
+      <task id="sid-board-transmit" name="transmit the request for standardised templates to the AI Office">
+         <incoming>sid-board-f4</incoming>
+         <outgoing>sid-board-f5</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-board-xor-j" isMarkerVisible="true">
+         <incoming>sid-board-f3</incoming>
+         <incoming>sid-board-f5</incoming>
+         <outgoing>sid-board-f6</outgoing>
+      </exclusiveGateway>
+      <endEvent id="sid-board-end" name="End">
+         <incoming>sid-board-f6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sid-board-f1" isImmediate="true" sourceRef="sid-board-start" targetRef="sid-board-xor-s"/>
+      <sequenceFlow id="sid-board-f2" isImmediate="true" name="required" sourceRef="sid-board-xor-s" targetRef="sid-board-req"/>
+      <sequenceFlow id="sid-board-f3" isImmediate="true" name="not required" sourceRef="sid-board-xor-s" targetRef="sid-board-xor-j"/>
+      <sequenceFlow id="sid-board-f4" isImmediate="true" sourceRef="sid-board-req" targetRef="sid-board-transmit"/>
+      <sequenceFlow id="sid-board-f5" isImmediate="true" sourceRef="sid-board-transmit" targetRef="sid-board-xor-j"/>
+      <sequenceFlow id="sid-board-f6" isImmediate="true" sourceRef="sid-board-xor-j" targetRef="sid-board-end"/>
+   </process>
+
+   <!-- PROCESS: Member State -->
+   <process id="sid-process-ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="sid-laneSet-ms">
+         <lane id="sid-lane-ms">
+            <flowNodeRef>sid-ms-start</flowNodeRef>
+            <flowNodeRef>sid-ms-and-s</flowNodeRef>
+            <flowNodeRef>sid-ms-assess1</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-e1-s</flowNodeRef>
+            <flowNodeRef>sid-ms-provprio</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-e1-j</flowNodeRef>
+            <flowNodeRef>sid-ms-assess2</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-e2-s</flowNodeRef>
+            <flowNodeRef>sid-ms-notprec</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-e2-j</flowNodeRef>
+            <flowNodeRef>sid-ms-org</flowNodeRef>
+            <flowNodeRef>sid-ms-util</flowNodeRef>
+            <flowNodeRef>sid-ms-assessappr</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-appr-s</flowNodeRef>
+            <flowNodeRef>sid-ms-est</flowNodeRef>
+            <flowNodeRef>sid-ms-xor-appr-j</flowNodeRef>
+            <flowNodeRef>sid-ms-provadv</flowNodeRef>
+            <flowNodeRef>sid-ms-resp</flowNodeRef>
+            <flowNodeRef>sid-ms-fac</flowNodeRef>
+            <flowNodeRef>sid-ms-and-j</flowNodeRef>
+            <flowNodeRef>sid-ms-catch-int</flowNodeRef>
+            <flowNodeRef>sid-ms-takeacc</flowNodeRef>
+            <flowNodeRef>sid-ms-setfees</flowNodeRef>
+            <flowNodeRef>sid-ms-end</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="sid-ms-start" name="Start">
+         <outgoing>sid-ms-f1</outgoing>
+      </startEvent>
+      <parallelGateway gatewayDirection="Diverging" id="sid-ms-and-s">
+         <incoming>sid-ms-f1</incoming>
+         <outgoing>sid-ms-fb1</outgoing>
+         <outgoing>sid-ms-fb2</outgoing>
+         <outgoing>sid-ms-fb3</outgoing>
+         <outgoing>sid-ms-fb4</outgoing>
+      </parallelGateway>
+
+      <!-- MS Branch 1 -->
+      <task id="sid-ms-assess1" name="assess whether SMEs having a registered office or a branch in the Union fulfil the eligibility conditions and selection criteria">
+         <incoming>sid-ms-fb1</incoming>
+         <outgoing>sid-ms-f-a1-xs1</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-ms-xor-e1-s" isMarkerVisible="true">
+         <incoming>sid-ms-f-a1-xs1</incoming>
+         <outgoing>sid-ms-f-xs1-true</outgoing>
+         <outgoing>sid-ms-f-xs1-false</outgoing>
+      </exclusiveGateway>
+      <task id="sid-ms-provprio" name="provide SMEs with priority access">
+         <incoming>sid-ms-f-xs1-true</incoming>
+         <outgoing>sid-ms-f-pp-xj1</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-ms-xor-e1-j" isMarkerVisible="true">
+         <incoming>sid-ms-f-xs1-false</incoming>
+         <incoming>sid-ms-f-pp-xj1</incoming>
+         <outgoing>sid-ms-f-xj1-a2</outgoing>
+      </exclusiveGateway>
+      <task id="sid-ms-assess2" name="assess whether other SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>sid-ms-f-xj1-a2</incoming>
+         <outgoing>sid-ms-f-a2-xs2</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-ms-xor-e2-s" isMarkerVisible="true">
+         <incoming>sid-ms-f-a2-xs2</incoming>
+         <outgoing>sid-ms-f-xs2-true</outgoing>
+         <outgoing>sid-ms-f-xs2-false</outgoing>
+      </exclusiveGateway>
+      <task id="sid-ms-notprec" name="not preclude other SMEs from access to the AI regulatory sandbox">
+         <incoming>sid-ms-f-xs2-true</incoming>
+         <outgoing>sid-ms-f-np-xj2</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-ms-xor-e2-j" isMarkerVisible="true">
+         <incoming>sid-ms-f-xs2-false</incoming>
+         <incoming>sid-ms-f-np-xj2</incoming>
+         <outgoing>sid-ms-f-xj2-andj</outgoing>
+      </exclusiveGateway>
+
+      <!-- MS Branch 2 -->
+      <task id="sid-ms-org" name="organise specific activities">
+         <incoming>sid-ms-fb2</incoming>
+         <outgoing>sid-ms-f-org-andj</outgoing>
+      </task>
+
+      <!-- MS Branch 3 -->
+      <task id="sid-ms-util" name="utilise existing dedicated channels">
+         <incoming>sid-ms-fb3</incoming>
+         <outgoing>sid-ms-f-util-aappr</outgoing>
+      </task>
+      <task id="sid-ms-assessappr" name="assess whether appropriate">
+         <incoming>sid-ms-f-util-aappr</incoming>
+         <outgoing>sid-ms-f-aappr-xsa</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-ms-xor-appr-s" isMarkerVisible="true">
+         <incoming>sid-ms-f-aappr-xsa</incoming>
+         <outgoing>sid-ms-f-xsa-true</outgoing>
+         <outgoing>sid-ms-f-xsa-false</outgoing>
+      </exclusiveGateway>
+      <task id="sid-ms-est" name="establish new channels">
+         <incoming>sid-ms-f-xsa-true</incoming>
+         <outgoing>sid-ms-f-est-xja</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-ms-xor-appr-j" isMarkerVisible="true">
+         <incoming>sid-ms-f-xsa-false</incoming>
+         <incoming>sid-ms-f-est-xja</incoming>
+         <outgoing>sid-ms-f-xja-padv</outgoing>
+      </exclusiveGateway>
+      <task id="sid-ms-provadv" name="provide advice">
+         <incoming>sid-ms-f-xja-padv</incoming>
+         <outgoing>sid-ms-f-padv-resp</outgoing>
+      </task>
+      <task id="sid-ms-resp" name="respond to queries">
+         <incoming>sid-ms-f-padv-resp</incoming>
+         <outgoing>sid-ms-f-resp-andj</outgoing>
+      </task>
+
+      <!-- MS Branch 4 -->
+      <task id="sid-ms-fac" name="facilitate the participation of SMEs in the development process">
+         <incoming>sid-ms-fb4</incoming>
+         <outgoing>sid-ms-f-fac-andj</outgoing>
+      </task>
+
+      <!-- Post Join MS -->
+      <parallelGateway gatewayDirection="Converging" id="sid-ms-and-j">
+         <incoming>sid-ms-f-xj2-andj</incoming>
+         <incoming>sid-ms-f-org-andj</incoming>
+         <incoming>sid-ms-f-resp-andj</incoming>
+         <incoming>sid-ms-f-fac-andj</incoming>
+         <outgoing>sid-ms-f-andj-catch</outgoing>
+      </parallelGateway>
+      <intermediateCatchEvent id="sid-ms-catch-int" name="Upon receiving interests and needs">
+         <incoming>sid-ms-f-andj-catch</incoming>
+         <outgoing>sid-ms-f-catch-take</outgoing>
+         <messageEventDefinition id="sid-ms-msgdef-1"/>
+      </intermediateCatchEvent>
+      <task id="sid-ms-takeacc" name="take into account the specific interests and needs">
+         <incoming>sid-ms-f-catch-take</incoming>
+         <outgoing>sid-ms-f-take-set</outgoing>
+      </task>
+      <task id="sid-ms-setfees" name="set the fees for conformity assessment">
+         <incoming>sid-ms-f-take-set</incoming>
+         <outgoing>sid-ms-f-set-end</outgoing>
+      </task>
+      <endEvent id="sid-ms-end" name="End">
+         <incoming>sid-ms-f-set-end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sid-ms-f1" isImmediate="true" sourceRef="sid-ms-start" targetRef="sid-ms-and-s"/>
+      <sequenceFlow id="sid-ms-fb1" isImmediate="true" sourceRef="sid-ms-and-s" targetRef="sid-ms-assess1"/>
+      <sequenceFlow id="sid-ms-fb2" isImmediate="true" sourceRef="sid-ms-and-s" targetRef="sid-ms-org"/>
+      <sequenceFlow id="sid-ms-fb3" isImmediate="true" sourceRef="sid-ms-and-s" targetRef="sid-ms-util"/>
+      <sequenceFlow id="sid-ms-fb4" isImmediate="true" sourceRef="sid-ms-and-s" targetRef="sid-ms-fac"/>
+
+      <sequenceFlow id="sid-ms-f-a1-xs1" isImmediate="true" sourceRef="sid-ms-assess1" targetRef="sid-ms-xor-e1-s"/>
+      <sequenceFlow id="sid-ms-f-xs1-true" isImmediate="true" name="true" sourceRef="sid-ms-xor-e1-s" targetRef="sid-ms-provprio"/>
+      <sequenceFlow id="sid-ms-f-xs1-false" isImmediate="true" name="false" sourceRef="sid-ms-xor-e1-s" targetRef="sid-ms-xor-e1-j"/>
+      <sequenceFlow id="sid-ms-f-pp-xj1" isImmediate="true" sourceRef="sid-ms-provprio" targetRef="sid-ms-xor-e1-j"/>
+      <sequenceFlow id="sid-ms-f-xj1-a2" isImmediate="true" sourceRef="sid-ms-xor-e1-j" targetRef="sid-ms-assess2"/>
+      <sequenceFlow id="sid-ms-f-a2-xs2" isImmediate="true" sourceRef="sid-ms-assess2" targetRef="sid-ms-xor-e2-s"/>
+      <sequenceFlow id="sid-ms-f-xs2-true" isImmediate="true" name="true" sourceRef="sid-ms-xor-e2-s" targetRef="sid-ms-notprec"/>
+      <sequenceFlow id="sid-ms-f-xs2-false" isImmediate="true" name="false" sourceRef="sid-ms-xor-e2-s" targetRef="sid-ms-xor-e2-j"/>
+      <sequenceFlow id="sid-ms-f-np-xj2" isImmediate="true" sourceRef="sid-ms-notprec" targetRef="sid-ms-xor-e2-j"/>
+      <sequenceFlow id="sid-ms-f-xj2-andj" isImmediate="true" sourceRef="sid-ms-xor-e2-j" targetRef="sid-ms-and-j"/>
+
+      <sequenceFlow id="sid-ms-f-org-andj" isImmediate="true" sourceRef="sid-ms-org" targetRef="sid-ms-and-j"/>
+
+      <sequenceFlow id="sid-ms-f-util-aappr" isImmediate="true" sourceRef="sid-ms-util" targetRef="sid-ms-assessappr"/>
+      <sequenceFlow id="sid-ms-f-aappr-xsa" isImmediate="true" sourceRef="sid-ms-assessappr" targetRef="sid-ms-xor-appr-s"/>
+      <sequenceFlow id="sid-ms-f-xsa-true" isImmediate="true" name="true" sourceRef="sid-ms-xor-appr-s" targetRef="sid-ms-est"/>
+      <sequenceFlow id="sid-ms-f-xsa-false" isImmediate="true" name="false" sourceRef="sid-ms-xor-appr-s" targetRef="sid-ms-xor-appr-j"/>
+      <sequenceFlow id="sid-ms-f-est-xja" isImmediate="true" sourceRef="sid-ms-est" targetRef="sid-ms-xor-appr-j"/>
+      <sequenceFlow id="sid-ms-f-xja-padv" isImmediate="true" sourceRef="sid-ms-xor-appr-j" targetRef="sid-ms-provadv"/>
+      <sequenceFlow id="sid-ms-f-padv-resp" isImmediate="true" sourceRef="sid-ms-provadv" targetRef="sid-ms-resp"/>
+      <sequenceFlow id="sid-ms-f-resp-andj" isImmediate="true" sourceRef="sid-ms-resp" targetRef="sid-ms-and-j"/>
+
+      <sequenceFlow id="sid-ms-f-fac-andj" isImmediate="true" sourceRef="sid-ms-fac" targetRef="sid-ms-and-j"/>
+
+      <sequenceFlow id="sid-ms-f-andj-catch" isImmediate="true" sourceRef="sid-ms-and-j" targetRef="sid-ms-catch-int"/>
+      <sequenceFlow id="sid-ms-f-catch-take" isImmediate="true" sourceRef="sid-ms-catch-int" targetRef="sid-ms-takeacc"/>
+      <sequenceFlow id="sid-ms-f-take-set" isImmediate="true" sourceRef="sid-ms-takeacc" targetRef="sid-ms-setfees"/>
+      <sequenceFlow id="sid-ms-f-set-end" isImmediate="true" sourceRef="sid-ms-setfees" targetRef="sid-ms-end"/>
+   </process>
+
+   <!-- PROCESS: AI Office -->
+   <process id="sid-process-aio" isClosed="false" isExecutable="false" name="AI Office" processType="None">
+      <laneSet id="sid-laneSet-aio">
+         <lane id="sid-lane-aio">
+            <flowNodeRef>sid-aio-start</flowNodeRef>
+            <flowNodeRef>sid-aio-and-s</flowNodeRef>
+            <flowNodeRef>sid-aio-catch-req</flowNodeRef>
+            <flowNodeRef>sid-aio-assess-spec</flowNodeRef>
+            <flowNodeRef>sid-aio-xor-spec-s</flowNodeRef>
+            <flowNodeRef>sid-aio-prov-temp</flowNodeRef>
+            <flowNodeRef>sid-aio-xor-spec-j</flowNodeRef>
+            <flowNodeRef>sid-aio-dev</flowNodeRef>
+            <flowNodeRef>sid-aio-maint</flowNodeRef>
+            <flowNodeRef>sid-aio-orgcomm</flowNodeRef>
+            <flowNodeRef>sid-aio-eval</flowNodeRef>
+            <flowNodeRef>sid-aio-prom</flowNodeRef>
+            <flowNodeRef>sid-aio-and-j</flowNodeRef>
+            <flowNodeRef>sid-aio-end</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="sid-aio-start" name="Start">
+         <outgoing>sid-aio-f1</outgoing>
+      </startEvent>
+      <parallelGateway gatewayDirection="Diverging" id="sid-aio-and-s">
+         <incoming>sid-aio-f1</incoming>
+         <outgoing>sid-aio-fb1</outgoing>
+         <outgoing>sid-aio-fb2</outgoing>
+         <outgoing>sid-aio-fb3</outgoing>
+         <outgoing>sid-aio-fb4</outgoing>
+      </parallelGateway>
+
+      <!-- AIO Branch 1 -->
+      <intermediateCatchEvent id="sid-aio-catch-req" name="Upon receiving the request for standardised templates">
+         <incoming>sid-aio-fb1</incoming>
+         <outgoing>sid-aio-f-catch-ass</outgoing>
+         <messageEventDefinition id="sid-aio-msgdef-2"/>
+      </intermediateCatchEvent>
+      <task id="sid-aio-assess-spec" name="assess whether as specified by the Board in its request">
+         <incoming>sid-aio-f-catch-ass</incoming>
+         <outgoing>sid-aio-f-ass-xs</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-aio-xor-spec-s" isMarkerVisible="true">
+         <incoming>sid-aio-f-ass-xs</incoming>
+         <outgoing>sid-aio-f-xs-true</outgoing>
+         <outgoing>sid-aio-f-xs-false</outgoing>
+      </exclusiveGateway>
+      <task id="sid-aio-prov-temp" name="provide standardised templates">
+         <incoming>sid-aio-f-xs-true</incoming>
+         <outgoing>sid-aio-f-prov-xj</outgoing>
+      </task>
+      <exclusiveGateway gatewayDirection="Converging" id="sid-aio-xor-spec-j" isMarkerVisible="true">
+         <incoming>sid-aio-f-xs-false</incoming>
+         <incoming>sid-aio-f-prov-xj</incoming>
+         <outgoing>sid-aio-f-xj-andj</outgoing>
+      </exclusiveGateway>
+
+      <!-- AIO Branch 2 -->
+      <task id="sid-aio-dev" name="develop a single information platform">
+         <incoming>sid-aio-fb2</incoming>
+         <outgoing>sid-aio-f-dev-maint</outgoing>
+      </task>
+      <task id="sid-aio-maint" name="maintain a single information platform">
+         <incoming>sid-aio-f-dev-maint</incoming>
+         <outgoing>sid-aio-f-maint-andj</outgoing>
+      </task>
+
+      <!-- AIO Branch 3 -->
+      <task id="sid-aio-orgcomm" name="organise appropriate communication campaigns">
+         <incoming>sid-aio-fb3</incoming>
+         <outgoing>sid-aio-f-org-andj</outgoing>
+      </task>
+
+      <!-- AIO Branch 4 -->
+      <task id="sid-aio-eval" name="evaluate the convergence of best practices">
+         <incoming>sid-aio-fb4</incoming>
+         <outgoing>sid-aio-f-eval-prom</outgoing>
+      </task>
+      <task id="sid-aio-prom" name="promote the convergence of best practices">
+         <incoming>sid-aio-f-eval-prom</incoming>
+         <outgoing>sid-aio-f-prom-andj</outgoing>
+      </task>
+
+      <!-- Post Join AIO -->
+      <parallelGateway gatewayDirection="Converging" id="sid-aio-and-j">
+         <incoming>sid-aio-f-xj-andj</incoming>
+         <incoming>sid-aio-f-maint-andj</incoming>
+         <incoming>sid-aio-f-org-andj</incoming>
+         <incoming>sid-aio-f-prom-andj</incoming>
+         <outgoing>sid-aio-f-andj-end</outgoing>
+      </parallelGateway>
+      <endEvent id="sid-aio-end" name="End">
+         <incoming>sid-aio-f-andj-end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sid-aio-f1" isImmediate="true" sourceRef="sid-aio-start" targetRef="sid-aio-and-s"/>
+      <sequenceFlow id="sid-aio-fb1" isImmediate="true" sourceRef="sid-aio-and-s" targetRef="sid-aio-catch-req"/>
+      <sequenceFlow id="sid-aio-fb2" isImmediate="true" sourceRef="sid-aio-and-s" targetRef="sid-aio-dev"/>
+      <sequenceFlow id="sid-aio-fb3" isImmediate="true" sourceRef="sid-aio-and-s" targetRef="sid-aio-orgcomm"/>
+      <sequenceFlow id="sid-aio-fb4" isImmediate="true" sourceRef="sid-aio-and-s" targetRef="sid-aio-eval"/>
+
+      <sequenceFlow id="sid-aio-f-catch-ass" isImmediate="true" sourceRef="sid-aio-catch-req" targetRef="sid-aio-assess-spec"/>
+      <sequenceFlow id="sid-aio-f-ass-xs" isImmediate="true" sourceRef="sid-aio-assess-spec" targetRef="sid-aio-xor-spec-s"/>
+      <sequenceFlow id="sid-aio-f-xs-true" isImmediate="true" name="true" sourceRef="sid-aio-xor-spec-s" targetRef="sid-aio-prov-temp"/>
+      <sequenceFlow id="sid-aio-f-xs-false" isImmediate="true" name="false" sourceRef="sid-aio-xor-spec-s" targetRef="sid-aio-xor-spec-j"/>
+      <sequenceFlow id="sid-aio-f-prov-xj" isImmediate="true" sourceRef="sid-aio-prov-temp" targetRef="sid-aio-xor-spec-j"/>
+      <sequenceFlow id="sid-aio-f-xj-andj" isImmediate="true" sourceRef="sid-aio-xor-spec-j" targetRef="sid-aio-and-j"/>
+
+      <sequenceFlow id="sid-aio-f-dev-maint" isImmediate="true" sourceRef="sid-aio-dev" targetRef="sid-aio-maint"/>
+      <sequenceFlow id="sid-aio-f-maint-andj" isImmediate="true" sourceRef="sid-aio-maint" targetRef="sid-aio-and-j"/>
+
+      <sequenceFlow id="sid-aio-f-org-andj" isImmediate="true" sourceRef="sid-aio-orgcomm" targetRef="sid-aio-and-j"/>
+
+      <sequenceFlow id="sid-aio-f-eval-prom" isImmediate="true" sourceRef="sid-aio-eval" targetRef="sid-aio-prom"/>
+      <sequenceFlow id="sid-aio-f-prom-andj" isImmediate="true" sourceRef="sid-aio-prom" targetRef="sid-aio-and-j"/>
+
+      <sequenceFlow id="sid-aio-f-andj-end" isImmediate="true" sourceRef="sid-aio-and-j" targetRef="sid-aio-end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="sid-diagram">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab" id="sid-plane">
+         <!-- SME Shapes -->
+         <bpmndi:BPMNShape bpmnElement="sid-pool-sme" id="sid-pool-sme_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="800.0" x="10.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-sme" id="sid-lane-sme_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="770.0" x="40.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-start" id="sid-sme-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-xor-s" id="sid-sme-xor-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="65.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-share" id="sid-sme-share_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-transmit" id="sid-sme-transmit_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-xor-j" id="sid-sme-xor-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="65.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-sme-end" id="sid-sme-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="650.0" y="71.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Board Shapes -->
+         <bpmndi:BPMNShape bpmnElement="sid-pool-board" id="sid-pool-board_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="800.0" x="10.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-board" id="sid-lane-board_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="770.0" x="40.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-start" id="sid-board-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="240.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-xor-s" id="sid-board-xor-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-req" id="sid-board-req_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-transmit" id="sid-board-transmit_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-xor-j" id="sid-board-xor-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-board-end" id="sid-board-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="650.0" y="241.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Shapes -->
+         <bpmndi:BPMNShape bpmnElement="sid-pool-ms" id="sid-pool-ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="650.0" width="2200.0" x="10.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-ms" id="sid-lane-ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="650.0" width="2170.0" x="40.0" y="350.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-start" id="sid-ms-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-and-s" id="sid-ms-and-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="645.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-assess1" id="sid-ms-assess1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-e1-s" id="sid-ms-xor-e1-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-provprio" id="sid-ms-provprio_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-e1-j" id="sid-ms-xor-e1-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="620.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-assess2" id="sid-ms-assess2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-e2-s" id="sid-ms-xor-e2-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-notprec" id="sid-ms-notprec_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="930.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-e2-j" id="sid-ms-xor-e2-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1070.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-org" id="sid-ms-org_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-util" id="sid-ms-util_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="620.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-assessappr" id="sid-ms-assessappr_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="620.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-appr-s" id="sid-ms-xor-appr-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-est" id="sid-ms-est_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="620.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-xor-appr-j" id="sid-ms-xor-appr-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="770.0" y="640.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-provadv" id="sid-ms-provadv_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="620.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-resp" id="sid-ms-resp_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="620.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-fac" id="sid-ms-fac_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="780.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-and-j" id="sid-ms-and-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="645.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-catch-int" id="sid-ms-catch-int_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1300.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-takeacc" id="sid-ms-takeacc_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="630.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-setfees" id="sid-ms-setfees_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="630.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-ms-end" id="sid-ms-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1700.0" y="651.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO Shapes -->
+         <bpmndi:BPMNShape bpmnElement="sid-pool-aio" id="sid-pool-aio_gui" isHorizontal="true">
+            <omgdc:Bounds height="550.0" width="1500.0" x="10.0" y="1020.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-aio" id="sid-lane-aio_gui" isHorizontal="true">
+            <omgdc:Bounds height="550.0" width="1470.0" x="40.0" y="1020.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-start" id="sid-aio-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="80.0" y="1300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-and-s" id="sid-aio-and-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="1295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-catch-req" id="sid-aio-catch-req_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="250.0" y="1075.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-assess-spec" id="sid-aio-assess-spec_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="1050.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-xor-spec-s" id="sid-aio-xor-spec-s_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="460.0" y="1070.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-prov-temp" id="sid-aio-prov-temp_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="540.0" y="1050.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-xor-spec-j" id="sid-aio-xor-spec-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="680.0" y="1070.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-dev" id="sid-aio-dev_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-maint" id="sid-aio-maint_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-orgcomm" id="sid-aio-orgcomm_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-eval" id="sid-aio-eval_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1440.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-prom" id="sid-aio-prom_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1440.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-and-j" id="sid-aio-and-j_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="1295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-aio-end" id="sid-aio-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="950.0" y="1301.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Edges SME -->
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f1" id="sid-sme-f1_gui">
+            <omgdi:waypoint x="110.0" y="85.0"/>
+            <omgdi:waypoint x="150.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f2" id="sid-sme-f2_gui">
+            <omgdi:waypoint x="190.0" y="85.0"/>
+            <omgdi:waypoint x="250.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f3" id="sid-sme-f3_gui">
+            <omgdi:waypoint x="170.0" y="105.0"/>
+            <omgdi:waypoint x="170.0" y="135.0"/>
+            <omgdi:waypoint x="570.0" y="135.0"/>
+            <omgdi:waypoint x="570.0" y="105.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f4" id="sid-sme-f4_gui">
+            <omgdi:waypoint x="350.0" y="85.0"/>
+            <omgdi:waypoint x="400.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f5" id="sid-sme-f5_gui">
+            <omgdi:waypoint x="500.0" y="85.0"/>
+            <omgdi:waypoint x="550.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-sme-f6" id="sid-sme-f6_gui">
+            <omgdi:waypoint x="590.0" y="85.0"/>
+            <omgdi:waypoint x="650.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges Board -->
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f1" id="sid-board-f1_gui">
+            <omgdi:waypoint x="110.0" y="255.0"/>
+            <omgdi:waypoint x="150.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f2" id="sid-board-f2_gui">
+            <omgdi:waypoint x="190.0" y="255.0"/>
+            <omgdi:waypoint x="250.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f3" id="sid-board-f3_gui">
+            <omgdi:waypoint x="170.0" y="275.0"/>
+            <omgdi:waypoint x="170.0" y="305.0"/>
+            <omgdi:waypoint x="570.0" y="305.0"/>
+            <omgdi:waypoint x="570.0" y="275.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f4" id="sid-board-f4_gui">
+            <omgdi:waypoint x="350.0" y="255.0"/>
+            <omgdi:waypoint x="400.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f5" id="sid-board-f5_gui">
+            <omgdi:waypoint x="500.0" y="255.0"/>
+            <omgdi:waypoint x="550.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-board-f6" id="sid-board-f6_gui">
+            <omgdi:waypoint x="590.0" y="255.0"/>
+            <omgdi:waypoint x="650.0" y="255.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges MS -->
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f1" id="sid-ms-f1_gui">
+            <omgdi:waypoint x="110.0" y="665.0"/>
+            <omgdi:waypoint x="150.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-fb1" id="sid-ms-fb1_gui">
+            <omgdi:waypoint x="170.0" y="645.0"/>
+            <omgdi:waypoint x="170.0" y="420.0"/>
+            <omgdi:waypoint x="250.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-fb2" id="sid-ms-fb2_gui">
+            <omgdi:waypoint x="170.0" y="645.0"/>
+            <omgdi:waypoint x="170.0" y="540.0"/>
+            <omgdi:waypoint x="250.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-fb3" id="sid-ms-fb3_gui">
+            <omgdi:waypoint x="190.0" y="665.0"/>
+            <omgdi:waypoint x="250.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-fb4" id="sid-ms-fb4_gui">
+            <omgdi:waypoint x="170.0" y="685.0"/>
+            <omgdi:waypoint x="170.0" y="820.0"/>
+            <omgdi:waypoint x="250.0" y="820.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-a1-xs1" id="sid-ms-f-a1-xs1_gui">
+            <omgdi:waypoint x="350.0" y="420.0"/>
+            <omgdi:waypoint x="400.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xs1-true" id="sid-ms-f-xs1-true_gui">
+            <omgdi:waypoint x="440.0" y="420.0"/>
+            <omgdi:waypoint x="480.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xs1-false" id="sid-ms-f-xs1-false_gui">
+            <omgdi:waypoint x="420.0" y="440.0"/>
+            <omgdi:waypoint x="420.0" y="480.0"/>
+            <omgdi:waypoint x="640.0" y="480.0"/>
+            <omgdi:waypoint x="640.0" y="440.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-pp-xj1" id="sid-ms-f-pp-xj1_gui">
+            <omgdi:waypoint x="580.0" y="420.0"/>
+            <omgdi:waypoint x="620.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xj1-a2" id="sid-ms-f-xj1-a2_gui">
+            <omgdi:waypoint x="660.0" y="420.0"/>
+            <omgdi:waypoint x="700.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-a2-xs2" id="sid-ms-f-a2-xs2_gui">
+            <omgdi:waypoint x="800.0" y="420.0"/>
+            <omgdi:waypoint x="850.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xs2-true" id="sid-ms-f-xs2-true_gui">
+            <omgdi:waypoint x="890.0" y="420.0"/>
+            <omgdi:waypoint x="930.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xs2-false" id="sid-ms-f-xs2-false_gui">
+            <omgdi:waypoint x="870.0" y="440.0"/>
+            <omgdi:waypoint x="870.0" y="480.0"/>
+            <omgdi:waypoint x="1090.0" y="480.0"/>
+            <omgdi:waypoint x="1090.0" y="440.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-np-xj2" id="sid-ms-f-np-xj2_gui">
+            <omgdi:waypoint x="1030.0" y="420.0"/>
+            <omgdi:waypoint x="1070.0" y="420.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xj2-andj" id="sid-ms-f-xj2-andj_gui">
+            <omgdi:waypoint x="1110.0" y="420.0"/>
+            <omgdi:waypoint x="1220.0" y="420.0"/>
+            <omgdi:waypoint x="1220.0" y="645.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-org-andj" id="sid-ms-f-org-andj_gui">
+            <omgdi:waypoint x="350.0" y="540.0"/>
+            <omgdi:waypoint x="1220.0" y="540.0"/>
+            <omgdi:waypoint x="1220.0" y="645.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-util-aappr" id="sid-ms-f-util-aappr_gui">
+            <omgdi:waypoint x="350.0" y="660.0"/>
+            <omgdi:waypoint x="400.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-aappr-xsa" id="sid-ms-f-aappr-xsa_gui">
+            <omgdi:waypoint x="500.0" y="660.0"/>
+            <omgdi:waypoint x="550.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xsa-true" id="sid-ms-f-xsa-true_gui">
+            <omgdi:waypoint x="590.0" y="660.0"/>
+            <omgdi:waypoint x="630.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xsa-false" id="sid-ms-f-xsa-false_gui">
+            <omgdi:waypoint x="570.0" y="680.0"/>
+            <omgdi:waypoint x="570.0" y="720.0"/>
+            <omgdi:waypoint x="790.0" y="720.0"/>
+            <omgdi:waypoint x="790.0" y="680.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-est-xja" id="sid-ms-f-est-xja_gui">
+            <omgdi:waypoint x="730.0" y="660.0"/>
+            <omgdi:waypoint x="770.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-xja-padv" id="sid-ms-f-xja-padv_gui">
+            <omgdi:waypoint x="810.0" y="660.0"/>
+            <omgdi:waypoint x="850.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-padv-resp" id="sid-ms-f-padv-resp_gui">
+            <omgdi:waypoint x="950.0" y="660.0"/>
+            <omgdi:waypoint x="1000.0" y="660.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-resp-andj" id="sid-ms-f-resp-andj_gui">
+            <omgdi:waypoint x="1100.0" y="660.0"/>
+            <omgdi:waypoint x="1200.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-fac-andj" id="sid-ms-f-fac-andj_gui">
+            <omgdi:waypoint x="350.0" y="820.0"/>
+            <omgdi:waypoint x="1220.0" y="820.0"/>
+            <omgdi:waypoint x="1220.0" y="685.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-andj-catch" id="sid-ms-f-andj-catch_gui">
+            <omgdi:waypoint x="1240.0" y="665.0"/>
+            <omgdi:waypoint x="1300.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-catch-take" id="sid-ms-f-catch-take_gui">
+            <omgdi:waypoint x="1330.0" y="665.0"/>
+            <omgdi:waypoint x="1400.0" y="670.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-take-set" id="sid-ms-f-take-set_gui">
+            <omgdi:waypoint x="1500.0" y="670.0"/>
+            <omgdi:waypoint x="1550.0" y="670.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-ms-f-set-end" id="sid-ms-f-set-end_gui">
+            <omgdi:waypoint x="1650.0" y="670.0"/>
+            <omgdi:waypoint x="1700.0" y="665.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges AIO -->
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f1" id="sid-aio-f1_gui">
+            <omgdi:waypoint x="110.0" y="1315.0"/>
+            <omgdi:waypoint x="150.0" y="1315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-fb1" id="sid-aio-fb1_gui">
+            <omgdi:waypoint x="170.0" y="1295.0"/>
+            <omgdi:waypoint x="170.0" y="1090.0"/>
+            <omgdi:waypoint x="250.0" y="1090.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-fb2" id="sid-aio-fb2_gui">
+            <omgdi:waypoint x="170.0" y="1295.0"/>
+            <omgdi:waypoint x="170.0" y="1220.0"/>
+            <omgdi:waypoint x="250.0" y="1220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-fb3" id="sid-aio-fb3_gui">
+            <omgdi:waypoint x="190.0" y="1315.0"/>
+            <omgdi:waypoint x="250.0" y="1315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-fb4" id="sid-aio-fb4_gui">
+            <omgdi:waypoint x="170.0" y="1335.0"/>
+            <omgdi:waypoint x="170.0" y="1480.0"/>
+            <omgdi:waypoint x="250.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-catch-ass" id="sid-aio-f-catch-ass_gui">
+            <omgdi:waypoint x="280.0" y="1090.0"/>
+            <omgdi:waypoint x="320.0" y="1090.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-ass-xs" id="sid-aio-f-ass-xs_gui">
+            <omgdi:waypoint x="420.0" y="1090.0"/>
+            <omgdi:waypoint x="460.0" y="1090.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-xs-true" id="sid-aio-f-xs-true_gui">
+            <omgdi:waypoint x="500.0" y="1090.0"/>
+            <omgdi:waypoint x="540.0" y="1090.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-xs-false" id="sid-aio-f-xs-false_gui">
+            <omgdi:waypoint x="480.0" y="1110.0"/>
+            <omgdi:waypoint x="480.0" y="1150.0"/>
+            <omgdi:waypoint x="700.0" y="1150.0"/>
+            <omgdi:waypoint x="700.0" y="1110.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-prov-xj" id="sid-aio-f-prov-xj_gui">
+            <omgdi:waypoint x="640.0" y="1090.0"/>
+            <omgdi:waypoint x="680.0" y="1090.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-xj-andj" id="sid-aio-f-xj-andj_gui">
+            <omgdi:waypoint x="720.0" y="1090.0"/>
+            <omgdi:waypoint x="870.0" y="1090.0"/>
+            <omgdi:waypoint x="870.0" y="1295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-dev-maint" id="sid-aio-f-dev-maint_gui">
+            <omgdi:waypoint x="350.0" y="1220.0"/>
+            <omgdi:waypoint x="400.0" y="1220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-maint-andj" id="sid-aio-f-maint-andj_gui">
+            <omgdi:waypoint x="500.0" y="1220.0"/>
+            <omgdi:waypoint x="870.0" y="1220.0"/>
+            <omgdi:waypoint x="870.0" y="1295.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-org-andj" id="sid-aio-f-org-andj_gui">
+            <omgdi:waypoint x="350.0" y="1315.0"/>
+            <omgdi:waypoint x="850.0" y="1315.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-eval-prom" id="sid-aio-f-eval-prom_gui">
+            <omgdi:waypoint x="350.0" y="1480.0"/>
+            <omgdi:waypoint x="400.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-prom-andj" id="sid-aio-f-prom-andj_gui">
+            <omgdi:waypoint x="500.0" y="1480.0"/>
+            <omgdi:waypoint x="870.0" y="1480.0"/>
+            <omgdi:waypoint x="870.0" y="1335.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-aio-f-andj-end" id="sid-aio-f-andj-end_gui">
+            <omgdi:waypoint x="890.0" y="1315.0"/>
+            <omgdi:waypoint x="950.0" y="1315.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="sid-mf-sme-ms" id="sid-mf-sme-ms_gui">
+            <omgdi:waypoint x="450.0" y="125.0"/>
+            <omgdi:waypoint x="450.0" y="200.0"/>
+            <omgdi:waypoint x="1315.0" y="200.0"/>
+            <omgdi:waypoint x="1315.0" y="650.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-mf-board-aio" id="sid-mf-board-aio_gui">
+            <omgdi:waypoint x="450.0" y="295.0"/>
+            <omgdi:waypoint x="450.0" y="330.0"/>
+            <omgdi:waypoint x="265.0" y="330.0"/>
+            <omgdi:waypoint x="265.0" y="1075.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

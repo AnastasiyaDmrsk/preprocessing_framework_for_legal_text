@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="19.2.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-definitions" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="sid-collab">
+      <participant id="pool_M" name="Manufacturer" processRef="proc_M" />
+      <participant id="pool_C" name="Competent Authority" processRef="proc_C" />
+      <participant id="pool_P" name="Patient / User or Successor or Health Insurance Company or Third Party" processRef="proc_P" />
+
+      <messageFlow id="mf_1" sourceRef="task_C1" targetRef="catch_M1" />
+      <messageFlow id="mf_2" sourceRef="task_M9" targetRef="pool_C" />
+      <messageFlow id="mf_3" sourceRef="task_C2" targetRef="catch_M2" />
+      <messageFlow id="mf_4" sourceRef="task_M20" targetRef="pool_C" />
+      <messageFlow id="mf_5" sourceRef="task_C3" targetRef="catch_M3" />
+      <messageFlow id="mf_6" sourceRef="task_M21" targetRef="pool_C" />
+      <messageFlow id="mf_7" sourceRef="task_C4" targetRef="catch_M4" />
+      <messageFlow id="mf_8" sourceRef="task_M22" targetRef="pool_C" />
+      <messageFlow id="mf_9" sourceRef="task_C5" targetRef="catch_M5" />
+      <messageFlow id="mf_10" sourceRef="task_M23" targetRef="pool_C" />
+      <messageFlow id="mf_11" sourceRef="task_P1" targetRef="catch_C1" />
+      <messageFlow id="mf_12" sourceRef="task_C7" targetRef="pool_P" />
+   </collaboration>
+
+   <process id="proc_M" isClosed="false" isExecutable="false" name="Manufacturer" processType="None">
+      <laneSet id="ls_M">
+         <lane id="lane_M_Gen" name="Manufacturer">
+            <flowNodeRef>start_M</flowNodeRef>
+            <flowNodeRef>task_M1</flowNodeRef>
+            <flowNodeRef>split_M1</flowNodeRef>
+            <flowNodeRef>task_M2a</flowNodeRef>
+            <flowNodeRef>task_M2b</flowNodeRef>
+            <flowNodeRef>task_M2c</flowNodeRef>
+            <flowNodeRef>task_M2d</flowNodeRef>
+            <flowNodeRef>join_M1</flowNodeRef>
+            <flowNodeRef>task_M3</flowNodeRef>
+            <flowNodeRef>xsplit_M1</flowNodeRef>
+            <flowNodeRef>split_M2</flowNodeRef>
+            <flowNodeRef>task_M4a</flowNodeRef>
+            <flowNodeRef>task_M4b</flowNodeRef>
+            <flowNodeRef>join_M2</flowNodeRef>
+            <flowNodeRef>xjoin_M1</flowNodeRef>
+            <flowNodeRef>xsplit_M2</flowNodeRef>
+            <flowNodeRef>split_M4</flowNodeRef>
+            <flowNodeRef>task_M6a</flowNodeRef>
+            <flowNodeRef>task_M6b</flowNodeRef>
+            <flowNodeRef>join_M4</flowNodeRef>
+            <flowNodeRef>xjoin_M2</flowNodeRef>
+            <flowNodeRef>task_M7</flowNodeRef>
+            <flowNodeRef>xsplit_M3</flowNodeRef>
+            <flowNodeRef>task_M8a</flowNodeRef>
+            <flowNodeRef>xjoin_M3</flowNodeRef>
+            <flowNodeRef>catch_M1</flowNodeRef>
+            <flowNodeRef>task_M9</flowNodeRef>
+            <flowNodeRef>xsplit_M4</flowNodeRef>
+            <flowNodeRef>task_M10</flowNodeRef>
+            <flowNodeRef>xjoin_M4</flowNodeRef>
+            <flowNodeRef>task_M11</flowNodeRef>
+            <flowNodeRef>task_M12</flowNodeRef>
+            <flowNodeRef>split_M5</flowNodeRef>
+            <flowNodeRef>task_M13a</flowNodeRef>
+            <flowNodeRef>task_M13b</flowNodeRef>
+            <flowNodeRef>task_M13c</flowNodeRef>
+            <flowNodeRef>task_M13d</flowNodeRef>
+            <flowNodeRef>task_M13e</flowNodeRef>
+            <flowNodeRef>task_M13f</flowNodeRef>
+            <flowNodeRef>join_M5</flowNodeRef>
+            <flowNodeRef>split_M7</flowNodeRef>
+            <flowNodeRef>task_M15a</flowNodeRef>
+            <flowNodeRef>task_M15b</flowNodeRef>
+            <flowNodeRef>join_M7</flowNodeRef>
+            <flowNodeRef>task_M16</flowNodeRef>
+            <flowNodeRef>xsplit_M5</flowNodeRef>
+            <flowNodeRef>split_M8</flowNodeRef>
+            <flowNodeRef>task_M17a</flowNodeRef>
+            <flowNodeRef>task_M17b</flowNodeRef>
+            <flowNodeRef>task_M17c</flowNodeRef>
+            <flowNodeRef>task_M17d</flowNodeRef>
+            <flowNodeRef>join_M8</flowNodeRef>
+            <flowNodeRef>xjoin_M5</flowNodeRef>
+            <flowNodeRef>xsplit_M6</flowNodeRef>
+            <flowNodeRef>task_M18</flowNodeRef>
+            <flowNodeRef>xjoin_M6</flowNodeRef>
+            <flowNodeRef>task_M19</flowNodeRef>
+            <flowNodeRef>catch_M2</flowNodeRef>
+            <flowNodeRef>task_M20</flowNodeRef>
+            <flowNodeRef>catch_M3</flowNodeRef>
+            <flowNodeRef>task_M21</flowNodeRef>
+            <flowNodeRef>catch_M4</flowNodeRef>
+            <flowNodeRef>task_M22</flowNodeRef>
+            <flowNodeRef>catch_M5</flowNodeRef>
+            <flowNodeRef>task_M23</flowNodeRef>
+            <flowNodeRef>xsplit_M7</flowNodeRef>
+            <flowNodeRef>task_M24</flowNodeRef>
+            <flowNodeRef>xjoin_M7</flowNodeRef>
+            <flowNodeRef>task_M25</flowNodeRef>
+            <flowNodeRef>end_M</flowNodeRef>
+         </lane>
+         <lane id="lane_M_Cust" name="Manufacturer of custom-made devices">
+            <flowNodeRef>split_M3</flowNodeRef>
+            <flowNodeRef>task_M5a</flowNodeRef>
+            <flowNodeRef>task_M5b</flowNodeRef>
+            <flowNodeRef>task_M5c</flowNodeRef>
+            <flowNodeRef>join_M3</flowNodeRef>
+         </lane>
+         <lane id="lane_M_Impl" name="Manufacturer of implantable devices">
+            <flowNodeRef>task_M8b</flowNodeRef>
+         </lane>
+         <lane id="lane_M_QMS" name="Quality Management System">
+            <flowNodeRef>split_M6</flowNodeRef>
+            <flowNodeRef>task_M14a</flowNodeRef>
+            <flowNodeRef>task_M14b</flowNodeRef>
+            <flowNodeRef>task_M14c</flowNodeRef>
+            <flowNodeRef>join_M6</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_M" name="Start: placing devices on the market">
+         <outgoing>sq_M_0</outgoing>
+      </startEvent>
+      <task id="task_M1" name="ensure devices designed and manufactured IAW requirements">
+         <incoming>sq_M_0</incoming><outgoing>sq_M_1</outgoing>
+      </task>
+      <parallelGateway gatewayDirection="Diverging" id="split_M1">
+         <incoming>sq_M_1</incoming><outgoing>sq_M_2a</outgoing><outgoing>sq_M_2b</outgoing><outgoing>sq_M_2c</outgoing><outgoing>sq_M_2d</outgoing>
+      </parallelGateway>
+      <task id="task_M2a" name="establish a system for risk management"><incoming>sq_M_2a</incoming><outgoing>sq_M_3a</outgoing></task>
+      <task id="task_M2b" name="document a system for risk management"><incoming>sq_M_2b</incoming><outgoing>sq_M_3b</outgoing></task>
+      <task id="task_M2c" name="implement a system for risk management"><incoming>sq_M_2c</incoming><outgoing>sq_M_3c</outgoing></task>
+      <task id="task_M2d" name="maintain a system for risk management"><incoming>sq_M_2d</incoming><outgoing>sq_M_3d</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M1">
+         <incoming>sq_M_3a</incoming><incoming>sq_M_3b</incoming><incoming>sq_M_3c</incoming><incoming>sq_M_3d</incoming><outgoing>sq_M_4</outgoing>
+      </parallelGateway>
+      <task id="task_M3" name="conduct a clinical evaluation"><incoming>sq_M_4</incoming><outgoing>sq_M_5</outgoing></task>
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M1" isMarkerVisible="true" name="assess custom-made?">
+         <incoming>sq_M_5</incoming><outgoing>sq_M_6_yes</outgoing><outgoing>sq_M_6_no</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M2">
+         <incoming>sq_M_6_no</incoming><outgoing>sq_M_7a</outgoing><outgoing>sq_M_7b</outgoing>
+      </parallelGateway>
+      <task id="task_M4a" name="draw up technical documentation"><incoming>sq_M_7a</incoming><outgoing>sq_M_8a</outgoing></task>
+      <task id="task_M4b" name="keep up to date technical documentation"><incoming>sq_M_7b</incoming><outgoing>sq_M_8b</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M2">
+         <incoming>sq_M_8a</incoming><incoming>sq_M_8b</incoming><outgoing>sq_M_9</outgoing>
+      </parallelGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M3">
+         <incoming>sq_M_6_yes</incoming><outgoing>sq_M_10a</outgoing><outgoing>sq_M_10b</outgoing><outgoing>sq_M_10c</outgoing>
+      </parallelGateway>
+      <task id="task_M5a" name="draw up documentation"><incoming>sq_M_10a</incoming><outgoing>sq_M_11a</outgoing></task>
+      <task id="task_M5b" name="keep up to date documentation"><incoming>sq_M_10b</incoming><outgoing>sq_M_11b</outgoing></task>
+      <task id="task_M5c" name="keep available documentation for C.A."><incoming>sq_M_10c</incoming><outgoing>sq_M_11c</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M3">
+         <incoming>sq_M_11a</incoming><incoming>sq_M_11b</incoming><incoming>sq_M_11c</incoming><outgoing>sq_M_12</outgoing>
+      </parallelGateway>
+
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M1" isMarkerVisible="true">
+         <incoming>sq_M_9</incoming><incoming>sq_M_12</incoming><outgoing>sq_M_13</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M2" isMarkerVisible="true" name="compliance demonstrated?">
+         <incoming>sq_M_13</incoming><outgoing>sq_M_14_yes</outgoing><outgoing>sq_M_14_no</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M4">
+         <incoming>sq_M_14_yes</incoming><outgoing>sq_M_15a</outgoing><outgoing>sq_M_15b</outgoing>
+      </parallelGateway>
+      <task id="task_M6a" name="draw up an EU declaration of conformity"><incoming>sq_M_15a</incoming><outgoing>sq_M_16a</outgoing></task>
+      <task id="task_M6b" name="affix the CE marking of conformity"><incoming>sq_M_15b</incoming><outgoing>sq_M_16b</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M4">
+         <incoming>sq_M_16a</incoming><incoming>sq_M_16b</incoming><outgoing>sq_M_17</outgoing>
+      </parallelGateway>
+
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M2" isMarkerVisible="true">
+         <incoming>sq_M_14_no</incoming><incoming>sq_M_17</incoming><outgoing>sq_M_18</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_M7" name="comply with the obligations"><incoming>sq_M_18</incoming><outgoing>sq_M_19</outgoing></task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M3" isMarkerVisible="true" name="is implantable?">
+         <incoming>sq_M_19</incoming><outgoing>sq_M_20_yes</outgoing><outgoing>sq_M_20_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_M8a" name="keep technical documentation... 10 years"><incoming>sq_M_20_no</incoming><outgoing>sq_M_21_no</outgoing></task>
+      <task id="task_M8b" name="keep technical documentation... 15 years"><incoming>sq_M_20_yes</incoming><outgoing>sq_M_21_yes</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M3" isMarkerVisible="true">
+         <incoming>sq_M_21_no</incoming><incoming>sq_M_21_yes</incoming><outgoing>sq_M_22</outgoing>
+      </exclusiveGateway>
+
+      <intermediateCatchEvent id="catch_M1" name="receive request for tech doc">
+         <incoming>sq_M_22</incoming><outgoing>sq_M_23</outgoing>
+         <messageEventDefinition id="med_M1" />
+      </intermediateCatchEvent>
+      <task id="task_M9" name="provide technical documentation to CA"><incoming>sq_M_23</incoming><outgoing>sq_M_24</outgoing></task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M4" isMarkerVisible="true" name="business outside Union?">
+         <incoming>sq_M_24</incoming><outgoing>sq_M_25_yes</outgoing><outgoing>sq_M_25_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_M10" name="ensure authorised rep has documentation"><incoming>sq_M_25_yes</incoming><outgoing>sq_M_26</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M4" isMarkerVisible="true">
+         <incoming>sq_M_25_no</incoming><incoming>sq_M_26</incoming><outgoing>sq_M_27</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_M11" name="ensure procedures are in place for series production"><incoming>sq_M_27</incoming><outgoing>sq_M_28</outgoing></task>
+      <task id="task_M12" name="take into account changes in design"><incoming>sq_M_28</incoming><outgoing>sq_M_29</outgoing></task>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M5">
+         <incoming>sq_M_29</incoming><outgoing>sq_M_30a</outgoing><outgoing>sq_M_30b</outgoing><outgoing>sq_M_30c</outgoing><outgoing>sq_M_30d</outgoing><outgoing>sq_M_30e</outgoing><outgoing>sq_M_30f</outgoing>
+      </parallelGateway>
+      <task id="task_M13a" name="establish QMS"><incoming>sq_M_30a</incoming><outgoing>sq_M_31a</outgoing></task>
+      <task id="task_M13b" name="document QMS"><incoming>sq_M_30b</incoming><outgoing>sq_M_31b</outgoing></task>
+      <task id="task_M13c" name="implement QMS"><incoming>sq_M_30c</incoming><outgoing>sq_M_31c</outgoing></task>
+      <task id="task_M13d" name="maintain QMS"><incoming>sq_M_30d</incoming><outgoing>sq_M_31d</outgoing></task>
+      <task id="task_M13e" name="keep up to date QMS"><incoming>sq_M_30e</incoming><outgoing>sq_M_31e</outgoing></task>
+      <task id="task_M13f" name="improve QMS"><incoming>sq_M_30f</incoming><outgoing>sq_M_31f</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M5">
+         <incoming>sq_M_31a</incoming><incoming>sq_M_31b</incoming><incoming>sq_M_31c</incoming><incoming>sq_M_31d</incoming><incoming>sq_M_31e</incoming><incoming>sq_M_31f</incoming><outgoing>sq_M_32</outgoing>
+      </parallelGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M6">
+         <incoming>sq_M_32</incoming><outgoing>sq_M_33a</outgoing><outgoing>sq_M_33b</outgoing><outgoing>sq_M_33c</outgoing>
+      </parallelGateway>
+      <task id="task_M14a" name="cover all parts of organisation"><incoming>sq_M_33a</incoming><outgoing>sq_M_34a</outgoing></task>
+      <task id="task_M14b" name="govern structure, processes, management"><incoming>sq_M_33b</incoming><outgoing>sq_M_34b</outgoing></task>
+      <task id="task_M14c" name="address aspects in paragraph 9"><incoming>sq_M_33c</incoming><outgoing>sq_M_34c</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M6">
+         <incoming>sq_M_34a</incoming><incoming>sq_M_34b</incoming><incoming>sq_M_34c</incoming><outgoing>sq_M_35</outgoing>
+      </parallelGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="split_M7">
+         <incoming>sq_M_35</incoming><outgoing>sq_M_36a</outgoing><outgoing>sq_M_36b</outgoing>
+      </parallelGateway>
+      <task id="task_M15a" name="implement post-market surveillance"><incoming>sq_M_36a</incoming><outgoing>sq_M_37a</outgoing></task>
+      <task id="task_M15b" name="keep up to date post-market surveillance"><incoming>sq_M_36b</incoming><outgoing>sq_M_37b</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M7">
+         <incoming>sq_M_37a</incoming><incoming>sq_M_37b</incoming><outgoing>sq_M_38</outgoing>
+      </parallelGateway>
+
+      <task id="task_M16" name="ensure device accompanied by information"><incoming>sq_M_38</incoming><outgoing>sq_M_39</outgoing></task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M5" isMarkerVisible="true" name="not in conformity?">
+         <incoming>sq_M_39</incoming><outgoing>sq_M_40_yes</outgoing><outgoing>sq_M_40_no</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="split_M8">
+         <incoming>sq_M_40_yes</incoming><outgoing>sq_M_41a</outgoing><outgoing>sq_M_41b</outgoing><outgoing>sq_M_41c</outgoing><outgoing>sq_M_41d</outgoing>
+      </parallelGateway>
+      <task id="task_M17a" name="bring device into conformity"><incoming>sq_M_41a</incoming><outgoing>sq_M_42a</outgoing></task>
+      <task id="task_M17b" name="withdraw the device"><incoming>sq_M_41b</incoming><outgoing>sq_M_42b</outgoing></task>
+      <task id="task_M17c" name="recall the device"><incoming>sq_M_41c</incoming><outgoing>sq_M_42c</outgoing></task>
+      <task id="task_M17d" name="transmit info of non-compliance"><incoming>sq_M_41d</incoming><outgoing>sq_M_42d</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_M8">
+         <incoming>sq_M_42a</incoming><incoming>sq_M_42b</incoming><incoming>sq_M_42c</incoming><incoming>sq_M_42d</incoming><outgoing>sq_M_43</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M5" isMarkerVisible="true">
+         <incoming>sq_M_40_no</incoming><incoming>sq_M_43</incoming><outgoing>sq_M_44</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M6" isMarkerVisible="true" name="serious risk?">
+         <incoming>sq_M_44</incoming><outgoing>sq_M_45_yes</outgoing><outgoing>sq_M_45_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_M18" name="transmit info to C.A. and notified body"><incoming>sq_M_45_yes</incoming><outgoing>sq_M_46</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M6" isMarkerVisible="true">
+         <incoming>sq_M_45_no</incoming><incoming>sq_M_46</incoming><outgoing>sq_M_47</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_M19" name="have a system for recording incidents"><incoming>sq_M_47</incoming><outgoing>sq_M_48</outgoing></task>
+
+      <intermediateCatchEvent id="catch_M2" name="receive request for doc conf">
+         <incoming>sq_M_48</incoming><outgoing>sq_M_49</outgoing>
+         <messageEventDefinition id="med_M2" />
+      </intermediateCatchEvent>
+      <task id="task_M20" name="provide doc for conformity to CA"><incoming>sq_M_49</incoming><outgoing>sq_M_50</outgoing></task>
+
+      <intermediateCatchEvent id="catch_M3" name="receive request for samples">
+         <incoming>sq_M_50</incoming><outgoing>sq_M_51</outgoing>
+         <messageEventDefinition id="med_M3" />
+      </intermediateCatchEvent>
+      <task id="task_M21" name="provide samples to CA"><incoming>sq_M_51</incoming><outgoing>sq_M_52</outgoing></task>
+
+      <intermediateCatchEvent id="catch_M4" name="receive request to grant access">
+         <incoming>sq_M_52</incoming><outgoing>sq_M_53</outgoing>
+         <messageEventDefinition id="med_M4" />
+      </intermediateCatchEvent>
+      <task id="task_M22" name="grant access to CA"><incoming>sq_M_53</incoming><outgoing>sq_M_54</outgoing></task>
+
+      <intermediateCatchEvent id="catch_M5" name="receive request for collaboration">
+         <incoming>sq_M_54</incoming><outgoing>sq_M_55</outgoing>
+         <messageEventDefinition id="med_M5" />
+      </intermediateCatchEvent>
+      <task id="task_M23" name="cooperate with CA"><incoming>sq_M_55</incoming><outgoing>sq_M_56</outgoing></task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_M7" isMarkerVisible="true" name="designed by another?">
+         <incoming>sq_M_56</incoming><outgoing>sq_M_57_yes</outgoing><outgoing>sq_M_57_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_M24" name="ensure info on identity submitted"><incoming>sq_M_57_yes</incoming><outgoing>sq_M_58</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_M7" isMarkerVisible="true">
+         <incoming>sq_M_57_no</incoming><incoming>sq_M_58</incoming><outgoing>sq_M_59</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_M25" name="have measures to provide financial coverage"><incoming>sq_M_59</incoming><outgoing>sq_M_60</outgoing></task>
+      <endEvent id="end_M" name="compliance and post-market maintenance end event"><incoming>sq_M_60</incoming></endEvent>
+
+      <sequenceFlow id="sq_M_0" isImmediate="true" sourceRef="start_M" targetRef="task_M1" />
+      <sequenceFlow id="sq_M_1" isImmediate="true" sourceRef="task_M1" targetRef="split_M1" />
+      <sequenceFlow id="sq_M_2a" isImmediate="true" sourceRef="split_M1" targetRef="task_M2a" />
+      <sequenceFlow id="sq_M_2b" isImmediate="true" sourceRef="split_M1" targetRef="task_M2b" />
+      <sequenceFlow id="sq_M_2c" isImmediate="true" sourceRef="split_M1" targetRef="task_M2c" />
+      <sequenceFlow id="sq_M_2d" isImmediate="true" sourceRef="split_M1" targetRef="task_M2d" />
+      <sequenceFlow id="sq_M_3a" isImmediate="true" sourceRef="task_M2a" targetRef="join_M1" />
+      <sequenceFlow id="sq_M_3b" isImmediate="true" sourceRef="task_M2b" targetRef="join_M1" />
+      <sequenceFlow id="sq_M_3c" isImmediate="true" sourceRef="task_M2c" targetRef="join_M1" />
+      <sequenceFlow id="sq_M_3d" isImmediate="true" sourceRef="task_M2d" targetRef="join_M1" />
+      <sequenceFlow id="sq_M_4" isImmediate="true" sourceRef="join_M1" targetRef="task_M3" />
+      <sequenceFlow id="sq_M_5" isImmediate="true" sourceRef="task_M3" targetRef="xsplit_M1" />
+      <sequenceFlow id="sq_M_6_yes" isImmediate="true" name="yes" sourceRef="xsplit_M1" targetRef="split_M3" />
+      <sequenceFlow id="sq_M_6_no" isImmediate="true" name="no" sourceRef="xsplit_M1" targetRef="split_M2" />
+      <sequenceFlow id="sq_M_7a" isImmediate="true" sourceRef="split_M2" targetRef="task_M4a" />
+      <sequenceFlow id="sq_M_7b" isImmediate="true" sourceRef="split_M2" targetRef="task_M4b" />
+      <sequenceFlow id="sq_M_8a" isImmediate="true" sourceRef="task_M4a" targetRef="join_M2" />
+      <sequenceFlow id="sq_M_8b" isImmediate="true" sourceRef="task_M4b" targetRef="join_M2" />
+      <sequenceFlow id="sq_M_9" isImmediate="true" sourceRef="join_M2" targetRef="xjoin_M1" />
+      <sequenceFlow id="sq_M_10a" isImmediate="true" sourceRef="split_M3" targetRef="task_M5a" />
+      <sequenceFlow id="sq_M_10b" isImmediate="true" sourceRef="split_M3" targetRef="task_M5b" />
+      <sequenceFlow id="sq_M_10c" isImmediate="true" sourceRef="split_M3" targetRef="task_M5c" />
+      <sequenceFlow id="sq_M_11a" isImmediate="true" sourceRef="task_M5a" targetRef="join_M3" />
+      <sequenceFlow id="sq_M_11b" isImmediate="true" sourceRef="task_M5b" targetRef="join_M3" />
+      <sequenceFlow id="sq_M_11c" isImmediate="true" sourceRef="task_M5c" targetRef="join_M3" />
+      <sequenceFlow id="sq_M_12" isImmediate="true" sourceRef="join_M3" targetRef="xjoin_M1" />
+      <sequenceFlow id="sq_M_13" isImmediate="true" sourceRef="xjoin_M1" targetRef="xsplit_M2" />
+      <sequenceFlow id="sq_M_14_yes" isImmediate="true" name="yes" sourceRef="xsplit_M2" targetRef="split_M4" />
+      <sequenceFlow id="sq_M_14_no" isImmediate="true" name="no" sourceRef="xsplit_M2" targetRef="xjoin_M2" />
+      <sequenceFlow id="sq_M_15a" isImmediate="true" sourceRef="split_M4" targetRef="task_M6a" />
+      <sequenceFlow id="sq_M_15b" isImmediate="true" sourceRef="split_M4" targetRef="task_M6b" />
+      <sequenceFlow id="sq_M_16a" isImmediate="true" sourceRef="task_M6a" targetRef="join_M4" />
+      <sequenceFlow id="sq_M_16b" isImmediate="true" sourceRef="task_M6b" targetRef="join_M4" />
+      <sequenceFlow id="sq_M_17" isImmediate="true" sourceRef="join_M4" targetRef="xjoin_M2" />
+      <sequenceFlow id="sq_M_18" isImmediate="true" sourceRef="xjoin_M2" targetRef="task_M7" />
+      <sequenceFlow id="sq_M_19" isImmediate="true" sourceRef="task_M7" targetRef="xsplit_M3" />
+      <sequenceFlow id="sq_M_20_yes" isImmediate="true" name="yes" sourceRef="xsplit_M3" targetRef="task_M8b" />
+      <sequenceFlow id="sq_M_20_no" isImmediate="true" name="no" sourceRef="xsplit_M3" targetRef="task_M8a" />
+      <sequenceFlow id="sq_M_21_yes" isImmediate="true" sourceRef="task_M8b" targetRef="xjoin_M3" />
+      <sequenceFlow id="sq_M_21_no" isImmediate="true" sourceRef="task_M8a" targetRef="xjoin_M3" />
+      <sequenceFlow id="sq_M_22" isImmediate="true" sourceRef="xjoin_M3" targetRef="catch_M1" />
+      <sequenceFlow id="sq_M_23" isImmediate="true" sourceRef="catch_M1" targetRef="task_M9" />
+      <sequenceFlow id="sq_M_24" isImmediate="true" sourceRef="task_M9" targetRef="xsplit_M4" />
+      <sequenceFlow id="sq_M_25_yes" isImmediate="true" name="yes" sourceRef="xsplit_M4" targetRef="task_M10" />
+      <sequenceFlow id="sq_M_25_no" isImmediate="true" name="no" sourceRef="xsplit_M4" targetRef="xjoin_M4" />
+      <sequenceFlow id="sq_M_26" isImmediate="true" sourceRef="task_M10" targetRef="xjoin_M4" />
+      <sequenceFlow id="sq_M_27" isImmediate="true" sourceRef="xjoin_M4" targetRef="task_M11" />
+      <sequenceFlow id="sq_M_28" isImmediate="true" sourceRef="task_M11" targetRef="task_M12" />
+      <sequenceFlow id="sq_M_29" isImmediate="true" sourceRef="task_M12" targetRef="split_M5" />
+      <sequenceFlow id="sq_M_30a" isImmediate="true" sourceRef="split_M5" targetRef="task_M13a" />
+      <sequenceFlow id="sq_M_30b" isImmediate="true" sourceRef="split_M5" targetRef="task_M13b" />
+      <sequenceFlow id="sq_M_30c" isImmediate="true" sourceRef="split_M5" targetRef="task_M13c" />
+      <sequenceFlow id="sq_M_30d" isImmediate="true" sourceRef="split_M5" targetRef="task_M13d" />
+      <sequenceFlow id="sq_M_30e" isImmediate="true" sourceRef="split_M5" targetRef="task_M13e" />
+      <sequenceFlow id="sq_M_30f" isImmediate="true" sourceRef="split_M5" targetRef="task_M13f" />
+      <sequenceFlow id="sq_M_31a" isImmediate="true" sourceRef="task_M13a" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_31b" isImmediate="true" sourceRef="task_M13b" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_31c" isImmediate="true" sourceRef="task_M13c" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_31d" isImmediate="true" sourceRef="task_M13d" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_31e" isImmediate="true" sourceRef="task_M13e" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_31f" isImmediate="true" sourceRef="task_M13f" targetRef="join_M5" />
+      <sequenceFlow id="sq_M_32" isImmediate="true" sourceRef="join_M5" targetRef="split_M6" />
+      <sequenceFlow id="sq_M_33a" isImmediate="true" sourceRef="split_M6" targetRef="task_M14a" />
+      <sequenceFlow id="sq_M_33b" isImmediate="true" sourceRef="split_M6" targetRef="task_M14b" />
+      <sequenceFlow id="sq_M_33c" isImmediate="true" sourceRef="split_M6" targetRef="task_M14c" />
+      <sequenceFlow id="sq_M_34a" isImmediate="true" sourceRef="task_M14a" targetRef="join_M6" />
+      <sequenceFlow id="sq_M_34b" isImmediate="true" sourceRef="task_M14b" targetRef="join_M6" />
+      <sequenceFlow id="sq_M_34c" isImmediate="true" sourceRef="task_M14c" targetRef="join_M6" />
+      <sequenceFlow id="sq_M_35" isImmediate="true" sourceRef="join_M6" targetRef="split_M7" />
+      <sequenceFlow id="sq_M_36a" isImmediate="true" sourceRef="split_M7" targetRef="task_M15a" />
+      <sequenceFlow id="sq_M_36b" isImmediate="true" sourceRef="split_M7" targetRef="task_M15b" />
+      <sequenceFlow id="sq_M_37a" isImmediate="true" sourceRef="task_M15a" targetRef="join_M7" />
+      <sequenceFlow id="sq_M_37b" isImmediate="true" sourceRef="task_M15b" targetRef="join_M7" />
+      <sequenceFlow id="sq_M_38" isImmediate="true" sourceRef="join_M7" targetRef="task_M16" />
+      <sequenceFlow id="sq_M_39" isImmediate="true" sourceRef="task_M16" targetRef="xsplit_M5" />
+      <sequenceFlow id="sq_M_40_yes" isImmediate="true" name="yes" sourceRef="xsplit_M5" targetRef="split_M8" />
+      <sequenceFlow id="sq_M_40_no" isImmediate="true" name="no" sourceRef="xsplit_M5" targetRef="xjoin_M5" />
+      <sequenceFlow id="sq_M_41a" isImmediate="true" sourceRef="split_M8" targetRef="task_M17a" />
+      <sequenceFlow id="sq_M_41b" isImmediate="true" sourceRef="split_M8" targetRef="task_M17b" />
+      <sequenceFlow id="sq_M_41c" isImmediate="true" sourceRef="split_M8" targetRef="task_M17c" />
+      <sequenceFlow id="sq_M_41d" isImmediate="true" sourceRef="split_M8" targetRef="task_M17d" />
+      <sequenceFlow id="sq_M_42a" isImmediate="true" sourceRef="task_M17a" targetRef="join_M8" />
+      <sequenceFlow id="sq_M_42b" isImmediate="true" sourceRef="task_M17b" targetRef="join_M8" />
+      <sequenceFlow id="sq_M_42c" isImmediate="true" sourceRef="task_M17c" targetRef="join_M8" />
+      <sequenceFlow id="sq_M_42d" isImmediate="true" sourceRef="task_M17d" targetRef="join_M8" />
+      <sequenceFlow id="sq_M_43" isImmediate="true" sourceRef="join_M8" targetRef="xjoin_M5" />
+      <sequenceFlow id="sq_M_44" isImmediate="true" sourceRef="xjoin_M5" targetRef="xsplit_M6" />
+      <sequenceFlow id="sq_M_45_yes" isImmediate="true" name="yes" sourceRef="xsplit_M6" targetRef="task_M18" />
+      <sequenceFlow id="sq_M_45_no" isImmediate="true" name="no" sourceRef="xsplit_M6" targetRef="xjoin_M6" />
+      <sequenceFlow id="sq_M_46" isImmediate="true" sourceRef="task_M18" targetRef="xjoin_M6" />
+      <sequenceFlow id="sq_M_47" isImmediate="true" sourceRef="xjoin_M6" targetRef="task_M19" />
+      <sequenceFlow id="sq_M_48" isImmediate="true" sourceRef="task_M19" targetRef="catch_M2" />
+      <sequenceFlow id="sq_M_49" isImmediate="true" sourceRef="catch_M2" targetRef="task_M20" />
+      <sequenceFlow id="sq_M_50" isImmediate="true" sourceRef="task_M20" targetRef="catch_M3" />
+      <sequenceFlow id="sq_M_51" isImmediate="true" sourceRef="catch_M3" targetRef="task_M21" />
+      <sequenceFlow id="sq_M_52" isImmediate="true" sourceRef="task_M21" targetRef="catch_M4" />
+      <sequenceFlow id="sq_M_53" isImmediate="true" sourceRef="catch_M4" targetRef="task_M22" />
+      <sequenceFlow id="sq_M_54" isImmediate="true" sourceRef="task_M22" targetRef="catch_M5" />
+      <sequenceFlow id="sq_M_55" isImmediate="true" sourceRef="catch_M5" targetRef="task_M23" />
+      <sequenceFlow id="sq_M_56" isImmediate="true" sourceRef="task_M23" targetRef="xsplit_M7" />
+      <sequenceFlow id="sq_M_57_yes" isImmediate="true" name="yes" sourceRef="xsplit_M7" targetRef="task_M24" />
+      <sequenceFlow id="sq_M_57_no" isImmediate="true" name="no" sourceRef="xsplit_M7" targetRef="xjoin_M7" />
+      <sequenceFlow id="sq_M_58" isImmediate="true" sourceRef="task_M24" targetRef="xjoin_M7" />
+      <sequenceFlow id="sq_M_59" isImmediate="true" sourceRef="xjoin_M7" targetRef="task_M25" />
+      <sequenceFlow id="sq_M_60" isImmediate="true" sourceRef="task_M25" targetRef="end_M" />
+   </process>
+
+   <process id="proc_C" isClosed="false" isExecutable="false" name="Competent Authority" processType="None">
+      <startEvent id="start_C" name="Start"><outgoing>sq_C_0</outgoing></startEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C1" isMarkerVisible="true" name="req tech doc?">
+         <incoming>sq_C_0</incoming><outgoing>sq_C_1_yes</outgoing><outgoing>sq_C_1_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C1" name="send request for tech doc"><incoming>sq_C_1_yes</incoming><outgoing>sq_C_2</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C1" isMarkerVisible="true">
+         <incoming>sq_C_1_no</incoming><incoming>sq_C_2</incoming><outgoing>sq_C_3</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C2" isMarkerVisible="true" name="req doc conformity?">
+         <incoming>sq_C_3</incoming><outgoing>sq_C_4_yes</outgoing><outgoing>sq_C_4_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C2" name="send req for doc conf"><incoming>sq_C_4_yes</incoming><outgoing>sq_C_5</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C2" isMarkerVisible="true">
+         <incoming>sq_C_4_no</incoming><incoming>sq_C_5</incoming><outgoing>sq_C_6</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C3" isMarkerVisible="true" name="req samples?">
+         <incoming>sq_C_6</incoming><outgoing>sq_C_7_yes</outgoing><outgoing>sq_C_7_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C3" name="send req for samples"><incoming>sq_C_7_yes</incoming><outgoing>sq_C_8</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C3" isMarkerVisible="true">
+         <incoming>sq_C_7_no</incoming><incoming>sq_C_8</incoming><outgoing>sq_C_9</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C4" isMarkerVisible="true" name="req access?">
+         <incoming>sq_C_9</incoming><outgoing>sq_C_10_yes</outgoing><outgoing>sq_C_10_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C4" name="send req for access"><incoming>sq_C_10_yes</incoming><outgoing>sq_C_11</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C4" isMarkerVisible="true">
+         <incoming>sq_C_10_no</incoming><incoming>sq_C_11</incoming><outgoing>sq_C_12</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C5" isMarkerVisible="true" name="req collaboration?">
+         <incoming>sq_C_12</incoming><outgoing>sq_C_13_yes</outgoing><outgoing>sq_C_13_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C5" name="send req for collab"><incoming>sq_C_13_yes</incoming><outgoing>sq_C_14</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C5" isMarkerVisible="true">
+         <incoming>sq_C_13_no</incoming><incoming>sq_C_14</incoming><outgoing>sq_C_15</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C6" isMarkerVisible="true" name="fails to cooperate?">
+         <incoming>sq_C_15</incoming><outgoing>sq_C_16_yes</outgoing><outgoing>sq_C_16_no</outgoing>
+      </exclusiveGateway>
+      <parallelGateway gatewayDirection="Diverging" id="split_C1">
+         <incoming>sq_C_16_yes</incoming><outgoing>sq_C_17a</outgoing><outgoing>sq_C_17b</outgoing><outgoing>sq_C_17c</outgoing>
+      </parallelGateway>
+      <task id="task_C6a" name="prohibit or restrict device"><incoming>sq_C_17a</incoming><outgoing>sq_C_18a</outgoing></task>
+      <task id="task_C6b" name="withdraw device"><incoming>sq_C_17b</incoming><outgoing>sq_C_18b</outgoing></task>
+      <task id="task_C6c" name="recall device"><incoming>sq_C_17c</incoming><outgoing>sq_C_18c</outgoing></task>
+      <parallelGateway gatewayDirection="Converging" id="join_C1">
+         <incoming>sq_C_18a</incoming><incoming>sq_C_18b</incoming><incoming>sq_C_18c</incoming><outgoing>sq_C_19</outgoing>
+      </parallelGateway>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C6" isMarkerVisible="true">
+         <incoming>sq_C_16_no</incoming><incoming>sq_C_19</incoming><outgoing>sq_C_20</outgoing>
+      </exclusiveGateway>
+
+      <intermediateCatchEvent id="catch_C1" name="receive req info damage">
+         <incoming>sq_C_20</incoming><outgoing>sq_C_21</outgoing>
+         <messageEventDefinition id="med_C1" />
+      </intermediateCatchEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_C7" isMarkerVisible="true" name="believes damage?">
+         <incoming>sq_C_21</incoming><outgoing>sq_C_22_yes</outgoing><outgoing>sq_C_22_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_C7" name="facilitate info provision"><incoming>sq_C_22_yes</incoming><outgoing>sq_C_23</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_C7" isMarkerVisible="true">
+         <incoming>sq_C_22_no</incoming><incoming>sq_C_23</incoming><outgoing>sq_C_24</outgoing>
+      </exclusiveGateway>
+      <endEvent id="end_C" name="regulatory oversight completion end event"><incoming>sq_C_24</incoming></endEvent>
+
+      <sequenceFlow id="sq_C_0" isImmediate="true" sourceRef="start_C" targetRef="xsplit_C1" />
+      <sequenceFlow id="sq_C_1_yes" isImmediate="true" name="yes" sourceRef="xsplit_C1" targetRef="task_C1" />
+      <sequenceFlow id="sq_C_1_no" isImmediate="true" name="no" sourceRef="xsplit_C1" targetRef="xjoin_C1" />
+      <sequenceFlow id="sq_C_2" isImmediate="true" sourceRef="task_C1" targetRef="xjoin_C1" />
+      <sequenceFlow id="sq_C_3" isImmediate="true" sourceRef="xjoin_C1" targetRef="xsplit_C2" />
+      <sequenceFlow id="sq_C_4_yes" isImmediate="true" name="yes" sourceRef="xsplit_C2" targetRef="task_C2" />
+      <sequenceFlow id="sq_C_4_no" isImmediate="true" name="no" sourceRef="xsplit_C2" targetRef="xjoin_C2" />
+      <sequenceFlow id="sq_C_5" isImmediate="true" sourceRef="task_C2" targetRef="xjoin_C2" />
+      <sequenceFlow id="sq_C_6" isImmediate="true" sourceRef="xjoin_C2" targetRef="xsplit_C3" />
+      <sequenceFlow id="sq_C_7_yes" isImmediate="true" name="yes" sourceRef="xsplit_C3" targetRef="task_C3" />
+      <sequenceFlow id="sq_C_7_no" isImmediate="true" name="no" sourceRef="xsplit_C3" targetRef="xjoin_C3" />
+      <sequenceFlow id="sq_C_8" isImmediate="true" sourceRef="task_C3" targetRef="xjoin_C3" />
+      <sequenceFlow id="sq_C_9" isImmediate="true" sourceRef="xjoin_C3" targetRef="xsplit_C4" />
+      <sequenceFlow id="sq_C_10_yes" isImmediate="true" name="yes" sourceRef="xsplit_C4" targetRef="task_C4" />
+      <sequenceFlow id="sq_C_10_no" isImmediate="true" name="no" sourceRef="xsplit_C4" targetRef="xjoin_C4" />
+      <sequenceFlow id="sq_C_11" isImmediate="true" sourceRef="task_C4" targetRef="xjoin_C4" />
+      <sequenceFlow id="sq_C_12" isImmediate="true" sourceRef="xjoin_C4" targetRef="xsplit_C5" />
+      <sequenceFlow id="sq_C_13_yes" isImmediate="true" name="yes" sourceRef="xsplit_C5" targetRef="task_C5" />
+      <sequenceFlow id="sq_C_13_no" isImmediate="true" name="no" sourceRef="xsplit_C5" targetRef="xjoin_C5" />
+      <sequenceFlow id="sq_C_14" isImmediate="true" sourceRef="task_C5" targetRef="xjoin_C5" />
+      <sequenceFlow id="sq_C_15" isImmediate="true" sourceRef="xjoin_C5" targetRef="xsplit_C6" />
+      <sequenceFlow id="sq_C_16_yes" isImmediate="true" name="yes" sourceRef="xsplit_C6" targetRef="split_C1" />
+      <sequenceFlow id="sq_C_16_no" isImmediate="true" name="no" sourceRef="xsplit_C6" targetRef="xjoin_C6" />
+      <sequenceFlow id="sq_C_17a" isImmediate="true" sourceRef="split_C1" targetRef="task_C6a" />
+      <sequenceFlow id="sq_C_17b" isImmediate="true" sourceRef="split_C1" targetRef="task_C6b" />
+      <sequenceFlow id="sq_C_17c" isImmediate="true" sourceRef="split_C1" targetRef="task_C6c" />
+      <sequenceFlow id="sq_C_18a" isImmediate="true" sourceRef="task_C6a" targetRef="join_C1" />
+      <sequenceFlow id="sq_C_18b" isImmediate="true" sourceRef="task_C6b" targetRef="join_C1" />
+      <sequenceFlow id="sq_C_18c" isImmediate="true" sourceRef="task_C6c" targetRef="join_C1" />
+      <sequenceFlow id="sq_C_19" isImmediate="true" sourceRef="join_C1" targetRef="xjoin_C6" />
+      <sequenceFlow id="sq_C_20" isImmediate="true" sourceRef="xjoin_C6" targetRef="catch_C1" />
+      <sequenceFlow id="sq_C_21" isImmediate="true" sourceRef="catch_C1" targetRef="xsplit_C7" />
+      <sequenceFlow id="sq_C_22_yes" isImmediate="true" name="yes" sourceRef="xsplit_C7" targetRef="task_C7" />
+      <sequenceFlow id="sq_C_22_no" isImmediate="true" name="no" sourceRef="xsplit_C7" targetRef="xjoin_C7" />
+      <sequenceFlow id="sq_C_23" isImmediate="true" sourceRef="task_C7" targetRef="xjoin_C7" />
+      <sequenceFlow id="sq_C_24" isImmediate="true" sourceRef="xjoin_C7" targetRef="end_C" />
+   </process>
+
+   <process id="proc_P" isClosed="false" isExecutable="false" name="Patient / User or Successor or Health Insurance Company or Third Party" processType="None">
+      <startEvent id="start_P" name="Start"><outgoing>sq_P_0</outgoing></startEvent>
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_P1" isMarkerVisible="true" name="req info damage?">
+         <incoming>sq_P_0</incoming><outgoing>sq_P_1_yes</outgoing><outgoing>sq_P_1_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_P1" name="send req info damage"><incoming>sq_P_1_yes</incoming><outgoing>sq_P_2</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_P1" isMarkerVisible="true">
+         <incoming>sq_P_1_no</incoming><incoming>sq_P_2</incoming><outgoing>sq_P_3</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway gatewayDirection="Diverging" id="xsplit_P2" isMarkerVisible="true" name="claim compensation?">
+         <incoming>sq_P_3</incoming><outgoing>sq_P_4_yes</outgoing><outgoing>sq_P_4_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_P2" name="claim compensation"><incoming>sq_P_4_yes</incoming><outgoing>sq_P_5</outgoing></task>
+      <exclusiveGateway gatewayDirection="Converging" id="xjoin_P2" isMarkerVisible="true">
+         <incoming>sq_P_4_no</incoming><incoming>sq_P_5</incoming><outgoing>sq_P_6</outgoing>
+      </exclusiveGateway>
+      <endEvent id="end_P" name="compensation or information retrieval end event"><incoming>sq_P_6</incoming></endEvent>
+
+      <sequenceFlow id="sq_P_0" isImmediate="true" sourceRef="start_P" targetRef="xsplit_P1" />
+      <sequenceFlow id="sq_P_1_yes" isImmediate="true" name="yes" sourceRef="xsplit_P1" targetRef="task_P1" />
+      <sequenceFlow id="sq_P_1_no" isImmediate="true" name="no" sourceRef="xsplit_P1" targetRef="xjoin_P1" />
+      <sequenceFlow id="sq_P_2" isImmediate="true" sourceRef="task_P1" targetRef="xjoin_P1" />
+      <sequenceFlow id="sq_P_3" isImmediate="true" sourceRef="xjoin_P1" targetRef="xsplit_P2" />
+      <sequenceFlow id="sq_P_4_yes" isImmediate="true" name="yes" sourceRef="xsplit_P2" targetRef="task_P2" />
+      <sequenceFlow id="sq_P_4_no" isImmediate="true" name="no" sourceRef="xsplit_P2" targetRef="xjoin_P2" />
+      <sequenceFlow id="sq_P_5" isImmediate="true" sourceRef="task_P2" targetRef="xjoin_P2" />
+      <sequenceFlow id="sq_P_6" isImmediate="true" sourceRef="xjoin_P2" targetRef="end_P" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="bpmndi_diagram">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab" id="bpmndi_plane">
+         <!-- Manufacturer Pool -->
+         <bpmndi:BPMNShape bpmnElement="pool_M" id="pool_M_gui" isHorizontal="true">
+            <omgdc:Bounds height="1200.0" width="7500.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_M_Gen" id="lane_M_Gen_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="7470.0" x="80.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_M_Cust" id="lane_M_Cust_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="7470.0" x="80.0" y="350.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_M_Impl" id="lane_M_Impl_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="7470.0" x="80.0" y="650.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_M_QMS" id="lane_M_QMS_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="7470.0" x="80.0" y="950.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- Nodes mapping for Manufacturer - Approximated coords for sequence -->
+         <bpmndi:BPMNShape bpmnElement="start_M" id="start_M_gui"><omgdc:Bounds height="30.0" width="30.0" x="100.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M1" id="task_M1_gui"><omgdc:Bounds height="80.0" width="100.0" x="180.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M1" id="split_M1_gui"><omgdc:Bounds height="40.0" width="40.0" x="330.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M2a" id="task_M2a_gui"><omgdc:Bounds height="80.0" width="100.0" x="420.0" y="60.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M2b" id="task_M2b_gui"><omgdc:Bounds height="80.0" width="100.0" x="420.0" y="150.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M2c" id="task_M2c_gui"><omgdc:Bounds height="80.0" width="100.0" x="420.0" y="240.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M2d" id="task_M2d_gui"><omgdc:Bounds height="80.0" width="100.0" x="420.0" y="330.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M1" id="join_M1_gui"><omgdc:Bounds height="40.0" width="40.0" x="570.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M3" id="task_M3_gui"><omgdc:Bounds height="80.0" width="100.0" x="660.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M1" id="xsplit_M1_gui"><omgdc:Bounds height="40.0" width="40.0" x="810.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M2" id="split_M2_gui"><omgdc:Bounds height="40.0" width="40.0" x="900.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M4a" id="task_M4a_gui"><omgdc:Bounds height="80.0" width="100.0" x="990.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M4b" id="task_M4b_gui"><omgdc:Bounds height="80.0" width="100.0" x="990.0" y="170.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M2" id="join_M2_gui"><omgdc:Bounds height="40.0" width="40.0" x="1140.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M3" id="split_M3_gui"><omgdc:Bounds height="40.0" width="40.0" x="900.0" y="450.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M5a" id="task_M5a_gui"><omgdc:Bounds height="80.0" width="100.0" x="990.0" y="380.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M5b" id="task_M5b_gui"><omgdc:Bounds height="80.0" width="100.0" x="990.0" y="470.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M5c" id="task_M5c_gui"><omgdc:Bounds height="80.0" width="100.0" x="990.0" y="560.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M3" id="join_M3_gui"><omgdc:Bounds height="40.0" width="40.0" x="1140.0" y="450.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M1" id="xjoin_M1_gui"><omgdc:Bounds height="40.0" width="40.0" x="1230.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M2" id="xsplit_M2_gui"><omgdc:Bounds height="40.0" width="40.0" x="1320.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M4" id="split_M4_gui"><omgdc:Bounds height="40.0" width="40.0" x="1410.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M6a" id="task_M6a_gui"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="50.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M6b" id="task_M6b_gui"><omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="150.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M4" id="join_M4_gui"><omgdc:Bounds height="40.0" width="40.0" x="1650.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M2" id="xjoin_M2_gui"><omgdc:Bounds height="40.0" width="40.0" x="1740.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M7" id="task_M7_gui"><omgdc:Bounds height="80.0" width="100.0" x="1830.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M3" id="xsplit_M3_gui"><omgdc:Bounds height="40.0" width="40.0" x="1980.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M8a" id="task_M8a_gui"><omgdc:Bounds height="80.0" width="100.0" x="2070.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M8b" id="task_M8b_gui"><omgdc:Bounds height="80.0" width="100.0" x="2070.0" y="700.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M3" id="xjoin_M3_gui"><omgdc:Bounds height="40.0" width="40.0" x="2220.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_M1" id="catch_M1_gui"><omgdc:Bounds height="30.0" width="30.0" x="2310.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M9" id="task_M9_gui"><omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M4" id="xsplit_M4_gui"><omgdc:Bounds height="40.0" width="40.0" x="2550.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M10" id="task_M10_gui"><omgdc:Bounds height="80.0" width="100.0" x="2640.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M4" id="xjoin_M4_gui"><omgdc:Bounds height="40.0" width="40.0" x="2790.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M11" id="task_M11_gui"><omgdc:Bounds height="80.0" width="100.0" x="2880.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M12" id="task_M12_gui"><omgdc:Bounds height="80.0" width="100.0" x="3030.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M5" id="split_M5_gui"><omgdc:Bounds height="40.0" width="40.0" x="3180.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13a" id="task_M13a_gui"><omgdc:Bounds height="80.0" width="100.0" x="3270.0" y="50.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13b" id="task_M13b_gui"><omgdc:Bounds height="80.0" width="100.0" x="3270.0" y="140.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13c" id="task_M13c_gui"><omgdc:Bounds height="80.0" width="100.0" x="3270.0" y="230.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13d" id="task_M13d_gui"><omgdc:Bounds height="80.0" width="100.0" x="3390.0" y="50.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13e" id="task_M13e_gui"><omgdc:Bounds height="80.0" width="100.0" x="3390.0" y="140.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M13f" id="task_M13f_gui"><omgdc:Bounds height="80.0" width="100.0" x="3390.0" y="230.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M5" id="join_M5_gui"><omgdc:Bounds height="40.0" width="40.0" x="3540.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M6" id="split_M6_gui"><omgdc:Bounds height="40.0" width="40.0" x="3630.0" y="1050.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M14a" id="task_M14a_gui"><omgdc:Bounds height="80.0" width="100.0" x="3720.0" y="960.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M14b" id="task_M14b_gui"><omgdc:Bounds height="80.0" width="100.0" x="3720.0" y="1060.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M14c" id="task_M14c_gui"><omgdc:Bounds height="80.0" width="100.0" x="3720.0" y="1160.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M6" id="join_M6_gui"><omgdc:Bounds height="40.0" width="40.0" x="3870.0" y="1050.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M7" id="split_M7_gui"><omgdc:Bounds height="40.0" width="40.0" x="3960.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M15a" id="task_M15a_gui"><omgdc:Bounds height="80.0" width="100.0" x="4050.0" y="50.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M15b" id="task_M15b_gui"><omgdc:Bounds height="80.0" width="100.0" x="4050.0" y="150.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M7" id="join_M7_gui"><omgdc:Bounds height="40.0" width="40.0" x="4200.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M16" id="task_M16_gui"><omgdc:Bounds height="80.0" width="100.0" x="4290.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M5" id="xsplit_M5_gui"><omgdc:Bounds height="40.0" width="40.0" x="4440.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_M8" id="split_M8_gui"><omgdc:Bounds height="40.0" width="40.0" x="4530.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M17a" id="task_M17a_gui"><omgdc:Bounds height="80.0" width="100.0" x="4620.0" y="50.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M17b" id="task_M17b_gui"><omgdc:Bounds height="80.0" width="100.0" x="4620.0" y="140.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M17c" id="task_M17c_gui"><omgdc:Bounds height="80.0" width="100.0" x="4620.0" y="230.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M17d" id="task_M17d_gui"><omgdc:Bounds height="80.0" width="100.0" x="4620.0" y="320.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_M8" id="join_M8_gui"><omgdc:Bounds height="40.0" width="40.0" x="4770.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M5" id="xjoin_M5_gui"><omgdc:Bounds height="40.0" width="40.0" x="4860.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M6" id="xsplit_M6_gui"><omgdc:Bounds height="40.0" width="40.0" x="4950.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M18" id="task_M18_gui"><omgdc:Bounds height="80.0" width="100.0" x="5040.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M6" id="xjoin_M6_gui"><omgdc:Bounds height="40.0" width="40.0" x="5190.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M19" id="task_M19_gui"><omgdc:Bounds height="80.0" width="100.0" x="5280.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_M2" id="catch_M2_gui"><omgdc:Bounds height="30.0" width="30.0" x="5430.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M20" id="task_M20_gui"><omgdc:Bounds height="80.0" width="100.0" x="5520.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_M3" id="catch_M3_gui"><omgdc:Bounds height="30.0" width="30.0" x="5670.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M21" id="task_M21_gui"><omgdc:Bounds height="80.0" width="100.0" x="5760.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_M4" id="catch_M4_gui"><omgdc:Bounds height="30.0" width="30.0" x="5910.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M22" id="task_M22_gui"><omgdc:Bounds height="80.0" width="100.0" x="6000.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_M5" id="catch_M5_gui"><omgdc:Bounds height="30.0" width="30.0" x="6150.0" y="100.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M23" id="task_M23_gui"><omgdc:Bounds height="80.0" width="100.0" x="6240.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_M7" id="xsplit_M7_gui"><omgdc:Bounds height="40.0" width="40.0" x="6390.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M24" id="task_M24_gui"><omgdc:Bounds height="80.0" width="100.0" x="6480.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_M7" id="xjoin_M7_gui"><omgdc:Bounds height="40.0" width="40.0" x="6630.0" y="95.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_M25" id="task_M25_gui"><omgdc:Bounds height="80.0" width="100.0" x="6720.0" y="75.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_M" id="end_M_gui"><omgdc:Bounds height="30.0" width="30.0" x="6870.0" y="100.0" /></bpmndi:BPMNShape>
+
+         <!-- CA Pool -->
+         <bpmndi:BPMNShape bpmnElement="pool_C" id="pool_C_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="7500.0" x="50.0" y="1300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_C" id="start_C_gui"><omgdc:Bounds height="30.0" width="30.0" x="100.0" y="1450.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C1" id="xsplit_C1_gui"><omgdc:Bounds height="40.0" width="40.0" x="180.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C1" id="task_C1_gui"><omgdc:Bounds height="80.0" width="100.0" x="270.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C1" id="xjoin_C1_gui"><omgdc:Bounds height="40.0" width="40.0" x="420.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C2" id="xsplit_C2_gui"><omgdc:Bounds height="40.0" width="40.0" x="510.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C2" id="task_C2_gui"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C2" id="xjoin_C2_gui"><omgdc:Bounds height="40.0" width="40.0" x="750.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C3" id="xsplit_C3_gui"><omgdc:Bounds height="40.0" width="40.0" x="840.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C3" id="task_C3_gui"><omgdc:Bounds height="80.0" width="100.0" x="930.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C3" id="xjoin_C3_gui"><omgdc:Bounds height="40.0" width="40.0" x="1080.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C4" id="xsplit_C4_gui"><omgdc:Bounds height="40.0" width="40.0" x="1170.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C4" id="task_C4_gui"><omgdc:Bounds height="80.0" width="100.0" x="1260.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C4" id="xjoin_C4_gui"><omgdc:Bounds height="40.0" width="40.0" x="1410.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C5" id="xsplit_C5_gui"><omgdc:Bounds height="40.0" width="40.0" x="1500.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C5" id="task_C5_gui"><omgdc:Bounds height="80.0" width="100.0" x="1590.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C5" id="xjoin_C5_gui"><omgdc:Bounds height="40.0" width="40.0" x="1740.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C6" id="xsplit_C6_gui"><omgdc:Bounds height="40.0" width="40.0" x="1830.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="split_C1" id="split_C1_gui"><omgdc:Bounds height="40.0" width="40.0" x="1920.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C6a" id="task_C6a_gui"><omgdc:Bounds height="80.0" width="100.0" x="2010.0" y="1325.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C6b" id="task_C6b_gui"><omgdc:Bounds height="80.0" width="100.0" x="2010.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C6c" id="task_C6c_gui"><omgdc:Bounds height="80.0" width="100.0" x="2010.0" y="1525.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="join_C1" id="join_C1_gui"><omgdc:Bounds height="40.0" width="40.0" x="2160.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C6" id="xjoin_C6_gui"><omgdc:Bounds height="40.0" width="40.0" x="2250.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="catch_C1" id="catch_C1_gui"><omgdc:Bounds height="30.0" width="30.0" x="2340.0" y="1450.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_C7" id="xsplit_C7_gui"><omgdc:Bounds height="40.0" width="40.0" x="2430.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_C7" id="task_C7_gui"><omgdc:Bounds height="80.0" width="100.0" x="2520.0" y="1425.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_C7" id="xjoin_C7_gui"><omgdc:Bounds height="40.0" width="40.0" x="2670.0" y="1445.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_C" id="end_C_gui"><omgdc:Bounds height="30.0" width="30.0" x="2760.0" y="1450.0" /></bpmndi:BPMNShape>
+
+         <!-- Patient Pool -->
+         <bpmndi:BPMNShape bpmnElement="pool_P" id="pool_P_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="7500.0" x="50.0" y="1800.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_P" id="start_P_gui"><omgdc:Bounds height="30.0" width="30.0" x="100.0" y="1950.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_P1" id="xsplit_P1_gui"><omgdc:Bounds height="40.0" width="40.0" x="180.0" y="1945.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_P1" id="task_P1_gui"><omgdc:Bounds height="80.0" width="100.0" x="270.0" y="1925.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_P1" id="xjoin_P1_gui"><omgdc:Bounds height="40.0" width="40.0" x="420.0" y="1945.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xsplit_P2" id="xsplit_P2_gui"><omgdc:Bounds height="40.0" width="40.0" x="510.0" y="1945.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_P2" id="task_P2_gui"><omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1925.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xjoin_P2" id="xjoin_P2_gui"><omgdc:Bounds height="40.0" width="40.0" x="750.0" y="1945.0" /></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_P" id="end_P_gui"><omgdc:Bounds height="30.0" width="30.0" x="840.0" y="1950.0" /></bpmndi:BPMNShape>
+
+         <!-- Edges (Sequence Flows and Message Flows) -->
+         <bpmndi:BPMNEdge bpmnElement="sq_M_0" id="sq_M_0_gui"><omgdi:waypoint x="130.0" y="115.0" /><omgdi:waypoint x="180.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_1" id="sq_M_1_gui"><omgdi:waypoint x="280.0" y="115.0" /><omgdi:waypoint x="330.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_2a" id="sq_M_2a_gui"><omgdi:waypoint x="370.0" y="115.0" /><omgdi:waypoint x="420.0" y="100.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_2b" id="sq_M_2b_gui"><omgdi:waypoint x="370.0" y="115.0" /><omgdi:waypoint x="420.0" y="190.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_2c" id="sq_M_2c_gui"><omgdi:waypoint x="370.0" y="115.0" /><omgdi:waypoint x="420.0" y="280.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_2d" id="sq_M_2d_gui"><omgdi:waypoint x="370.0" y="115.0" /><omgdi:waypoint x="420.0" y="370.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_3a" id="sq_M_3a_gui"><omgdi:waypoint x="520.0" y="100.0" /><omgdi:waypoint x="570.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_3b" id="sq_M_3b_gui"><omgdi:waypoint x="520.0" y="190.0" /><omgdi:waypoint x="570.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_3c" id="sq_M_3c_gui"><omgdi:waypoint x="520.0" y="280.0" /><omgdi:waypoint x="570.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_3d" id="sq_M_3d_gui"><omgdi:waypoint x="520.0" y="370.0" /><omgdi:waypoint x="570.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_4" id="sq_M_4_gui"><omgdi:waypoint x="610.0" y="115.0" /><omgdi:waypoint x="660.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_5" id="sq_M_5_gui"><omgdi:waypoint x="760.0" y="115.0" /><omgdi:waypoint x="810.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_6_yes" id="sq_M_6_yes_gui"><omgdi:waypoint x="830.0" y="135.0" /><omgdi:waypoint x="900.0" y="470.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_6_no" id="sq_M_6_no_gui"><omgdi:waypoint x="850.0" y="115.0" /><omgdi:waypoint x="900.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_7a" id="sq_M_7a_gui"><omgdi:waypoint x="940.0" y="115.0" /><omgdi:waypoint x="990.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_7b" id="sq_M_7b_gui"><omgdi:waypoint x="940.0" y="115.0" /><omgdi:waypoint x="990.0" y="210.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_8a" id="sq_M_8a_gui"><omgdi:waypoint x="1090.0" y="115.0" /><omgdi:waypoint x="1140.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_8b" id="sq_M_8b_gui"><omgdi:waypoint x="1090.0" y="210.0" /><omgdi:waypoint x="1140.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_9" id="sq_M_9_gui"><omgdi:waypoint x="1180.0" y="115.0" /><omgdi:waypoint x="1230.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_10a" id="sq_M_10a_gui"><omgdi:waypoint x="940.0" y="470.0" /><omgdi:waypoint x="990.0" y="420.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_10b" id="sq_M_10b_gui"><omgdi:waypoint x="940.0" y="470.0" /><omgdi:waypoint x="990.0" y="510.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_10c" id="sq_M_10c_gui"><omgdi:waypoint x="940.0" y="470.0" /><omgdi:waypoint x="990.0" y="600.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_11a" id="sq_M_11a_gui"><omgdi:waypoint x="1090.0" y="420.0" /><omgdi:waypoint x="1140.0" y="470.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_11b" id="sq_M_11b_gui"><omgdi:waypoint x="1090.0" y="510.0" /><omgdi:waypoint x="1140.0" y="470.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_11c" id="sq_M_11c_gui"><omgdi:waypoint x="1090.0" y="600.0" /><omgdi:waypoint x="1140.0" y="470.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_12" id="sq_M_12_gui"><omgdi:waypoint x="1180.0" y="470.0" /><omgdi:waypoint x="1230.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_13" id="sq_M_13_gui"><omgdi:waypoint x="1270.0" y="115.0" /><omgdi:waypoint x="1320.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_14_yes" id="sq_M_14_yes_gui"><omgdi:waypoint x="1360.0" y="115.0" /><omgdi:waypoint x="1410.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_14_no" id="sq_M_14_no_gui"><omgdi:waypoint x="1340.0" y="135.0" /><omgdi:waypoint x="1740.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_15a" id="sq_M_15a_gui"><omgdi:waypoint x="1450.0" y="115.0" /><omgdi:waypoint x="1500.0" y="90.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_15b" id="sq_M_15b_gui"><omgdi:waypoint x="1450.0" y="115.0" /><omgdi:waypoint x="1500.0" y="190.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_16a" id="sq_M_16a_gui"><omgdi:waypoint x="1600.0" y="90.0" /><omgdi:waypoint x="1650.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_16b" id="sq_M_16b_gui"><omgdi:waypoint x="1600.0" y="190.0" /><omgdi:waypoint x="1650.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_17" id="sq_M_17_gui"><omgdi:waypoint x="1690.0" y="115.0" /><omgdi:waypoint x="1740.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_18" id="sq_M_18_gui"><omgdi:waypoint x="1780.0" y="115.0" /><omgdi:waypoint x="1830.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_19" id="sq_M_19_gui"><omgdi:waypoint x="1930.0" y="115.0" /><omgdi:waypoint x="1980.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_20_yes" id="sq_M_20_yes_gui"><omgdi:waypoint x="2000.0" y="135.0" /><omgdi:waypoint x="2070.0" y="740.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_20_no" id="sq_M_20_no_gui"><omgdi:waypoint x="2020.0" y="115.0" /><omgdi:waypoint x="2070.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_21_yes" id="sq_M_21_yes_gui"><omgdi:waypoint x="2170.0" y="740.0" /><omgdi:waypoint x="2220.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_21_no" id="sq_M_21_no_gui"><omgdi:waypoint x="2170.0" y="115.0" /><omgdi:waypoint x="2220.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_22" id="sq_M_22_gui"><omgdi:waypoint x="2260.0" y="115.0" /><omgdi:waypoint x="2310.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_23" id="sq_M_23_gui"><omgdi:waypoint x="2340.0" y="115.0" /><omgdi:waypoint x="2400.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_24" id="sq_M_24_gui"><omgdi:waypoint x="2500.0" y="115.0" /><omgdi:waypoint x="2550.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_25_yes" id="sq_M_25_yes_gui"><omgdi:waypoint x="2590.0" y="115.0" /><omgdi:waypoint x="2640.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_25_no" id="sq_M_25_no_gui"><omgdi:waypoint x="2570.0" y="135.0" /><omgdi:waypoint x="2790.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_26" id="sq_M_26_gui"><omgdi:waypoint x="2740.0" y="115.0" /><omgdi:waypoint x="2790.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_27" id="sq_M_27_gui"><omgdi:waypoint x="2830.0" y="115.0" /><omgdi:waypoint x="2880.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_28" id="sq_M_28_gui"><omgdi:waypoint x="2980.0" y="115.0" /><omgdi:waypoint x="3030.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_29" id="sq_M_29_gui"><omgdi:waypoint x="3130.0" y="115.0" /><omgdi:waypoint x="3180.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30a" id="sq_M_30a_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3270.0" y="90.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30b" id="sq_M_30b_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3270.0" y="180.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30c" id="sq_M_30c_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3270.0" y="270.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30d" id="sq_M_30d_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3390.0" y="90.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30e" id="sq_M_30e_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3390.0" y="180.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_30f" id="sq_M_30f_gui"><omgdi:waypoint x="3220.0" y="115.0" /><omgdi:waypoint x="3390.0" y="270.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31a" id="sq_M_31a_gui"><omgdi:waypoint x="3370.0" y="90.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31b" id="sq_M_31b_gui"><omgdi:waypoint x="3370.0" y="180.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31c" id="sq_M_31c_gui"><omgdi:waypoint x="3370.0" y="270.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31d" id="sq_M_31d_gui"><omgdi:waypoint x="3490.0" y="90.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31e" id="sq_M_31e_gui"><omgdi:waypoint x="3490.0" y="180.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_31f" id="sq_M_31f_gui"><omgdi:waypoint x="3490.0" y="270.0" /><omgdi:waypoint x="3540.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_32" id="sq_M_32_gui"><omgdi:waypoint x="3580.0" y="115.0" /><omgdi:waypoint x="3630.0" y="1070.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_33a" id="sq_M_33a_gui"><omgdi:waypoint x="3670.0" y="1070.0" /><omgdi:waypoint x="3720.0" y="1000.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_33b" id="sq_M_33b_gui"><omgdi:waypoint x="3670.0" y="1070.0" /><omgdi:waypoint x="3720.0" y="1100.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_33c" id="sq_M_33c_gui"><omgdi:waypoint x="3670.0" y="1070.0" /><omgdi:waypoint x="3720.0" y="1200.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_34a" id="sq_M_34a_gui"><omgdi:waypoint x="3820.0" y="1000.0" /><omgdi:waypoint x="3870.0" y="1070.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_34b" id="sq_M_34b_gui"><omgdi:waypoint x="3820.0" y="1100.0" /><omgdi:waypoint x="3870.0" y="1070.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_34c" id="sq_M_34c_gui"><omgdi:waypoint x="3820.0" y="1200.0" /><omgdi:waypoint x="3870.0" y="1070.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_35" id="sq_M_35_gui"><omgdi:waypoint x="3910.0" y="1070.0" /><omgdi:waypoint x="3960.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_36a" id="sq_M_36a_gui"><omgdi:waypoint x="4000.0" y="115.0" /><omgdi:waypoint x="4050.0" y="90.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_36b" id="sq_M_36b_gui"><omgdi:waypoint x="4000.0" y="115.0" /><omgdi:waypoint x="4050.0" y="190.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_37a" id="sq_M_37a_gui"><omgdi:waypoint x="4150.0" y="90.0" /><omgdi:waypoint x="4200.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_37b" id="sq_M_37b_gui"><omgdi:waypoint x="4150.0" y="190.0" /><omgdi:waypoint x="4200.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_38" id="sq_M_38_gui"><omgdi:waypoint x="4240.0" y="115.0" /><omgdi:waypoint x="4290.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_39" id="sq_M_39_gui"><omgdi:waypoint x="4390.0" y="115.0" /><omgdi:waypoint x="4440.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_40_yes" id="sq_M_40_yes_gui"><omgdi:waypoint x="4480.0" y="115.0" /><omgdi:waypoint x="4530.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_40_no" id="sq_M_40_no_gui"><omgdi:waypoint x="4460.0" y="135.0" /><omgdi:waypoint x="4860.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_41a" id="sq_M_41a_gui"><omgdi:waypoint x="4570.0" y="115.0" /><omgdi:waypoint x="4620.0" y="90.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_41b" id="sq_M_41b_gui"><omgdi:waypoint x="4570.0" y="115.0" /><omgdi:waypoint x="4620.0" y="180.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_41c" id="sq_M_41c_gui"><omgdi:waypoint x="4570.0" y="115.0" /><omgdi:waypoint x="4620.0" y="270.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_41d" id="sq_M_41d_gui"><omgdi:waypoint x="4570.0" y="115.0" /><omgdi:waypoint x="4620.0" y="360.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_42a" id="sq_M_42a_gui"><omgdi:waypoint x="4720.0" y="90.0" /><omgdi:waypoint x="4770.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_42b" id="sq_M_42b_gui"><omgdi:waypoint x="4720.0" y="180.0" /><omgdi:waypoint x="4770.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_42c" id="sq_M_42c_gui"><omgdi:waypoint x="4720.0" y="270.0" /><omgdi:waypoint x="4770.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_42d" id="sq_M_42d_gui"><omgdi:waypoint x="4720.0" y="360.0" /><omgdi:waypoint x="4770.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_43" id="sq_M_43_gui"><omgdi:waypoint x="4810.0" y="115.0" /><omgdi:waypoint x="4860.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_44" id="sq_M_44_gui"><omgdi:waypoint x="4900.0" y="115.0" /><omgdi:waypoint x="4950.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_45_yes" id="sq_M_45_yes_gui"><omgdi:waypoint x="4990.0" y="115.0" /><omgdi:waypoint x="5040.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_45_no" id="sq_M_45_no_gui"><omgdi:waypoint x="4970.0" y="135.0" /><omgdi:waypoint x="5190.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_46" id="sq_M_46_gui"><omgdi:waypoint x="5140.0" y="115.0" /><omgdi:waypoint x="5190.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_47" id="sq_M_47_gui"><omgdi:waypoint x="5230.0" y="115.0" /><omgdi:waypoint x="5280.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_48" id="sq_M_48_gui"><omgdi:waypoint x="5380.0" y="115.0" /><omgdi:waypoint x="5430.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_49" id="sq_M_49_gui"><omgdi:waypoint x="5460.0" y="115.0" /><omgdi:waypoint x="5520.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_50" id="sq_M_50_gui"><omgdi:waypoint x="5620.0" y="115.0" /><omgdi:waypoint x="5670.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_51" id="sq_M_51_gui"><omgdi:waypoint x="5700.0" y="115.0" /><omgdi:waypoint x="5760.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_52" id="sq_M_52_gui"><omgdi:waypoint x="5860.0" y="115.0" /><omgdi:waypoint x="5910.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_53" id="sq_M_53_gui"><omgdi:waypoint x="5940.0" y="115.0" /><omgdi:waypoint x="6000.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_54" id="sq_M_54_gui"><omgdi:waypoint x="6100.0" y="115.0" /><omgdi:waypoint x="6150.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_55" id="sq_M_55_gui"><omgdi:waypoint x="6180.0" y="115.0" /><omgdi:waypoint x="6240.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_56" id="sq_M_56_gui"><omgdi:waypoint x="6340.0" y="115.0" /><omgdi:waypoint x="6390.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_57_yes" id="sq_M_57_yes_gui"><omgdi:waypoint x="6430.0" y="115.0" /><omgdi:waypoint x="6480.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_57_no" id="sq_M_57_no_gui"><omgdi:waypoint x="6410.0" y="135.0" /><omgdi:waypoint x="6630.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_58" id="sq_M_58_gui"><omgdi:waypoint x="6580.0" y="115.0" /><omgdi:waypoint x="6630.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_59" id="sq_M_59_gui"><omgdi:waypoint x="6670.0" y="115.0" /><omgdi:waypoint x="6720.0" y="115.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_M_60" id="sq_M_60_gui"><omgdi:waypoint x="6820.0" y="115.0" /><omgdi:waypoint x="6870.0" y="115.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sq_C_0" id="sq_C_0_gui"><omgdi:waypoint x="130.0" y="1465.0" /><omgdi:waypoint x="180.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_1_yes" id="sq_C_1_yes_gui"><omgdi:waypoint x="220.0" y="1465.0" /><omgdi:waypoint x="270.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_1_no" id="sq_C_1_no_gui"><omgdi:waypoint x="200.0" y="1485.0" /><omgdi:waypoint x="420.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_2" id="sq_C_2_gui"><omgdi:waypoint x="370.0" y="1465.0" /><omgdi:waypoint x="420.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_3" id="sq_C_3_gui"><omgdi:waypoint x="460.0" y="1465.0" /><omgdi:waypoint x="510.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_4_yes" id="sq_C_4_yes_gui"><omgdi:waypoint x="550.0" y="1465.0" /><omgdi:waypoint x="600.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_4_no" id="sq_C_4_no_gui"><omgdi:waypoint x="530.0" y="1485.0" /><omgdi:waypoint x="750.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_5" id="sq_C_5_gui"><omgdi:waypoint x="700.0" y="1465.0" /><omgdi:waypoint x="750.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_6" id="sq_C_6_gui"><omgdi:waypoint x="790.0" y="1465.0" /><omgdi:waypoint x="840.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_7_yes" id="sq_C_7_yes_gui"><omgdi:waypoint x="880.0" y="1465.0" /><omgdi:waypoint x="930.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_7_no" id="sq_C_7_no_gui"><omgdi:waypoint x="860.0" y="1485.0" /><omgdi:waypoint x="1080.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_8" id="sq_C_8_gui"><omgdi:waypoint x="1030.0" y="1465.0" /><omgdi:waypoint x="1080.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_9" id="sq_C_9_gui"><omgdi:waypoint x="1120.0" y="1465.0" /><omgdi:waypoint x="1170.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_10_yes" id="sq_C_10_yes_gui"><omgdi:waypoint x="1210.0" y="1465.0" /><omgdi:waypoint x="1260.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_10_no" id="sq_C_10_no_gui"><omgdi:waypoint x="1190.0" y="1485.0" /><omgdi:waypoint x="1410.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_11" id="sq_C_11_gui"><omgdi:waypoint x="1360.0" y="1465.0" /><omgdi:waypoint x="1410.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_12" id="sq_C_12_gui"><omgdi:waypoint x="1450.0" y="1465.0" /><omgdi:waypoint x="1500.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_13_yes" id="sq_C_13_yes_gui"><omgdi:waypoint x="1540.0" y="1465.0" /><omgdi:waypoint x="1590.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_13_no" id="sq_C_13_no_gui"><omgdi:waypoint x="1520.0" y="1485.0" /><omgdi:waypoint x="1740.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_14" id="sq_C_14_gui"><omgdi:waypoint x="1690.0" y="1465.0" /><omgdi:waypoint x="1740.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_15" id="sq_C_15_gui"><omgdi:waypoint x="1780.0" y="1465.0" /><omgdi:waypoint x="1830.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_16_yes" id="sq_C_16_yes_gui"><omgdi:waypoint x="1870.0" y="1465.0" /><omgdi:waypoint x="1920.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_16_no" id="sq_C_16_no_gui"><omgdi:waypoint x="1850.0" y="1485.0" /><omgdi:waypoint x="2250.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_17a" id="sq_C_17a_gui"><omgdi:waypoint x="1960.0" y="1465.0" /><omgdi:waypoint x="2010.0" y="1365.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_17b" id="sq_C_17b_gui"><omgdi:waypoint x="1960.0" y="1465.0" /><omgdi:waypoint x="2010.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_17c" id="sq_C_17c_gui"><omgdi:waypoint x="1960.0" y="1465.0" /><omgdi:waypoint x="2010.0" y="1565.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_18a" id="sq_C_18a_gui"><omgdi:waypoint x="2110.0" y="1365.0" /><omgdi:waypoint x="2160.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_18b" id="sq_C_18b_gui"><omgdi:waypoint x="2110.0" y="1465.0" /><omgdi:waypoint x="2160.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_18c" id="sq_C_18c_gui"><omgdi:waypoint x="2110.0" y="1565.0" /><omgdi:waypoint x="2160.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_19" id="sq_C_19_gui"><omgdi:waypoint x="2200.0" y="1465.0" /><omgdi:waypoint x="2250.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_20" id="sq_C_20_gui"><omgdi:waypoint x="2290.0" y="1465.0" /><omgdi:waypoint x="2340.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_21" id="sq_C_21_gui"><omgdi:waypoint x="2370.0" y="1465.0" /><omgdi:waypoint x="2430.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_22_yes" id="sq_C_22_yes_gui"><omgdi:waypoint x="2470.0" y="1465.0" /><omgdi:waypoint x="2520.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_22_no" id="sq_C_22_no_gui"><omgdi:waypoint x="2450.0" y="1485.0" /><omgdi:waypoint x="2670.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_23" id="sq_C_23_gui"><omgdi:waypoint x="2620.0" y="1465.0" /><omgdi:waypoint x="2670.0" y="1465.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_C_24" id="sq_C_24_gui"><omgdi:waypoint x="2710.0" y="1465.0" /><omgdi:waypoint x="2760.0" y="1465.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sq_P_0" id="sq_P_0_gui"><omgdi:waypoint x="130.0" y="1965.0" /><omgdi:waypoint x="180.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_1_yes" id="sq_P_1_yes_gui"><omgdi:waypoint x="220.0" y="1965.0" /><omgdi:waypoint x="270.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_1_no" id="sq_P_1_no_gui"><omgdi:waypoint x="200.0" y="1985.0" /><omgdi:waypoint x="420.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_2" id="sq_P_2_gui"><omgdi:waypoint x="370.0" y="1965.0" /><omgdi:waypoint x="420.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_3" id="sq_P_3_gui"><omgdi:waypoint x="460.0" y="1965.0" /><omgdi:waypoint x="510.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_4_yes" id="sq_P_4_yes_gui"><omgdi:waypoint x="550.0" y="1965.0" /><omgdi:waypoint x="600.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_4_no" id="sq_P_4_no_gui"><omgdi:waypoint x="530.0" y="1985.0" /><omgdi:waypoint x="750.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_5" id="sq_P_5_gui"><omgdi:waypoint x="700.0" y="1965.0" /><omgdi:waypoint x="750.0" y="1965.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sq_P_6" id="sq_P_6_gui"><omgdi:waypoint x="790.0" y="1965.0" /><omgdi:waypoint x="840.0" y="1965.0" /></bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="mf_1" id="mf_1_gui"><omgdi:waypoint x="320.0" y="1425.0" /><omgdi:waypoint x="2325.0" y="130.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_2" id="mf_2_gui"><omgdi:waypoint x="2450.0" y="155.0" /><omgdi:waypoint x="2450.0" y="1300.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_3" id="mf_3_gui"><omgdi:waypoint x="650.0" y="1425.0" /><omgdi:waypoint x="5445.0" y="130.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_4" id="mf_4_gui"><omgdi:waypoint x="5570.0" y="155.0" /><omgdi:waypoint x="5570.0" y="1300.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_5" id="mf_5_gui"><omgdi:waypoint x="980.0" y="1425.0" /><omgdi:waypoint x="5685.0" y="130.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_6" id="mf_6_gui"><omgdi:waypoint x="5810.0" y="155.0" /><omgdi:waypoint x="5810.0" y="1300.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_7" id="mf_7_gui"><omgdi:waypoint x="1310.0" y="1425.0" /><omgdi:waypoint x="5925.0" y="130.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_8" id="mf_8_gui"><omgdi:waypoint x="6050.0" y="155.0" /><omgdi:waypoint x="6050.0" y="1300.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_9" id="mf_9_gui"><omgdi:waypoint x="1640.0" y="1425.0" /><omgdi:waypoint x="6165.0" y="130.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_10" id="mf_10_gui"><omgdi:waypoint x="6290.0" y="155.0" /><omgdi:waypoint x="6290.0" y="1300.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_11" id="mf_11_gui"><omgdi:waypoint x="320.0" y="1925.0" /><omgdi:waypoint x="2355.0" y="1480.0" /></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_12" id="mf_12_gui"><omgdi:waypoint x="2570.0" y="1505.0" /><omgdi:waypoint x="2570.0" y="1800.0" /></bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

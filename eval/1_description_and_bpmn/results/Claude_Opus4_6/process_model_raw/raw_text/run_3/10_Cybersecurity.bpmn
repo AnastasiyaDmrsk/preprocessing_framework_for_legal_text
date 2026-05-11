@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="sid-definitions-1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ==================== COLLABORATION ==================== -->
+   <collaboration id="collab-1">
+      <participant id="pool-commission" name="Commission" processRef="proc-commission"/>
+      <participant id="pool-enisa" name="ENISA" processRef="proc-enisa"/>
+      <participant id="pool-eccg" name="ECCG" processRef="proc-eccg"/>
+
+      <!-- Message Flows -->
+      <messageFlow id="mf-request-to-enisa" name="" sourceRef="task-request-scheme" targetRef="start-enisa-receive"/>
+      <messageFlow id="mf-transmit-to-commission" name="" sourceRef="task-transmit-scheme" targetRef="event-receive-scheme"/>
+      <messageFlow id="mf-eccg-opinion-to-enisa" name="" sourceRef="task-adopt-opinion" targetRef="event-receive-opinion"/>
+      <messageFlow id="mf-enisa-notify-eccg" name="" sourceRef="task-prepare-scheme" targetRef="start-eccg-receive"/>
+   </collaboration>
+
+   <!-- ==================== COMMISSION PROCESS ==================== -->
+   <process id="proc-commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls-commission">
+         <lane id="lane-commission">
+            <flowNodeRef>start-commission</flowNodeRef>
+            <flowNodeRef>task-request-scheme</flowNodeRef>
+            <flowNodeRef>event-receive-scheme</flowNodeRef>
+            <flowNodeRef>task-adopt-implementing-acts</flowNodeRef>
+            <flowNodeRef>end-commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start-commission" name="Start">
+         <outgoing>sf-c1</outgoing>
+      </startEvent>
+
+      <task id="task-request-scheme" name="request preparation of candidate scheme" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-c1</incoming>
+         <outgoing>sf-c2</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="event-receive-scheme" name="receive candidate scheme">
+         <incoming>sf-c2</incoming>
+         <outgoing>sf-c3</outgoing>
+         <messageEventDefinition id="med-receive-scheme"/>
+      </intermediateCatchEvent>
+
+      <task id="task-adopt-implementing-acts" name="adopt implementing acts" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-c3</incoming>
+         <outgoing>sf-c4</outgoing>
+      </task>
+
+      <endEvent id="end-commission" name="End">
+         <incoming>sf-c4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-c1" sourceRef="start-commission" targetRef="task-request-scheme"/>
+      <sequenceFlow id="sf-c2" sourceRef="task-request-scheme" targetRef="event-receive-scheme"/>
+      <sequenceFlow id="sf-c3" sourceRef="event-receive-scheme" targetRef="task-adopt-implementing-acts"/>
+      <sequenceFlow id="sf-c4" sourceRef="task-adopt-implementing-acts" targetRef="end-commission"/>
+   </process>
+
+   <!-- ==================== ENISA PROCESS ==================== -->
+   <process id="proc-enisa" name="ENISA" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls-enisa">
+         <lane id="lane-enisa">
+            <flowNodeRef>start-enisa-receive</flowNodeRef>
+            <flowNodeRef>gw-accept</flowNodeRef>
+            <flowNodeRef>task-refuse-request</flowNodeRef>
+            <flowNodeRef>end-enisa-refused</flowNodeRef>
+            <flowNodeRef>task-prepare-scheme</flowNodeRef>
+            <flowNodeRef>task-consult-stakeholders</flowNodeRef>
+            <flowNodeRef>task-establish-working-group</flowNodeRef>
+            <flowNodeRef>event-receive-opinion</flowNodeRef>
+            <flowNodeRef>task-take-account-opinion</flowNodeRef>
+            <flowNodeRef>task-transmit-scheme</flowNodeRef>
+            <flowNodeRef>task-evaluate-scheme</flowNodeRef>
+            <flowNodeRef>end-enisa</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start-enisa-receive" name="receive request" isInterrupting="true">
+         <outgoing>sf-e1</outgoing>
+         <messageEventDefinition id="med-enisa-start"/>
+      </startEvent>
+
+      <exclusiveGateway id="gw-accept" name="request accepted?" gatewayDirection="Diverging">
+         <incoming>sf-e1</incoming>
+         <outgoing>sf-e-refuse</outgoing>
+         <outgoing>sf-e-accept</outgoing>
+      </exclusiveGateway>
+
+      <task id="task-refuse-request" name="refuse request (Management Board)" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e-refuse</incoming>
+         <outgoing>sf-e-refuse-end</outgoing>
+      </task>
+
+      <endEvent id="end-enisa-refused" name="request refused">
+         <incoming>sf-e-refuse-end</incoming>
+      </endEvent>
+
+      <task id="task-prepare-scheme" name="prepare candidate scheme" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e-accept</incoming>
+         <outgoing>sf-e2</outgoing>
+      </task>
+
+      <task id="task-consult-stakeholders" name="consult stakeholders" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e2</incoming>
+         <outgoing>sf-e3</outgoing>
+      </task>
+
+      <task id="task-establish-working-group" name="establish ad hoc working group" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e3</incoming>
+         <outgoing>sf-e4</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="event-receive-opinion" name="receive ECCG opinion">
+         <incoming>sf-e4</incoming>
+         <outgoing>sf-e5</outgoing>
+         <messageEventDefinition id="med-receive-opinion"/>
+      </intermediateCatchEvent>
+
+      <task id="task-take-account-opinion" name="take account of ECCG opinion" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e5</incoming>
+         <outgoing>sf-e6</outgoing>
+      </task>
+
+      <task id="task-transmit-scheme" name="transmit candidate scheme to Commission" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e6</incoming>
+         <outgoing>sf-e7</outgoing>
+      </task>
+
+      <task id="task-evaluate-scheme" name="evaluate certification scheme" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-e7</incoming>
+         <outgoing>sf-e8</outgoing>
+      </task>
+
+      <endEvent id="end-enisa" name="End">
+         <incoming>sf-e8</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-e1" sourceRef="start-enisa-receive" targetRef="gw-accept"/>
+      <sequenceFlow id="sf-e-refuse" name="no" sourceRef="gw-accept" targetRef="task-refuse-request"/>
+      <sequenceFlow id="sf-e-accept" name="yes" sourceRef="gw-accept" targetRef="task-prepare-scheme"/>
+      <sequenceFlow id="sf-e-refuse-end" sourceRef="task-refuse-request" targetRef="end-enisa-refused"/>
+      <sequenceFlow id="sf-e2" sourceRef="task-prepare-scheme" targetRef="task-consult-stakeholders"/>
+      <sequenceFlow id="sf-e3" sourceRef="task-consult-stakeholders" targetRef="task-establish-working-group"/>
+      <sequenceFlow id="sf-e4" sourceRef="task-establish-working-group" targetRef="event-receive-opinion"/>
+      <sequenceFlow id="sf-e5" sourceRef="event-receive-opinion" targetRef="task-take-account-opinion"/>
+      <sequenceFlow id="sf-e6" sourceRef="task-take-account-opinion" targetRef="task-transmit-scheme"/>
+      <sequenceFlow id="sf-e7" sourceRef="task-transmit-scheme" targetRef="task-evaluate-scheme"/>
+      <sequenceFlow id="sf-e8" sourceRef="task-evaluate-scheme" targetRef="end-enisa"/>
+   </process>
+
+   <!-- ==================== ECCG PROCESS ==================== -->
+   <process id="proc-eccg" name="ECCG" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls-eccg">
+         <lane id="lane-eccg">
+            <flowNodeRef>start-eccg-receive</flowNodeRef>
+            <flowNodeRef>task-provide-assistance</flowNodeRef>
+            <flowNodeRef>task-adopt-opinion</flowNodeRef>
+            <flowNodeRef>end-eccg</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start-eccg-receive" name="receive notification" isInterrupting="true">
+         <outgoing>sf-g1</outgoing>
+         <messageEventDefinition id="med-eccg-start"/>
+      </startEvent>
+
+      <task id="task-provide-assistance" name="provide assistance and expert advice" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-g1</incoming>
+         <outgoing>sf-g2</outgoing>
+      </task>
+
+      <task id="task-adopt-opinion" name="adopt opinion on candidate scheme" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf-g2</incoming>
+         <outgoing>sf-g3</outgoing>
+      </task>
+
+      <endEvent id="end-eccg" name="End">
+         <incoming>sf-g3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-g1" sourceRef="start-eccg-receive" targetRef="task-provide-assistance"/>
+      <sequenceFlow id="sf-g2" sourceRef="task-provide-assistance" targetRef="task-adopt-opinion"/>
+      <sequenceFlow id="sf-g3" sourceRef="task-adopt-opinion" targetRef="end-eccg"/>
+   </process>
+
+   <!-- ==================== DIAGRAM (DI) ==================== -->
+   <bpmndi:BPMNDiagram id="diagram-1">
+      <bpmndi:BPMNPlane bpmnElement="collab-1" id="plane-1">
+
+         <!-- === COMMISSION POOL (y=60, height=160) === -->
+         <bpmndi:BPMNShape bpmnElement="pool-commission" id="shape-pool-commission" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1000.0" x="120.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane-commission" id="shape-lane-commission" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="970.0" x="150.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start-commission" id="shape-start-commission">
+            <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="125.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-request-scheme" id="shape-task-request-scheme">
+            <omgdc:Bounds height="80.0" width="120.0" x="270.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event-receive-scheme" id="shape-event-receive-scheme">
+            <omgdc:Bounds height="30.0" width="30.0" x="820.0" y="125.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-adopt-implementing-acts" id="shape-task-adopt-impl">
+            <omgdc:Bounds height="80.0" width="120.0" x="900.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end-commission" id="shape-end-commission">
+            <omgdc:Bounds height="28.0" width="28.0" x="1060.0" y="126.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-c1" id="edge-sf-c1">
+            <omgdi:waypoint x="220.0" y="140.0"/>
+            <omgdi:waypoint x="270.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c2" id="edge-sf-c2">
+            <omgdi:waypoint x="390.0" y="140.0"/>
+            <omgdi:waypoint x="820.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c3" id="edge-sf-c3">
+            <omgdi:waypoint x="850.0" y="140.0"/>
+            <omgdi:waypoint x="900.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c4" id="edge-sf-c4">
+            <omgdi:waypoint x="1020.0" y="140.0"/>
+            <omgdi:waypoint x="1060.0" y="140.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === ENISA POOL (y=260, height=220) === -->
+         <bpmndi:BPMNShape bpmnElement="pool-enisa" id="shape-pool-enisa" isHorizontal="true">
+            <omgdc:Bounds height="220.0" width="1000.0" x="120.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane-enisa" id="shape-lane-enisa" isHorizontal="true">
+            <omgdc:Bounds height="220.0" width="970.0" x="150.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start-enisa-receive" id="shape-start-enisa">
+            <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw-accept" id="shape-gw-accept" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="260.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-refuse-request" id="shape-task-refuse">
+            <omgdc:Bounds height="60.0" width="130.0" x="240.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end-enisa-refused" id="shape-end-refused">
+            <omgdc:Bounds height="28.0" width="28.0" x="410.0" y="416.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-prepare-scheme" id="shape-task-prepare">
+            <omgdc:Bounds height="60.0" width="120.0" x="340.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-consult-stakeholders" id="shape-task-consult">
+            <omgdc:Bounds height="60.0" width="120.0" x="490.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-establish-working-group" id="shape-task-wg">
+            <omgdc:Bounds height="60.0" width="120.0" x="640.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event-receive-opinion" id="shape-event-opinion">
+            <omgdc:Bounds height="30.0" width="30.0" x="785.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-take-account-opinion" id="shape-task-account">
+            <omgdc:Bounds height="60.0" width="120.0" x="840.0" y="295.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-transmit-scheme" id="shape-task-transmit">
+            <omgdc:Bounds height="60.0" width="130.0" x="840.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-evaluate-scheme" id="shape-task-evaluate">
+            <omgdc:Bounds height="60.0" width="130.0" x="990.0" y="380.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end-enisa" id="shape-end-enisa">
+            <omgdc:Bounds height="28.0" width="28.0" x="1040.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-e1" id="edge-sf-e1">
+            <omgdi:waypoint x="220.0" y="325.0"/>
+            <omgdi:waypoint x="260.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e-refuse" id="edge-sf-e-refuse">
+            <omgdi:waypoint x="280.0" y="345.0"/>
+            <omgdi:waypoint x="280.0" y="400.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e-accept" id="edge-sf-e-accept">
+            <omgdi:waypoint x="300.0" y="325.0"/>
+            <omgdi:waypoint x="340.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e-refuse-end" id="edge-sf-e-refuse-end">
+            <omgdi:waypoint x="370.0" y="430.0"/>
+            <omgdi:waypoint x="410.0" y="430.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e2" id="edge-sf-e2">
+            <omgdi:waypoint x="460.0" y="325.0"/>
+            <omgdi:waypoint x="490.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e3" id="edge-sf-e3">
+            <omgdi:waypoint x="610.0" y="325.0"/>
+            <omgdi:waypoint x="640.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e4" id="edge-sf-e4">
+            <omgdi:waypoint x="760.0" y="325.0"/>
+            <omgdi:waypoint x="785.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e5" id="edge-sf-e5">
+            <omgdi:waypoint x="815.0" y="325.0"/>
+            <omgdi:waypoint x="840.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e6" id="edge-sf-e6">
+            <omgdi:waypoint x="905.0" y="355.0"/>
+            <omgdi:waypoint x="905.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e7" id="edge-sf-e7">
+            <omgdi:waypoint x="970.0" y="410.0"/>
+            <omgdi:waypoint x="990.0" y="410.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e8" id="edge-sf-e8">
+            <omgdi:waypoint x="1054.0" y="380.0"/>
+            <omgdi:waypoint x="1054.0" y="328.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === ECCG POOL (y=520, height=160) === -->
+         <bpmndi:BPMNShape bpmnElement="pool-eccg" id="shape-pool-eccg" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="1000.0" x="120.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane-eccg" id="shape-lane-eccg" isHorizontal="true">
+            <omgdc:Bounds height="160.0" width="970.0" x="150.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start-eccg-receive" id="shape-start-eccg">
+            <omgdc:Bounds height="30.0" width="30.0" x="385.0" y="585.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-provide-assistance" id="shape-task-assist">
+            <omgdc:Bounds height="60.0" width="140.0" x="500.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task-adopt-opinion" id="shape-task-opinion">
+            <omgdc:Bounds height="60.0" width="140.0" x="700.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end-eccg" id="shape-end-eccg">
+            <omgdc:Bounds height="28.0" width="28.0" x="890.0" y="586.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-g1" id="edge-sf-g1">
+            <omgdi:waypoint x="415.0" y="600.0"/>
+            <omgdi:waypoint x="500.0" y="600.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-g2" id="edge-sf-g2">
+            <omgdi:waypoint x="640.0" y="600.0"/>
+            <omgdi:waypoint x="700.0" y="600.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-g3" id="edge-sf-g3">
+            <omgdi:waypoint x="840.0" y="600.0"/>
+            <omgdi:waypoint x="890.0" y="600.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === MESSAGE FLOWS === -->
+         <bpmndi:BPMNEdge bpmnElement="mf-request-to-enisa" id="edge-mf-request">
+            <omgdi:waypoint x="310.0" y="180.0"/>
+            <omgdi:waypoint x="205.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-transmit-to-commission" id="edge-mf-transmit">
+            <omgdi:waypoint x="870.0" y="380.0"/>
+            <omgdi:waypoint x="835.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-eccg-opinion-to-enisa" id="edge-mf-opinion">
+            <omgdi:waypoint x="770.0" y="570.0"/>
+            <omgdi:waypoint x="800.0" y="340.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-enisa-notify-eccg" id="edge-mf-notify-eccg">
+            <omgdi:waypoint x="400.0" y="355.0"/>
+            <omgdi:waypoint x="400.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

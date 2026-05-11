@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <collaboration id="sid-collaboration">
+      <participant id="part_app" name="Applicant / Representative" processRef="proc_app">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="part_hp" name="Health Professional" processRef="proc_hp">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="part_ca" name="Competent Authority" processRef="proc_ca">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="part_com" name="Commission" processRef="proc_com">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <messageFlow id="mf_hp_ca" name="Information" sourceRef="task_transmit_info" targetRef="start_ca">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <!-- PROCESS: Applicant / Representative -->
+   <process id="proc_app" isClosed="false" isExecutable="false" name="Applicant / Representative" processType="None">
+      <laneSet id="ls_app">
+         <lane id="lane_app">
+            <flowNodeRef>start_app</flowNodeRef>
+            <flowNodeRef>gw_app_div</flowNodeRef>
+            <flowNodeRef>task_provide_consent</flowNodeRef>
+            <flowNodeRef>task_refuse_consent</flowNodeRef>
+            <flowNodeRef>gw_app_conv</flowNodeRef>
+            <flowNodeRef>end_app</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_app" name="need to exchange health data before a transfer is carried out">
+         <outgoing>sf_app_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="gw_app_div" name="Consent Decision" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_app_1</incoming>
+         <outgoing>sf_app_2</outgoing>
+         <outgoing>sf_app_3</outgoing>
+      </exclusiveGateway>
+      <task id="task_provide_consent" name="provide consent">
+         <incoming>sf_app_2</incoming>
+         <outgoing>sf_app_4</outgoing>
+      </task>
+      <task id="task_refuse_consent" name="refuse consent">
+         <incoming>sf_app_3</incoming>
+         <outgoing>sf_app_5</outgoing>
+      </task>
+      <exclusiveGateway id="gw_app_conv" name="Merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_app_4</incoming>
+         <incoming>sf_app_5</incoming>
+         <outgoing>sf_app_6</outgoing>
+      </exclusiveGateway>
+      <endEvent id="end_app" name="End">
+         <incoming>sf_app_6</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sf_app_1" isImmediate="true" sourceRef="start_app" targetRef="gw_app_div"/>
+      <sequenceFlow id="sf_app_2" isImmediate="true" name="if required" sourceRef="gw_app_div" targetRef="task_provide_consent"/>
+      <sequenceFlow id="sf_app_3" isImmediate="true" name="refuse if required" sourceRef="gw_app_div" targetRef="task_refuse_consent"/>
+      <sequenceFlow id="sf_app_4" isImmediate="true" sourceRef="task_provide_consent" targetRef="gw_app_conv"/>
+      <sequenceFlow id="sf_app_5" isImmediate="true" sourceRef="task_refuse_consent" targetRef="gw_app_conv"/>
+      <sequenceFlow id="sf_app_6" isImmediate="true" sourceRef="gw_app_conv" targetRef="end_app"/>
+   </process>
+
+   <!-- PROCESS: Health Professional -->
+   <process id="proc_hp" isClosed="false" isExecutable="false" name="Health Professional" processType="None">
+      <laneSet id="ls_hp">
+         <lane id="lane_hp">
+            <flowNodeRef>start_hp</flowNodeRef>
+            <flowNodeRef>task_carry_out_processing</flowNodeRef>
+            <flowNodeRef>gw_hp_include_div</flowNodeRef>
+            <flowNodeRef>task_include_info</flowNodeRef>
+            <flowNodeRef>gw_hp_include_conv</flowNodeRef>
+            <flowNodeRef>gw_hp_consent_div</flowNodeRef>
+            <flowNodeRef>task_obtain_consent</flowNodeRef>
+            <flowNodeRef>gw_hp_consent_conv</flowNodeRef>
+            <flowNodeRef>task_transmit_info</flowNodeRef>
+            <flowNodeRef>task_exchange_info</flowNodeRef>
+            <flowNodeRef>task_use_info</flowNodeRef>
+            <flowNodeRef>task_not_further_process</flowNodeRef>
+            <flowNodeRef>end_hp</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_hp" name="Start">
+         <outgoing>sf_hp_1</outgoing>
+      </startEvent>
+      <task id="task_carry_out_processing" name="carry out the processing of personal health data">
+         <incoming>sf_hp_1</incoming>
+         <outgoing>sf_hp_2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_hp_include_div" name="Specific cases?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_hp_2</incoming>
+         <outgoing>sf_hp_3</outgoing>
+         <outgoing>sf_hp_4</outgoing>
+      </exclusiveGateway>
+      <task id="task_include_info" name="include information on physical or mental health">
+         <incoming>sf_hp_3</incoming>
+         <outgoing>sf_hp_5</outgoing>
+      </task>
+      <exclusiveGateway id="gw_hp_include_conv" name="Merge Include" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_hp_4</incoming>
+         <incoming>sf_hp_5</incoming>
+         <outgoing>sf_hp_6</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="gw_hp_consent_div" name="Require explicit consent?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_hp_6</incoming>
+         <outgoing>sf_hp_7</outgoing>
+         <outgoing>sf_hp_8</outgoing>
+      </exclusiveGateway>
+      <task id="task_obtain_consent" name="obtain explicit consent prior to transmitting the information">
+         <incoming>sf_hp_7</incoming>
+         <outgoing>sf_hp_9</outgoing>
+      </task>
+      <exclusiveGateway id="gw_hp_consent_conv" name="Merge Consent" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_hp_8</incoming>
+         <incoming>sf_hp_9</incoming>
+         <outgoing>sf_hp_10</outgoing>
+      </exclusiveGateway>
+      <task id="task_transmit_info" name="transmit to the Member State responsible information to the Competent Authority">
+         <incoming>sf_hp_10</incoming>
+         <outgoing>sf_hp_11</outgoing>
+      </task>
+      <task id="task_exchange_info" name="exchange information">
+         <incoming>sf_hp_11</incoming>
+         <outgoing>sf_hp_12</outgoing>
+      </task>
+      <task id="task_use_info" name="use exchanged information">
+         <incoming>sf_hp_12</incoming>
+         <outgoing>sf_hp_13</outgoing>
+      </task>
+      <task id="task_not_further_process" name="not further process the information">
+         <incoming>sf_hp_13</incoming>
+         <outgoing>sf_hp_14</outgoing>
+      </task>
+      <endEvent id="end_hp" name="End">
+         <incoming>sf_hp_14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_hp_1" isImmediate="true" sourceRef="start_hp" targetRef="task_carry_out_processing"/>
+      <sequenceFlow id="sf_hp_2" isImmediate="true" sourceRef="task_carry_out_processing" targetRef="gw_hp_include_div"/>
+      <sequenceFlow id="sf_hp_3" isImmediate="true" name="if in specific cases" sourceRef="gw_hp_include_div" targetRef="task_include_info"/>
+      <sequenceFlow id="sf_hp_4" isImmediate="true" name="not in specific cases" sourceRef="gw_hp_include_div" targetRef="gw_hp_include_conv"/>
+      <sequenceFlow id="sf_hp_5" isImmediate="true" sourceRef="task_include_info" targetRef="gw_hp_include_conv"/>
+      <sequenceFlow id="sf_hp_6" isImmediate="true" sourceRef="gw_hp_include_conv" targetRef="gw_hp_consent_div"/>
+      <sequenceFlow id="sf_hp_7" isImmediate="true" name="capable and required" sourceRef="gw_hp_consent_div" targetRef="task_obtain_consent"/>
+      <sequenceFlow id="sf_hp_8" isImmediate="true" name="except where applicant incapable" sourceRef="gw_hp_consent_div" targetRef="gw_hp_consent_conv"/>
+      <sequenceFlow id="sf_hp_9" isImmediate="true" sourceRef="task_obtain_consent" targetRef="gw_hp_consent_conv"/>
+      <sequenceFlow id="sf_hp_10" isImmediate="true" sourceRef="gw_hp_consent_conv" targetRef="task_transmit_info"/>
+      <sequenceFlow id="sf_hp_11" isImmediate="true" sourceRef="task_transmit_info" targetRef="task_exchange_info"/>
+      <sequenceFlow id="sf_hp_12" isImmediate="true" sourceRef="task_exchange_info" targetRef="task_use_info"/>
+      <sequenceFlow id="sf_hp_13" isImmediate="true" sourceRef="task_use_info" targetRef="task_not_further_process"/>
+      <sequenceFlow id="sf_hp_14" isImmediate="true" sourceRef="task_not_further_process" targetRef="end_hp"/>
+   </process>
+
+   <!-- PROCESS: Competent Authority -->
+   <process id="proc_ca" isClosed="false" isExecutable="false" name="Competent Authority" processType="None">
+      <laneSet id="ls_ca">
+         <lane id="lane_ca">
+            <flowNodeRef>start_ca</flowNodeRef>
+            <flowNodeRef>task_ensure_special_needs</flowNodeRef>
+            <flowNodeRef>end_ca</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_ca" name="Upon receiving information" isInterrupting="true">
+         <outgoing>sf_ca_1</outgoing>
+         <messageEventDefinition id="msg_def_ca"/>
+      </startEvent>
+      <task id="task_ensure_special_needs" name="ensure that special needs are adequately addressed">
+         <incoming>sf_ca_1</incoming>
+         <outgoing>sf_ca_2</outgoing>
+      </task>
+      <endEvent id="end_ca" name="End">
+         <incoming>sf_ca_2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ca_1" isImmediate="true" sourceRef="start_ca" targetRef="task_ensure_special_needs"/>
+      <sequenceFlow id="sf_ca_2" isImmediate="true" sourceRef="task_ensure_special_needs" targetRef="end_ca"/>
+   </process>
+
+   <!-- PROCESS: Commission -->
+   <process id="proc_com" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="ls_com">
+         <lane id="lane_com">
+            <flowNodeRef>start_com</flowNodeRef>
+            <flowNodeRef>task_draw_up_cert</flowNodeRef>
+            <flowNodeRef>task_adopt_acts_1</flowNodeRef>
+            <flowNodeRef>task_adopt_uniform</flowNodeRef>
+            <flowNodeRef>task_adopt_acts_2</flowNodeRef>
+            <flowNodeRef>end_com</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_com" name="Start">
+         <outgoing>sf_com_1</outgoing>
+      </startEvent>
+      <task id="task_draw_up_cert" name="draw up the common health certificate">
+         <incoming>sf_com_1</incoming>
+         <outgoing>sf_com_2</outgoing>
+      </task>
+      <task id="task_adopt_acts_1" name="adopt implementing acts">
+         <incoming>sf_com_2</incoming>
+         <outgoing>sf_com_3</outgoing>
+      </task>
+      <task id="task_adopt_uniform" name="adopt uniform conditions and practical arrangements for exchanging the information">
+         <incoming>sf_com_3</incoming>
+         <outgoing>sf_com_4</outgoing>
+      </task>
+      <task id="task_adopt_acts_2" name="adopt those implementing acts">
+         <incoming>sf_com_4</incoming>
+         <outgoing>sf_com_5</outgoing>
+      </task>
+      <endEvent id="end_com" name="End">
+         <incoming>sf_com_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_com_1" isImmediate="true" sourceRef="start_com" targetRef="task_draw_up_cert"/>
+      <sequenceFlow id="sf_com_2" isImmediate="true" sourceRef="task_draw_up_cert" targetRef="task_adopt_acts_1"/>
+      <sequenceFlow id="sf_com_3" isImmediate="true" sourceRef="task_adopt_acts_1" targetRef="task_adopt_uniform"/>
+      <sequenceFlow id="sf_com_4" isImmediate="true" sourceRef="task_adopt_uniform" targetRef="task_adopt_acts_2"/>
+      <sequenceFlow id="sf_com_5" isImmediate="true" sourceRef="task_adopt_acts_2" targetRef="end_com"/>
+   </process>
+
+   <!-- BPMN DI SECTION -->
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collaboration" id="BPMNPlane_1">
+         
+         <!-- Applicant Shape -->
+         <bpmndi:BPMNShape bpmnElement="part_app" id="part_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1400.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_app" id="lane_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1370.0" x="80.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_app" id="start_app_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_div" id="gw_app_div_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="240.0" y="130.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_provide_consent" id="task_provide_consent_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="340.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_refuse_consent" id="task_refuse_consent_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="340.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_conv" id="gw_app_conv_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="130.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_app" id="end_app_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="600.0" y="136.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Health Professional Shape -->
+         <bpmndi:BPMNShape bpmnElement="part_hp" id="part_hp_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1550.0" x="50.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_hp" id="lane_hp_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1520.0" x="80.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_hp" id="start_hp_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_carry_out_processing" id="task_carry_out_processing_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="385.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_include_div" id="gw_hp_include_div_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="340.0" y="405.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_include_info" id="task_include_info_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="430.0" y="325.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_include_conv" id="gw_hp_include_conv_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="580.0" y="405.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_consent_div" id="gw_hp_consent_div_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="660.0" y="405.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obtain_consent" id="task_obtain_consent_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="325.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_consent_conv" id="gw_hp_consent_conv_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="900.0" y="405.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_transmit_info" id="task_transmit_info_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="990.0" y="385.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_exchange_info" id="task_exchange_info_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1140.0" y="385.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_use_info" id="task_use_info_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1290.0" y="385.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_not_further_process" id="task_not_further_process_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1440.0" y="385.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_hp" id="end_hp_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1580.0" y="411.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Competent Authority Shape -->
+         <bpmndi:BPMNShape bpmnElement="part_ca" id="part_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1400.0" x="50.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ca" id="lane_ca_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1370.0" x="80.0" y="600.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_ca" id="start_ca_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1025.0" y="685.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ensure_special_needs" id="task_ensure_special_needs_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1140.0" y="660.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ca" id="end_ca_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1290.0" y="686.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission Shape -->
+         <bpmndi:BPMNShape bpmnElement="part_com" id="part_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1400.0" x="50.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_com" id="lane_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1370.0" x="80.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_com" id="start_com_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="935.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_draw_up_cert" id="task_draw_up_cert_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_acts_1" id="task_adopt_acts_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_uniform" id="task_adopt_uniform_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_acts_2" id="task_adopt_acts_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_com" id="end_com_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="800.0" y="936.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Applicant Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_app_1" id="sf_app_1_gui">
+            <omgdi:waypoint x="180.0" y="150.0"/>
+            <omgdi:waypoint x="240.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_2" id="sf_app_2_gui">
+            <omgdi:waypoint x="260.0" y="130.0"/>
+            <omgdi:waypoint x="260.0" y="110.0"/>
+            <omgdi:waypoint x="340.0" y="110.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_3" id="sf_app_3_gui">
+            <omgdi:waypoint x="260.0" y="170.0"/>
+            <omgdi:waypoint x="260.0" y="200.0"/>
+            <omgdi:waypoint x="340.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_4" id="sf_app_4_gui">
+            <omgdi:waypoint x="440.0" y="110.0"/>
+            <omgdi:waypoint x="520.0" y="110.0"/>
+            <omgdi:waypoint x="520.0" y="130.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_5" id="sf_app_5_gui">
+            <omgdi:waypoint x="440.0" y="200.0"/>
+            <omgdi:waypoint x="520.0" y="200.0"/>
+            <omgdi:waypoint x="520.0" y="170.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_6" id="sf_app_6_gui">
+            <omgdi:waypoint x="540.0" y="150.0"/>
+            <omgdi:waypoint x="600.0" y="150.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Health Professional Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_1" id="sf_hp_1_gui">
+            <omgdi:waypoint x="150.0" y="425.0"/>
+            <omgdi:waypoint x="200.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_2" id="sf_hp_2_gui">
+            <omgdi:waypoint x="300.0" y="425.0"/>
+            <omgdi:waypoint x="340.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_3" id="sf_hp_3_gui">
+            <omgdi:waypoint x="360.0" y="405.0"/>
+            <omgdi:waypoint x="360.0" y="365.0"/>
+            <omgdi:waypoint x="430.0" y="365.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_4" id="sf_hp_4_gui">
+            <omgdi:waypoint x="360.0" y="445.0"/>
+            <omgdi:waypoint x="360.0" y="485.0"/>
+            <omgdi:waypoint x="600.0" y="485.0"/>
+            <omgdi:waypoint x="600.0" y="445.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_5" id="sf_hp_5_gui">
+            <omgdi:waypoint x="530.0" y="365.0"/>
+            <omgdi:waypoint x="600.0" y="365.0"/>
+            <omgdi:waypoint x="600.0" y="405.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_6" id="sf_hp_6_gui">
+            <omgdi:waypoint x="620.0" y="425.0"/>
+            <omgdi:waypoint x="660.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_7" id="sf_hp_7_gui">
+            <omgdi:waypoint x="680.0" y="405.0"/>
+            <omgdi:waypoint x="680.0" y="365.0"/>
+            <omgdi:waypoint x="750.0" y="365.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_8" id="sf_hp_8_gui">
+            <omgdi:waypoint x="680.0" y="445.0"/>
+            <omgdi:waypoint x="680.0" y="485.0"/>
+            <omgdi:waypoint x="920.0" y="485.0"/>
+            <omgdi:waypoint x="920.0" y="445.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_9" id="sf_hp_9_gui">
+            <omgdi:waypoint x="850.0" y="365.0"/>
+            <omgdi:waypoint x="920.0" y="365.0"/>
+            <omgdi:waypoint x="920.0" y="405.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_10" id="sf_hp_10_gui">
+            <omgdi:waypoint x="940.0" y="425.0"/>
+            <omgdi:waypoint x="990.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_11" id="sf_hp_11_gui">
+            <omgdi:waypoint x="1090.0" y="425.0"/>
+            <omgdi:waypoint x="1140.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_12" id="sf_hp_12_gui">
+            <omgdi:waypoint x="1240.0" y="425.0"/>
+            <omgdi:waypoint x="1290.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_13" id="sf_hp_13_gui">
+            <omgdi:waypoint x="1390.0" y="425.0"/>
+            <omgdi:waypoint x="1440.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_hp_14" id="sf_hp_14_gui">
+            <omgdi:waypoint x="1540.0" y="425.0"/>
+            <omgdi:waypoint x="1580.0" y="425.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Competent Authority Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_1" id="sf_ca_1_gui">
+            <omgdi:waypoint x="1055.0" y="700.0"/>
+            <omgdi:waypoint x="1140.0" y="700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ca_2" id="sf_ca_2_gui">
+            <omgdi:waypoint x="1240.0" y="700.0"/>
+            <omgdi:waypoint x="1290.0" y="700.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Commission Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_com_1" id="sf_com_1_gui">
+            <omgdi:waypoint x="150.0" y="950.0"/>
+            <omgdi:waypoint x="200.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_2" id="sf_com_2_gui">
+            <omgdi:waypoint x="300.0" y="950.0"/>
+            <omgdi:waypoint x="350.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_3" id="sf_com_3_gui">
+            <omgdi:waypoint x="450.0" y="950.0"/>
+            <omgdi:waypoint x="500.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_4" id="sf_com_4_gui">
+            <omgdi:waypoint x="600.0" y="950.0"/>
+            <omgdi:waypoint x="650.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_com_5" id="sf_com_5_gui">
+            <omgdi:waypoint x="750.0" y="950.0"/>
+            <omgdi:waypoint x="800.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="mf_hp_ca" id="mf_hp_ca_gui">
+            <omgdi:waypoint x="1040.0" y="465.0"/>
+            <omgdi:waypoint x="1040.0" y="685.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
