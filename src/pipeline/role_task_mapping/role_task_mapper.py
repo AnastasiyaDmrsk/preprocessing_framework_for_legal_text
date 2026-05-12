@@ -1,14 +1,14 @@
 import warnings
 from typing import List
 
-from .const import (
+from src.pipeline.role_task_mapping.const import (
     TASK_NLP_CANDIDATES_PROMPT,
     DEFAULT_TASK_EXTRACTION_MAX_TOKENS,
 )
-from .llm_task_extractor import LLMTaskExtractor
-from .nlp_task_extractor import NLPTaskCandidateExtractor
-from .models import Task, TaskCandidate
-from ..organigram.const import DEFAULT_NLP_MIN_CANDIDATES, DEFAULT_VALIDATOR_MODEL, DEFAULT_SPACY_MODEL, DEFAULT_MODEL
+from src.pipeline.role_task_mapping.llm_task_extractor import LLMTaskExtractor
+from src.pipeline.role_task_mapping.nlp_task_extractor import NLPTaskCandidateExtractor
+from src.pipeline.role_task_mapping.models import Task, TaskCandidate
+from src.pipeline.organigram.const import DEFAULT_NLP_MIN_CANDIDATES, DEFAULT_VALIDATOR_MODEL, DEFAULT_SPACY_MODEL, DEFAULT_MODEL
 
 
 def _serialize_candidates_for_prompt(

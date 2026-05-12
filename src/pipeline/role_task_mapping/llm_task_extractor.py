@@ -6,7 +6,7 @@ from typing import Dict, List, Set, Tuple
 
 import google.genai as genai
 
-from .const import (
+from src.pipeline.role_task_mapping.const import (
     TASK_EXTRACTION_PROMPT,
     TASK_VALIDATION_PROMPT,
     DEFAULT_TASK_EXTRACTION_MAX_TOKENS,
@@ -239,7 +239,6 @@ class LLMTaskExtractor:
             if not label:
                 continue
             performers = self._parse_performers(fields.get('performers', ''))
-            print("Performers:", performers)
             conditions = [
                 c.strip()
                 for c in fields.get('conditions', '').split(';;')
@@ -291,19 +290,19 @@ class LLMTaskExtractor:
                     lines.append(f"unit: {unit}, role: {role}")
         except ET.ParseError as e:
             warnings.warn(f"Failed to parse organigram XML: {e}", RuntimeWarning)
-        return "\n".join(lines) if lines else "(none)"
+        return "\n".join(lines) if lines else ""
 
     def _serialize_tasks_for_prompt(self, tasks: List[Task]) -> str:
         blocks: List[str] = []
         for task in tasks:
             performers_str = " ;; ".join(
                 f"{p.unit}/{p.role}" for p in task.performers
-            ) or "(none)"
-            conditions_str = " ;; ".join(task.conditions) or "(none)"
+            ) or ""
+            conditions_str = " ;; ".join(task.conditions) or ""
             exceptions_str = " ;; ".join(
                 e.description + ("[CROSS_REF]" if e.needs_cross_ref else "")
                 for e in task.exceptions
-            ) or "(none)"
+            ) or ""
             blocks.append(
                 f"---TASK---\n"
                 f"label: {task.label}\n"
