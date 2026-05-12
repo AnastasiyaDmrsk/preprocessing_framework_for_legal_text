@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-def-12345" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="sid-collab">
+      <participant id="sid-POOL-MS" name="Member State" processRef="sid-PROC-MS">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-POOL-CUST" name="Customer or Beneficial Owner" processRef="sid-PROC-CUST">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-POOL-OE" name="Obliged Entity" processRef="sid-PROC-OE">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+   </collaboration>
+
+   <!-- Member State Process -->
+   <process id="sid-PROC-MS" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="sid-LANE-MS-SET">
+         <lane id="sid-LANE-MS">
+            <flowNodeRef>sid-MS-START</flowNodeRef>
+            <flowNodeRef>sid-MS-T1</flowNodeRef>
+            <flowNodeRef>sid-MS-T2</flowNodeRef>
+            <flowNodeRef>sid-MS-T3</flowNodeRef>
+            <flowNodeRef>sid-MS-T4</flowNodeRef>
+            <flowNodeRef>sid-MS-END</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="sid-MS-START" name="regulatory implementation of customer due diligence requirements">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>sid-F-MS-1</outgoing>
+      </startEvent>
+      
+      <task id="sid-MS-T1" name="Require verification of the identity before the establishment of a business relationship or the carrying out of the transaction, except where Member States may allow verification to be completed during the establishment of a business relationship rather than before it.">
+         <incoming>sid-F-MS-1</incoming>
+         <outgoing>sid-F-MS-2</outgoing>
+      </task>
+      
+      <task id="sid-MS-T2" name="Allow verification of the identity to be completed during the relationship establishment if necessary so as not to interrupt the normal conduct of business and where there is little risk of money laundering or terrorist financing.">
+         <incoming>sid-F-MS-2</incoming>
+         <outgoing>sid-F-MS-3</outgoing>
+      </task>
+      
+      <task id="sid-MS-T3" name="Allow the opening of an account provided that there are adequate safeguards in place, except where By way of derogation from paragraph 1, Member States may allow the opening of an account before full verification has been completed, subject to adequate safeguards.">
+         <incoming>sid-F-MS-3</incoming>
+         <outgoing>sid-F-MS-4</outgoing>
+      </task>
+      
+      <task id="sid-MS-T4" name="require that obliged entities apply the customer due diligence measures.">
+         <incoming>sid-F-MS-4</incoming>
+         <outgoing>sid-F-MS-5</outgoing>
+      </task>
+      
+      <endEvent id="sid-MS-END" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>sid-F-MS-5</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sid-F-MS-1" isImmediate="true" sourceRef="sid-MS-START" targetRef="sid-MS-T1"/>
+      <sequenceFlow id="sid-F-MS-2" isImmediate="true" sourceRef="sid-MS-T1" targetRef="sid-MS-T2"/>
+      <sequenceFlow id="sid-F-MS-3" isImmediate="true" sourceRef="sid-MS-T2" targetRef="sid-MS-T3"/>
+      <sequenceFlow id="sid-F-MS-4" isImmediate="true" sourceRef="sid-MS-T3" targetRef="sid-MS-T4"/>
+      <sequenceFlow id="sid-F-MS-5" isImmediate="true" sourceRef="sid-MS-T4" targetRef="sid-MS-END"/>
+   </process>
+
+   <!-- Customer or Beneficial Owner Process -->
+   <process id="sid-PROC-CUST" isClosed="false" isExecutable="false" name="Customer or Beneficial Owner" processType="None">
+      <laneSet id="sid-LANE-CUST-SET">
+         <lane id="sid-LANE-CUST">
+            <flowNodeRef>sid-CUST-START</flowNodeRef>
+            <flowNodeRef>sid-CUST-T1</flowNodeRef>
+            <flowNodeRef>sid-CUST-T2</flowNodeRef>
+            <flowNodeRef>sid-CUST-END</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="sid-CUST-START" name="intent to establish a business relationship or carry out a transaction">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>sid-F-CUST-1</outgoing>
+      </startEvent>
+      
+      <task id="sid-CUST-T1" name="Verify the identity before the establishment of a business relationship or the carrying out of the transaction.">
+         <incoming>sid-F-CUST-1</incoming>
+         <outgoing>sid-F-CUST-2</outgoing>
+      </task>
+      
+      <task id="sid-CUST-T2" name="Complete identity verification procedures if verification of the identity is allowed to be completed during the establishment of a business relationship and as soon as practicable after initial contact.">
+         <incoming>sid-F-CUST-2</incoming>
+         <outgoing>sid-F-CUST-3</outgoing>
+      </task>
+      
+      <endEvent id="sid-CUST-END" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>sid-F-CUST-3</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sid-F-CUST-1" isImmediate="true" sourceRef="sid-CUST-START" targetRef="sid-CUST-T1"/>
+      <sequenceFlow id="sid-F-CUST-2" isImmediate="true" sourceRef="sid-CUST-T1" targetRef="sid-CUST-T2"/>
+      <sequenceFlow id="sid-F-CUST-3" isImmediate="true" sourceRef="sid-CUST-T2" targetRef="sid-CUST-END"/>
+   </process>
+
+   <!-- Obliged Entity Process -->
+   <process id="sid-PROC-OE" isClosed="false" isExecutable="false" name="Obliged Entity" processType="None">
+      <laneSet id="sid-LANE-OE-SET">
+         <lane id="sid-LANE-OE">
+            <flowNodeRef>sid-OE-START</flowNodeRef>
+            <flowNodeRef>sid-OE-T1</flowNodeRef>
+            <flowNodeRef>sid-OE-XOR1</flowNodeRef>
+            <flowNodeRef>sid-OE-AND-DIV</flowNodeRef>
+            <flowNodeRef>sid-OE-P1</flowNodeRef>
+            <flowNodeRef>sid-OE-P2</flowNodeRef>
+            <flowNodeRef>sid-OE-P3</flowNodeRef>
+            <flowNodeRef>sid-OE-P4</flowNodeRef>
+            <flowNodeRef>sid-OE-P5</flowNodeRef>
+            <flowNodeRef>sid-OE-AND-CONV</flowNodeRef>
+            <flowNodeRef>sid-OE-T2</flowNodeRef>
+            <flowNodeRef>sid-OE-END</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="sid-OE-START" name="interaction with a customer on a risk-sensitive basis">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>sid-F-OE-1</outgoing>
+      </startEvent>
+      
+      <task id="sid-OE-T1" name="assess whether an obliged entity is unable to comply with the customer due diligence requirements.">
+         <incoming>sid-F-OE-1</incoming>
+         <outgoing>sid-F-OE-2</outgoing>
+      </task>
+      
+      <exclusiveGateway gatewayDirection="Diverging" id="sid-OE-XOR1" isMarkerVisible="true" name="unable to comply with the customer due diligence requirements?">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sid-F-OE-2</incoming>
+         <outgoing>sid-F-OE-YES</outgoing>
+         <outgoing>sid-F-OE-NO</outgoing>
+      </exclusiveGateway>
+      
+      <parallelGateway gatewayDirection="Diverging" id="sid-OE-AND-DIV" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sid-F-OE-YES</incoming>
+         <outgoing>sid-F-OE-D1</outgoing>
+         <outgoing>sid-F-OE-D2</outgoing>
+         <outgoing>sid-F-OE-D3</outgoing>
+         <outgoing>sid-F-OE-D4</outgoing>
+         <outgoing>sid-F-OE-D5</outgoing>
+      </parallelGateway>
+      
+      <task id="sid-OE-P1" name="not Carry out a transaction through a bank account, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor.">
+         <incoming>sid-F-OE-D1</incoming>
+         <outgoing>sid-F-OE-C1</outgoing>
+      </task>
+      <task id="sid-OE-P2" name="not establish a business relationship, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor.">
+         <incoming>sid-F-OE-D2</incoming>
+         <outgoing>sid-F-OE-C2</outgoing>
+      </task>
+      <task id="sid-OE-P3" name="not carry out the transaction, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor.">
+         <incoming>sid-F-OE-D3</incoming>
+         <outgoing>sid-F-OE-C3</outgoing>
+      </task>
+      <task id="sid-OE-P4" name="terminate the business relationship, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor.">
+         <incoming>sid-F-OE-D4</incoming>
+         <outgoing>sid-F-OE-C4</outgoing>
+      </task>
+      <task id="sid-OE-P5" name="consider making a suspicious transaction report to the FIU, except where the entity is a Notary, Independent Legal Professional, Auditor, External Accountant, or Tax Advisor.">
+         <incoming>sid-F-OE-D5</incoming>
+         <outgoing>sid-F-OE-C5</outgoing>
+      </task>
+      
+      <parallelGateway gatewayDirection="Converging" id="sid-OE-AND-CONV" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sid-F-OE-C1</incoming>
+         <incoming>sid-F-OE-C2</incoming>
+         <incoming>sid-F-OE-C3</incoming>
+         <incoming>sid-F-OE-C4</incoming>
+         <incoming>sid-F-OE-C5</incoming>
+         <outgoing>sid-F-OE-MERGE</outgoing>
+      </parallelGateway>
+      
+      <task id="sid-OE-T2" name="apply the customer due diligence measures.">
+         <incoming>sid-F-OE-MERGE</incoming>
+         <incoming>sid-F-OE-NO</incoming>
+         <outgoing>sid-F-OE-END-FLOW</outgoing>
+      </task>
+      
+      <endEvent id="sid-OE-END" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="bottom" x="14.0" y="32.0"/>
+         </extensionElements>
+         <incoming>sid-F-OE-END-FLOW</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sid-F-OE-1" isImmediate="true" sourceRef="sid-OE-START" targetRef="sid-OE-T1"/>
+      <sequenceFlow id="sid-F-OE-2" isImmediate="true" sourceRef="sid-OE-T1" targetRef="sid-OE-XOR1"/>
+      <sequenceFlow id="sid-F-OE-YES" isImmediate="true" name="yes" sourceRef="sid-OE-XOR1" targetRef="sid-OE-AND-DIV"/>
+      <sequenceFlow id="sid-F-OE-NO" isImmediate="true" name="no" sourceRef="sid-OE-XOR1" targetRef="sid-OE-T2"/>
+      
+      <sequenceFlow id="sid-F-OE-D1" isImmediate="true" sourceRef="sid-OE-AND-DIV" targetRef="sid-OE-P1"/>
+      <sequenceFlow id="sid-F-OE-D2" isImmediate="true" sourceRef="sid-OE-AND-DIV" targetRef="sid-OE-P2"/>
+      <sequenceFlow id="sid-F-OE-D3" isImmediate="true" sourceRef="sid-OE-AND-DIV" targetRef="sid-OE-P3"/>
+      <sequenceFlow id="sid-F-OE-D4" isImmediate="true" sourceRef="sid-OE-AND-DIV" targetRef="sid-OE-P4"/>
+      <sequenceFlow id="sid-F-OE-D5" isImmediate="true" sourceRef="sid-OE-AND-DIV" targetRef="sid-OE-P5"/>
+      
+      <sequenceFlow id="sid-F-OE-C1" isImmediate="true" sourceRef="sid-OE-P1" targetRef="sid-OE-AND-CONV"/>
+      <sequenceFlow id="sid-F-OE-C2" isImmediate="true" sourceRef="sid-OE-P2" targetRef="sid-OE-AND-CONV"/>
+      <sequenceFlow id="sid-F-OE-C3" isImmediate="true" sourceRef="sid-OE-P3" targetRef="sid-OE-AND-CONV"/>
+      <sequenceFlow id="sid-F-OE-C4" isImmediate="true" sourceRef="sid-OE-P4" targetRef="sid-OE-AND-CONV"/>
+      <sequenceFlow id="sid-F-OE-C5" isImmediate="true" sourceRef="sid-OE-P5" targetRef="sid-OE-AND-CONV"/>
+      
+      <sequenceFlow id="sid-F-OE-MERGE" isImmediate="true" sourceRef="sid-OE-AND-CONV" targetRef="sid-OE-T2"/>
+      <sequenceFlow id="sid-F-OE-END-FLOW" isImmediate="true" sourceRef="sid-OE-T2" targetRef="sid-OE-END"/>
+   </process>
+
+   <!-- BPMNDiagram -->
+   <bpmndi:BPMNDiagram id="sid-diagram">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab" id="sid-plane">
+         
+         <!-- POOLS & LANES -->
+         <bpmndi:BPMNShape bpmnElement="sid-POOL-MS" id="sid-POOL-MS_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1200.0" x="100.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-LANE-MS" id="sid-LANE-MS_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1170.0" x="130.0" y="100.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="sid-POOL-CUST" id="sid-POOL-CUST_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1200.0" x="100.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-LANE-CUST" id="sid-LANE-CUST_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1170.0" x="130.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="sid-POOL-OE" id="sid-POOL-OE_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="1200.0" x="100.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-LANE-OE" id="sid-LANE-OE_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="1170.0" x="130.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-MS-START" id="sid-MS-START_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS-T1" id="sid-MS-T1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS-T2" id="sid-MS-T2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS-T3" id="sid-MS-T3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS-T4" id="sid-MS-T4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="700.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-MS-END" id="sid-MS-END_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="850.0" y="211.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- CUSTOMER SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-CUST-START" id="sid-CUST-START_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-CUST-T1" id="sid-CUST-T1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-CUST-T2" id="sid-CUST-T2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-CUST-END" id="sid-CUST-END_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="550.0" y="486.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- OBLIGED ENTITY SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-OE-START" id="sid-OE-START_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="935.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-T1" id="sid-OE-T1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-XOR1" id="sid-OE-XOR1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="930.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-AND-DIV" id="sid-OE-AND-DIV_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="930.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-P1" id="sid-OE-P1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="700.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-P2" id="sid-OE-P2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-P3" id="sid-OE-P3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-P4" id="sid-OE-P4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1020.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-P5" id="sid-OE-P5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1130.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-AND-CONV" id="sid-OE-AND-CONV_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="930.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-T2" id="sid-OE-T2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="910.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-OE-END" id="sid-OE-END_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1000.0" y="936.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sid-F-MS-1" id="sid-F-MS-1_gui">
+            <omgdi:waypoint x="180.0" y="225.0"/>
+            <omgdi:waypoint x="250.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-MS-2" id="sid-F-MS-2_gui">
+            <omgdi:waypoint x="350.0" y="225.0"/>
+            <omgdi:waypoint x="400.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-MS-3" id="sid-F-MS-3_gui">
+            <omgdi:waypoint x="500.0" y="225.0"/>
+            <omgdi:waypoint x="550.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-MS-4" id="sid-F-MS-4_gui">
+            <omgdi:waypoint x="650.0" y="225.0"/>
+            <omgdi:waypoint x="700.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-MS-5" id="sid-F-MS-5_gui">
+            <omgdi:waypoint x="800.0" y="225.0"/>
+            <omgdi:waypoint x="850.0" y="225.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- CUSTOMER EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sid-F-CUST-1" id="sid-F-CUST-1_gui">
+            <omgdi:waypoint x="180.0" y="500.0"/>
+            <omgdi:waypoint x="250.0" y="500.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-CUST-2" id="sid-F-CUST-2_gui">
+            <omgdi:waypoint x="350.0" y="500.0"/>
+            <omgdi:waypoint x="400.0" y="500.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-CUST-3" id="sid-F-CUST-3_gui">
+            <omgdi:waypoint x="500.0" y="500.0"/>
+            <omgdi:waypoint x="550.0" y="500.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- OBLIGED ENTITY EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-1" id="sid-F-OE-1_gui">
+            <omgdi:waypoint x="180.0" y="950.0"/>
+            <omgdi:waypoint x="250.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-2" id="sid-F-OE-2_gui">
+            <omgdi:waypoint x="350.0" y="950.0"/>
+            <omgdi:waypoint x="400.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-YES" id="sid-F-OE-YES_gui">
+            <omgdi:waypoint x="440.0" y="950.0"/>
+            <omgdi:waypoint x="500.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-NO" id="sid-F-OE-NO_gui">
+            <omgdi:waypoint x="420.0" y="970.0"/>
+            <omgdi:waypoint x="420.0" y="1270.0"/>
+            <omgdi:waypoint x="900.0" y="1270.0"/>
+            <omgdi:waypoint x="900.0" y="990.0"/>
+         </bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-D1" id="sid-F-OE-D1_gui">
+            <omgdi:waypoint x="520.0" y="930.0"/>
+            <omgdi:waypoint x="520.0" y="740.0"/>
+            <omgdi:waypoint x="600.0" y="740.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-D2" id="sid-F-OE-D2_gui">
+            <omgdi:waypoint x="520.0" y="930.0"/>
+            <omgdi:waypoint x="520.0" y="840.0"/>
+            <omgdi:waypoint x="600.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-D3" id="sid-F-OE-D3_gui">
+            <omgdi:waypoint x="540.0" y="950.0"/>
+            <omgdi:waypoint x="600.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-D4" id="sid-F-OE-D4_gui">
+            <omgdi:waypoint x="520.0" y="970.0"/>
+            <omgdi:waypoint x="520.0" y="1060.0"/>
+            <omgdi:waypoint x="600.0" y="1060.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-D5" id="sid-F-OE-D5_gui">
+            <omgdi:waypoint x="520.0" y="970.0"/>
+            <omgdi:waypoint x="520.0" y="1170.0"/>
+            <omgdi:waypoint x="600.0" y="1170.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-C1" id="sid-F-OE-C1_gui">
+            <omgdi:waypoint x="700.0" y="740.0"/>
+            <omgdi:waypoint x="770.0" y="740.0"/>
+            <omgdi:waypoint x="770.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-C2" id="sid-F-OE-C2_gui">
+            <omgdi:waypoint x="700.0" y="840.0"/>
+            <omgdi:waypoint x="770.0" y="840.0"/>
+            <omgdi:waypoint x="770.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-C3" id="sid-F-OE-C3_gui">
+            <omgdi:waypoint x="700.0" y="950.0"/>
+            <omgdi:waypoint x="750.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-C4" id="sid-F-OE-C4_gui">
+            <omgdi:waypoint x="700.0" y="1060.0"/>
+            <omgdi:waypoint x="770.0" y="1060.0"/>
+            <omgdi:waypoint x="770.0" y="970.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-C5" id="sid-F-OE-C5_gui">
+            <omgdi:waypoint x="700.0" y="1170.0"/>
+            <omgdi:waypoint x="770.0" y="1170.0"/>
+            <omgdi:waypoint x="770.0" y="970.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-MERGE" id="sid-F-OE-MERGE_gui">
+            <omgdi:waypoint x="790.0" y="950.0"/>
+            <omgdi:waypoint x="850.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sid-F-OE-END-FLOW" id="sid-F-OE-END-FLOW_gui">
+            <omgdi:waypoint x="950.0" y="950.0"/>
+            <omgdi:waypoint x="1000.0" y="950.0"/>
+         </bpmndi:BPMNEdge>
+         
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

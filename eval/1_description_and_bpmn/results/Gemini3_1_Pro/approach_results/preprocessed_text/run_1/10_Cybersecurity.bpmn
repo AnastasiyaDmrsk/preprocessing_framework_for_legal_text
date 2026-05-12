@@ -1,0 +1,1298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-process-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collaboration_1">
+      <participant id="sid-pool-comm" name="Commission" processRef="process_comm" />
+      <participant id="sid-pool-eccg" name="ECCG" processRef="process_eccg" />
+      <participant id="sid-pool-enisa" name="ENISA" processRef="process_enisa" />
+      <participant id="sid-pool-ip" name="Interested Party" processRef="process_ip" />
+      
+      <messageFlow id="mf1" sourceRef="comm-t6" targetRef="enisa-catch1" />
+      <messageFlow id="mf2" sourceRef="eccg-t3" targetRef="enisa-catch2" />
+      <messageFlow id="mf3" sourceRef="eccg-t6" targetRef="enisa-catch3" />
+      <messageFlow id="mf4" sourceRef="enisa-t9" targetRef="comm-catch1" />
+      <messageFlow id="mf5" sourceRef="ip-t2" targetRef="enisa-catch4" />
+      <messageFlow id="mf6" sourceRef="comm-t9" targetRef="enisa-catch5" />
+      <messageFlow id="mf7" sourceRef="eccg-t8" targetRef="enisa-catch5" />
+   </collaboration>
+
+   <process id="process_comm" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="comm-start" name="Start">
+         <outgoing>sf-c1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="comm-gw1-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c1</incoming>
+         <outgoing>sf-c2</outgoing>
+         <outgoing>sf-c3</outgoing>
+         <outgoing>sf-c4</outgoing>
+         <outgoing>sf-c5</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t1" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>sf-c2</incoming>
+         <outgoing>sf-c6</outgoing>
+      </task>
+      <task id="comm-t2" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>sf-c3</incoming>
+         <outgoing>sf-c7</outgoing>
+      </task>
+      <task id="comm-t3" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>sf-c4</incoming>
+         <outgoing>sf-c8</outgoing>
+      </task>
+      <task id="comm-t4" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>sf-c5</incoming>
+         <outgoing>sf-c9</outgoing>
+      </task>
+      <exclusiveGateway id="comm-gw1-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c6</incoming>
+         <incoming>sf-c7</incoming>
+         <incoming>sf-c8</incoming>
+         <incoming>sf-c9</incoming>
+         <outgoing>sf-c10</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="comm-gw2-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c10</incoming>
+         <outgoing>sf-c11</outgoing>
+         <outgoing>sf-c12</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t5" name="update the Union rolling work programme">
+         <incoming>sf-c11</incoming>
+         <outgoing>sf-c13</outgoing>
+      </task>
+      <exclusiveGateway id="comm-gw2-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c12</incoming>
+         <incoming>sf-c13</incoming>
+         <outgoing>sf-c14</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t6" name="transmit the request to ENISA">
+         <incoming>sf-c14</incoming>
+         <outgoing>sf-c15</outgoing>
+      </task>
+      <intermediateCatchEvent id="comm-catch1" name="Receive candidate scheme from ENISA">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-c15</incoming>
+         <outgoing>sf-c16</outgoing>
+         <messageEventDefinition id="med-comm1" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="comm-gw3-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c16</incoming>
+         <outgoing>sf-c17</outgoing>
+         <outgoing>sf-c18</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t7" name="adopt implementing acts">
+         <incoming>sf-c17</incoming>
+         <outgoing>sf-c19</outgoing>
+      </task>
+      <exclusiveGateway id="comm-gw3-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c18</incoming>
+         <incoming>sf-c19</incoming>
+         <outgoing>sf-c20</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="comm-gw4-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c20</incoming>
+         <outgoing>sf-c21</outgoing>
+         <outgoing>sf-c22</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t8" name="request ENISA to start the process of developing a revised candidate scheme">
+         <incoming>sf-c21</incoming>
+         <outgoing>sf-c23</outgoing>
+      </task>
+      <exclusiveGateway id="comm-gw4-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-c22</incoming>
+         <incoming>sf-c23</incoming>
+         <outgoing>sf-c24</outgoing>
+      </exclusiveGateway>
+      <task id="comm-t9" name="transmit the request to start the process of developing a revised candidate scheme to ENISA">
+         <incoming>sf-c24</incoming>
+         <outgoing>sf-c25</outgoing>
+      </task>
+      <endEvent id="comm-end" name="scheme adoption or revision request end event">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-c25</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-c1" name="" sourceRef="comm-start" targetRef="comm-gw1-split" isImmediate="true" />
+      <sequenceFlow id="sf-c2" name="on the basis of the Union rolling work programme" sourceRef="comm-gw1-split" targetRef="comm-t1" isImmediate="true" />
+      <sequenceFlow id="sf-c3" name="on the basis of the Union rolling work programme" sourceRef="comm-gw1-split" targetRef="comm-t2" isImmediate="true" />
+      <sequenceFlow id="sf-c4" name="in duly justified cases and the candidate scheme is not included in the Union rolling work programme" sourceRef="comm-gw1-split" targetRef="comm-t3" isImmediate="true" />
+      <sequenceFlow id="sf-c5" name="in duly justified cases and the existing scheme is not included in the Union rolling work programme" sourceRef="comm-gw1-split" targetRef="comm-t4" isImmediate="true" />
+      <sequenceFlow id="sf-c6" name="" sourceRef="comm-t1" targetRef="comm-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c7" name="" sourceRef="comm-t2" targetRef="comm-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c8" name="" sourceRef="comm-t3" targetRef="comm-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c9" name="" sourceRef="comm-t4" targetRef="comm-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c10" name="" sourceRef="comm-gw1-merge" targetRef="comm-gw2-split" isImmediate="true" />
+      <sequenceFlow id="sf-c11" name="following a request under paragraph 2" sourceRef="comm-gw2-split" targetRef="comm-t5" isImmediate="true" />
+      <sequenceFlow id="sf-c12" name="" sourceRef="comm-gw2-split" targetRef="comm-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c13" name="" sourceRef="comm-t5" targetRef="comm-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c14" name="" sourceRef="comm-gw2-merge" targetRef="comm-t6" isImmediate="true" />
+      <sequenceFlow id="sf-c15" name="" sourceRef="comm-t6" targetRef="comm-catch1" isImmediate="true" />
+      <sequenceFlow id="sf-c16" name="" sourceRef="comm-catch1" targetRef="comm-gw3-split" isImmediate="true" />
+      <sequenceFlow id="sf-c17" name="based on the candidate scheme prepared by ENISA and in accordance with the examination procedure" sourceRef="comm-gw3-split" targetRef="comm-t7" isImmediate="true" />
+      <sequenceFlow id="sf-c18" name="" sourceRef="comm-gw3-split" targetRef="comm-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c19" name="" sourceRef="comm-t7" targetRef="comm-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c20" name="" sourceRef="comm-gw3-merge" targetRef="comm-gw4-split" isImmediate="true" />
+      <sequenceFlow id="sf-c21" name="if necessary" sourceRef="comm-gw4-split" targetRef="comm-t8" isImmediate="true" />
+      <sequenceFlow id="sf-c22" name="" sourceRef="comm-gw4-split" targetRef="comm-gw4-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c23" name="" sourceRef="comm-t8" targetRef="comm-gw4-merge" isImmediate="true" />
+      <sequenceFlow id="sf-c24" name="" sourceRef="comm-gw4-merge" targetRef="comm-t9" isImmediate="true" />
+      <sequenceFlow id="sf-c25" name="" sourceRef="comm-t9" targetRef="comm-end" isImmediate="true" />
+   </process>
+
+   <process id="process_eccg" isClosed="false" isExecutable="false" name="ECCG" processType="None">
+      <startEvent id="eccg-start" name="Start">
+         <outgoing>sf-e1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="eccg-gw1-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e1</incoming>
+         <outgoing>sf-e2</outgoing>
+         <outgoing>sf-e3</outgoing>
+         <outgoing>sf-e4</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t1" name="request ENISA to prepare a candidate cybersecurity certification scheme">
+         <incoming>sf-e2</incoming>
+         <outgoing>sf-e5</outgoing>
+      </task>
+      <task id="eccg-t2" name="request ENISA to review an existing European cybersecurity certification scheme">
+         <incoming>sf-e3</incoming>
+         <outgoing>sf-e6</outgoing>
+      </task>
+      <exclusiveGateway id="eccg-gw1-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e4</incoming>
+         <incoming>sf-e5</incoming>
+         <incoming>sf-e6</incoming>
+         <outgoing>sf-e7</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t3" name="transmit the request to ENISA">
+         <incoming>sf-e7</incoming>
+         <outgoing>sf-e8</outgoing>
+      </task>
+      <exclusiveGateway id="eccg-gw2-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e8</incoming>
+         <outgoing>sf-e9</outgoing>
+         <outgoing>sf-e10</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t4" name="provide ENISA with assistance and expert advice">
+         <incoming>sf-e9</incoming>
+         <outgoing>sf-e11</outgoing>
+      </task>
+      <exclusiveGateway id="eccg-gw2-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e10</incoming>
+         <incoming>sf-e11</incoming>
+         <outgoing>sf-e12</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t5" name="adopt an opinion on the candidate scheme">
+         <incoming>sf-e12</incoming>
+         <outgoing>sf-e13</outgoing>
+      </task>
+      <task id="eccg-t6" name="transmit the assistance and expert advice and opinion to ENISA">
+         <incoming>sf-e13</incoming>
+         <outgoing>sf-e14</outgoing>
+      </task>
+      <exclusiveGateway id="eccg-gw3-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e14</incoming>
+         <outgoing>sf-e15</outgoing>
+         <outgoing>sf-e16</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t7" name="request ENISA to start the process of developing a revised candidate scheme">
+         <incoming>sf-e15</incoming>
+         <outgoing>sf-e17</outgoing>
+      </task>
+      <exclusiveGateway id="eccg-gw3-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-e16</incoming>
+         <incoming>sf-e17</incoming>
+         <outgoing>sf-e18</outgoing>
+      </exclusiveGateway>
+      <task id="eccg-t8" name="transmit the request to start the process of developing a revised candidate scheme to ENISA">
+         <incoming>sf-e18</incoming>
+         <outgoing>sf-e19</outgoing>
+      </task>
+      <endEvent id="eccg-end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-e19</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-e1" name="" sourceRef="eccg-start" targetRef="eccg-gw1-split" isImmediate="true" />
+      <sequenceFlow id="sf-e2" name="in duly justified cases and the candidate scheme is not included in the Union rolling work programme" sourceRef="eccg-gw1-split" targetRef="eccg-t1" isImmediate="true" />
+      <sequenceFlow id="sf-e3" name="in duly justified cases and the existing scheme is not included in the Union rolling work programme" sourceRef="eccg-gw1-split" targetRef="eccg-t2" isImmediate="true" />
+      <sequenceFlow id="sf-e4" name="" sourceRef="eccg-gw1-split" targetRef="eccg-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e5" name="" sourceRef="eccg-t1" targetRef="eccg-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e6" name="" sourceRef="eccg-t2" targetRef="eccg-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e7" name="" sourceRef="eccg-gw1-merge" targetRef="eccg-t3" isImmediate="true" />
+      <sequenceFlow id="sf-e8" name="" sourceRef="eccg-t3" targetRef="eccg-gw2-split" isImmediate="true" />
+      <sequenceFlow id="sf-e9" name="in relation to the preparation of the candidate scheme" sourceRef="eccg-gw2-split" targetRef="eccg-t4" isImmediate="true" />
+      <sequenceFlow id="sf-e10" name="" sourceRef="eccg-gw2-split" targetRef="eccg-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e11" name="" sourceRef="eccg-t4" targetRef="eccg-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e12" name="" sourceRef="eccg-gw2-merge" targetRef="eccg-t5" isImmediate="true" />
+      <sequenceFlow id="sf-e13" name="" sourceRef="eccg-t5" targetRef="eccg-t6" isImmediate="true" />
+      <sequenceFlow id="sf-e14" name="" sourceRef="eccg-t6" targetRef="eccg-gw3-split" isImmediate="true" />
+      <sequenceFlow id="sf-e15" name="if necessary" sourceRef="eccg-gw3-split" targetRef="eccg-t7" isImmediate="true" />
+      <sequenceFlow id="sf-e16" name="" sourceRef="eccg-gw3-split" targetRef="eccg-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e17" name="" sourceRef="eccg-t7" targetRef="eccg-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-e18" name="" sourceRef="eccg-gw3-merge" targetRef="eccg-t8" isImmediate="true" />
+      <sequenceFlow id="sf-e19" name="" sourceRef="eccg-t8" targetRef="eccg-end" isImmediate="true" />
+   </process>
+
+   <process id="process_enisa" isClosed="false" isExecutable="false" name="ENISA" processType="None">
+      <laneSet id="ls-enisa">
+         <lane id="sid-lane-enisa" name="ENISA">
+            <flowNodeRef>enisa-start</flowNodeRef>
+            <flowNodeRef>enisa-catch1</flowNodeRef>
+            <flowNodeRef>enisa-gw1-split</flowNodeRef>
+            <flowNodeRef>enisa-t1</flowNodeRef>
+            <flowNodeRef>enisa-gw1-merge</flowNodeRef>
+            <flowNodeRef>enisa-catch2</flowNodeRef>
+            <flowNodeRef>enisa-gw2-split</flowNodeRef>
+            <flowNodeRef>enisa-t2</flowNodeRef>
+            <flowNodeRef>enisa-gw2-merge</flowNodeRef>
+            <flowNodeRef>enisa-gw3-split</flowNodeRef>
+            <flowNodeRef>enisa-t4</flowNodeRef>
+            <flowNodeRef>enisa-pgw1-split</flowNodeRef>
+            <flowNodeRef>enisa-t5</flowNodeRef>
+            <flowNodeRef>enisa-t6</flowNodeRef>
+            <flowNodeRef>enisa-t7</flowNodeRef>
+            <flowNodeRef>enisa-pgw1-merge</flowNodeRef>
+            <flowNodeRef>enisa-gw3-merge</flowNodeRef>
+            <flowNodeRef>enisa-catch3</flowNodeRef>
+            <flowNodeRef>enisa-gw4-split</flowNodeRef>
+            <flowNodeRef>enisa-t8</flowNodeRef>
+            <flowNodeRef>enisa-gw4-merge</flowNodeRef>
+            <flowNodeRef>enisa-gw5-split</flowNodeRef>
+            <flowNodeRef>enisa-t9</flowNodeRef>
+            <flowNodeRef>enisa-gw5-merge</flowNodeRef>
+            <flowNodeRef>enisa-catch4</flowNodeRef>
+            <flowNodeRef>enisa-gw6-split</flowNodeRef>
+            <flowNodeRef>enisa-t10</flowNodeRef>
+            <flowNodeRef>enisa-gw6-merge</flowNodeRef>
+            <flowNodeRef>enisa-catch5</flowNodeRef>
+            <flowNodeRef>enisa-gw7-split</flowNodeRef>
+            <flowNodeRef>enisa-t11</flowNodeRef>
+            <flowNodeRef>enisa-gw7-merge</flowNodeRef>
+            <flowNodeRef>enisa-end</flowNodeRef>
+         </lane>
+         <lane id="sid-lane-mb" name="Management Board">
+            <flowNodeRef>enisa-t3</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="enisa-start" name="Start">
+         <outgoing>sf-n1</outgoing>
+      </startEvent>
+      <intermediateCatchEvent id="enisa-catch1" name="Receive request from the Commission">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n1</incoming>
+         <outgoing>sf-n2</outgoing>
+         <messageEventDefinition id="med-n1" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="enisa-gw1-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n2</incoming>
+         <outgoing>sf-n3</outgoing>
+         <outgoing>sf-n4</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t1" name="prepare a candidate cybersecurity certification scheme">
+         <incoming>sf-n3</incoming>
+         <outgoing>sf-n5</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw1-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n4</incoming>
+         <incoming>sf-n5</incoming>
+         <outgoing>sf-n6</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="enisa-catch2" name="Receive request from the ECCG">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n6</incoming>
+         <outgoing>sf-n7</outgoing>
+         <messageEventDefinition id="med-n2" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="enisa-gw2-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n7</incoming>
+         <outgoing>sf-n8</outgoing>
+         <outgoing>sf-n9</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t2" name="prepare a candidate cybersecurity certification scheme">
+         <incoming>sf-n8</incoming>
+         <outgoing>sf-n10</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw2-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n9</incoming>
+         <incoming>sf-n10</incoming>
+         <outgoing>sf-n11</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="enisa-gw3-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n11</incoming>
+         <outgoing>sf-n12</outgoing>
+         <outgoing>sf-n13</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t3" name="take decision to refuse a request">
+         <incoming>sf-n12</incoming>
+         <outgoing>sf-n14</outgoing>
+      </task>
+      <task id="enisa-t4" name="give reasons for refusal of preparing a candidate scheme">
+         <incoming>sf-n14</incoming>
+         <outgoing>sf-n15</outgoing>
+      </task>
+      <parallelGateway id="enisa-pgw1-split" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n13</incoming>
+         <outgoing>sf-n16</outgoing>
+         <outgoing>sf-n17</outgoing>
+         <outgoing>sf-n18</outgoing>
+      </parallelGateway>
+      <task id="enisa-t5" name="consult all relevant stakeholders">
+         <incoming>sf-n16</incoming>
+         <outgoing>sf-n19</outgoing>
+      </task>
+      <task id="enisa-t6" name="establish an ad hoc working group">
+         <incoming>sf-n17</incoming>
+         <outgoing>sf-n20</outgoing>
+      </task>
+      <task id="enisa-t7" name="cooperate with the ECCG">
+         <incoming>sf-n18</incoming>
+         <outgoing>sf-n21</outgoing>
+      </task>
+      <parallelGateway id="enisa-pgw1-merge" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n19</incoming>
+         <incoming>sf-n20</incoming>
+         <incoming>sf-n21</incoming>
+         <outgoing>sf-n22</outgoing>
+      </parallelGateway>
+      <exclusiveGateway id="enisa-gw3-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n15</incoming>
+         <incoming>sf-n22</incoming>
+         <outgoing>sf-n23</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="enisa-catch3" name="Receive assistance, expert advice, and opinion from the ECCG">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n23</incoming>
+         <outgoing>sf-n24</outgoing>
+         <messageEventDefinition id="med-n3" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="enisa-gw4-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n24</incoming>
+         <outgoing>sf-n25</outgoing>
+         <outgoing>sf-n26</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t8" name="take utmost account of the ECCG opinion">
+         <incoming>sf-n25</incoming>
+         <outgoing>sf-n27</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw4-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n26</incoming>
+         <incoming>sf-n27</incoming>
+         <outgoing>sf-n28</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="enisa-gw5-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n28</incoming>
+         <outgoing>sf-n29</outgoing>
+         <outgoing>sf-n30</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t9" name="transmit the candidate scheme to the Commission">
+         <incoming>sf-n29</incoming>
+         <outgoing>sf-n31</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw5-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n30</incoming>
+         <incoming>sf-n31</incoming>
+         <outgoing>sf-n32</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="enisa-catch4" name="Receive feedback from the Interested Party">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n32</incoming>
+         <outgoing>sf-n33</outgoing>
+         <messageEventDefinition id="med-n4" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="enisa-gw6-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n33</incoming>
+         <outgoing>sf-n34</outgoing>
+         <outgoing>sf-n35</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t10" name="evaluate each adopted European cybersecurity certification scheme">
+         <incoming>sf-n34</incoming>
+         <outgoing>sf-n36</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw6-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n35</incoming>
+         <incoming>sf-n36</incoming>
+         <outgoing>sf-n37</outgoing>
+      </exclusiveGateway>
+      <intermediateCatchEvent id="enisa-catch5" name="Receive request from the Commission or the ECCG">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n37</incoming>
+         <outgoing>sf-n38</outgoing>
+         <messageEventDefinition id="med-n5" />
+      </intermediateCatchEvent>
+      <exclusiveGateway id="enisa-gw7-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n38</incoming>
+         <outgoing>sf-n39</outgoing>
+         <outgoing>sf-n40</outgoing>
+      </exclusiveGateway>
+      <task id="enisa-t11" name="start developing a revised candidate scheme">
+         <incoming>sf-n39</incoming>
+         <outgoing>sf-n41</outgoing>
+      </task>
+      <exclusiveGateway id="enisa-gw7-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-n40</incoming>
+         <incoming>sf-n41</incoming>
+         <outgoing>sf-n42</outgoing>
+      </exclusiveGateway>
+      <endEvent id="enisa-end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-n42</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-n1" name="" sourceRef="enisa-start" targetRef="enisa-catch1" isImmediate="true" />
+      <sequenceFlow id="sf-n2" name="" sourceRef="enisa-catch1" targetRef="enisa-gw1-split" isImmediate="true" />
+      <sequenceFlow id="sf-n3" name="following a request from the Commission" sourceRef="enisa-gw1-split" targetRef="enisa-t1" isImmediate="true" />
+      <sequenceFlow id="sf-n4" name="" sourceRef="enisa-gw1-split" targetRef="enisa-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n5" name="" sourceRef="enisa-t1" targetRef="enisa-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n6" name="" sourceRef="enisa-gw1-merge" targetRef="enisa-catch2" isImmediate="true" />
+      <sequenceFlow id="sf-n7" name="" sourceRef="enisa-catch2" targetRef="enisa-gw2-split" isImmediate="true" />
+      <sequenceFlow id="sf-n8" name="following a request from ECCG" sourceRef="enisa-gw2-split" targetRef="enisa-t2" isImmediate="true" />
+      <sequenceFlow id="sf-n9" name="" sourceRef="enisa-gw2-split" targetRef="enisa-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n10" name="" sourceRef="enisa-t2" targetRef="enisa-gw2-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n11" name="" sourceRef="enisa-gw2-merge" targetRef="enisa-gw3-split" isImmediate="true" />
+      <sequenceFlow id="sf-n12" name="decides to refuse a request" sourceRef="enisa-gw3-split" targetRef="enisa-t3" isImmediate="true" />
+      <sequenceFlow id="sf-n13" name="prepares a candidate scheme" sourceRef="enisa-gw3-split" targetRef="enisa-pgw1-split" isImmediate="true" />
+      <sequenceFlow id="sf-n14" name="" sourceRef="enisa-t3" targetRef="enisa-t4" isImmediate="true" />
+      <sequenceFlow id="sf-n15" name="" sourceRef="enisa-t4" targetRef="enisa-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n16" name="" sourceRef="enisa-pgw1-split" targetRef="enisa-t5" isImmediate="true" />
+      <sequenceFlow id="sf-n17" name="" sourceRef="enisa-pgw1-split" targetRef="enisa-t6" isImmediate="true" />
+      <sequenceFlow id="sf-n18" name="" sourceRef="enisa-pgw1-split" targetRef="enisa-t7" isImmediate="true" />
+      <sequenceFlow id="sf-n19" name="" sourceRef="enisa-t5" targetRef="enisa-pgw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n20" name="" sourceRef="enisa-t6" targetRef="enisa-pgw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n21" name="" sourceRef="enisa-t7" targetRef="enisa-pgw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n22" name="" sourceRef="enisa-pgw1-merge" targetRef="enisa-gw3-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n23" name="" sourceRef="enisa-gw3-merge" targetRef="enisa-catch3" isImmediate="true" />
+      <sequenceFlow id="sf-n24" name="" sourceRef="enisa-catch3" targetRef="enisa-gw4-split" isImmediate="true" />
+      <sequenceFlow id="sf-n25" name="before transmitting the candidate scheme prepared in accordance with paragraphs 3, 4 and 5 to the Commission" sourceRef="enisa-gw4-split" targetRef="enisa-t8" isImmediate="true" />
+      <sequenceFlow id="sf-n26" name="except where the absence of an ECCG opinion shall not prevent ENISA from transmitting the candidate scheme to the Commission and the opinion of the ECCG shall not bind ENISA" sourceRef="enisa-gw4-split" targetRef="enisa-gw4-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n27" name="" sourceRef="enisa-t8" targetRef="enisa-gw4-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n28" name="" sourceRef="enisa-gw4-merge" targetRef="enisa-gw5-split" isImmediate="true" />
+      <sequenceFlow id="sf-n29" name="" sourceRef="enisa-gw5-split" targetRef="enisa-t9" isImmediate="true" />
+      <sequenceFlow id="sf-n30" name="except where absence of the ECCG opinion shall not prevent transmission" sourceRef="enisa-gw5-split" targetRef="enisa-gw5-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n31" name="" sourceRef="enisa-t9" targetRef="enisa-gw5-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n32" name="" sourceRef="enisa-gw5-merge" targetRef="enisa-catch4" isImmediate="true" />
+      <sequenceFlow id="sf-n33" name="taking into account feedback received from interested parties" sourceRef="enisa-catch4" targetRef="enisa-t10" isImmediate="true" />
+      <sequenceFlow id="sf-n34" name="" sourceRef="enisa-catch4" targetRef="enisa-gw6-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n35" name="" sourceRef="enisa-t10" targetRef="enisa-gw6-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n36" name="" sourceRef="enisa-gw6-merge" targetRef="enisa-catch5" isImmediate="true" />
+      <sequenceFlow id="sf-n37" name="" sourceRef="enisa-catch5" targetRef="enisa-gw7-split" isImmediate="true" />
+      <sequenceFlow id="sf-n38" name="requested by Commission or ECCG" sourceRef="enisa-gw7-split" targetRef="enisa-t11" isImmediate="true" />
+      <sequenceFlow id="sf-n39" name="" sourceRef="enisa-gw7-split" targetRef="enisa-gw7-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n40" name="" sourceRef="enisa-t11" targetRef="enisa-gw7-merge" isImmediate="true" />
+      <sequenceFlow id="sf-n41" name="" sourceRef="enisa-gw7-merge" targetRef="enisa-end" isImmediate="true" />
+   </process>
+
+   <process id="process_ip" isClosed="false" isExecutable="false" name="Interested Party" processType="None">
+      <startEvent id="ip-start" name="Start">
+         <outgoing>sf-p1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="ip-gw1-split" isMarkerVisible="true" gatewayDirection="Diverging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-p1</incoming>
+         <outgoing>sf-p2</outgoing>
+         <outgoing>sf-p3</outgoing>
+      </exclusiveGateway>
+      <task id="ip-t1" name="provide feedback">
+         <incoming>sf-p2</incoming>
+         <outgoing>sf-p4</outgoing>
+      </task>
+      <exclusiveGateway id="ip-gw1-merge" isMarkerVisible="true" gatewayDirection="Converging" name="">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>sf-p3</incoming>
+         <incoming>sf-p4</incoming>
+         <outgoing>sf-p5</outgoing>
+      </exclusiveGateway>
+      <task id="ip-t2" name="transmit the feedback to ENISA">
+         <incoming>sf-p5</incoming>
+         <outgoing>sf-p6</outgoing>
+      </task>
+      <endEvent id="ip-end" name="End">
+         <extensionElements>
+            <signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>sf-p6</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf-p1" name="" sourceRef="ip-start" targetRef="ip-gw1-split" isImmediate="true" />
+      <sequenceFlow id="sf-p2" name="feedback" sourceRef="ip-gw1-split" targetRef="ip-t1" isImmediate="true" />
+      <sequenceFlow id="sf-p3" name="" sourceRef="ip-gw1-split" targetRef="ip-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-p4" name="" sourceRef="ip-t1" targetRef="ip-gw1-merge" isImmediate="true" />
+      <sequenceFlow id="sf-p5" name="" sourceRef="ip-gw1-merge" targetRef="ip-t2" isImmediate="true" />
+      <sequenceFlow id="sf-p6" name="" sourceRef="ip-t2" targetRef="ip-end" isImmediate="true" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="bpmndi_diagram">
+      <bpmndi:BPMNPlane bpmnElement="collaboration_1" id="bpmndi_plane">
+         <bpmndi:BPMNShape bpmnElement="sid-pool-comm" id="sid-pool-comm_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="3300.0" x="100.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-eccg" id="sid-pool-eccg_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="3300.0" x="100.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-enisa" id="sid-pool-enisa_gui" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="3300.0" x="100.0" y="820.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-enisa" id="sid-lane-enisa_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="3270.0" x="130.0" y="820.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-mb" id="sid-lane-mb_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="3270.0" x="130.0" y="1170.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-ip" id="sid-pool-ip_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="3300.0" x="100.0" y="1360.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="comm-start" id="comm-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="160.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw1-split" id="comm-gw1-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="220.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t1" id="comm-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t2" id="comm-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t3" id="comm-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t4" id="comm-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="340.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw1-merge" id="comm-gw1-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw2-split" id="comm-gw2-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t5" id="comm-t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="580.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw2-merge" id="comm-gw2-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="680.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t6" id="comm-t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="740.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-catch1" id="comm-catch1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2265.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw3-split" id="comm-gw3-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2340.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t7" id="comm-t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2420.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw3-merge" id="comm-gw3-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2540.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw4-split" id="comm-gw4-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2600.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t8" id="comm-t8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2680.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-gw4-merge" id="comm-gw4-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2800.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-t9" id="comm-t9_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2880.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="comm-end" id="comm-end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="3040.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="eccg-start" id="eccg-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="160.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw1-split" id="eccg-gw1-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="220.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t1" id="eccg-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t2" id="eccg-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="660.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw1-merge" id="eccg-gw1-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="420.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t3" id="eccg-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw2-split" id="eccg-gw2-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t4" id="eccg-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1180.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw2-merge" id="eccg-gw2-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1300.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t5" id="eccg-t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1380.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t6" id="eccg-t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw3-split" id="eccg-gw3-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1920.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t7" id="eccg-t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="520.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-gw3-merge" id="eccg-gw3-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2120.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-t8" id="eccg-t8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2820.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="eccg-end" id="eccg-end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="3040.0" y="615.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="enisa-start" id="enisa-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="160.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-catch1" id="enisa-catch1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="775.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw1-split" id="enisa-gw1-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="850.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t1" id="enisa-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="910.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw1-merge" id="enisa-gw1-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1030.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-catch2" id="enisa-catch2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1095.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw2-split" id="enisa-gw2-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1150.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t2" id="enisa-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1210.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw2-merge" id="enisa-gw2-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1330.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw3-split" id="enisa-gw3-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1390.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t3" id="enisa-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1470.0" y="1190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t4" id="enisa-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1590.0" y="1060.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-pgw1-split" id="enisa-pgw1-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1470.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t5" id="enisa-t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="710.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t6" id="enisa-t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="800.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t7" id="enisa-t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-pgw1-merge" id="enisa-pgw1-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1670.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw3-merge" id="enisa-gw3-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1770.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-catch3" id="enisa-catch3_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1835.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw4-split" id="enisa-gw4-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1890.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t8" id="enisa-t8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1970.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw4-merge" id="enisa-gw4-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2090.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw5-split" id="enisa-gw5-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2150.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t9" id="enisa-t9_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2230.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw5-merge" id="enisa-gw5-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2350.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-catch4" id="enisa-catch4_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2435.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw6-split" id="enisa-gw6-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2490.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t10" id="enisa-t10_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2570.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw6-merge" id="enisa-gw6-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2690.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-catch5" id="enisa-catch5_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2915.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw7-split" id="enisa-gw7-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2990.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-t11" id="enisa-t11_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3070.0" y="890.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-gw7-merge" id="enisa-gw7-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3190.0" y="980.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="enisa-end" id="enisa-end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="3250.0" y="985.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="ip-start" id="ip-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2060.0" y="1465.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip-gw1-split" id="ip-gw1-split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2120.0" y="1460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip-t1" id="ip-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2200.0" y="1370.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip-gw1-merge" id="ip-gw1-merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2320.0" y="1460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip-t2" id="ip-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="1440.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ip-end" id="ip-end_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2560.0" y="1465.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-c1" id="sf-c1_gui">
+            <omgdi:waypoint x="190.0" y="250.0"/>
+            <omgdi:waypoint x="220.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c2" id="sf-c2_gui">
+            <omgdi:waypoint x="260.0" y="250.0"/>
+            <omgdi:waypoint x="300.0" y="110.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c3" id="sf-c3_gui">
+            <omgdi:waypoint x="260.0" y="250.0"/>
+            <omgdi:waypoint x="300.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c4" id="sf-c4_gui">
+            <omgdi:waypoint x="260.0" y="250.0"/>
+            <omgdi:waypoint x="300.0" y="290.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c5" id="sf-c5_gui">
+            <omgdi:waypoint x="260.0" y="250.0"/>
+            <omgdi:waypoint x="300.0" y="380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c6" id="sf-c6_gui">
+            <omgdi:waypoint x="400.0" y="110.0"/>
+            <omgdi:waypoint x="420.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c7" id="sf-c7_gui">
+            <omgdi:waypoint x="400.0" y="200.0"/>
+            <omgdi:waypoint x="420.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c8" id="sf-c8_gui">
+            <omgdi:waypoint x="400.0" y="290.0"/>
+            <omgdi:waypoint x="420.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c9" id="sf-c9_gui">
+            <omgdi:waypoint x="400.0" y="380.0"/>
+            <omgdi:waypoint x="420.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c10" id="sf-c10_gui">
+            <omgdi:waypoint x="460.0" y="250.0"/>
+            <omgdi:waypoint x="500.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c11" id="sf-c11_gui">
+            <omgdi:waypoint x="540.0" y="250.0"/>
+            <omgdi:waypoint x="580.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c12" id="sf-c12_gui">
+            <omgdi:waypoint x="540.0" y="250.0"/>
+            <omgdi:waypoint x="680.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c13" id="sf-c13_gui">
+            <omgdi:waypoint x="680.0" y="180.0"/>
+            <omgdi:waypoint x="680.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c14" id="sf-c14_gui">
+            <omgdi:waypoint x="720.0" y="250.0"/>
+            <omgdi:waypoint x="740.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c15" id="sf-c15_gui">
+            <omgdi:waypoint x="840.0" y="250.0"/>
+            <omgdi:waypoint x="2265.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c16" id="sf-c16_gui">
+            <omgdi:waypoint x="2295.0" y="250.0"/>
+            <omgdi:waypoint x="2340.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c17" id="sf-c17_gui">
+            <omgdi:waypoint x="2380.0" y="250.0"/>
+            <omgdi:waypoint x="2420.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c18" id="sf-c18_gui">
+            <omgdi:waypoint x="2380.0" y="250.0"/>
+            <omgdi:waypoint x="2540.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c19" id="sf-c19_gui">
+            <omgdi:waypoint x="2520.0" y="180.0"/>
+            <omgdi:waypoint x="2540.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c20" id="sf-c20_gui">
+            <omgdi:waypoint x="2580.0" y="250.0"/>
+            <omgdi:waypoint x="2600.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c21" id="sf-c21_gui">
+            <omgdi:waypoint x="2640.0" y="250.0"/>
+            <omgdi:waypoint x="2680.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c22" id="sf-c22_gui">
+            <omgdi:waypoint x="2640.0" y="250.0"/>
+            <omgdi:waypoint x="2800.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c23" id="sf-c23_gui">
+            <omgdi:waypoint x="2780.0" y="180.0"/>
+            <omgdi:waypoint x="2800.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c24" id="sf-c24_gui">
+            <omgdi:waypoint x="2840.0" y="250.0"/>
+            <omgdi:waypoint x="2880.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-c25" id="sf-c25_gui">
+            <omgdi:waypoint x="2980.0" y="250.0"/>
+            <omgdi:waypoint x="3040.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-e1" id="sf-e1_gui">
+            <omgdi:waypoint x="190.0" y="630.0"/>
+            <omgdi:waypoint x="220.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e2" id="sf-e2_gui">
+            <omgdi:waypoint x="260.0" y="630.0"/>
+            <omgdi:waypoint x="300.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e3" id="sf-e3_gui">
+            <omgdi:waypoint x="260.0" y="630.0"/>
+            <omgdi:waypoint x="300.0" y="700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e4" id="sf-e4_gui">
+            <omgdi:waypoint x="260.0" y="630.0"/>
+            <omgdi:waypoint x="420.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e5" id="sf-e5_gui">
+            <omgdi:waypoint x="400.0" y="560.0"/>
+            <omgdi:waypoint x="420.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e6" id="sf-e6_gui">
+            <omgdi:waypoint x="400.0" y="700.0"/>
+            <omgdi:waypoint x="420.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e7" id="sf-e7_gui">
+            <omgdi:waypoint x="460.0" y="630.0"/>
+            <omgdi:waypoint x="1060.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e8" id="sf-e8_gui">
+            <omgdi:waypoint x="1160.0" y="630.0"/>
+            <omgdi:waypoint x="1100.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e9" id="sf-e9_gui">
+            <omgdi:waypoint x="1140.0" y="630.0"/>
+            <omgdi:waypoint x="1180.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e10" id="sf-e10_gui">
+            <omgdi:waypoint x="1140.0" y="630.0"/>
+            <omgdi:waypoint x="1300.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e11" id="sf-e11_gui">
+            <omgdi:waypoint x="1280.0" y="560.0"/>
+            <omgdi:waypoint x="1300.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e12" id="sf-e12_gui">
+            <omgdi:waypoint x="1340.0" y="630.0"/>
+            <omgdi:waypoint x="1380.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e13" id="sf-e13_gui">
+            <omgdi:waypoint x="1480.0" y="630.0"/>
+            <omgdi:waypoint x="1800.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e14" id="sf-e14_gui">
+            <omgdi:waypoint x="1900.0" y="630.0"/>
+            <omgdi:waypoint x="1920.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e15" id="sf-e15_gui">
+            <omgdi:waypoint x="1960.0" y="630.0"/>
+            <omgdi:waypoint x="2000.0" y="560.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e16" id="sf-e16_gui">
+            <omgdi:waypoint x="1960.0" y="630.0"/>
+            <omgdi:waypoint x="2120.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e17" id="sf-e17_gui">
+            <omgdi:waypoint x="2100.0" y="560.0"/>
+            <omgdi:waypoint x="2120.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e18" id="sf-e18_gui">
+            <omgdi:waypoint x="2160.0" y="630.0"/>
+            <omgdi:waypoint x="2820.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-e19" id="sf-e19_gui">
+            <omgdi:waypoint x="2920.0" y="630.0"/>
+            <omgdi:waypoint x="3040.0" y="630.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-n1" id="sf-n1_gui">
+            <omgdi:waypoint x="190.0" y="1000.0"/>
+            <omgdi:waypoint x="775.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n2" id="sf-n2_gui">
+            <omgdi:waypoint x="805.0" y="1000.0"/>
+            <omgdi:waypoint x="850.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n3" id="sf-n3_gui">
+            <omgdi:waypoint x="890.0" y="1000.0"/>
+            <omgdi:waypoint x="910.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n4" id="sf-n4_gui">
+            <omgdi:waypoint x="890.0" y="1000.0"/>
+            <omgdi:waypoint x="1030.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n5" id="sf-n5_gui">
+            <omgdi:waypoint x="1010.0" y="930.0"/>
+            <omgdi:waypoint x="1030.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n6" id="sf-n6_gui">
+            <omgdi:waypoint x="1070.0" y="1000.0"/>
+            <omgdi:waypoint x="1095.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n7" id="sf-n7_gui">
+            <omgdi:waypoint x="1125.0" y="1000.0"/>
+            <omgdi:waypoint x="1150.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n8" id="sf-n8_gui">
+            <omgdi:waypoint x="1190.0" y="1000.0"/>
+            <omgdi:waypoint x="1210.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n9" id="sf-n9_gui">
+            <omgdi:waypoint x="1190.0" y="1000.0"/>
+            <omgdi:waypoint x="1330.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n10" id="sf-n10_gui">
+            <omgdi:waypoint x="1310.0" y="930.0"/>
+            <omgdi:waypoint x="1330.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n11" id="sf-n11_gui">
+            <omgdi:waypoint x="1370.0" y="1000.0"/>
+            <omgdi:waypoint x="1390.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n12" id="sf-n12_gui">
+            <omgdi:waypoint x="1430.0" y="1000.0"/>
+            <omgdi:waypoint x="1470.0" y="1230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n13" id="sf-n13_gui">
+            <omgdi:waypoint x="1430.0" y="1000.0"/>
+            <omgdi:waypoint x="1470.0" y="910.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n14" id="sf-n14_gui">
+            <omgdi:waypoint x="1570.0" y="1230.0"/>
+            <omgdi:waypoint x="1590.0" y="1100.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n15" id="sf-n15_gui">
+            <omgdi:waypoint x="1690.0" y="1100.0"/>
+            <omgdi:waypoint x="1770.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n16" id="sf-n16_gui">
+            <omgdi:waypoint x="1510.0" y="910.0"/>
+            <omgdi:waypoint x="1550.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n17" id="sf-n17_gui">
+            <omgdi:waypoint x="1510.0" y="910.0"/>
+            <omgdi:waypoint x="1550.0" y="840.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n18" id="sf-n18_gui">
+            <omgdi:waypoint x="1510.0" y="910.0"/>
+            <omgdi:waypoint x="1550.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n19" id="sf-n19_gui">
+            <omgdi:waypoint x="1650.0" y="750.0"/>
+            <omgdi:waypoint x="1670.0" y="910.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n20" id="sf-n20_gui">
+            <omgdi:waypoint x="1650.0" y="840.0"/>
+            <omgdi:waypoint x="1670.0" y="910.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n21" id="sf-n21_gui">
+            <omgdi:waypoint x="1650.0" y="930.0"/>
+            <omgdi:waypoint x="1670.0" y="910.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n22" id="sf-n22_gui">
+            <omgdi:waypoint x="1710.0" y="910.0"/>
+            <omgdi:waypoint x="1770.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n23" id="sf-n23_gui">
+            <omgdi:waypoint x="1810.0" y="1000.0"/>
+            <omgdi:waypoint x="1835.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n24" id="sf-n24_gui">
+            <omgdi:waypoint x="1865.0" y="1000.0"/>
+            <omgdi:waypoint x="1890.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n25" id="sf-n25_gui">
+            <omgdi:waypoint x="1930.0" y="1000.0"/>
+            <omgdi:waypoint x="1970.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n26" id="sf-n26_gui">
+            <omgdi:waypoint x="1930.0" y="1000.0"/>
+            <omgdi:waypoint x="2090.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n27" id="sf-n27_gui">
+            <omgdi:waypoint x="2070.0" y="930.0"/>
+            <omgdi:waypoint x="2090.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n28" id="sf-n28_gui">
+            <omgdi:waypoint x="2130.0" y="1000.0"/>
+            <omgdi:waypoint x="2150.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n29" id="sf-n29_gui">
+            <omgdi:waypoint x="2190.0" y="1000.0"/>
+            <omgdi:waypoint x="2230.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n30" id="sf-n30_gui">
+            <omgdi:waypoint x="2190.0" y="1000.0"/>
+            <omgdi:waypoint x="2350.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n31" id="sf-n31_gui">
+            <omgdi:waypoint x="2330.0" y="930.0"/>
+            <omgdi:waypoint x="2350.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n32" id="sf-n32_gui">
+            <omgdi:waypoint x="2390.0" y="1000.0"/>
+            <omgdi:waypoint x="2435.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n33" id="sf-n33_gui">
+            <omgdi:waypoint x="2465.0" y="1000.0"/>
+            <omgdi:waypoint x="2570.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n34" id="sf-n34_gui">
+            <omgdi:waypoint x="2465.0" y="1000.0"/>
+            <omgdi:waypoint x="2690.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n35" id="sf-n35_gui">
+            <omgdi:waypoint x="2670.0" y="930.0"/>
+            <omgdi:waypoint x="2690.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n36" id="sf-n36_gui">
+            <omgdi:waypoint x="2730.0" y="1000.0"/>
+            <omgdi:waypoint x="2915.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n37" id="sf-n37_gui">
+            <omgdi:waypoint x="2945.0" y="1000.0"/>
+            <omgdi:waypoint x="2990.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n38" id="sf-n38_gui">
+            <omgdi:waypoint x="3030.0" y="1000.0"/>
+            <omgdi:waypoint x="3070.0" y="930.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n39" id="sf-n39_gui">
+            <omgdi:waypoint x="3030.0" y="1000.0"/>
+            <omgdi:waypoint x="3190.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n40" id="sf-n40_gui">
+            <omgdi:waypoint x="3170.0" y="930.0"/>
+            <omgdi:waypoint x="3190.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-n41" id="sf-n41_gui">
+            <omgdi:waypoint x="3230.0" y="1000.0"/>
+            <omgdi:waypoint x="3250.0" y="1000.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf-p1" id="sf-p1_gui">
+            <omgdi:waypoint x="2090.0" y="1480.0"/>
+            <omgdi:waypoint x="2120.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-p2" id="sf-p2_gui">
+            <omgdi:waypoint x="2160.0" y="1480.0"/>
+            <omgdi:waypoint x="2200.0" y="1410.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-p3" id="sf-p3_gui">
+            <omgdi:waypoint x="2160.0" y="1480.0"/>
+            <omgdi:waypoint x="2320.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-p4" id="sf-p4_gui">
+            <omgdi:waypoint x="2300.0" y="1410.0"/>
+            <omgdi:waypoint x="2320.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-p5" id="sf-p5_gui">
+            <omgdi:waypoint x="2360.0" y="1480.0"/>
+            <omgdi:waypoint x="2400.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf-p6" id="sf-p6_gui">
+            <omgdi:waypoint x="2500.0" y="1480.0"/>
+            <omgdi:waypoint x="2560.0" y="1480.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="mf1" id="mf1_gui">
+            <omgdi:waypoint x="790.0" y="290.0"/>
+            <omgdi:waypoint x="790.0" y="985.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf2" id="mf2_gui">
+            <omgdi:waypoint x="1110.0" y="670.0"/>
+            <omgdi:waypoint x="1110.0" y="985.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf3" id="mf3_gui">
+            <omgdi:waypoint x="1850.0" y="670.0"/>
+            <omgdi:waypoint x="1850.0" y="985.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf4" id="mf4_gui">
+            <omgdi:waypoint x="2280.0" y="890.0"/>
+            <omgdi:waypoint x="2280.0" y="265.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf5" id="mf5_gui">
+            <omgdi:waypoint x="2450.0" y="1440.0"/>
+            <omgdi:waypoint x="2450.0" y="1015.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf6" id="mf6_gui">
+            <omgdi:waypoint x="2930.0" y="290.0"/>
+            <omgdi:waypoint x="2930.0" y="985.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf7" id="mf7_gui">
+            <omgdi:waypoint x="2870.0" y="670.0"/>
+            <omgdi:waypoint x="2930.0" y="985.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

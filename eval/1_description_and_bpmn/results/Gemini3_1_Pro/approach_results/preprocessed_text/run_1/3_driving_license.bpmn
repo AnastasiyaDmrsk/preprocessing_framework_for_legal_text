@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             id="sid-main-definition" 
+             targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+   <collaboration id="sid-collaboration">
+      <participant id="Pool_Applicant" name="Applicant" processRef="Process_Applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_MemberState" name="Member State" processRef="Process_MemberState">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="Pool_Commission" name="Commission" processRef="Process_Commission">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      
+      <messageFlow id="MsgFlow_1" name="" sourceRef="Task_MS_11" targetRef="Catch1_Com">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="MsgFlow_2" name="" sourceRef="Task_MS_13" targetRef="Catch2_Com">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <!-- PROCESS: APPLICANT -->
+   <process id="Process_Applicant" isClosed="false" isExecutable="false" name="Applicant" processType="None">
+      <laneSet id="LaneSet_App">
+         <lane id="Lane_App">
+            <flowNodeRef>Start_App</flowNodeRef>
+            <flowNodeRef>GW1_App</flowNodeRef>
+            <flowNodeRef>Task1_App</flowNodeRef>
+            <flowNodeRef>GW1b_App</flowNodeRef>
+            <flowNodeRef>GW2_App</flowNodeRef>
+            <flowNodeRef>Task2_App</flowNodeRef>
+            <flowNodeRef>GW2b_App</flowNodeRef>
+            <flowNodeRef>End_App</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_App" name="Start">
+         <outgoing>Flow_App_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW1_App" isMarkerVisible="true" name="assess whether it is before a driving licence is issued for the first time or renewed or for categories C, CE, C1, C1E, D, D1, DE or D1E or AM">
+         <incoming>Flow_App_1</incoming>
+         <outgoing>Flow_App_2</outgoing>
+         <outgoing>Flow_App_3</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task1_App" isForCompensation="false" name="undergo a medical examination" startQuantity="1">
+         <incoming>Flow_App_2</incoming>
+         <outgoing>Flow_App_4</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW1b_App" isMarkerVisible="true" name="">
+         <incoming>Flow_App_3</incoming>
+         <incoming>Flow_App_4</incoming>
+         <outgoing>Flow_App_5</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW2_App" isMarkerVisible="true" name="assess whether it is for driving licence categories AM, A, A1, A2, B, B1 and BE if required instead of a medical examination">
+         <incoming>Flow_App_5</incoming>
+         <outgoing>Flow_App_6</outgoing>
+         <outgoing>Flow_App_7</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task2_App" isForCompensation="false" name="fill in a self-assessment form" startQuantity="1">
+         <incoming>Flow_App_6</incoming>
+         <outgoing>Flow_App_8</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW2b_App" isMarkerVisible="true" name="">
+         <incoming>Flow_App_7</incoming>
+         <incoming>Flow_App_8</incoming>
+         <outgoing>Flow_App_9</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="End_App" name="End">
+         <incoming>Flow_App_9</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_App_1" isImmediate="true" name="" sourceRef="Start_App" targetRef="GW1_App"/>
+      <sequenceFlow id="Flow_App_2" isImmediate="true" name="yes" sourceRef="GW1_App" targetRef="Task1_App"/>
+      <sequenceFlow id="Flow_App_3" isImmediate="true" name="no" sourceRef="GW1_App" targetRef="GW1b_App"/>
+      <sequenceFlow id="Flow_App_4" isImmediate="true" name="" sourceRef="Task1_App" targetRef="GW1b_App"/>
+      <sequenceFlow id="Flow_App_5" isImmediate="true" name="" sourceRef="GW1b_App" targetRef="GW2_App"/>
+      <sequenceFlow id="Flow_App_6" isImmediate="true" name="yes" sourceRef="GW2_App" targetRef="Task2_App"/>
+      <sequenceFlow id="Flow_App_7" isImmediate="true" name="no" sourceRef="GW2_App" targetRef="GW2b_App"/>
+      <sequenceFlow id="Flow_App_8" isImmediate="true" name="" sourceRef="Task2_App" targetRef="GW2b_App"/>
+      <sequenceFlow id="Flow_App_9" isImmediate="true" name="" sourceRef="GW2b_App" targetRef="End_App"/>
+   </process>
+
+   <!-- PROCESS: MEMBER STATE -->
+   <process id="Process_MemberState" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="LaneSet_MS">
+         <lane id="Lane_MS">
+            <flowNodeRef>Start_MS</flowNodeRef>
+            <flowNodeRef>GW1_MS</flowNodeRef>
+            <flowNodeRef>Task1_MS</flowNodeRef>
+            <flowNodeRef>GW1b_MS</flowNodeRef>
+            <flowNodeRef>GW2_MS</flowNodeRef>
+            <flowNodeRef>Task2_MS</flowNodeRef>
+            <flowNodeRef>GW2b_MS</flowNodeRef>
+            <flowNodeRef>GW3_MS</flowNodeRef>
+            <flowNodeRef>Task3_MS</flowNodeRef>
+            <flowNodeRef>Task4_MS</flowNodeRef>
+            <flowNodeRef>GW4_MS</flowNodeRef>
+            <flowNodeRef>Task5_MS</flowNodeRef>
+            <flowNodeRef>Task6_MS</flowNodeRef>
+            <flowNodeRef>GW5_MS</flowNodeRef>
+            <flowNodeRef>Task7_MS</flowNodeRef>
+            <flowNodeRef>GW5b_MS</flowNodeRef>
+            <flowNodeRef>Task8_MS</flowNodeRef>
+            <flowNodeRef>Task9_MS</flowNodeRef>
+            <flowNodeRef>Task10_MS</flowNodeRef>
+            <flowNodeRef>GW6_MS</flowNodeRef>
+            <flowNodeRef>Task11_MS</flowNodeRef>
+            <flowNodeRef>GW6b_MS</flowNodeRef>
+            <flowNodeRef>Task12_MS</flowNodeRef>
+            <flowNodeRef>GW7_MS</flowNodeRef>
+            <flowNodeRef>Task13_MS</flowNodeRef>
+            <flowNodeRef>GW7b_MS</flowNodeRef>
+            <flowNodeRef>Task14_MS</flowNodeRef>
+            <flowNodeRef>End_MS</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_MS" name="application for issuance or renewal">
+         <outgoing>Flow_MS_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW1_MS" isMarkerVisible="true" name="assess whether a driving licence is issued for the first time">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_2</outgoing>
+         <outgoing>Flow_MS_3</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task1_MS" isForCompensation="false" name="ensure that applicants undergo a medical examination" startQuantity="1">
+         <incoming>Flow_MS_2</incoming>
+         <outgoing>Flow_MS_4</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW1b_MS" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_3</incoming>
+         <incoming>Flow_MS_4</incoming>
+         <outgoing>Flow_MS_5</outgoing>
+      </exclusiveGateway>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW2_MS" isMarkerVisible="true" name="assess whether it is for driving licences of categories C, CE, C1, C1E, D, D1, DE or D1E or for category AM">
+         <incoming>Flow_MS_5</incoming>
+         <outgoing>Flow_MS_6</outgoing>
+         <outgoing>Flow_MS_7</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task2_MS" isForCompensation="false" name="require a medical examination" startQuantity="1">
+         <incoming>Flow_MS_6</incoming>
+         <outgoing>Flow_MS_8</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW2b_MS" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_7</incoming>
+         <incoming>Flow_MS_8</incoming>
+         <outgoing>Flow_MS_9</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway gatewayDirection="Diverging" id="GW3_MS" name="carry out activities in parallel">
+         <incoming>Flow_MS_9</incoming>
+         <outgoing>Flow_MS_10</outgoing>
+         <outgoing>Flow_MS_11</outgoing>
+      </parallelGateway>
+
+      <task completionQuantity="1" id="Task3_MS" isForCompensation="false" name="require the applicant to fill in a self-assessment form" startQuantity="1">
+         <incoming>Flow_MS_10</incoming>
+         <outgoing>Flow_MS_12</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task4_MS" isForCompensation="false" name="establish a national system of assessment of fitness to drive" startQuantity="1">
+         <incoming>Flow_MS_11</incoming>
+         <outgoing>Flow_MS_13</outgoing>
+      </task>
+
+      <parallelGateway gatewayDirection="Converging" id="GW4_MS" name="">
+         <incoming>Flow_MS_12</incoming>
+         <incoming>Flow_MS_13</incoming>
+         <outgoing>Flow_MS_14</outgoing>
+      </parallelGateway>
+
+      <task completionQuantity="1" id="Task5_MS" isForCompensation="false" name="provide for appropriate measures to address non-compliance" startQuantity="1">
+         <incoming>Flow_MS_14</incoming>
+         <outgoing>Flow_MS_15</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task6_MS" isForCompensation="false" name="apply the national system to monitor" startQuantity="1">
+         <incoming>Flow_MS_15</incoming>
+         <outgoing>Flow_MS_16</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW5_MS" isMarkerVisible="true" name="assess whether the applicant is likely to have the medical conditions">
+         <incoming>Flow_MS_16</incoming>
+         <outgoing>Flow_MS_17</outgoing>
+         <outgoing>Flow_MS_18</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task7_MS" isForCompensation="false" name="ensure that the applicant undergoes a medical examination" startQuantity="1">
+         <incoming>Flow_MS_17</incoming>
+         <outgoing>Flow_MS_19</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW5b_MS" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_18</incoming>
+         <incoming>Flow_MS_19</incoming>
+         <outgoing>Flow_MS_20</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task8_MS" isForCompensation="false" name="take measures to raise awareness" startQuantity="1">
+         <incoming>Flow_MS_20</incoming>
+         <outgoing>Flow_MS_21</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task9_MS" isForCompensation="false" name="take measures to improve the knowledge of the health sector" startQuantity="1">
+         <incoming>Flow_MS_21</incoming>
+         <outgoing>Flow_MS_22</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task10_MS" isForCompensation="false" name="adopt guidelines for medical practitioners" startQuantity="1">
+         <incoming>Flow_MS_22</incoming>
+         <outgoing>Flow_MS_23</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW6_MS" isMarkerVisible="true" name="assess whether the Member State adopts guidelines">
+         <incoming>Flow_MS_23</incoming>
+         <outgoing>Flow_MS_24</outgoing>
+         <outgoing>Flow_MS_25</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task11_MS" isForCompensation="false" name="notify the guidelines adopted to the Commission" startQuantity="1">
+         <incoming>Flow_MS_24</incoming>
+         <outgoing>Flow_MS_26</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW6b_MS" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_25</incoming>
+         <incoming>Flow_MS_26</incoming>
+         <outgoing>Flow_MS_27</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task12_MS" isForCompensation="false" name="develop public awareness campaigns" startQuantity="1">
+         <incoming>Flow_MS_27</incoming>
+         <outgoing>Flow_MS_28</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="GW7_MS" isMarkerVisible="true" name="assess whether the Member State develops public awareness campaigns">
+         <incoming>Flow_MS_28</incoming>
+         <outgoing>Flow_MS_29</outgoing>
+         <outgoing>Flow_MS_30</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task13_MS" isForCompensation="false" name="notify any public awareness campaigns developed to the Commission" startQuantity="1">
+         <incoming>Flow_MS_29</incoming>
+         <outgoing>Flow_MS_31</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="GW7b_MS" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_30</incoming>
+         <incoming>Flow_MS_31</incoming>
+         <outgoing>Flow_MS_32</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task14_MS" isForCompensation="false" name="set standards stricter than those set out in Annex III" startQuantity="1">
+         <incoming>Flow_MS_32</incoming>
+         <outgoing>Flow_MS_33</outgoing>
+      </task>
+
+      <endEvent id="End_MS" name="End">
+         <incoming>Flow_MS_33</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_MS_1" isImmediate="true" name="" sourceRef="Start_MS" targetRef="GW1_MS"/>
+      <sequenceFlow id="Flow_MS_2" isImmediate="true" name="yes" sourceRef="GW1_MS" targetRef="Task1_MS"/>
+      <sequenceFlow id="Flow_MS_3" isImmediate="true" name="no" sourceRef="GW1_MS" targetRef="GW1b_MS"/>
+      <sequenceFlow id="Flow_MS_4" isImmediate="true" name="" sourceRef="Task1_MS" targetRef="GW1b_MS"/>
+      <sequenceFlow id="Flow_MS_5" isImmediate="true" name="" sourceRef="GW1b_MS" targetRef="GW2_MS"/>
+      <sequenceFlow id="Flow_MS_6" isImmediate="true" name="yes" sourceRef="GW2_MS" targetRef="Task2_MS"/>
+      <sequenceFlow id="Flow_MS_7" isImmediate="true" name="no" sourceRef="GW2_MS" targetRef="GW2b_MS"/>
+      <sequenceFlow id="Flow_MS_8" isImmediate="true" name="" sourceRef="Task2_MS" targetRef="GW2b_MS"/>
+      <sequenceFlow id="Flow_MS_9" isImmediate="true" name="" sourceRef="GW2b_MS" targetRef="GW3_MS"/>
+      <sequenceFlow id="Flow_MS_10" isImmediate="true" name="" sourceRef="GW3_MS" targetRef="Task3_MS"/>
+      <sequenceFlow id="Flow_MS_11" isImmediate="true" name="" sourceRef="GW3_MS" targetRef="Task4_MS"/>
+      <sequenceFlow id="Flow_MS_12" isImmediate="true" name="" sourceRef="Task3_MS" targetRef="GW4_MS"/>
+      <sequenceFlow id="Flow_MS_13" isImmediate="true" name="" sourceRef="Task4_MS" targetRef="GW4_MS"/>
+      <sequenceFlow id="Flow_MS_14" isImmediate="true" name="" sourceRef="GW4_MS" targetRef="Task5_MS"/>
+      <sequenceFlow id="Flow_MS_15" isImmediate="true" name="" sourceRef="Task5_MS" targetRef="Task6_MS"/>
+      <sequenceFlow id="Flow_MS_16" isImmediate="true" name="" sourceRef="Task6_MS" targetRef="GW5_MS"/>
+      <sequenceFlow id="Flow_MS_17" isImmediate="true" name="yes" sourceRef="GW5_MS" targetRef="Task7_MS"/>
+      <sequenceFlow id="Flow_MS_18" isImmediate="true" name="no" sourceRef="GW5_MS" targetRef="GW5b_MS"/>
+      <sequenceFlow id="Flow_MS_19" isImmediate="true" name="" sourceRef="Task7_MS" targetRef="GW5b_MS"/>
+      <sequenceFlow id="Flow_MS_20" isImmediate="true" name="" sourceRef="GW5b_MS" targetRef="Task8_MS"/>
+      <sequenceFlow id="Flow_MS_21" isImmediate="true" name="" sourceRef="Task8_MS" targetRef="Task9_MS"/>
+      <sequenceFlow id="Flow_MS_22" isImmediate="true" name="" sourceRef="Task9_MS" targetRef="Task10_MS"/>
+      <sequenceFlow id="Flow_MS_23" isImmediate="true" name="" sourceRef="Task10_MS" targetRef="GW6_MS"/>
+      <sequenceFlow id="Flow_MS_24" isImmediate="true" name="yes" sourceRef="GW6_MS" targetRef="Task11_MS"/>
+      <sequenceFlow id="Flow_MS_25" isImmediate="true" name="no" sourceRef="GW6_MS" targetRef="GW6b_MS"/>
+      <sequenceFlow id="Flow_MS_26" isImmediate="true" name="" sourceRef="Task11_MS" targetRef="GW6b_MS"/>
+      <sequenceFlow id="Flow_MS_27" isImmediate="true" name="" sourceRef="GW6b_MS" targetRef="Task12_MS"/>
+      <sequenceFlow id="Flow_MS_28" isImmediate="true" name="" sourceRef="Task12_MS" targetRef="GW7_MS"/>
+      <sequenceFlow id="Flow_MS_29" isImmediate="true" name="yes" sourceRef="GW7_MS" targetRef="Task13_MS"/>
+      <sequenceFlow id="Flow_MS_30" isImmediate="true" name="no" sourceRef="GW7_MS" targetRef="GW7b_MS"/>
+      <sequenceFlow id="Flow_MS_31" isImmediate="true" name="" sourceRef="Task13_MS" targetRef="GW7b_MS"/>
+      <sequenceFlow id="Flow_MS_32" isImmediate="true" name="" sourceRef="GW7b_MS" targetRef="Task14_MS"/>
+      <sequenceFlow id="Flow_MS_33" isImmediate="true" name="" sourceRef="Task14_MS" targetRef="End_MS"/>
+   </process>
+
+   <!-- PROCESS: COMMISSION -->
+   <process id="Process_Commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="LaneSet_Com">
+         <lane id="Lane_Com">
+            <flowNodeRef>Start_Com</flowNodeRef>
+            <flowNodeRef>Catch1_Com</flowNodeRef>
+            <flowNodeRef>Task1_Com</flowNodeRef>
+            <flowNodeRef>Catch2_Com</flowNodeRef>
+            <flowNodeRef>Task2_Com</flowNodeRef>
+            <flowNodeRef>End_Com</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="Start_Com" name="Start">
+         <outgoing>Flow_Com_1</outgoing>
+      </startEvent>
+
+      <intermediateCatchEvent id="Catch1_Com" name="Receive guidelines adopted">
+         <incoming>Flow_Com_1</incoming>
+         <outgoing>Flow_Com_2</outgoing>
+         <messageEventDefinition id="MsgDef_1"/>
+      </intermediateCatchEvent>
+
+      <task completionQuantity="1" id="Task1_Com" isForCompensation="false" name="make available to the other Member States the guidelines adopted" startQuantity="1">
+         <incoming>Flow_Com_2</incoming>
+         <outgoing>Flow_Com_3</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="Catch2_Com" name="Receive public awareness campaigns developed">
+         <incoming>Flow_Com_3</incoming>
+         <outgoing>Flow_Com_4</outgoing>
+         <messageEventDefinition id="MsgDef_2"/>
+      </intermediateCatchEvent>
+
+      <task completionQuantity="1" id="Task2_Com" isForCompensation="false" name="make available to the other Member States the information" startQuantity="1">
+         <incoming>Flow_Com_4</incoming>
+         <outgoing>Flow_Com_5</outgoing>
+      </task>
+
+      <endEvent id="End_Com" name="End">
+         <incoming>Flow_Com_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Com_1" isImmediate="true" name="" sourceRef="Start_Com" targetRef="Catch1_Com"/>
+      <sequenceFlow id="Flow_Com_2" isImmediate="true" name="" sourceRef="Catch1_Com" targetRef="Task1_Com"/>
+      <sequenceFlow id="Flow_Com_3" isImmediate="true" name="" sourceRef="Task1_Com" targetRef="Catch2_Com"/>
+      <sequenceFlow id="Flow_Com_4" isImmediate="true" name="" sourceRef="Catch2_Com" targetRef="Task2_Com"/>
+      <sequenceFlow id="Flow_Com_5" isImmediate="true" name="" sourceRef="Task2_Com" targetRef="End_Com"/>
+   </process>
+
+   <!-- BPMNDI: LAYOUT -->
+   <bpmndi:BPMNDiagram id="BPMNDiagram_Main">
+      <bpmndi:BPMNPlane bpmnElement="sid-collaboration" id="BPMNPlane_Main">
+         
+         <!-- POOLS AND LANES -->
+         <bpmndi:BPMNShape bpmnElement="Pool_Applicant" id="Pool_Applicant_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1500.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_App" id="Lane_App_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1470.0" x="80.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="Pool_MemberState" id="Pool_MemberState_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="3600.0" x="50.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_MS" id="Lane_MS_gui" isHorizontal="true">
+            <omgdc:Bounds height="400.0" width="3570.0" x="80.0" y="320.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="Pool_Commission" id="Pool_Commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3600.0" x="50.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Lane_Com" id="Lane_Com_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="3570.0" x="80.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- APPLICANT SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="Start_App" id="Start_App_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="140.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW1_App" id="GW1_App_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task1_App" id="Task1_App_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW1b_App" id="GW1b_App_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW2_App" id="GW2_App_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task2_App" id="Task2_App_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW2b_App" id="GW2b_App_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="135.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_App" id="End_App_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="900.0" y="141.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Start_MS_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW1_MS" id="GW1_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task1_MS" id="Task1_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW1b_MS" id="GW1b_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW2_MS" id="GW2_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task2_MS" id="Task2_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW2b_MS" id="GW2b_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW3_MS" id="GW3_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="900.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task3_MS" id="Task3_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task4_MS" id="Task4_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="550.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW4_MS" id="GW4_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1150.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task5_MS" id="Task5_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task6_MS" id="Task6_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW5_MS" id="GW5_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1550.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task7_MS" id="Task7_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW5b_MS" id="GW5b_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1800.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task8_MS" id="Task8_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1900.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task9_MS" id="Task9_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2050.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task10_MS" id="Task10_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2200.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW6_MS" id="GW6_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2350.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task11_MS" id="Task11_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2450.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW6b_MS" id="GW6b_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2600.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task12_MS" id="Task12_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW7_MS" id="GW7_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2850.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task13_MS" id="Task13_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2950.0" y="410.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="GW7b_MS" id="GW7b_MS_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="3100.0" y="495.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task14_MS" id="Task14_MS_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3200.0" y="475.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="End_MS_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="3400.0" y="501.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- COMMISSION SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="Start_Com" id="Start_Com_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2350.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch1_Com" id="Catch1_Com_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2485.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task1_Com" id="Task1_Com_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2600.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch2_Com" id="Catch2_Com_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2985.0" y="850.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task2_Com" id="Task2_Com_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="3100.0" y="825.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Com" id="End_Com_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="3300.0" y="851.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- EDGES: APPLICANT -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_1" id="Flow_App_1_gui">
+            <omgdi:waypoint x="150.0" y="155.0"/>
+            <omgdi:waypoint x="200.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_2" id="Flow_App_2_gui">
+            <omgdi:waypoint x="220.0" y="135.0"/>
+            <omgdi:waypoint x="220.0" y="120.0"/>
+            <omgdi:waypoint x="300.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_3" id="Flow_App_3_gui">
+            <omgdi:waypoint x="240.0" y="155.0"/>
+            <omgdi:waypoint x="450.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_4" id="Flow_App_4_gui">
+            <omgdi:waypoint x="400.0" y="120.0"/>
+            <omgdi:waypoint x="470.0" y="120.0"/>
+            <omgdi:waypoint x="470.0" y="135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_5" id="Flow_App_5_gui">
+            <omgdi:waypoint x="490.0" y="155.0"/>
+            <omgdi:waypoint x="550.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_6" id="Flow_App_6_gui">
+            <omgdi:waypoint x="570.0" y="135.0"/>
+            <omgdi:waypoint x="570.0" y="120.0"/>
+            <omgdi:waypoint x="650.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_7" id="Flow_App_7_gui">
+            <omgdi:waypoint x="590.0" y="155.0"/>
+            <omgdi:waypoint x="800.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_8" id="Flow_App_8_gui">
+            <omgdi:waypoint x="750.0" y="120.0"/>
+            <omgdi:waypoint x="820.0" y="120.0"/>
+            <omgdi:waypoint x="820.0" y="135.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_App_9" id="Flow_App_9_gui">
+            <omgdi:waypoint x="840.0" y="155.0"/>
+            <omgdi:waypoint x="900.0" y="155.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: MEMBER STATE -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1" id="Flow_MS_1_gui">
+            <omgdi:waypoint x="150.0" y="515.0"/>
+            <omgdi:waypoint x="200.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_2" id="Flow_MS_2_gui">
+            <omgdi:waypoint x="220.0" y="495.0"/>
+            <omgdi:waypoint x="220.0" y="450.0"/>
+            <omgdi:waypoint x="300.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_3" id="Flow_MS_3_gui">
+            <omgdi:waypoint x="240.0" y="515.0"/>
+            <omgdi:waypoint x="450.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_4" id="Flow_MS_4_gui">
+            <omgdi:waypoint x="400.0" y="450.0"/>
+            <omgdi:waypoint x="470.0" y="450.0"/>
+            <omgdi:waypoint x="470.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_5" id="Flow_MS_5_gui">
+            <omgdi:waypoint x="490.0" y="515.0"/>
+            <omgdi:waypoint x="550.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_6" id="Flow_MS_6_gui">
+            <omgdi:waypoint x="570.0" y="495.0"/>
+            <omgdi:waypoint x="570.0" y="450.0"/>
+            <omgdi:waypoint x="650.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_7" id="Flow_MS_7_gui">
+            <omgdi:waypoint x="590.0" y="515.0"/>
+            <omgdi:waypoint x="800.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_8" id="Flow_MS_8_gui">
+            <omgdi:waypoint x="750.0" y="450.0"/>
+            <omgdi:waypoint x="820.0" y="450.0"/>
+            <omgdi:waypoint x="820.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_9" id="Flow_MS_9_gui">
+            <omgdi:waypoint x="840.0" y="515.0"/>
+            <omgdi:waypoint x="900.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_10" id="Flow_MS_10_gui">
+            <omgdi:waypoint x="920.0" y="495.0"/>
+            <omgdi:waypoint x="920.0" y="450.0"/>
+            <omgdi:waypoint x="1000.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_11" id="Flow_MS_11_gui">
+            <omgdi:waypoint x="920.0" y="535.0"/>
+            <omgdi:waypoint x="920.0" y="590.0"/>
+            <omgdi:waypoint x="1000.0" y="590.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_12" id="Flow_MS_12_gui">
+            <omgdi:waypoint x="1100.0" y="450.0"/>
+            <omgdi:waypoint x="1170.0" y="450.0"/>
+            <omgdi:waypoint x="1170.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_13" id="Flow_MS_13_gui">
+            <omgdi:waypoint x="1100.0" y="590.0"/>
+            <omgdi:waypoint x="1170.0" y="590.0"/>
+            <omgdi:waypoint x="1170.0" y="535.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_14" id="Flow_MS_14_gui">
+            <omgdi:waypoint x="1190.0" y="515.0"/>
+            <omgdi:waypoint x="1250.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_15" id="Flow_MS_15_gui">
+            <omgdi:waypoint x="1350.0" y="515.0"/>
+            <omgdi:waypoint x="1400.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_16" id="Flow_MS_16_gui">
+            <omgdi:waypoint x="1500.0" y="515.0"/>
+            <omgdi:waypoint x="1550.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_17" id="Flow_MS_17_gui">
+            <omgdi:waypoint x="1570.0" y="495.0"/>
+            <omgdi:waypoint x="1570.0" y="450.0"/>
+            <omgdi:waypoint x="1650.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_18" id="Flow_MS_18_gui">
+            <omgdi:waypoint x="1590.0" y="515.0"/>
+            <omgdi:waypoint x="1800.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_19" id="Flow_MS_19_gui">
+            <omgdi:waypoint x="1750.0" y="450.0"/>
+            <omgdi:waypoint x="1820.0" y="450.0"/>
+            <omgdi:waypoint x="1820.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_20" id="Flow_MS_20_gui">
+            <omgdi:waypoint x="1840.0" y="515.0"/>
+            <omgdi:waypoint x="1900.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_21" id="Flow_MS_21_gui">
+            <omgdi:waypoint x="2000.0" y="515.0"/>
+            <omgdi:waypoint x="2050.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_22" id="Flow_MS_22_gui">
+            <omgdi:waypoint x="2150.0" y="515.0"/>
+            <omgdi:waypoint x="2200.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_23" id="Flow_MS_23_gui">
+            <omgdi:waypoint x="2300.0" y="515.0"/>
+            <omgdi:waypoint x="2350.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_24" id="Flow_MS_24_gui">
+            <omgdi:waypoint x="2370.0" y="495.0"/>
+            <omgdi:waypoint x="2370.0" y="450.0"/>
+            <omgdi:waypoint x="2450.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_25" id="Flow_MS_25_gui">
+            <omgdi:waypoint x="2390.0" y="515.0"/>
+            <omgdi:waypoint x="2600.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_26" id="Flow_MS_26_gui">
+            <omgdi:waypoint x="2550.0" y="450.0"/>
+            <omgdi:waypoint x="2620.0" y="450.0"/>
+            <omgdi:waypoint x="2620.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_27" id="Flow_MS_27_gui">
+            <omgdi:waypoint x="2640.0" y="515.0"/>
+            <omgdi:waypoint x="2700.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_28" id="Flow_MS_28_gui">
+            <omgdi:waypoint x="2800.0" y="515.0"/>
+            <omgdi:waypoint x="2850.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_29" id="Flow_MS_29_gui">
+            <omgdi:waypoint x="2870.0" y="495.0"/>
+            <omgdi:waypoint x="2870.0" y="450.0"/>
+            <omgdi:waypoint x="2950.0" y="450.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_30" id="Flow_MS_30_gui">
+            <omgdi:waypoint x="2890.0" y="515.0"/>
+            <omgdi:waypoint x="3100.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_31" id="Flow_MS_31_gui">
+            <omgdi:waypoint x="3050.0" y="450.0"/>
+            <omgdi:waypoint x="3120.0" y="450.0"/>
+            <omgdi:waypoint x="3120.0" y="495.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_32" id="Flow_MS_32_gui">
+            <omgdi:waypoint x="3140.0" y="515.0"/>
+            <omgdi:waypoint x="3200.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_33" id="Flow_MS_33_gui">
+            <omgdi:waypoint x="3300.0" y="515.0"/>
+            <omgdi:waypoint x="3400.0" y="515.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: COMMISSION -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_Com_1" id="Flow_Com_1_gui">
+            <omgdi:waypoint x="2380.0" y="865.0"/>
+            <omgdi:waypoint x="2485.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Com_2" id="Flow_Com_2_gui">
+            <omgdi:waypoint x="2515.0" y="865.0"/>
+            <omgdi:waypoint x="2600.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Com_3" id="Flow_Com_3_gui">
+            <omgdi:waypoint x="2700.0" y="865.0"/>
+            <omgdi:waypoint x="2985.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Com_4" id="Flow_Com_4_gui">
+            <omgdi:waypoint x="3015.0" y="865.0"/>
+            <omgdi:waypoint x="3100.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Com_5" id="Flow_Com_5_gui">
+            <omgdi:waypoint x="3200.0" y="865.0"/>
+            <omgdi:waypoint x="3300.0" y="865.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: MESSAGE FLOWS -->
+         <bpmndi:BPMNEdge bpmnElement="MsgFlow_1" id="MsgFlow_1_gui">
+            <omgdi:waypoint x="2500.0" y="490.0"/>
+            <omgdi:waypoint x="2500.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MsgFlow_2" id="MsgFlow_2_gui">
+            <omgdi:waypoint x="3000.0" y="490.0"/>
+            <omgdi:waypoint x="3000.0" y="850.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

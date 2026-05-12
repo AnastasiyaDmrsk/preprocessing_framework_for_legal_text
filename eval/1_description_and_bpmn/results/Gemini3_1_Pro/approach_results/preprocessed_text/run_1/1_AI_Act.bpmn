@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_main">
+      <participant id="pool_sme" name="SME" processRef="proc_sme" />
+      <participant id="pool_ms" name="Member State" processRef="proc_ms" />
+      <participant id="pool_board" name="Board" processRef="proc_board" />
+      <participant id="pool_aio" name="AI Office" processRef="proc_aio" />
+      <messageFlow id="mf_sme_to_ms" sourceRef="task_sme_transmit" targetRef="event_ms_receive_sme" />
+      <messageFlow id="mf_board_to_aio" sourceRef="task_board_transmit" targetRef="event_aio_receive_board" />
+   </collaboration>
+
+   <!-- ================= SME PROCESS ================= -->
+   <process id="proc_sme" isClosed="false" isExecutable="false" name="SME" processType="None">
+      <laneSet id="laneSet_sme">
+         <lane id="lane_sme">
+            <flowNodeRef>start_sme</flowNodeRef>
+            <flowNodeRef>gw_sme_split</flowNodeRef>
+            <flowNodeRef>task_sme_share</flowNodeRef>
+            <flowNodeRef>gw_sme_merge</flowNodeRef>
+            <flowNodeRef>task_sme_transmit</flowNodeRef>
+            <flowNodeRef>end_sme</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="start_sme" name="Start">
+         <outgoing>sf_sme_1</outgoing>
+      </startEvent>
+      
+      <exclusiveGateway id="gw_sme_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <incoming>sf_sme_1</incoming>
+         <outgoing>sf_sme_y</outgoing>
+         <outgoing>sf_sme_n</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_sme_share" name="share interests and needs">
+         <incoming>sf_sme_y</incoming>
+         <outgoing>sf_sme_2</outgoing>
+      </task>
+      
+      <exclusiveGateway id="gw_sme_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_sme_2</incoming>
+         <incoming>sf_sme_n</incoming>
+         <outgoing>sf_sme_3</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_sme_transmit" name="transmit interests and needs">
+         <incoming>sf_sme_3</incoming>
+         <outgoing>sf_sme_4</outgoing>
+      </task>
+      
+      <endEvent id="end_sme" name="End">
+         <incoming>sf_sme_4</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="sf_sme_1" isImmediate="true" sourceRef="start_sme" targetRef="gw_sme_split" />
+      <sequenceFlow id="sf_sme_y" isImmediate="true" name="yes" sourceRef="gw_sme_split" targetRef="task_sme_share" />
+      <sequenceFlow id="sf_sme_n" isImmediate="true" name="no" sourceRef="gw_sme_split" targetRef="gw_sme_merge" />
+      <sequenceFlow id="sf_sme_2" isImmediate="true" sourceRef="task_sme_share" targetRef="gw_sme_merge" />
+      <sequenceFlow id="sf_sme_3" isImmediate="true" sourceRef="gw_sme_merge" targetRef="task_sme_transmit" />
+      <sequenceFlow id="sf_sme_4" isImmediate="true" sourceRef="task_sme_transmit" targetRef="end_sme" />
+   </process>
+
+   <!-- ================= MEMBER STATE PROCESS ================= -->
+   <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="laneSet_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>start_ms</flowNodeRef>
+            <flowNodeRef>gw_ms_split_par</flowNodeRef>
+            <flowNodeRef>task_ms_assess_1</flowNodeRef>
+            <flowNodeRef>gw_ms_xor1_split</flowNodeRef>
+            <flowNodeRef>task_ms_provide</flowNodeRef>
+            <flowNodeRef>gw_ms_xor1_merge</flowNodeRef>
+            <flowNodeRef>task_ms_assess_2</flowNodeRef>
+            <flowNodeRef>gw_ms_xor2_split</flowNodeRef>
+            <flowNodeRef>task_ms_not_preclude</flowNodeRef>
+            <flowNodeRef>gw_ms_xor2_merge</flowNodeRef>
+            <flowNodeRef>task_ms_organise</flowNodeRef>
+            <flowNodeRef>task_ms_utilise</flowNodeRef>
+            <flowNodeRef>gw_ms_xor3_split</flowNodeRef>
+            <flowNodeRef>task_ms_establish</flowNodeRef>
+            <flowNodeRef>gw_ms_xor3_merge</flowNodeRef>
+            <flowNodeRef>task_ms_advise</flowNodeRef>
+            <flowNodeRef>task_ms_respond</flowNodeRef>
+            <flowNodeRef>task_ms_facilitate</flowNodeRef>
+            <flowNodeRef>gw_ms_merge_par</flowNodeRef>
+            <flowNodeRef>event_ms_receive_sme</flowNodeRef>
+            <flowNodeRef>task_ms_take_account</flowNodeRef>
+            <flowNodeRef>task_ms_set_fees</flowNodeRef>
+            <flowNodeRef>end_ms</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ms" name="implementation of measures for providers and deployers">
+         <outgoing>sf_ms_1</outgoing>
+      </startEvent>
+      <parallelGateway id="gw_ms_split_par" gatewayDirection="Diverging">
+         <incoming>sf_ms_1</incoming>
+         <outgoing>sf_ms_p1</outgoing>
+         <outgoing>sf_ms_p2</outgoing>
+         <outgoing>sf_ms_p3</outgoing>
+         <outgoing>sf_ms_p4</outgoing>
+      </parallelGateway>
+
+      <!-- MS Branch 1 -->
+      <task id="task_ms_assess_1" name="assess whether having a registered office or a branch in the Union and if SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>sf_ms_p1</incoming>
+         <outgoing>sf_ms_a1</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor1_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if having a registered office...">
+         <incoming>sf_ms_a1</incoming>
+         <outgoing>sf_ms_x1y</outgoing>
+         <outgoing>sf_ms_x1n</outgoing>
+      </exclusiveGateway>
+      <task id="task_ms_provide" name="provide SMEs with priority access">
+         <incoming>sf_ms_x1y</incoming>
+         <outgoing>sf_ms_a2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor1_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_ms_a2</incoming>
+         <incoming>sf_ms_x1n</incoming>
+         <outgoing>sf_ms_a3</outgoing>
+      </exclusiveGateway>
+      <task id="task_ms_assess_2" name="assess whether other SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>sf_ms_a3</incoming>
+         <outgoing>sf_ms_a4</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor2_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if other SMEs fulfil conditions">
+         <incoming>sf_ms_a4</incoming>
+         <outgoing>sf_ms_x2y</outgoing>
+         <outgoing>sf_ms_x2n</outgoing>
+      </exclusiveGateway>
+      <task id="task_ms_not_preclude" name="not preclude other SMEs from access to the AI regulatory sandbox">
+         <incoming>sf_ms_x2y</incoming>
+         <outgoing>sf_ms_a5</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor2_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_ms_a5</incoming>
+         <incoming>sf_ms_x2n</incoming>
+         <outgoing>sf_ms_a6</outgoing>
+      </exclusiveGateway>
+
+      <!-- MS Branch 2 -->
+      <task id="task_ms_organise" name="organise specific activities">
+         <incoming>sf_ms_p2</incoming>
+         <outgoing>sf_ms_b1</outgoing>
+      </task>
+
+      <!-- MS Branch 3 -->
+      <task id="task_ms_utilise" name="utilise existing dedicated channels">
+         <incoming>sf_ms_p3</incoming>
+         <outgoing>sf_ms_c1</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor3_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if appropriate">
+         <incoming>sf_ms_c1</incoming>
+         <outgoing>sf_ms_x3y</outgoing>
+         <outgoing>sf_ms_x3n</outgoing>
+      </exclusiveGateway>
+      <task id="task_ms_establish" name="establish new channels">
+         <incoming>sf_ms_x3y</incoming>
+         <outgoing>sf_ms_c2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_ms_xor3_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_ms_c2</incoming>
+         <incoming>sf_ms_x3n</incoming>
+         <outgoing>sf_ms_c3</outgoing>
+      </exclusiveGateway>
+      <task id="task_ms_advise" name="provide advice">
+         <incoming>sf_ms_c3</incoming>
+         <outgoing>sf_ms_c4</outgoing>
+      </task>
+      <task id="task_ms_respond" name="respond to queries">
+         <incoming>sf_ms_c4</incoming>
+         <outgoing>sf_ms_c5</outgoing>
+      </task>
+
+      <!-- MS Branch 4 -->
+      <task id="task_ms_facilitate" name="facilitate the participation of SMEs in the development process">
+         <incoming>sf_ms_p4</incoming>
+         <outgoing>sf_ms_d1</outgoing>
+      </task>
+
+      <parallelGateway id="gw_ms_merge_par" gatewayDirection="Converging">
+         <incoming>sf_ms_a6</incoming>
+         <incoming>sf_ms_b1</incoming>
+         <incoming>sf_ms_c5</incoming>
+         <incoming>sf_ms_d1</incoming>
+         <outgoing>sf_ms_2</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="event_ms_receive_sme" name="Receive interests and needs">
+         <incoming>sf_ms_2</incoming>
+         <outgoing>sf_ms_3</outgoing>
+         <messageEventDefinition id="med_ms_1" />
+      </intermediateCatchEvent>
+
+      <task id="task_ms_take_account" name="take into account the specific interests and needs">
+         <incoming>sf_ms_3</incoming>
+         <outgoing>sf_ms_4</outgoing>
+      </task>
+      <task id="task_ms_set_fees" name="set the fees for conformity assessment">
+         <incoming>sf_ms_4</incoming>
+         <outgoing>sf_ms_5</outgoing>
+      </task>
+      <endEvent id="end_ms" name="conformity assessment fees set">
+         <incoming>sf_ms_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ms_1" isImmediate="true" sourceRef="start_ms" targetRef="gw_ms_split_par" />
+      <sequenceFlow id="sf_ms_p1" isImmediate="true" sourceRef="gw_ms_split_par" targetRef="task_ms_assess_1" />
+      <sequenceFlow id="sf_ms_p2" isImmediate="true" sourceRef="gw_ms_split_par" targetRef="task_ms_organise" />
+      <sequenceFlow id="sf_ms_p3" isImmediate="true" sourceRef="gw_ms_split_par" targetRef="task_ms_utilise" />
+      <sequenceFlow id="sf_ms_p4" isImmediate="true" sourceRef="gw_ms_split_par" targetRef="task_ms_facilitate" />
+      
+      <sequenceFlow id="sf_ms_a1" isImmediate="true" sourceRef="task_ms_assess_1" targetRef="gw_ms_xor1_split" />
+      <sequenceFlow id="sf_ms_x1y" isImmediate="true" name="yes" sourceRef="gw_ms_xor1_split" targetRef="task_ms_provide" />
+      <sequenceFlow id="sf_ms_x1n" isImmediate="true" name="no" sourceRef="gw_ms_xor1_split" targetRef="gw_ms_xor1_merge" />
+      <sequenceFlow id="sf_ms_a2" isImmediate="true" sourceRef="task_ms_provide" targetRef="gw_ms_xor1_merge" />
+      <sequenceFlow id="sf_ms_a3" isImmediate="true" sourceRef="gw_ms_xor1_merge" targetRef="task_ms_assess_2" />
+      <sequenceFlow id="sf_ms_a4" isImmediate="true" sourceRef="task_ms_assess_2" targetRef="gw_ms_xor2_split" />
+      <sequenceFlow id="sf_ms_x2y" isImmediate="true" name="yes" sourceRef="gw_ms_xor2_split" targetRef="task_ms_not_preclude" />
+      <sequenceFlow id="sf_ms_x2n" isImmediate="true" name="no" sourceRef="gw_ms_xor2_split" targetRef="gw_ms_xor2_merge" />
+      <sequenceFlow id="sf_ms_a5" isImmediate="true" sourceRef="task_ms_not_preclude" targetRef="gw_ms_xor2_merge" />
+      <sequenceFlow id="sf_ms_a6" isImmediate="true" sourceRef="gw_ms_xor2_merge" targetRef="gw_ms_merge_par" />
+
+      <sequenceFlow id="sf_ms_b1" isImmediate="true" sourceRef="task_ms_organise" targetRef="gw_ms_merge_par" />
+
+      <sequenceFlow id="sf_ms_c1" isImmediate="true" sourceRef="task_ms_utilise" targetRef="gw_ms_xor3_split" />
+      <sequenceFlow id="sf_ms_x3y" isImmediate="true" name="yes" sourceRef="gw_ms_xor3_split" targetRef="task_ms_establish" />
+      <sequenceFlow id="sf_ms_x3n" isImmediate="true" name="no" sourceRef="gw_ms_xor3_split" targetRef="gw_ms_xor3_merge" />
+      <sequenceFlow id="sf_ms_c2" isImmediate="true" sourceRef="task_ms_establish" targetRef="gw_ms_xor3_merge" />
+      <sequenceFlow id="sf_ms_c3" isImmediate="true" sourceRef="gw_ms_xor3_merge" targetRef="task_ms_advise" />
+      <sequenceFlow id="sf_ms_c4" isImmediate="true" sourceRef="task_ms_advise" targetRef="task_ms_respond" />
+      <sequenceFlow id="sf_ms_c5" isImmediate="true" sourceRef="task_ms_respond" targetRef="gw_ms_merge_par" />
+
+      <sequenceFlow id="sf_ms_d1" isImmediate="true" sourceRef="task_ms_facilitate" targetRef="gw_ms_merge_par" />
+
+      <sequenceFlow id="sf_ms_2" isImmediate="true" sourceRef="gw_ms_merge_par" targetRef="event_ms_receive_sme" />
+      <sequenceFlow id="sf_ms_3" isImmediate="true" sourceRef="event_ms_receive_sme" targetRef="task_ms_take_account" />
+      <sequenceFlow id="sf_ms_4" isImmediate="true" sourceRef="task_ms_take_account" targetRef="task_ms_set_fees" />
+      <sequenceFlow id="sf_ms_5" isImmediate="true" sourceRef="task_ms_set_fees" targetRef="end_ms" />
+   </process>
+
+   <!-- ================= BOARD PROCESS ================= -->
+   <process id="proc_board" isClosed="false" isExecutable="false" name="Board" processType="None">
+      <laneSet id="laneSet_board">
+         <lane id="lane_board">
+            <flowNodeRef>start_board</flowNodeRef>
+            <flowNodeRef>gw_board_split</flowNodeRef>
+            <flowNodeRef>task_board_request</flowNodeRef>
+            <flowNodeRef>gw_board_merge</flowNodeRef>
+            <flowNodeRef>task_board_transmit</flowNodeRef>
+            <flowNodeRef>end_board</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_board" name="Start">
+         <outgoing>sf_board_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="gw_board_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <incoming>sf_board_1</incoming>
+         <outgoing>sf_board_y</outgoing>
+         <outgoing>sf_board_n</outgoing>
+      </exclusiveGateway>
+      <task id="task_board_request" name="request standardised templates">
+         <incoming>sf_board_y</incoming>
+         <outgoing>sf_board_2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_board_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_board_2</incoming>
+         <incoming>sf_board_n</incoming>
+         <outgoing>sf_board_3</outgoing>
+      </exclusiveGateway>
+      <task id="task_board_transmit" name="transmit the request for standardised templates">
+         <incoming>sf_board_3</incoming>
+         <outgoing>sf_board_4</outgoing>
+      </task>
+      <endEvent id="end_board" name="End">
+         <incoming>sf_board_4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_board_1" isImmediate="true" sourceRef="start_board" targetRef="gw_board_split" />
+      <sequenceFlow id="sf_board_y" isImmediate="true" name="yes" sourceRef="gw_board_split" targetRef="task_board_request" />
+      <sequenceFlow id="sf_board_n" isImmediate="true" name="no" sourceRef="gw_board_split" targetRef="gw_board_merge" />
+      <sequenceFlow id="sf_board_2" isImmediate="true" sourceRef="task_board_request" targetRef="gw_board_merge" />
+      <sequenceFlow id="sf_board_3" isImmediate="true" sourceRef="gw_board_merge" targetRef="task_board_transmit" />
+      <sequenceFlow id="sf_board_4" isImmediate="true" sourceRef="task_board_transmit" targetRef="end_board" />
+   </process>
+
+   <!-- ================= AI OFFICE PROCESS ================= -->
+   <process id="proc_aio" isClosed="false" isExecutable="false" name="AI Office" processType="None">
+      <laneSet id="laneSet_aio">
+         <lane id="lane_aio">
+            <flowNodeRef>start_aio</flowNodeRef>
+            <flowNodeRef>gw_aio_split_par</flowNodeRef>
+            <flowNodeRef>event_aio_receive_board</flowNodeRef>
+            <flowNodeRef>task_aio_assess</flowNodeRef>
+            <flowNodeRef>gw_aio_xor1_split</flowNodeRef>
+            <flowNodeRef>task_aio_provide</flowNodeRef>
+            <flowNodeRef>gw_aio_xor1_merge</flowNodeRef>
+            <flowNodeRef>task_aio_develop</flowNodeRef>
+            <flowNodeRef>task_aio_maintain</flowNodeRef>
+            <flowNodeRef>task_aio_organise</flowNodeRef>
+            <flowNodeRef>task_aio_evaluate</flowNodeRef>
+            <flowNodeRef>task_aio_promote</flowNodeRef>
+            <flowNodeRef>gw_aio_merge_par</flowNodeRef>
+            <flowNodeRef>end_aio</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_aio" name="Start">
+         <outgoing>sf_aio_1</outgoing>
+      </startEvent>
+      <parallelGateway id="gw_aio_split_par" gatewayDirection="Diverging">
+         <incoming>sf_aio_1</incoming>
+         <outgoing>sf_aio_p1</outgoing>
+         <outgoing>sf_aio_p2</outgoing>
+         <outgoing>sf_aio_p3</outgoing>
+         <outgoing>sf_aio_p4</outgoing>
+      </parallelGateway>
+
+      <!-- AIO Branch 1 -->
+      <intermediateCatchEvent id="event_aio_receive_board" name="Receive request for standardised templates">
+         <incoming>sf_aio_p1</incoming>
+         <outgoing>sf_aio_a1</outgoing>
+         <messageEventDefinition id="med_aio_1" />
+      </intermediateCatchEvent>
+      <task id="task_aio_assess" name="assess whether as specified by the Board in its request">
+         <incoming>sf_aio_a1</incoming>
+         <outgoing>sf_aio_a2</outgoing>
+      </task>
+      <exclusiveGateway id="gw_aio_xor1_split" gatewayDirection="Diverging" isMarkerVisible="true" name="if as specified">
+         <incoming>sf_aio_a2</incoming>
+         <outgoing>sf_aio_x1y</outgoing>
+         <outgoing>sf_aio_x1n</outgoing>
+      </exclusiveGateway>
+      <task id="task_aio_provide" name="provide standardised templates">
+         <incoming>sf_aio_x1y</incoming>
+         <outgoing>sf_aio_a3</outgoing>
+      </task>
+      <exclusiveGateway id="gw_aio_xor1_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_aio_a3</incoming>
+         <incoming>sf_aio_x1n</incoming>
+         <outgoing>sf_aio_a4</outgoing>
+      </exclusiveGateway>
+
+      <!-- AIO Branch 2 -->
+      <task id="task_aio_develop" name="develop a single information platform">
+         <incoming>sf_aio_p2</incoming>
+         <outgoing>sf_aio_b1</outgoing>
+      </task>
+      <task id="task_aio_maintain" name="maintain a single information platform">
+         <incoming>sf_aio_b1</incoming>
+         <outgoing>sf_aio_b2</outgoing>
+      </task>
+
+      <!-- AIO Branch 3 -->
+      <task id="task_aio_organise" name="organise appropriate communication campaigns">
+         <incoming>sf_aio_p3</incoming>
+         <outgoing>sf_aio_c1</outgoing>
+      </task>
+
+      <!-- AIO Branch 4 -->
+      <task id="task_aio_evaluate" name="evaluate the convergence of best practices">
+         <incoming>sf_aio_p4</incoming>
+         <outgoing>sf_aio_d1</outgoing>
+      </task>
+      <task id="task_aio_promote" name="promote the convergence of best practices">
+         <incoming>sf_aio_d1</incoming>
+         <outgoing>sf_aio_d2</outgoing>
+      </task>
+
+      <parallelGateway id="gw_aio_merge_par" gatewayDirection="Converging">
+         <incoming>sf_aio_a4</incoming>
+         <incoming>sf_aio_b2</incoming>
+         <incoming>sf_aio_c1</incoming>
+         <incoming>sf_aio_d2</incoming>
+         <outgoing>sf_aio_2</outgoing>
+      </parallelGateway>
+
+      <endEvent id="end_aio" name="End">
+         <incoming>sf_aio_2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_aio_1" isImmediate="true" sourceRef="start_aio" targetRef="gw_aio_split_par" />
+      <sequenceFlow id="sf_aio_p1" isImmediate="true" sourceRef="gw_aio_split_par" targetRef="event_aio_receive_board" />
+      <sequenceFlow id="sf_aio_p2" isImmediate="true" sourceRef="gw_aio_split_par" targetRef="task_aio_develop" />
+      <sequenceFlow id="sf_aio_p3" isImmediate="true" sourceRef="gw_aio_split_par" targetRef="task_aio_organise" />
+      <sequenceFlow id="sf_aio_p4" isImmediate="true" sourceRef="gw_aio_split_par" targetRef="task_aio_evaluate" />
+
+      <sequenceFlow id="sf_aio_a1" isImmediate="true" sourceRef="event_aio_receive_board" targetRef="task_aio_assess" />
+      <sequenceFlow id="sf_aio_a2" isImmediate="true" sourceRef="task_aio_assess" targetRef="gw_aio_xor1_split" />
+      <sequenceFlow id="sf_aio_x1y" isImmediate="true" name="yes" sourceRef="gw_aio_xor1_split" targetRef="task_aio_provide" />
+      <sequenceFlow id="sf_aio_x1n" isImmediate="true" name="no" sourceRef="gw_aio_xor1_split" targetRef="gw_aio_xor1_merge" />
+      <sequenceFlow id="sf_aio_a3" isImmediate="true" sourceRef="task_aio_provide" targetRef="gw_aio_xor1_merge" />
+      <sequenceFlow id="sf_aio_a4" isImmediate="true" sourceRef="gw_aio_xor1_merge" targetRef="gw_aio_merge_par" />
+
+      <sequenceFlow id="sf_aio_b1" isImmediate="true" sourceRef="task_aio_develop" targetRef="task_aio_maintain" />
+      <sequenceFlow id="sf_aio_b2" isImmediate="true" sourceRef="task_aio_maintain" targetRef="gw_aio_merge_par" />
+
+      <sequenceFlow id="sf_aio_c1" isImmediate="true" sourceRef="task_aio_organise" targetRef="gw_aio_merge_par" />
+
+      <sequenceFlow id="sf_aio_d1" isImmediate="true" sourceRef="task_aio_evaluate" targetRef="task_aio_promote" />
+      <sequenceFlow id="sf_aio_d2" isImmediate="true" sourceRef="task_aio_promote" targetRef="gw_aio_merge_par" />
+
+      <sequenceFlow id="sf_aio_2" isImmediate="true" sourceRef="gw_aio_merge_par" targetRef="end_aio" />
+   </process>
+
+   <!-- ================= DIAGRAM INTERCHANGE ================= -->
+   <bpmndi:BPMNDiagram id="diagram_main">
+      <bpmndi:BPMNPlane bpmnElement="collab_main" id="plane_main">
+         
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="pool_sme" id="pool_sme_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2200.0" x="100.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_ms" id="pool_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="700.0" width="2200.0" x="100.0" y="300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_board" id="pool_board_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2200.0" x="100.0" y="1050.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_aio" id="pool_aio_gui" isHorizontal="true">
+            <omgdc:Bounds height="600.0" width="2200.0" x="100.0" y="1300.0" />
+         </bpmndi:BPMNShape>
+         
+         <!-- LANES -->
+         <bpmndi:BPMNShape bpmnElement="lane_sme" id="lane_sme_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2170.0" x="130.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="700.0" width="2170.0" x="130.0" y="300.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_board" id="lane_board_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2170.0" x="130.0" y="1050.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_aio" id="lane_aio_gui" isHorizontal="true">
+            <omgdc:Bounds height="600.0" width="2170.0" x="130.0" y="1300.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- SME SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="start_sme" id="start_sme_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1050.0" y="150.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_sme_split" id="gw_sme_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1150.0" y="145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sme_share" id="task_sme_share_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1250.0" y="70.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_sme_merge" id="gw_sme_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1400.0" y="145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_sme_transmit" id="task_sme_transmit_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1500.0" y="125.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_sme" id="end_sme_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1650.0" y="151.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MS SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="start_ms" id="start_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="150.0" y="600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_split_par" id="gw_ms_split_par_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <!-- MS Branch 1 -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_assess_1" id="task_ms_assess_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="320.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor1_split" id="gw_ms_xor1_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_provide" id="task_ms_provide_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="250.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor1_merge" id="gw_ms_xor1_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_assess_2" id="task_ms_assess_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="320.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor2_split" id="gw_ms_xor2_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1000.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_not_preclude" id="task_ms_not_preclude_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="250.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor2_merge" id="gw_ms_xor2_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1250.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <!-- MS Branch 2 -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_organise" id="task_ms_organise_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="450.0" />
+         </bpmndi:BPMNShape>
+         <!-- MS Branch 3 -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_utilise" id="task_ms_utilise_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="575.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor3_split" id="gw_ms_xor3_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_establish" id="task_ms_establish_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="515.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_xor3_merge" id="gw_ms_xor3_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_advise" id="task_ms_advise_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="850.0" y="575.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_respond" id="task_ms_respond_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="575.0" />
+         </bpmndi:BPMNShape>
+         <!-- MS Branch 4 -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_facilitate" id="task_ms_facilitate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_merge_par" id="gw_ms_merge_par_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1400.0" y="595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="event_ms_receive_sme" id="event_ms_receive_sme_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1535.0" y="600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_take_account" id="task_ms_take_account_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1650.0" y="575.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_set_fees" id="task_ms_set_fees_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1800.0" y="575.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="end_ms_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1950.0" y="601.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- BOARD SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="start_board" id="start_board_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="1150.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_board_split" id="gw_board_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="300.0" y="1145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_board_request" id="task_board_request_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1060.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_board_merge" id="gw_board_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="1145.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_board_transmit" id="task_board_transmit_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="1125.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_board" id="end_board_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="800.0" y="1151.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI OFFICE SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="start_aio" id="start_aio_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="200.0" y="1600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_aio_split_par" id="gw_aio_split_par_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="300.0" y="1595.0" />
+         </bpmndi:BPMNShape>
+         <!-- AIO Branch 1 -->
+         <bpmndi:BPMNShape bpmnElement="event_aio_receive_board" id="event_aio_receive_board_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="685.0" y="1400.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_aio_assess" id="task_aio_assess_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="1375.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_aio_xor1_split" id="gw_aio_xor1_split_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="950.0" y="1395.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_aio_provide" id="task_aio_provide_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="1310.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_aio_xor1_merge" id="gw_aio_xor1_merge_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="1395.0" />
+         </bpmndi:BPMNShape>
+         <!-- AIO Branch 2 -->
+         <bpmndi:BPMNShape bpmnElement="task_aio_develop" id="task_aio_develop_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1500.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_aio_maintain" id="task_aio_maintain_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="1500.0" />
+         </bpmndi:BPMNShape>
+         <!-- AIO Branch 3 -->
+         <bpmndi:BPMNShape bpmnElement="task_aio_organise" id="task_aio_organise_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1650.0" />
+         </bpmndi:BPMNShape>
+         <!-- AIO Branch 4 -->
+         <bpmndi:BPMNShape bpmnElement="task_aio_evaluate" id="task_aio_evaluate_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1760.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_aio_promote" id="task_aio_promote_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="1760.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_aio_merge_par" id="gw_aio_merge_par_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="1595.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_aio" id="end_aio_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1450.0" y="1601.0" />
+         </bpmndi:BPMNShape>
+
+
+         <!-- SME EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_1" id="sf_sme_1_gui">
+            <omgdi:waypoint x="1080.0" y="165.0" />
+            <omgdi:waypoint x="1150.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_y" id="sf_sme_y_gui">
+            <omgdi:waypoint x="1170.0" y="145.0" />
+            <omgdi:waypoint x="1170.0" y="110.0" />
+            <omgdi:waypoint x="1250.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_n" id="sf_sme_n_gui">
+            <omgdi:waypoint x="1190.0" y="165.0" />
+            <omgdi:waypoint x="1400.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_2" id="sf_sme_2_gui">
+            <omgdi:waypoint x="1350.0" y="110.0" />
+            <omgdi:waypoint x="1420.0" y="110.0" />
+            <omgdi:waypoint x="1420.0" y="145.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_3" id="sf_sme_3_gui">
+            <omgdi:waypoint x="1440.0" y="165.0" />
+            <omgdi:waypoint x="1500.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_sme_4" id="sf_sme_4_gui">
+            <omgdi:waypoint x="1600.0" y="165.0" />
+            <omgdi:waypoint x="1650.0" y="165.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOWS -->
+         <bpmndi:BPMNEdge bpmnElement="mf_sme_to_ms" id="mf_sme_to_ms_gui">
+            <omgdi:waypoint x="1550.0" y="205.0" />
+            <omgdi:waypoint x="1550.0" y="600.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_board_to_aio" id="mf_board_to_aio_gui">
+            <omgdi:waypoint x="700.0" y="1205.0" />
+            <omgdi:waypoint x="700.0" y="1400.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MS EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_1" id="sf_ms_1_gui">
+            <omgdi:waypoint x="180.0" y="615.0" />
+            <omgdi:waypoint x="250.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_p1" id="sf_ms_p1_gui">
+            <omgdi:waypoint x="270.0" y="595.0" />
+            <omgdi:waypoint x="270.0" y="360.0" />
+            <omgdi:waypoint x="350.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_p2" id="sf_ms_p2_gui">
+            <omgdi:waypoint x="270.0" y="595.0" />
+            <omgdi:waypoint x="270.0" y="490.0" />
+            <omgdi:waypoint x="350.0" y="490.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_p3" id="sf_ms_p3_gui">
+            <omgdi:waypoint x="290.0" y="615.0" />
+            <omgdi:waypoint x="350.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_p4" id="sf_ms_p4_gui">
+            <omgdi:waypoint x="270.0" y="635.0" />
+            <omgdi:waypoint x="270.0" y="740.0" />
+            <omgdi:waypoint x="350.0" y="740.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MS Branch 1 Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a1" id="sf_ms_a1_gui">
+            <omgdi:waypoint x="450.0" y="360.0" />
+            <omgdi:waypoint x="500.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x1y" id="sf_ms_x1y_gui">
+            <omgdi:waypoint x="520.0" y="340.0" />
+            <omgdi:waypoint x="520.0" y="290.0" />
+            <omgdi:waypoint x="600.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x1n" id="sf_ms_x1n_gui">
+            <omgdi:waypoint x="540.0" y="360.0" />
+            <omgdi:waypoint x="750.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a2" id="sf_ms_a2_gui">
+            <omgdi:waypoint x="700.0" y="290.0" />
+            <omgdi:waypoint x="770.0" y="290.0" />
+            <omgdi:waypoint x="770.0" y="340.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a3" id="sf_ms_a3_gui">
+            <omgdi:waypoint x="790.0" y="360.0" />
+            <omgdi:waypoint x="850.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a4" id="sf_ms_a4_gui">
+            <omgdi:waypoint x="950.0" y="360.0" />
+            <omgdi:waypoint x="1000.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x2y" id="sf_ms_x2y_gui">
+            <omgdi:waypoint x="1020.0" y="340.0" />
+            <omgdi:waypoint x="1020.0" y="290.0" />
+            <omgdi:waypoint x="1100.0" y="290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x2n" id="sf_ms_x2n_gui">
+            <omgdi:waypoint x="1040.0" y="360.0" />
+            <omgdi:waypoint x="1250.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a5" id="sf_ms_a5_gui">
+            <omgdi:waypoint x="1200.0" y="290.0" />
+            <omgdi:waypoint x="1270.0" y="290.0" />
+            <omgdi:waypoint x="1270.0" y="340.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_a6" id="sf_ms_a6_gui">
+            <omgdi:waypoint x="1290.0" y="360.0" />
+            <omgdi:waypoint x="1420.0" y="360.0" />
+            <omgdi:waypoint x="1420.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MS Branch 2 Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_b1" id="sf_ms_b1_gui">
+            <omgdi:waypoint x="450.0" y="490.0" />
+            <omgdi:waypoint x="1420.0" y="490.0" />
+            <omgdi:waypoint x="1420.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MS Branch 3 Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_c1" id="sf_ms_c1_gui">
+            <omgdi:waypoint x="450.0" y="615.0" />
+            <omgdi:waypoint x="500.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x3y" id="sf_ms_x3y_gui">
+            <omgdi:waypoint x="520.0" y="595.0" />
+            <omgdi:waypoint x="520.0" y="555.0" />
+            <omgdi:waypoint x="600.0" y="555.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_x3n" id="sf_ms_x3n_gui">
+            <omgdi:waypoint x="540.0" y="615.0" />
+            <omgdi:waypoint x="750.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_c2" id="sf_ms_c2_gui">
+            <omgdi:waypoint x="700.0" y="555.0" />
+            <omgdi:waypoint x="770.0" y="555.0" />
+            <omgdi:waypoint x="770.0" y="595.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_c3" id="sf_ms_c3_gui">
+            <omgdi:waypoint x="790.0" y="615.0" />
+            <omgdi:waypoint x="850.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_c4" id="sf_ms_c4_gui">
+            <omgdi:waypoint x="950.0" y="615.0" />
+            <omgdi:waypoint x="1000.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_c5" id="sf_ms_c5_gui">
+            <omgdi:waypoint x="1100.0" y="615.0" />
+            <omgdi:waypoint x="1400.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MS Branch 4 Edges -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_d1" id="sf_ms_d1_gui">
+            <omgdi:waypoint x="450.0" y="740.0" />
+            <omgdi:waypoint x="1420.0" y="740.0" />
+            <omgdi:waypoint x="1420.0" y="635.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_2" id="sf_ms_2_gui">
+            <omgdi:waypoint x="1440.0" y="615.0" />
+            <omgdi:waypoint x="1535.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_3" id="sf_ms_3_gui">
+            <omgdi:waypoint x="1565.0" y="615.0" />
+            <omgdi:waypoint x="1650.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_4" id="sf_ms_4_gui">
+            <omgdi:waypoint x="1750.0" y="615.0" />
+            <omgdi:waypoint x="1800.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_5" id="sf_ms_5_gui">
+            <omgdi:waypoint x="1900.0" y="615.0" />
+            <omgdi:waypoint x="1950.0" y="615.0" />
+         </bpmndi:BPMNEdge>
+
+
+         <!-- BOARD EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_board_1" id="sf_board_1_gui">
+            <omgdi:waypoint x="230.0" y="1165.0" />
+            <omgdi:waypoint x="300.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_board_y" id="sf_board_y_gui">
+            <omgdi:waypoint x="320.0" y="1145.0" />
+            <omgdi:waypoint x="320.0" y="1100.0" />
+            <omgdi:waypoint x="400.0" y="1100.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_board_n" id="sf_board_n_gui">
+            <omgdi:waypoint x="340.0" y="1165.0" />
+            <omgdi:waypoint x="550.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_board_2" id="sf_board_2_gui">
+            <omgdi:waypoint x="500.0" y="1100.0" />
+            <omgdi:waypoint x="570.0" y="1100.0" />
+            <omgdi:waypoint x="570.0" y="1145.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_board_3" id="sf_board_3_gui">
+            <omgdi:waypoint x="590.0" y="1165.0" />
+            <omgdi:waypoint x="650.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_board_4" id="sf_board_4_gui">
+            <omgdi:waypoint x="750.0" y="1165.0" />
+            <omgdi:waypoint x="800.0" y="1165.0" />
+         </bpmndi:BPMNEdge>
+
+
+         <!-- AIO EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_1" id="sf_aio_1_gui">
+            <omgdi:waypoint x="230.0" y="1615.0" />
+            <omgdi:waypoint x="300.0" y="1615.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_p1" id="sf_aio_p1_gui">
+            <omgdi:waypoint x="320.0" y="1595.0" />
+            <omgdi:waypoint x="320.0" y="1415.0" />
+            <omgdi:waypoint x="685.0" y="1415.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_p2" id="sf_aio_p2_gui">
+            <omgdi:waypoint x="320.0" y="1595.0" />
+            <omgdi:waypoint x="320.0" y="1540.0" />
+            <omgdi:waypoint x="400.0" y="1540.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_p3" id="sf_aio_p3_gui">
+            <omgdi:waypoint x="320.0" y="1635.0" />
+            <omgdi:waypoint x="320.0" y="1690.0" />
+            <omgdi:waypoint x="400.0" y="1690.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_p4" id="sf_aio_p4_gui">
+            <omgdi:waypoint x="320.0" y="1635.0" />
+            <omgdi:waypoint x="320.0" y="1800.0" />
+            <omgdi:waypoint x="400.0" y="1800.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_a1" id="sf_aio_a1_gui">
+            <omgdi:waypoint x="715.0" y="1415.0" />
+            <omgdi:waypoint x="800.0" y="1415.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_a2" id="sf_aio_a2_gui">
+            <omgdi:waypoint x="900.0" y="1415.0" />
+            <omgdi:waypoint x="950.0" y="1415.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_x1y" id="sf_aio_x1y_gui">
+            <omgdi:waypoint x="970.0" y="1395.0" />
+            <omgdi:waypoint x="970.0" y="1350.0" />
+            <omgdi:waypoint x="1050.0" y="1350.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_x1n" id="sf_aio_x1n_gui">
+            <omgdi:waypoint x="990.0" y="1415.0" />
+            <omgdi:waypoint x="1200.0" y="1415.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_a3" id="sf_aio_a3_gui">
+            <omgdi:waypoint x="1150.0" y="1350.0" />
+            <omgdi:waypoint x="1220.0" y="1350.0" />
+            <omgdi:waypoint x="1220.0" y="1395.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_a4" id="sf_aio_a4_gui">
+            <omgdi:waypoint x="1240.0" y="1415.0" />
+            <omgdi:waypoint x="1370.0" y="1415.0" />
+            <omgdi:waypoint x="1370.0" y="1595.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_b1" id="sf_aio_b1_gui">
+            <omgdi:waypoint x="500.0" y="1540.0" />
+            <omgdi:waypoint x="550.0" y="1540.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_b2" id="sf_aio_b2_gui">
+            <omgdi:waypoint x="650.0" y="1540.0" />
+            <omgdi:waypoint x="1370.0" y="1540.0" />
+            <omgdi:waypoint x="1370.0" y="1595.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_c1" id="sf_aio_c1_gui">
+            <omgdi:waypoint x="500.0" y="1690.0" />
+            <omgdi:waypoint x="1370.0" y="1690.0" />
+            <omgdi:waypoint x="1370.0" y="1635.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_d1" id="sf_aio_d1_gui">
+            <omgdi:waypoint x="500.0" y="1800.0" />
+            <omgdi:waypoint x="550.0" y="1800.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_d2" id="sf_aio_d2_gui">
+            <omgdi:waypoint x="650.0" y="1800.0" />
+            <omgdi:waypoint x="1370.0" y="1800.0" />
+            <omgdi:waypoint x="1370.0" y="1635.0" />
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_aio_2" id="sf_aio_2_gui">
+            <omgdi:waypoint x="1390.0" y="1615.0" />
+            <omgdi:waypoint x="1450.0" y="1615.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
