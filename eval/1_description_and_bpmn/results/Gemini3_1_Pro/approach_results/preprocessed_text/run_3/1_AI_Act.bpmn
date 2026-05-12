@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-def" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_1">
+      <participant id="Pool_SME" name="SME" processRef="Proc_SME"/>
+      <participant id="Pool_Board" name="Board" processRef="Proc_Board"/>
+      <participant id="Pool_MS" name="Member State" processRef="Proc_MS"/>
+      <participant id="Pool_AIO" name="AI Office" processRef="Proc_AIO"/>
+      <messageFlow id="MF_SME_to_MS" name="" sourceRef="Task_SME_Send" targetRef="Catch_MS_Interests"/>
+      <messageFlow id="MF_Board_to_AIO" name="" sourceRef="Task_Board_Send" targetRef="Catch_AIO_Req"/>
+   </collaboration>
+
+   <!-- SME Process -->
+   <process id="Proc_SME" isClosed="false" isExecutable="false" name="SME" processType="None">
+      <startEvent id="Start_SME" name="starts">
+         <outgoing>seq_SME_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="XOR_SME_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_SME_1</incoming>
+         <outgoing>seq_SME_2_true</outgoing>
+         <outgoing>seq_SME_2_false</outgoing>
+      </exclusiveGateway>
+      <task id="Task_SME_Share" name="Share interests and needs">
+         <incoming>seq_SME_2_true</incoming>
+         <outgoing>seq_SME_3</outgoing>
+      </task>
+      <task id="Task_SME_Send" name="send interests and needs to Member State">
+         <incoming>seq_SME_3</incoming>
+         <outgoing>seq_SME_4</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_SME_Conv" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_SME_4</incoming>
+         <incoming>seq_SME_2_false</incoming>
+         <outgoing>seq_SME_5</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_SME" name="ends">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_SME_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_SME_1" isImmediate="true" sourceRef="Start_SME" targetRef="XOR_SME_Div"/>
+      <sequenceFlow id="seq_SME_2_true" isImmediate="true" name="yes" sourceRef="XOR_SME_Div" targetRef="Task_SME_Share"/>
+      <sequenceFlow id="seq_SME_2_false" isImmediate="true" name="no" sourceRef="XOR_SME_Div" targetRef="XOR_SME_Conv"/>
+      <sequenceFlow id="seq_SME_3" isImmediate="true" sourceRef="Task_SME_Share" targetRef="Task_SME_Send"/>
+      <sequenceFlow id="seq_SME_4" isImmediate="true" sourceRef="Task_SME_Send" targetRef="XOR_SME_Conv"/>
+      <sequenceFlow id="seq_SME_5" isImmediate="true" sourceRef="XOR_SME_Conv" targetRef="End_SME"/>
+   </process>
+
+   <!-- Board Process -->
+   <process id="Proc_Board" isClosed="false" isExecutable="false" name="Board" processType="None">
+      <startEvent id="Start_Board" name="starts">
+         <outgoing>seq_Board_1</outgoing>
+      </startEvent>
+      <exclusiveGateway id="XOR_Board_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="if required">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_Board_1</incoming>
+         <outgoing>seq_Board_2_true</outgoing>
+         <outgoing>seq_Board_2_false</outgoing>
+      </exclusiveGateway>
+      <task id="Task_Board_Req" name="Request standardised templates">
+         <incoming>seq_Board_2_true</incoming>
+         <outgoing>seq_Board_3</outgoing>
+      </task>
+      <task id="Task_Board_Send" name="send a request for standardised templates to the AI Office">
+         <incoming>seq_Board_3</incoming>
+         <outgoing>seq_Board_4</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_Board_Conv" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_Board_4</incoming>
+         <incoming>seq_Board_2_false</incoming>
+         <outgoing>seq_Board_5</outgoing>
+      </exclusiveGateway>
+      <endEvent id="End_Board" name="ends">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_Board_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_Board_1" isImmediate="true" sourceRef="Start_Board" targetRef="XOR_Board_Div"/>
+      <sequenceFlow id="seq_Board_2_true" isImmediate="true" name="yes" sourceRef="XOR_Board_Div" targetRef="Task_Board_Req"/>
+      <sequenceFlow id="seq_Board_2_false" isImmediate="true" name="no" sourceRef="XOR_Board_Div" targetRef="XOR_Board_Conv"/>
+      <sequenceFlow id="seq_Board_3" isImmediate="true" sourceRef="Task_Board_Req" targetRef="Task_Board_Send"/>
+      <sequenceFlow id="seq_Board_4" isImmediate="true" sourceRef="Task_Board_Send" targetRef="XOR_Board_Conv"/>
+      <sequenceFlow id="seq_Board_5" isImmediate="true" sourceRef="XOR_Board_Conv" targetRef="End_Board"/>
+   </process>
+
+   <!-- Member State Process -->
+   <process id="Proc_MS" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <startEvent id="Start_MS" name="implementation of measures for providers and deployers">
+         <outgoing>seq_MS_1</outgoing>
+      </startEvent>
+      <parallelGateway id="PG_MS_Div" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_1</incoming>
+         <outgoing>seq_MS_B1_start</outgoing>
+         <outgoing>seq_MS_B2_start</outgoing>
+         <outgoing>seq_MS_B3_start</outgoing>
+         <outgoing>seq_MS_B4_start</outgoing>
+      </parallelGateway>
+
+      <!-- MS Branch 1 -->
+      <task id="Task_MS_B1_Assess1" name="assess whether SMEs have a registered office or a branch in the Union and if SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>seq_MS_B1_start</incoming>
+         <outgoing>seq_MS_B1_toXOR1</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B1_Div1" gatewayDirection="Diverging" isMarkerVisible="true" name="SMEs have a registered office...">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B1_toXOR1</incoming>
+         <outgoing>seq_MS_B1_true1</outgoing>
+         <outgoing>seq_MS_B1_false1</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_B1_Provide" name="Provide SMEs with priority access">
+         <incoming>seq_MS_B1_true1</incoming>
+         <outgoing>seq_MS_B1_toConv1</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B1_Conv1" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B1_toConv1</incoming>
+         <incoming>seq_MS_B1_false1</incoming>
+         <outgoing>seq_MS_B1_toAssess2</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_B1_Assess2" name="assess whether other SMEs fulfil the eligibility conditions and selection criteria">
+         <incoming>seq_MS_B1_toAssess2</incoming>
+         <outgoing>seq_MS_B1_toXOR2</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B1_Div2" gatewayDirection="Diverging" isMarkerVisible="true" name="other SMEs fulfil...">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B1_toXOR2</incoming>
+         <outgoing>seq_MS_B1_true2</outgoing>
+         <outgoing>seq_MS_B1_false2</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_B1_NotPreclude" name="not Preclude other SMEs from access to the AI regulatory sandbox">
+         <incoming>seq_MS_B1_true2</incoming>
+         <outgoing>seq_MS_B1_toConv2</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B1_Conv2" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B1_toConv2</incoming>
+         <incoming>seq_MS_B1_false2</incoming>
+         <outgoing>seq_MS_B1_end</outgoing>
+      </exclusiveGateway>
+
+      <!-- MS Branch 2 -->
+      <task id="Task_MS_B2_Org" name="Organise specific activities">
+         <incoming>seq_MS_B2_start</incoming>
+         <outgoing>seq_MS_B2_end</outgoing>
+      </task>
+
+      <!-- MS Branch 3 -->
+      <task id="Task_MS_B3_Util" name="Utilise existing dedicated channels">
+         <incoming>seq_MS_B3_start</incoming>
+         <outgoing>seq_MS_B3_toAssess</outgoing>
+      </task>
+      <task id="Task_MS_B3_Assess" name="assess whether appropriate">
+         <incoming>seq_MS_B3_toAssess</incoming>
+         <outgoing>seq_MS_B3_toXOR</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B3_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="appropriate">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B3_toXOR</incoming>
+         <outgoing>seq_MS_B3_true</outgoing>
+         <outgoing>seq_MS_B3_false</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_B3_Est" name="Establish new channels">
+         <incoming>seq_MS_B3_true</incoming>
+         <outgoing>seq_MS_B3_toConv</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_MS_B3_Conv" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B3_toConv</incoming>
+         <incoming>seq_MS_B3_false</incoming>
+         <outgoing>seq_MS_B3_toAdv</outgoing>
+      </exclusiveGateway>
+      <task id="Task_MS_B3_Advice" name="Provide advice">
+         <incoming>seq_MS_B3_toAdv</incoming>
+         <outgoing>seq_MS_B3_toResp</outgoing>
+      </task>
+      <task id="Task_MS_B3_Resp" name="Respond to queries">
+         <incoming>seq_MS_B3_toResp</incoming>
+         <outgoing>seq_MS_B3_end</outgoing>
+      </task>
+
+      <!-- MS Branch 4 -->
+      <task id="Task_MS_B4_Facil" name="Facilitate the participation of SMEs in the development process">
+         <incoming>seq_MS_B4_start</incoming>
+         <outgoing>seq_MS_B4_end</outgoing>
+      </task>
+
+      <parallelGateway id="PG_MS_Conv" gatewayDirection="Converging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_B1_end</incoming>
+         <incoming>seq_MS_B2_end</incoming>
+         <incoming>seq_MS_B3_end</incoming>
+         <incoming>seq_MS_B4_end</incoming>
+         <outgoing>seq_MS_toCatch</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="Catch_MS_Interests" name="Upon receiving interests and needs">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_toCatch</incoming>
+         <outgoing>seq_MS_toTake</outgoing>
+         <messageEventDefinition id="med_MS_1"/>
+      </intermediateCatchEvent>
+
+      <task id="Task_MS_Take" name="Take into account the specific interests and needs">
+         <incoming>seq_MS_toTake</incoming>
+         <outgoing>seq_MS_toSet</outgoing>
+      </task>
+      <task id="Task_MS_Set" name="Set the fees for conformity assessment">
+         <incoming>seq_MS_toSet</incoming>
+         <outgoing>seq_MS_final</outgoing>
+      </task>
+      <endEvent id="End_MS" name="ends">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_MS_final</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_MS_1" isImmediate="true" sourceRef="Start_MS" targetRef="PG_MS_Div"/>
+      
+      <!-- B1 seqs -->
+      <sequenceFlow id="seq_MS_B1_start" isImmediate="true" sourceRef="PG_MS_Div" targetRef="Task_MS_B1_Assess1"/>
+      <sequenceFlow id="seq_MS_B1_toXOR1" isImmediate="true" sourceRef="Task_MS_B1_Assess1" targetRef="XOR_MS_B1_Div1"/>
+      <sequenceFlow id="seq_MS_B1_true1" isImmediate="true" name="yes" sourceRef="XOR_MS_B1_Div1" targetRef="Task_MS_B1_Provide"/>
+      <sequenceFlow id="seq_MS_B1_false1" isImmediate="true" name="no" sourceRef="XOR_MS_B1_Div1" targetRef="XOR_MS_B1_Conv1"/>
+      <sequenceFlow id="seq_MS_B1_toConv1" isImmediate="true" sourceRef="Task_MS_B1_Provide" targetRef="XOR_MS_B1_Conv1"/>
+      <sequenceFlow id="seq_MS_B1_toAssess2" isImmediate="true" sourceRef="XOR_MS_B1_Conv1" targetRef="Task_MS_B1_Assess2"/>
+      <sequenceFlow id="seq_MS_B1_toXOR2" isImmediate="true" sourceRef="Task_MS_B1_Assess2" targetRef="XOR_MS_B1_Div2"/>
+      <sequenceFlow id="seq_MS_B1_true2" isImmediate="true" name="yes" sourceRef="XOR_MS_B1_Div2" targetRef="Task_MS_B1_NotPreclude"/>
+      <sequenceFlow id="seq_MS_B1_false2" isImmediate="true" name="no" sourceRef="XOR_MS_B1_Div2" targetRef="XOR_MS_B1_Conv2"/>
+      <sequenceFlow id="seq_MS_B1_toConv2" isImmediate="true" sourceRef="Task_MS_B1_NotPreclude" targetRef="XOR_MS_B1_Conv2"/>
+      <sequenceFlow id="seq_MS_B1_end" isImmediate="true" sourceRef="XOR_MS_B1_Conv2" targetRef="PG_MS_Conv"/>
+
+      <!-- B2 seqs -->
+      <sequenceFlow id="seq_MS_B2_start" isImmediate="true" sourceRef="PG_MS_Div" targetRef="Task_MS_B2_Org"/>
+      <sequenceFlow id="seq_MS_B2_end" isImmediate="true" sourceRef="Task_MS_B2_Org" targetRef="PG_MS_Conv"/>
+
+      <!-- B3 seqs -->
+      <sequenceFlow id="seq_MS_B3_start" isImmediate="true" sourceRef="PG_MS_Div" targetRef="Task_MS_B3_Util"/>
+      <sequenceFlow id="seq_MS_B3_toAssess" isImmediate="true" sourceRef="Task_MS_B3_Util" targetRef="Task_MS_B3_Assess"/>
+      <sequenceFlow id="seq_MS_B3_toXOR" isImmediate="true" sourceRef="Task_MS_B3_Assess" targetRef="XOR_MS_B3_Div"/>
+      <sequenceFlow id="seq_MS_B3_true" isImmediate="true" name="yes" sourceRef="XOR_MS_B3_Div" targetRef="Task_MS_B3_Est"/>
+      <sequenceFlow id="seq_MS_B3_false" isImmediate="true" name="no" sourceRef="XOR_MS_B3_Div" targetRef="XOR_MS_B3_Conv"/>
+      <sequenceFlow id="seq_MS_B3_toConv" isImmediate="true" sourceRef="Task_MS_B3_Est" targetRef="XOR_MS_B3_Conv"/>
+      <sequenceFlow id="seq_MS_B3_toAdv" isImmediate="true" sourceRef="XOR_MS_B3_Conv" targetRef="Task_MS_B3_Advice"/>
+      <sequenceFlow id="seq_MS_B3_toResp" isImmediate="true" sourceRef="Task_MS_B3_Advice" targetRef="Task_MS_B3_Resp"/>
+      <sequenceFlow id="seq_MS_B3_end" isImmediate="true" sourceRef="Task_MS_B3_Resp" targetRef="PG_MS_Conv"/>
+
+      <!-- B4 seqs -->
+      <sequenceFlow id="seq_MS_B4_start" isImmediate="true" sourceRef="PG_MS_Div" targetRef="Task_MS_B4_Facil"/>
+      <sequenceFlow id="seq_MS_B4_end" isImmediate="true" sourceRef="Task_MS_B4_Facil" targetRef="PG_MS_Conv"/>
+
+      <sequenceFlow id="seq_MS_toCatch" isImmediate="true" sourceRef="PG_MS_Conv" targetRef="Catch_MS_Interests"/>
+      <sequenceFlow id="seq_MS_toTake" isImmediate="true" sourceRef="Catch_MS_Interests" targetRef="Task_MS_Take"/>
+      <sequenceFlow id="seq_MS_toSet" isImmediate="true" sourceRef="Task_MS_Take" targetRef="Task_MS_Set"/>
+      <sequenceFlow id="seq_MS_final" isImmediate="true" sourceRef="Task_MS_Set" targetRef="End_MS"/>
+   </process>
+
+   <!-- AI Office Process -->
+   <process id="Proc_AIO" isClosed="false" isExecutable="false" name="AI Office" processType="None">
+      <startEvent id="Start_AIO" name="implementation of measures for providers and deployers">
+         <outgoing>seq_AIO_1</outgoing>
+      </startEvent>
+      <parallelGateway id="PG_AIO_Div" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_1</incoming>
+         <outgoing>seq_AIO_B1_start</outgoing>
+         <outgoing>seq_AIO_B2_start</outgoing>
+         <outgoing>seq_AIO_B3_start</outgoing>
+         <outgoing>seq_AIO_B4_start</outgoing>
+      </parallelGateway>
+
+      <!-- AIO Branch 1 -->
+      <intermediateCatchEvent id="Catch_AIO_Req" name="Upon receiving a request for standardised templates">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_B1_start</incoming>
+         <outgoing>seq_AIO_B1_toAssess</outgoing>
+         <messageEventDefinition id="med_AIO_1"/>
+      </intermediateCatchEvent>
+      <task id="Task_AIO_B1_Assess" name="assess whether as specified by the Board in its request">
+         <incoming>seq_AIO_B1_toAssess</incoming>
+         <outgoing>seq_AIO_B1_toXOR</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_AIO_B1_Div" gatewayDirection="Diverging" isMarkerVisible="true" name="as specified by the Board">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_B1_toXOR</incoming>
+         <outgoing>seq_AIO_B1_true</outgoing>
+         <outgoing>seq_AIO_B1_false</outgoing>
+      </exclusiveGateway>
+      <task id="Task_AIO_B1_Prov" name="Provide standardised templates">
+         <incoming>seq_AIO_B1_true</incoming>
+         <outgoing>seq_AIO_B1_toConv</outgoing>
+      </task>
+      <exclusiveGateway id="XOR_AIO_B1_Conv" gatewayDirection="Converging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_B1_toConv</incoming>
+         <incoming>seq_AIO_B1_false</incoming>
+         <outgoing>seq_AIO_B1_end</outgoing>
+      </exclusiveGateway>
+
+      <!-- AIO Branch 2 -->
+      <task id="Task_AIO_B2_Dev" name="Develop a single information platform">
+         <incoming>seq_AIO_B2_start</incoming>
+         <outgoing>seq_AIO_B2_toMaint</outgoing>
+      </task>
+      <task id="Task_AIO_B2_Maint" name="Maintain a single information platform">
+         <incoming>seq_AIO_B2_toMaint</incoming>
+         <outgoing>seq_AIO_B2_end</outgoing>
+      </task>
+
+      <!-- AIO Branch 3 -->
+      <task id="Task_AIO_B3_Org" name="Organise appropriate communication campaigns">
+         <incoming>seq_AIO_B3_start</incoming>
+         <outgoing>seq_AIO_B3_end</outgoing>
+      </task>
+
+      <!-- AIO Branch 4 -->
+      <task id="Task_AIO_B4_Eval" name="Evaluate the convergence of best practices">
+         <incoming>seq_AIO_B4_start</incoming>
+         <outgoing>seq_AIO_B4_toProm</outgoing>
+      </task>
+      <task id="Task_AIO_B4_Prom" name="Promote the convergence of best practices">
+         <incoming>seq_AIO_B4_toProm</incoming>
+         <outgoing>seq_AIO_B4_end</outgoing>
+      </task>
+
+      <parallelGateway id="PG_AIO_Conv" gatewayDirection="Converging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_B1_end</incoming>
+         <incoming>seq_AIO_B2_end</incoming>
+         <incoming>seq_AIO_B3_end</incoming>
+         <incoming>seq_AIO_B4_end</incoming>
+         <outgoing>seq_AIO_final</outgoing>
+      </parallelGateway>
+      
+      <endEvent id="End_AIO" name="ends">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="14.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>seq_AIO_final</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq_AIO_1" isImmediate="true" sourceRef="Start_AIO" targetRef="PG_AIO_Div"/>
+      
+      <sequenceFlow id="seq_AIO_B1_start" isImmediate="true" sourceRef="PG_AIO_Div" targetRef="Catch_AIO_Req"/>
+      <sequenceFlow id="seq_AIO_B1_toAssess" isImmediate="true" sourceRef="Catch_AIO_Req" targetRef="Task_AIO_B1_Assess"/>
+      <sequenceFlow id="seq_AIO_B1_toXOR" isImmediate="true" sourceRef="Task_AIO_B1_Assess" targetRef="XOR_AIO_B1_Div"/>
+      <sequenceFlow id="seq_AIO_B1_true" isImmediate="true" name="yes" sourceRef="XOR_AIO_B1_Div" targetRef="Task_AIO_B1_Prov"/>
+      <sequenceFlow id="seq_AIO_B1_false" isImmediate="true" name="no" sourceRef="XOR_AIO_B1_Div" targetRef="XOR_AIO_B1_Conv"/>
+      <sequenceFlow id="seq_AIO_B1_toConv" isImmediate="true" sourceRef="Task_AIO_B1_Prov" targetRef="XOR_AIO_B1_Conv"/>
+      <sequenceFlow id="seq_AIO_B1_end" isImmediate="true" sourceRef="XOR_AIO_B1_Conv" targetRef="PG_AIO_Conv"/>
+
+      <sequenceFlow id="seq_AIO_B2_start" isImmediate="true" sourceRef="PG_AIO_Div" targetRef="Task_AIO_B2_Dev"/>
+      <sequenceFlow id="seq_AIO_B2_toMaint" isImmediate="true" sourceRef="Task_AIO_B2_Dev" targetRef="Task_AIO_B2_Maint"/>
+      <sequenceFlow id="seq_AIO_B2_end" isImmediate="true" sourceRef="Task_AIO_B2_Maint" targetRef="PG_AIO_Conv"/>
+
+      <sequenceFlow id="seq_AIO_B3_start" isImmediate="true" sourceRef="PG_AIO_Div" targetRef="Task_AIO_B3_Org"/>
+      <sequenceFlow id="seq_AIO_B3_end" isImmediate="true" sourceRef="Task_AIO_B3_Org" targetRef="PG_AIO_Conv"/>
+
+      <sequenceFlow id="seq_AIO_B4_start" isImmediate="true" sourceRef="PG_AIO_Div" targetRef="Task_AIO_B4_Eval"/>
+      <sequenceFlow id="seq_AIO_B4_toProm" isImmediate="true" sourceRef="Task_AIO_B4_Eval" targetRef="Task_AIO_B4_Prom"/>
+      <sequenceFlow id="seq_AIO_B4_end" isImmediate="true" sourceRef="Task_AIO_B4_Prom" targetRef="PG_AIO_Conv"/>
+
+      <sequenceFlow id="seq_AIO_final" isImmediate="true" sourceRef="PG_AIO_Conv" targetRef="End_AIO"/>
+   </process>
+
+   <!-- DI Layout Info -->
+   <bpmndi:BPMNDiagram id="bpmndi_main_diagram">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="bpmndi_main_plane">
+         <!-- Participant Pools -->
+         <bpmndi:BPMNShape bpmnElement="Pool_SME" id="Shape_Pool_SME" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="800.0" x="750.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_Board" id="Shape_Pool_Board" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="600.0" x="50.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_MS" id="Shape_Pool_MS" isHorizontal="true">
+            <omgdc:Bounds height="650.0" width="1650.0" x="50.0" y="450.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_AIO" id="Shape_Pool_AIO" isHorizontal="true">
+            <omgdc:Bounds height="650.0" width="1100.0" x="50.0" y="1150.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- SME Process Shapes -->
+         <bpmndi:BPMNShape bpmnElement="Start_SME" id="Shape_Start_SME">
+            <omgdc:Bounds height="30.0" width="30.0" x="800.0" y="110.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_SME_Div" id="Shape_XOR_SME_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="870.0" y="105.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SME_Share" id="Shape_Task_SME_Share">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="85.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SME_Send" id="Shape_Task_SME_Send">
+            <omgdc:Bounds height="80.0" width="100.0" x="1100.0" y="85.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_SME_Conv" id="Shape_XOR_SME_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="1250.0" y="105.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_SME" id="Shape_End_SME">
+            <omgdc:Bounds height="28.0" width="28.0" x="1340.0" y="111.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Board Process Shapes -->
+         <bpmndi:BPMNShape bpmnElement="Start_Board" id="Shape_Start_Board">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Board_Div" id="Shape_XOR_Board_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="170.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Board_Req" id="Shape_Task_Board_Req">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="285.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Board_Send" id="Shape_Task_Board_Send">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="285.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Board_Conv" id="Shape_XOR_Board_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Board" id="Shape_End_Board">
+            <omgdc:Bounds height="28.0" width="28.0" x="600.0" y="311.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Member State Shapes -->
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Shape_Start_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="PG_MS_Div" id="Shape_PG_MS_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="170.0" y="745.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B1_Assess1" id="Shape_Task_MS_B1_Assess1">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B1_Div1" id="Shape_XOR_MS_B1_Div1">
+            <omgdc:Bounds height="40.0" width="40.0" x="390.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B1_Provide" id="Shape_Task_MS_B1_Provide">
+            <omgdc:Bounds height="80.0" width="100.0" x="470.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B1_Conv1" id="Shape_XOR_MS_B1_Conv1">
+            <omgdc:Bounds height="40.0" width="40.0" x="610.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B1_Assess2" id="Shape_Task_MS_B1_Assess2">
+            <omgdc:Bounds height="80.0" width="100.0" x="690.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B1_Div2" id="Shape_XOR_MS_B1_Div2">
+            <omgdc:Bounds height="40.0" width="40.0" x="830.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B1_NotPreclude" id="Shape_Task_MS_B1_NotPreclude">
+            <omgdc:Bounds height="80.0" width="100.0" x="910.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B1_Conv2" id="Shape_XOR_MS_B1_Conv2">
+            <omgdc:Bounds height="40.0" width="40.0" x="1050.0" y="500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B2_Org" id="Shape_Task_MS_B2_Org">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="610.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B3_Util" id="Shape_Task_MS_B3_Util">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B3_Assess" id="Shape_Task_MS_B3_Assess">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B3_Div" id="Shape_XOR_MS_B3_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B3_Est" id="Shape_Task_MS_B3_Est">
+            <omgdc:Bounds height="80.0" width="100.0" x="610.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_B3_Conv" id="Shape_XOR_MS_B3_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B3_Advice" id="Shape_Task_MS_B3_Advice">
+            <omgdc:Bounds height="80.0" width="100.0" x="830.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B3_Resp" id="Shape_Task_MS_B3_Resp">
+            <omgdc:Bounds height="80.0" width="100.0" x="970.0" y="740.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_B4_Facil" id="Shape_Task_MS_B4_Facil">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="870.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="PG_MS_Conv" id="Shape_PG_MS_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="1130.0" y="745.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_MS_Interests" id="Shape_Catch_MS_Interests">
+            <omgdc:Bounds height="30.0" width="30.0" x="1210.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_Take" id="Shape_Task_MS_Take">
+            <omgdc:Bounds height="80.0" width="100.0" x="1280.0" y="725.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_Set" id="Shape_Task_MS_Set">
+            <omgdc:Bounds height="80.0" width="100.0" x="1420.0" y="725.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="Shape_End_MS">
+            <omgdc:Bounds height="28.0" width="28.0" x="1560.0" y="751.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AI Office Shapes -->
+         <bpmndi:BPMNShape bpmnElement="Start_AIO" id="Shape_Start_AIO">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="1450.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="PG_AIO_Div" id="Shape_PG_AIO_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="170.0" y="1445.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Catch_AIO_Req" id="Shape_Catch_AIO_Req">
+            <omgdc:Bounds height="30.0" width="30.0" x="250.0" y="1225.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B1_Assess" id="Shape_Task_AIO_B1_Assess">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_AIO_B1_Div" id="Shape_XOR_AIO_B1_Div">
+            <omgdc:Bounds height="40.0" width="40.0" x="470.0" y="1220.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B1_Prov" id="Shape_Task_AIO_B1_Prov">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="1200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_AIO_B1_Conv" id="Shape_XOR_AIO_B1_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="690.0" y="1220.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B2_Dev" id="Shape_Task_AIO_B2_Dev">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1340.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B2_Maint" id="Shape_Task_AIO_B2_Maint">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="1340.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B3_Org" id="Shape_Task_AIO_B3_Org">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1500.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B4_Eval" id="Shape_Task_AIO_B4_Eval">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="1660.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AIO_B4_Prom" id="Shape_Task_AIO_B4_Prom">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="1660.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="PG_AIO_Conv" id="Shape_PG_AIO_Conv">
+            <omgdc:Bounds height="40.0" width="40.0" x="830.0" y="1445.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_AIO" id="Shape_End_AIO">
+            <omgdc:Bounds height="28.0" width="28.0" x="930.0" y="1451.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Edges for SME -->
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_1" id="Edge_seq_SME_1">
+            <omgdi:waypoint x="830.0" y="125.0"/>
+            <omgdi:waypoint x="870.0" y="125.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_2_true" id="Edge_seq_SME_2_true">
+            <omgdi:waypoint x="910.0" y="125.0"/>
+            <omgdi:waypoint x="950.0" y="125.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_2_false" id="Edge_seq_SME_2_false">
+            <omgdi:waypoint x="890.0" y="145.0"/>
+            <omgdi:waypoint x="890.0" y="180.0"/>
+            <omgdi:waypoint x="1270.0" y="180.0"/>
+            <omgdi:waypoint x="1270.0" y="145.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_3" id="Edge_seq_SME_3">
+            <omgdi:waypoint x="1050.0" y="125.0"/>
+            <omgdi:waypoint x="1100.0" y="125.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_4" id="Edge_seq_SME_4">
+            <omgdi:waypoint x="1200.0" y="125.0"/>
+            <omgdi:waypoint x="1250.0" y="125.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_SME_5" id="Edge_seq_SME_5">
+            <omgdi:waypoint x="1290.0" y="125.0"/>
+            <omgdi:waypoint x="1340.0" y="125.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for Board -->
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_1" id="Edge_seq_Board_1">
+            <omgdi:waypoint x="130.0" y="325.0"/>
+            <omgdi:waypoint x="170.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_2_true" id="Edge_seq_Board_2_true">
+            <omgdi:waypoint x="210.0" y="325.0"/>
+            <omgdi:waypoint x="250.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_2_false" id="Edge_seq_Board_2_false">
+            <omgdi:waypoint x="190.0" y="345.0"/>
+            <omgdi:waypoint x="190.0" y="380.0"/>
+            <omgdi:waypoint x="550.0" y="380.0"/>
+            <omgdi:waypoint x="550.0" y="345.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_3" id="Edge_seq_Board_3">
+            <omgdi:waypoint x="350.0" y="325.0"/>
+            <omgdi:waypoint x="400.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_4" id="Edge_seq_Board_4">
+            <omgdi:waypoint x="500.0" y="325.0"/>
+            <omgdi:waypoint x="530.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_Board_5" id="Edge_seq_Board_5">
+            <omgdi:waypoint x="570.0" y="325.0"/>
+            <omgdi:waypoint x="600.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for MS -->
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_1" id="Edge_seq_MS_1">
+            <omgdi:waypoint x="130.0" y="765.0"/>
+            <omgdi:waypoint x="170.0" y="765.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- B1 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_start" id="Edge_seq_MS_B1_start">
+            <omgdi:waypoint x="190.0" y="745.0"/>
+            <omgdi:waypoint x="190.0" y="520.0"/>
+            <omgdi:waypoint x="250.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_toXOR1" id="Edge_seq_MS_B1_toXOR1">
+            <omgdi:waypoint x="350.0" y="520.0"/>
+            <omgdi:waypoint x="390.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_true1" id="Edge_seq_MS_B1_true1">
+            <omgdi:waypoint x="430.0" y="520.0"/>
+            <omgdi:waypoint x="470.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_false1" id="Edge_seq_MS_B1_false1">
+            <omgdi:waypoint x="410.0" y="540.0"/>
+            <omgdi:waypoint x="410.0" y="570.0"/>
+            <omgdi:waypoint x="630.0" y="570.0"/>
+            <omgdi:waypoint x="630.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_toConv1" id="Edge_seq_MS_B1_toConv1">
+            <omgdi:waypoint x="570.0" y="520.0"/>
+            <omgdi:waypoint x="610.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_toAssess2" id="Edge_seq_MS_B1_toAssess2">
+            <omgdi:waypoint x="650.0" y="520.0"/>
+            <omgdi:waypoint x="690.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_toXOR2" id="Edge_seq_MS_B1_toXOR2">
+            <omgdi:waypoint x="790.0" y="520.0"/>
+            <omgdi:waypoint x="830.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_true2" id="Edge_seq_MS_B1_true2">
+            <omgdi:waypoint x="870.0" y="520.0"/>
+            <omgdi:waypoint x="910.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_false2" id="Edge_seq_MS_B1_false2">
+            <omgdi:waypoint x="850.0" y="540.0"/>
+            <omgdi:waypoint x="850.0" y="570.0"/>
+            <omgdi:waypoint x="1070.0" y="570.0"/>
+            <omgdi:waypoint x="1070.0" y="540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_toConv2" id="Edge_seq_MS_B1_toConv2">
+            <omgdi:waypoint x="1010.0" y="520.0"/>
+            <omgdi:waypoint x="1050.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B1_end" id="Edge_seq_MS_B1_end">
+            <omgdi:waypoint x="1090.0" y="520.0"/>
+            <omgdi:waypoint x="1150.0" y="520.0"/>
+            <omgdi:waypoint x="1150.0" y="745.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- B2 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B2_start" id="Edge_seq_MS_B2_start">
+            <omgdi:waypoint x="190.0" y="745.0"/>
+            <omgdi:waypoint x="190.0" y="650.0"/>
+            <omgdi:waypoint x="250.0" y="650.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B2_end" id="Edge_seq_MS_B2_end">
+            <omgdi:waypoint x="350.0" y="650.0"/>
+            <omgdi:waypoint x="1150.0" y="650.0"/>
+            <omgdi:waypoint x="1150.0" y="745.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- B3 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_start" id="Edge_seq_MS_B3_start">
+            <omgdi:waypoint x="210.0" y="765.0"/>
+            <omgdi:waypoint x="250.0" y="765.0"/>
+            <omgdi:waypoint x="250.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_toAssess" id="Edge_seq_MS_B3_toAssess">
+            <omgdi:waypoint x="350.0" y="780.0"/>
+            <omgdi:waypoint x="390.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_toXOR" id="Edge_seq_MS_B3_toXOR">
+            <omgdi:waypoint x="490.0" y="780.0"/>
+            <omgdi:waypoint x="530.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_true" id="Edge_seq_MS_B3_true">
+            <omgdi:waypoint x="570.0" y="780.0"/>
+            <omgdi:waypoint x="610.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_false" id="Edge_seq_MS_B3_false">
+            <omgdi:waypoint x="550.0" y="800.0"/>
+            <omgdi:waypoint x="550.0" y="830.0"/>
+            <omgdi:waypoint x="770.0" y="830.0"/>
+            <omgdi:waypoint x="770.0" y="800.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_toConv" id="Edge_seq_MS_B3_toConv">
+            <omgdi:waypoint x="710.0" y="780.0"/>
+            <omgdi:waypoint x="750.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_toAdv" id="Edge_seq_MS_B3_toAdv">
+            <omgdi:waypoint x="790.0" y="780.0"/>
+            <omgdi:waypoint x="830.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_toResp" id="Edge_seq_MS_B3_toResp">
+            <omgdi:waypoint x="930.0" y="780.0"/>
+            <omgdi:waypoint x="970.0" y="780.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B3_end" id="Edge_seq_MS_B3_end">
+            <omgdi:waypoint x="1070.0" y="780.0"/>
+            <omgdi:waypoint x="1150.0" y="780.0"/>
+            <omgdi:waypoint x="1150.0" y="785.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- B4 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B4_start" id="Edge_seq_MS_B4_start">
+            <omgdi:waypoint x="190.0" y="785.0"/>
+            <omgdi:waypoint x="190.0" y="910.0"/>
+            <omgdi:waypoint x="250.0" y="910.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_B4_end" id="Edge_seq_MS_B4_end">
+            <omgdi:waypoint x="350.0" y="910.0"/>
+            <omgdi:waypoint x="1150.0" y="910.0"/>
+            <omgdi:waypoint x="1150.0" y="785.0"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_toCatch" id="Edge_seq_MS_toCatch">
+            <omgdi:waypoint x="1170.0" y="765.0"/>
+            <omgdi:waypoint x="1210.0" y="765.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_toTake" id="Edge_seq_MS_toTake">
+            <omgdi:waypoint x="1240.0" y="765.0"/>
+            <omgdi:waypoint x="1280.0" y="765.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_toSet" id="Edge_seq_MS_toSet">
+            <omgdi:waypoint x="1380.0" y="765.0"/>
+            <omgdi:waypoint x="1420.0" y="765.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_MS_final" id="Edge_seq_MS_final">
+            <omgdi:waypoint x="1520.0" y="765.0"/>
+            <omgdi:waypoint x="1560.0" y="765.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Edges for AIO -->
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_1" id="Edge_seq_AIO_1">
+            <omgdi:waypoint x="130.0" y="1465.0"/>
+            <omgdi:waypoint x="170.0" y="1465.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- AIO B1 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_start" id="Edge_seq_AIO_B1_start">
+            <omgdi:waypoint x="190.0" y="1445.0"/>
+            <omgdi:waypoint x="190.0" y="1240.0"/>
+            <omgdi:waypoint x="250.0" y="1240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_toAssess" id="Edge_seq_AIO_B1_toAssess">
+            <omgdi:waypoint x="280.0" y="1240.0"/>
+            <omgdi:waypoint x="330.0" y="1240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_toXOR" id="Edge_seq_AIO_B1_toXOR">
+            <omgdi:waypoint x="430.0" y="1240.0"/>
+            <omgdi:waypoint x="470.0" y="1240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_true" id="Edge_seq_AIO_B1_true">
+            <omgdi:waypoint x="510.0" y="1240.0"/>
+            <omgdi:waypoint x="550.0" y="1240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_false" id="Edge_seq_AIO_B1_false">
+            <omgdi:waypoint x="490.0" y="1260.0"/>
+            <omgdi:waypoint x="490.0" y="1290.0"/>
+            <omgdi:waypoint x="710.0" y="1290.0"/>
+            <omgdi:waypoint x="710.0" y="1260.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_toConv" id="Edge_seq_AIO_B1_toConv">
+            <omgdi:waypoint x="650.0" y="1240.0"/>
+            <omgdi:waypoint x="690.0" y="1240.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B1_end" id="Edge_seq_AIO_B1_end">
+            <omgdi:waypoint x="730.0" y="1240.0"/>
+            <omgdi:waypoint x="850.0" y="1240.0"/>
+            <omgdi:waypoint x="850.0" y="1445.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- AIO B2 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B2_start" id="Edge_seq_AIO_B2_start">
+            <omgdi:waypoint x="190.0" y="1445.0"/>
+            <omgdi:waypoint x="190.0" y="1380.0"/>
+            <omgdi:waypoint x="250.0" y="1380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B2_toMaint" id="Edge_seq_AIO_B2_toMaint">
+            <omgdi:waypoint x="350.0" y="1380.0"/>
+            <omgdi:waypoint x="390.0" y="1380.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B2_end" id="Edge_seq_AIO_B2_end">
+            <omgdi:waypoint x="490.0" y="1380.0"/>
+            <omgdi:waypoint x="850.0" y="1380.0"/>
+            <omgdi:waypoint x="850.0" y="1445.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- AIO B3 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B3_start" id="Edge_seq_AIO_B3_start">
+            <omgdi:waypoint x="210.0" y="1465.0"/>
+            <omgdi:waypoint x="230.0" y="1465.0"/>
+            <omgdi:waypoint x="230.0" y="1540.0"/>
+            <omgdi:waypoint x="250.0" y="1540.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B3_end" id="Edge_seq_AIO_B3_end">
+            <omgdi:waypoint x="350.0" y="1540.0"/>
+            <omgdi:waypoint x="850.0" y="1540.0"/>
+            <omgdi:waypoint x="850.0" y="1485.0"/>
+         </bpmndi:BPMNEdge>
+         <!-- AIO B4 -->
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B4_start" id="Edge_seq_AIO_B4_start">
+            <omgdi:waypoint x="190.0" y="1485.0"/>
+            <omgdi:waypoint x="190.0" y="1700.0"/>
+            <omgdi:waypoint x="250.0" y="1700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B4_toProm" id="Edge_seq_AIO_B4_toProm">
+            <omgdi:waypoint x="350.0" y="1700.0"/>
+            <omgdi:waypoint x="390.0" y="1700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_B4_end" id="Edge_seq_AIO_B4_end">
+            <omgdi:waypoint x="490.0" y="1700.0"/>
+            <omgdi:waypoint x="850.0" y="1700.0"/>
+            <omgdi:waypoint x="850.0" y="1485.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_AIO_final" id="Edge_seq_AIO_final">
+            <omgdi:waypoint x="870.0" y="1465.0"/>
+            <omgdi:waypoint x="930.0" y="1465.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="MF_SME_to_MS" id="Edge_MF_SME_to_MS">
+            <omgdi:waypoint x="1150.0" y="165.0"/>
+            <omgdi:waypoint x="1150.0" y="457.0"/>
+            <omgdi:waypoint x="1225.0" y="457.0"/>
+            <omgdi:waypoint x="1225.0" y="750.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF_Board_to_AIO" id="Edge_MF_Board_to_AIO">
+            <omgdi:waypoint x="450.0" y="365.0"/>
+            <omgdi:waypoint x="450.0" y="795.0"/>
+            <omgdi:waypoint x="265.0" y="795.0"/>
+            <omgdi:waypoint x="265.0" y="1225.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

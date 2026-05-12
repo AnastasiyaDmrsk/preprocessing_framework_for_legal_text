@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-process-root" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+             
+   <collaboration id="sid-collaboration">
+      <participant id="pool_applicant" name="Applicant" processRef="proc_applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="pool_ms" name="Member State" processRef="proc_ms">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="pool_com" name="Commission" processRef="proc_com">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      
+      <messageFlow id="msg1" name="" sourceRef="ms_t10" targetRef="com_catch1">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="msg2" name="" sourceRef="ms_t12" targetRef="com_catch2">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <!-- PROCESS: APPLICANT -->
+   <process id="proc_applicant" isClosed="false" isExecutable="false" name="Applicant" processType="None">
+      <laneSet id="laneSet_applicant">
+         <lane id="lane_applicant">
+            <flowNodeRef>app_start</flowNodeRef>
+            <flowNodeRef>app_t1</flowNodeRef>
+            <flowNodeRef>app_t2</flowNodeRef>
+            <flowNodeRef>app_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="app_start" name="application for the issuance or renewal of a driving licence">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>app_seq1</outgoing>
+      </startEvent>
+      <task id="app_t1" name="undergo a medical examination before a driving licence is issued for the first time or renewed..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>app_seq1</incoming>
+         <outgoing>app_seq2</outgoing>
+      </task>
+      <task id="app_t2" name="fill in a self-assessment form for driving licence categories AM, A, A1, A2, B, B1 and BE..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>app_seq2</incoming>
+         <outgoing>app_seq3</outgoing>
+      </task>
+      <endEvent id="app_end" name="completion of fitness evaluation">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>app_seq3</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="app_seq1" name="" isImmediate="true" sourceRef="app_start" targetRef="app_t1"/>
+      <sequenceFlow id="app_seq2" name="" isImmediate="true" sourceRef="app_t1" targetRef="app_t2"/>
+      <sequenceFlow id="app_seq3" name="" isImmediate="true" sourceRef="app_t2" targetRef="app_end"/>
+   </process>
+
+   <!-- PROCESS: MEMBER STATE -->
+   <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="laneSet_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>ms_start</flowNodeRef>
+            <flowNodeRef>ms_t1</flowNodeRef>
+            <flowNodeRef>ms_t2</flowNodeRef>
+            <flowNodeRef>ms_par_div</flowNodeRef>
+            <flowNodeRef>ms_t3a</flowNodeRef>
+            <flowNodeRef>ms_t3b</flowNodeRef>
+            <flowNodeRef>ms_par_conv</flowNodeRef>
+            <flowNodeRef>ms_t4</flowNodeRef>
+            <flowNodeRef>ms_t5</flowNodeRef>
+            <flowNodeRef>ms_xor_div1</flowNodeRef>
+            <flowNodeRef>ms_t6</flowNodeRef>
+            <flowNodeRef>ms_xor_conv1</flowNodeRef>
+            <flowNodeRef>ms_t7</flowNodeRef>
+            <flowNodeRef>ms_t8</flowNodeRef>
+            <flowNodeRef>ms_t9</flowNodeRef>
+            <flowNodeRef>ms_xor_div2</flowNodeRef>
+            <flowNodeRef>ms_t10</flowNodeRef>
+            <flowNodeRef>ms_xor_conv2</flowNodeRef>
+            <flowNodeRef>ms_t11</flowNodeRef>
+            <flowNodeRef>ms_xor_div3</flowNodeRef>
+            <flowNodeRef>ms_t12</flowNodeRef>
+            <flowNodeRef>ms_xor_conv3</flowNodeRef>
+            <flowNodeRef>ms_t13</flowNodeRef>
+            <flowNodeRef>ms_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="ms_start" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>ms_seq1</outgoing>
+      </startEvent>
+      <task id="ms_t1" name="ensure that applicants undergo a medical examination before a driving licence is issued..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq1</incoming>
+         <outgoing>ms_seq2</outgoing>
+      </task>
+      <task id="ms_t2" name="require a medical examination for driving licences of categories C, CE, C1..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq2</incoming>
+         <outgoing>ms_seq3</outgoing>
+      </task>
+      
+      <parallelGateway id="ms_par_div" name="parallel 2 activities" gatewayDirection="Diverging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>ms_seq3</incoming>
+         <outgoing>ms_seq4</outgoing>
+         <outgoing>ms_seq5</outgoing>
+      </parallelGateway>
+      
+      <task id="ms_t3a" name="require the applicant to fill in a self-assessment form for driving licence categories..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq4</incoming>
+         <outgoing>ms_seq6</outgoing>
+      </task>
+      <task id="ms_t3b" name="establish a national system of assessment of fitness to drive for driving licence categories..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq5</incoming>
+         <outgoing>ms_seq7</outgoing>
+      </task>
+      
+      <parallelGateway id="ms_par_conv" name="all activities completed" gatewayDirection="Converging">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>ms_seq6</incoming>
+         <incoming>ms_seq7</incoming>
+         <outgoing>ms_seq8</outgoing>
+      </parallelGateway>
+      
+      <task id="ms_t4" name="provide for appropriate measures to address non-compliance..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq8</incoming>
+         <outgoing>ms_seq9</outgoing>
+      </task>
+      <task id="ms_t5" name="apply the national system to monitor if the Member State has established a national system..." completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq9</incoming>
+         <outgoing>ms_seq10</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_div1" name="assess whether the applicant is likely to have the medical conditions" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>ms_seq10</incoming>
+         <outgoing>ms_seq11</outgoing>
+         <outgoing>ms_seq12</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t6" name="ensure that the applicant undergoes a medical examination" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq11</incoming>
+         <outgoing>ms_seq13</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_conv1" name="merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ms_seq12</incoming>
+         <incoming>ms_seq13</incoming>
+         <outgoing>ms_seq14</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t7" name="take measures to raise awareness" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq14</incoming>
+         <outgoing>ms_seq15</outgoing>
+      </task>
+      <task id="ms_t8" name="take measures to improve the knowledge of the health sector" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq15</incoming>
+         <outgoing>ms_seq16</outgoing>
+      </task>
+      <task id="ms_t9" name="adopt guidelines for medical practitioners" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq16</incoming>
+         <outgoing>ms_seq17</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_div2" name="assess whether the Member State adopts guidelines for medical practitioners" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>ms_seq17</incoming>
+         <outgoing>ms_seq18</outgoing>
+         <outgoing>ms_seq19</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t10" name="transmit guidelines adopted to the Commission" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq18</incoming>
+         <outgoing>ms_seq20</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_conv2" name="merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ms_seq19</incoming>
+         <incoming>ms_seq20</incoming>
+         <outgoing>ms_seq21</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t11" name="develop public awareness campaigns" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq21</incoming>
+         <outgoing>ms_seq22</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_div3" name="assess whether the Member State develops public awareness campaigns" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>ms_seq22</incoming>
+         <outgoing>ms_seq23</outgoing>
+         <outgoing>ms_seq24</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t12" name="transmit any public awareness campaigns developed to the Commission" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq23</incoming>
+         <outgoing>ms_seq25</outgoing>
+      </task>
+      
+      <exclusiveGateway id="ms_xor_conv3" name="merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>ms_seq24</incoming>
+         <incoming>ms_seq25</incoming>
+         <outgoing>ms_seq26</outgoing>
+      </exclusiveGateway>
+      
+      <task id="ms_t13" name="set standards stricter than those set out in Annex III" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>ms_seq26</incoming>
+         <outgoing>ms_seq27</outgoing>
+      </task>
+      
+      <endEvent id="ms_end" name="completion of licensing and awareness activities">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>ms_seq27</incoming>
+      </endEvent>
+
+      <sequenceFlow id="ms_seq1" name="" isImmediate="true" sourceRef="ms_start" targetRef="ms_t1"/>
+      <sequenceFlow id="ms_seq2" name="" isImmediate="true" sourceRef="ms_t1" targetRef="ms_t2"/>
+      <sequenceFlow id="ms_seq3" name="" isImmediate="true" sourceRef="ms_t2" targetRef="ms_par_div"/>
+      <sequenceFlow id="ms_seq4" name="" isImmediate="true" sourceRef="ms_par_div" targetRef="ms_t3a"/>
+      <sequenceFlow id="ms_seq5" name="" isImmediate="true" sourceRef="ms_par_div" targetRef="ms_t3b"/>
+      <sequenceFlow id="ms_seq6" name="" isImmediate="true" sourceRef="ms_t3a" targetRef="ms_par_conv"/>
+      <sequenceFlow id="ms_seq7" name="" isImmediate="true" sourceRef="ms_t3b" targetRef="ms_par_conv"/>
+      <sequenceFlow id="ms_seq8" name="" isImmediate="true" sourceRef="ms_par_conv" targetRef="ms_t4"/>
+      <sequenceFlow id="ms_seq9" name="" isImmediate="true" sourceRef="ms_t4" targetRef="ms_t5"/>
+      <sequenceFlow id="ms_seq10" name="" isImmediate="true" sourceRef="ms_t5" targetRef="ms_xor_div1"/>
+      <sequenceFlow id="ms_seq11" name="the applicant is likely to have the medical conditions" isImmediate="true" sourceRef="ms_xor_div1" targetRef="ms_t6"/>
+      <sequenceFlow id="ms_seq12" name="not likely" isImmediate="true" sourceRef="ms_xor_div1" targetRef="ms_xor_conv1"/>
+      <sequenceFlow id="ms_seq13" name="" isImmediate="true" sourceRef="ms_t6" targetRef="ms_xor_conv1"/>
+      <sequenceFlow id="ms_seq14" name="" isImmediate="true" sourceRef="ms_xor_conv1" targetRef="ms_t7"/>
+      <sequenceFlow id="ms_seq15" name="" isImmediate="true" sourceRef="ms_t7" targetRef="ms_t8"/>
+      <sequenceFlow id="ms_seq16" name="" isImmediate="true" sourceRef="ms_t8" targetRef="ms_t9"/>
+      <sequenceFlow id="ms_seq17" name="" isImmediate="true" sourceRef="ms_t9" targetRef="ms_xor_div2"/>
+      <sequenceFlow id="ms_seq18" name="the Member State adopts guidelines for medical practitioners" isImmediate="true" sourceRef="ms_xor_div2" targetRef="ms_t10"/>
+      <sequenceFlow id="ms_seq19" name="does not adopt" isImmediate="true" sourceRef="ms_xor_div2" targetRef="ms_xor_conv2"/>
+      <sequenceFlow id="ms_seq20" name="" isImmediate="true" sourceRef="ms_t10" targetRef="ms_xor_conv2"/>
+      <sequenceFlow id="ms_seq21" name="" isImmediate="true" sourceRef="ms_xor_conv2" targetRef="ms_t11"/>
+      <sequenceFlow id="ms_seq22" name="" isImmediate="true" sourceRef="ms_t11" targetRef="ms_xor_div3"/>
+      <sequenceFlow id="ms_seq23" name="the Member State develops public awareness campaigns" isImmediate="true" sourceRef="ms_xor_div3" targetRef="ms_t12"/>
+      <sequenceFlow id="ms_seq24" name="does not develop" isImmediate="true" sourceRef="ms_xor_div3" targetRef="ms_xor_conv3"/>
+      <sequenceFlow id="ms_seq25" name="" isImmediate="true" sourceRef="ms_t12" targetRef="ms_xor_conv3"/>
+      <sequenceFlow id="ms_seq26" name="" isImmediate="true" sourceRef="ms_xor_conv3" targetRef="ms_t13"/>
+      <sequenceFlow id="ms_seq27" name="" isImmediate="true" sourceRef="ms_t13" targetRef="ms_end"/>
+   </process>
+
+   <!-- PROCESS: COMMISSION -->
+   <process id="proc_com" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="laneSet_com">
+         <lane id="lane_com">
+            <flowNodeRef>com_start</flowNodeRef>
+            <flowNodeRef>com_catch1</flowNodeRef>
+            <flowNodeRef>com_t1</flowNodeRef>
+            <flowNodeRef>com_catch2</flowNodeRef>
+            <flowNodeRef>com_t2</flowNodeRef>
+            <flowNodeRef>com_end</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="com_start" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <outgoing>com_seq1</outgoing>
+      </startEvent>
+      
+      <intermediateCatchEvent id="com_catch1" name="receiving guidelines adopted">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>com_seq1</incoming>
+         <outgoing>com_seq2</outgoing>
+         <messageEventDefinition id="msg_def_1"/>
+      </intermediateCatchEvent>
+      
+      <task id="com_t1" name="make available to the other Member States the guidelines adopted" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>com_seq2</incoming>
+         <outgoing>com_seq3</outgoing>
+      </task>
+      
+      <intermediateCatchEvent id="com_catch2" name="receiving any public awareness campaigns developed">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>com_seq3</incoming>
+         <outgoing>com_seq4</outgoing>
+         <messageEventDefinition id="msg_def_2"/>
+      </intermediateCatchEvent>
+      
+      <task id="com_t2" name="make available to the other Member States the information" completionQuantity="1" isForCompensation="false" startQuantity="1">
+         <incoming>com_seq4</incoming>
+         <outgoing>com_seq5</outgoing>
+      </task>
+      
+      <endEvent id="com_end" name="information distribution">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="middle" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>com_seq5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="com_seq1" name="" isImmediate="true" sourceRef="com_start" targetRef="com_catch1"/>
+      <sequenceFlow id="com_seq2" name="" isImmediate="true" sourceRef="com_catch1" targetRef="com_t1"/>
+      <sequenceFlow id="com_seq3" name="" isImmediate="true" sourceRef="com_t1" targetRef="com_catch2"/>
+      <sequenceFlow id="com_seq4" name="" isImmediate="true" sourceRef="com_catch2" targetRef="com_t2"/>
+      <sequenceFlow id="com_seq5" name="" isImmediate="true" sourceRef="com_t2" targetRef="com_end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collaboration" id="BPMNPlane_1">
+         
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="pool_applicant" id="pool_applicant_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="550.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_applicant" id="lane_applicant_gui" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="520.0" x="80.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="pool_ms" id="pool_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="2900.0" x="50.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="350.0" width="2870.0" x="80.0" y="250.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="pool_com" id="pool_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2900.0" x="50.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_com" id="lane_com_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2870.0" x="80.0" y="650.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- APPLICANT SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="app_start" id="app_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="105.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_t1" id="app_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_t2" id="app_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="80.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="app_end" id="app_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="480.0" y="106.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="ms_start" id="ms_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t1" id="ms_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="180.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t2" id="ms_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_par_div" id="ms_par_div_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="480.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t3a" id="ms_t3a_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t3b" id="ms_t3b_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_par_conv" id="ms_par_conv_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="720.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t4" id="ms_t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t5" id="ms_t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="960.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_div1" id="ms_xor_div1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1110.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t6" id="ms_t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1200.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_conv1" id="ms_xor_conv1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1350.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t7" id="ms_t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1440.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t8" id="ms_t8_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1590.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t9" id="ms_t9_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1740.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_div2" id="ms_xor_div2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="1890.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t10" id="ms_t10_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1980.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_conv2" id="ms_xor_conv2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2130.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t11" id="ms_t11_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2220.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_div3" id="ms_xor_div3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2370.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t12" id="ms_t12_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2460.0" y="270.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_xor_conv3" id="ms_xor_conv3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="2610.0" y="395.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_t13" id="ms_t13_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="375.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="ms_end" id="ms_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2850.0" y="401.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- COMMISSION SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="com_start" id="com_start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1800.0" y="705.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_catch1" id="com_catch1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2015.0" y="705.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t1" id="com_t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2130.0" y="680.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_catch2" id="com_catch2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="2495.0" y="705.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_t2" id="com_t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="2610.0" y="680.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="com_end" id="com_end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2760.0" y="706.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- APPLICANT EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="app_seq1" id="app_seq1_gui">
+            <omgdi:waypoint x="130.0" y="120.0"/>
+            <omgdi:waypoint x="180.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_seq2" id="app_seq2_gui">
+            <omgdi:waypoint x="280.0" y="120.0"/>
+            <omgdi:waypoint x="330.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="app_seq3" id="app_seq3_gui">
+            <omgdi:waypoint x="430.0" y="120.0"/>
+            <omgdi:waypoint x="480.0" y="120.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MEMBER STATE EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="ms_seq1" id="ms_seq1_gui">
+            <omgdi:waypoint x="130.0" y="415.0"/>
+            <omgdi:waypoint x="180.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq2" id="ms_seq2_gui">
+            <omgdi:waypoint x="280.0" y="415.0"/>
+            <omgdi:waypoint x="330.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq3" id="ms_seq3_gui">
+            <omgdi:waypoint x="430.0" y="415.0"/>
+            <omgdi:waypoint x="480.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq4" id="ms_seq4_gui">
+            <omgdi:waypoint x="500.0" y="395.0"/>
+            <omgdi:waypoint x="500.0" y="310.0"/>
+            <omgdi:waypoint x="570.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq5" id="ms_seq5_gui">
+            <omgdi:waypoint x="500.0" y="435.0"/>
+            <omgdi:waypoint x="500.0" y="520.0"/>
+            <omgdi:waypoint x="570.0" y="520.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq6" id="ms_seq6_gui">
+            <omgdi:waypoint x="670.0" y="310.0"/>
+            <omgdi:waypoint x="740.0" y="310.0"/>
+            <omgdi:waypoint x="740.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq7" id="ms_seq7_gui">
+            <omgdi:waypoint x="670.0" y="520.0"/>
+            <omgdi:waypoint x="740.0" y="520.0"/>
+            <omgdi:waypoint x="740.0" y="435.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq8" id="ms_seq8_gui">
+            <omgdi:waypoint x="760.0" y="415.0"/>
+            <omgdi:waypoint x="810.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq9" id="ms_seq9_gui">
+            <omgdi:waypoint x="910.0" y="415.0"/>
+            <omgdi:waypoint x="960.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq10" id="ms_seq10_gui">
+            <omgdi:waypoint x="1060.0" y="415.0"/>
+            <omgdi:waypoint x="1110.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq11" id="ms_seq11_gui">
+            <omgdi:waypoint x="1130.0" y="395.0"/>
+            <omgdi:waypoint x="1130.0" y="310.0"/>
+            <omgdi:waypoint x="1200.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq12" id="ms_seq12_gui">
+            <omgdi:waypoint x="1130.0" y="435.0"/>
+            <omgdi:waypoint x="1130.0" y="520.0"/>
+            <omgdi:waypoint x="1370.0" y="520.0"/>
+            <omgdi:waypoint x="1370.0" y="435.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq13" id="ms_seq13_gui">
+            <omgdi:waypoint x="1300.0" y="310.0"/>
+            <omgdi:waypoint x="1370.0" y="310.0"/>
+            <omgdi:waypoint x="1370.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq14" id="ms_seq14_gui">
+            <omgdi:waypoint x="1390.0" y="415.0"/>
+            <omgdi:waypoint x="1440.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq15" id="ms_seq15_gui">
+            <omgdi:waypoint x="1540.0" y="415.0"/>
+            <omgdi:waypoint x="1590.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq16" id="ms_seq16_gui">
+            <omgdi:waypoint x="1690.0" y="415.0"/>
+            <omgdi:waypoint x="1740.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq17" id="ms_seq17_gui">
+            <omgdi:waypoint x="1840.0" y="415.0"/>
+            <omgdi:waypoint x="1890.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq18" id="ms_seq18_gui">
+            <omgdi:waypoint x="1910.0" y="395.0"/>
+            <omgdi:waypoint x="1910.0" y="310.0"/>
+            <omgdi:waypoint x="1980.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq19" id="ms_seq19_gui">
+            <omgdi:waypoint x="1910.0" y="435.0"/>
+            <omgdi:waypoint x="1910.0" y="520.0"/>
+            <omgdi:waypoint x="2150.0" y="520.0"/>
+            <omgdi:waypoint x="2150.0" y="435.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq20" id="ms_seq20_gui">
+            <omgdi:waypoint x="2080.0" y="310.0"/>
+            <omgdi:waypoint x="2150.0" y="310.0"/>
+            <omgdi:waypoint x="2150.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq21" id="ms_seq21_gui">
+            <omgdi:waypoint x="2170.0" y="415.0"/>
+            <omgdi:waypoint x="2220.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq22" id="ms_seq22_gui">
+            <omgdi:waypoint x="2320.0" y="415.0"/>
+            <omgdi:waypoint x="2370.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq23" id="ms_seq23_gui">
+            <omgdi:waypoint x="2390.0" y="395.0"/>
+            <omgdi:waypoint x="2390.0" y="310.0"/>
+            <omgdi:waypoint x="2460.0" y="310.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq24" id="ms_seq24_gui">
+            <omgdi:waypoint x="2390.0" y="435.0"/>
+            <omgdi:waypoint x="2390.0" y="520.0"/>
+            <omgdi:waypoint x="2630.0" y="520.0"/>
+            <omgdi:waypoint x="2630.0" y="435.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq25" id="ms_seq25_gui">
+            <omgdi:waypoint x="2560.0" y="310.0"/>
+            <omgdi:waypoint x="2630.0" y="310.0"/>
+            <omgdi:waypoint x="2630.0" y="395.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq26" id="ms_seq26_gui">
+            <omgdi:waypoint x="2650.0" y="415.0"/>
+            <omgdi:waypoint x="2700.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="ms_seq27" id="ms_seq27_gui">
+            <omgdi:waypoint x="2800.0" y="415.0"/>
+            <omgdi:waypoint x="2850.0" y="415.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- COMMISSION EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="com_seq1" id="com_seq1_gui">
+            <omgdi:waypoint x="1830.0" y="720.0"/>
+            <omgdi:waypoint x="2015.0" y="720.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_seq2" id="com_seq2_gui">
+            <omgdi:waypoint x="2045.0" y="720.0"/>
+            <omgdi:waypoint x="2130.0" y="720.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_seq3" id="com_seq3_gui">
+            <omgdi:waypoint x="2230.0" y="720.0"/>
+            <omgdi:waypoint x="2495.0" y="720.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_seq4" id="com_seq4_gui">
+            <omgdi:waypoint x="2525.0" y="720.0"/>
+            <omgdi:waypoint x="2610.0" y="720.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="com_seq5" id="com_seq5_gui">
+            <omgdi:waypoint x="2710.0" y="720.0"/>
+            <omgdi:waypoint x="2760.0" y="720.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOW EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="msg1" id="msg1_gui">
+            <omgdi:waypoint x="2030.0" y="350.0"/>
+            <omgdi:waypoint x="2030.0" y="705.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="msg2" id="msg2_gui">
+            <omgdi:waypoint x="2510.0" y="350.0"/>
+            <omgdi:waypoint x="2510.0" y="705.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

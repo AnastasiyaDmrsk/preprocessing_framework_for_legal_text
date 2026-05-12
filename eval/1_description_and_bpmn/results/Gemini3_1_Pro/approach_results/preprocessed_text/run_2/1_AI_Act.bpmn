@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-def" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="Collab_1">
+      <participant id="Pool_MS" name="Member State" processRef="Process_MS" />
+      <participant id="Pool_SME" name="SME" processRef="Process_SME" />
+      <participant id="Pool_Board" name="Board" processRef="Process_Board" />
+      <participant id="Pool_AIOffice" name="AI Office" processRef="Process_AIOffice" />
+      <messageFlow id="MF_SME_to_MS" sourceRef="Task_SME_2" targetRef="Event_Catch_MS" />
+      <messageFlow id="MF_Board_to_AI" sourceRef="Task_Board_2" targetRef="Event_Catch_AI" />
+   </collaboration>
+
+   <process id="Process_MS" isClosed="false" isExecutable="true" name="Member State" processType="None">
+      <startEvent id="Start_MS" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_MS_1</outgoing>
+      </startEvent>
+
+      <parallelGateway gatewayDirection="Diverging" id="AND_Split_MS" name="">
+         <incoming>Flow_MS_1</incoming>
+         <outgoing>Flow_MS_B1</outgoing>
+         <outgoing>Flow_MS_B2</outgoing>
+         <outgoing>Flow_MS_B3</outgoing>
+         <outgoing>Flow_MS_B4</outgoing>
+      </parallelGateway>
+
+      <!-- Branch 1 -->
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_MS_1" isMarkerVisible="true" name="having a registered office or a branch in the Union and if SMEs fulfil the eligibility conditions and selection criteria">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_MS_B1</incoming>
+         <outgoing>Flow_MS_B1_yes</outgoing>
+         <outgoing>Flow_MS_B1_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_MS_1" isForCompensation="false" name="Provide SMEs with priority access" startQuantity="1">
+         <incoming>Flow_MS_B1_yes</incoming>
+         <outgoing>Flow_MS_B1_mid1</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_MS_2" isMarkerVisible="true" name="other SMEs fulfil the eligibility conditions and selection criteria">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_MS_B1_mid1</incoming>
+         <outgoing>Flow_MS_B1_mid1_yes</outgoing>
+         <outgoing>Flow_MS_B1_mid1_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_MS_2" isForCompensation="false" name="not Preclude other SMEs from access to the AI regulatory sandbox" startQuantity="1">
+         <incoming>Flow_MS_B1_mid1_yes</incoming>
+         <outgoing>Flow_MS_B1_mid2</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="XOR_Merge_B1" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_B1_no</incoming>
+         <incoming>Flow_MS_B1_mid1_no</incoming>
+         <incoming>Flow_MS_B1_mid2</incoming>
+         <outgoing>Flow_MS_B1_out</outgoing>
+      </exclusiveGateway>
+
+      <!-- Branch 2 -->
+      <task completionQuantity="1" id="Task_MS_3" isForCompensation="false" name="Organise specific activities" startQuantity="1">
+         <incoming>Flow_MS_B2</incoming>
+         <outgoing>Flow_MS_B2_out</outgoing>
+      </task>
+
+      <!-- Branch 3 -->
+      <task completionQuantity="1" id="Task_MS_4" isForCompensation="false" name="Utilise existing dedicated channels" startQuantity="1">
+         <incoming>Flow_MS_B3</incoming>
+         <outgoing>Flow_MS_B3_mid1</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_MS_3" isMarkerVisible="true" name="appropriate">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_MS_B3_mid1</incoming>
+         <outgoing>Flow_MS_B3_mid1_yes</outgoing>
+         <outgoing>Flow_MS_B3_mid1_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_MS_5" isForCompensation="false" name="Establish new channels" startQuantity="1">
+         <incoming>Flow_MS_B3_mid1_yes</incoming>
+         <outgoing>Flow_MS_B3_mid2</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="XOR_Merge_B3" isMarkerVisible="true" name="">
+         <incoming>Flow_MS_B3_mid1_no</incoming>
+         <incoming>Flow_MS_B3_mid2</incoming>
+         <outgoing>Flow_MS_B3_mid3</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_MS_6" isForCompensation="false" name="Provide advice" startQuantity="1">
+         <incoming>Flow_MS_B3_mid3</incoming>
+         <outgoing>Flow_MS_B3_mid4</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_MS_7" isForCompensation="false" name="Respond to queries" startQuantity="1">
+         <incoming>Flow_MS_B3_mid4</incoming>
+         <outgoing>Flow_MS_B3_out</outgoing>
+      </task>
+
+      <!-- Branch 4 -->
+      <task completionQuantity="1" id="Task_MS_8" isForCompensation="false" name="Facilitate the participation of SMEs in the development process" startQuantity="1">
+         <incoming>Flow_MS_B4</incoming>
+         <outgoing>Flow_MS_B4_out</outgoing>
+      </task>
+
+      <parallelGateway gatewayDirection="Converging" id="AND_Merge_MS" name="">
+         <incoming>Flow_MS_B1_out</incoming>
+         <incoming>Flow_MS_B2_out</incoming>
+         <incoming>Flow_MS_B3_out</incoming>
+         <incoming>Flow_MS_B4_out</incoming>
+         <outgoing>Flow_MS_mid1</outgoing>
+      </parallelGateway>
+
+      <intermediateCatchEvent id="Event_Catch_MS" name="Receive interests and needs">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_MS_mid1</incoming>
+         <outgoing>Flow_MS_mid2</outgoing>
+         <messageEventDefinition id="MsgDef_MS" />
+      </intermediateCatchEvent>
+
+      <task completionQuantity="1" id="Task_MS_9" isForCompensation="false" name="Take into account the specific interests and needs" startQuantity="1">
+         <incoming>Flow_MS_mid2</incoming>
+         <outgoing>Flow_MS_mid3</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_MS_10" isForCompensation="false" name="Set the fees for conformity assessment" startQuantity="1">
+         <incoming>Flow_MS_mid3</incoming>
+         <outgoing>Flow_MS_mid4</outgoing>
+      </task>
+
+      <endEvent id="End_MS" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_MS_mid4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_MS_1" isImmediate="true" name="" sourceRef="Start_MS" targetRef="AND_Split_MS" />
+      
+      <sequenceFlow id="Flow_MS_B1" isImmediate="true" name="" sourceRef="AND_Split_MS" targetRef="XOR_MS_1" />
+      <sequenceFlow id="Flow_MS_B1_yes" isImmediate="true" name="yes" sourceRef="XOR_MS_1" targetRef="Task_MS_1" />
+      <sequenceFlow id="Flow_MS_B1_no" isImmediate="true" name="no" sourceRef="XOR_MS_1" targetRef="XOR_Merge_B1" />
+      <sequenceFlow id="Flow_MS_B1_mid1" isImmediate="true" name="" sourceRef="Task_MS_1" targetRef="XOR_MS_2" />
+      <sequenceFlow id="Flow_MS_B1_mid1_yes" isImmediate="true" name="yes" sourceRef="XOR_MS_2" targetRef="Task_MS_2" />
+      <sequenceFlow id="Flow_MS_B1_mid1_no" isImmediate="true" name="no" sourceRef="XOR_MS_2" targetRef="XOR_Merge_B1" />
+      <sequenceFlow id="Flow_MS_B1_mid2" isImmediate="true" name="" sourceRef="Task_MS_2" targetRef="XOR_Merge_B1" />
+      <sequenceFlow id="Flow_MS_B1_out" isImmediate="true" name="" sourceRef="XOR_Merge_B1" targetRef="AND_Merge_MS" />
+
+      <sequenceFlow id="Flow_MS_B2" isImmediate="true" name="" sourceRef="AND_Split_MS" targetRef="Task_MS_3" />
+      <sequenceFlow id="Flow_MS_B2_out" isImmediate="true" name="" sourceRef="Task_MS_3" targetRef="AND_Merge_MS" />
+
+      <sequenceFlow id="Flow_MS_B3" isImmediate="true" name="" sourceRef="AND_Split_MS" targetRef="Task_MS_4" />
+      <sequenceFlow id="Flow_MS_B3_mid1" isImmediate="true" name="" sourceRef="Task_MS_4" targetRef="XOR_MS_3" />
+      <sequenceFlow id="Flow_MS_B3_mid1_yes" isImmediate="true" name="yes" sourceRef="XOR_MS_3" targetRef="Task_MS_5" />
+      <sequenceFlow id="Flow_MS_B3_mid1_no" isImmediate="true" name="no" sourceRef="XOR_MS_3" targetRef="XOR_Merge_B3" />
+      <sequenceFlow id="Flow_MS_B3_mid2" isImmediate="true" name="" sourceRef="Task_MS_5" targetRef="XOR_Merge_B3" />
+      <sequenceFlow id="Flow_MS_B3_mid3" isImmediate="true" name="" sourceRef="XOR_Merge_B3" targetRef="Task_MS_6" />
+      <sequenceFlow id="Flow_MS_B3_mid4" isImmediate="true" name="" sourceRef="Task_MS_6" targetRef="Task_MS_7" />
+      <sequenceFlow id="Flow_MS_B3_out" isImmediate="true" name="" sourceRef="Task_MS_7" targetRef="AND_Merge_MS" />
+
+      <sequenceFlow id="Flow_MS_B4" isImmediate="true" name="" sourceRef="AND_Split_MS" targetRef="Task_MS_8" />
+      <sequenceFlow id="Flow_MS_B4_out" isImmediate="true" name="" sourceRef="Task_MS_8" targetRef="AND_Merge_MS" />
+
+      <sequenceFlow id="Flow_MS_mid1" isImmediate="true" name="" sourceRef="AND_Merge_MS" targetRef="Event_Catch_MS" />
+      <sequenceFlow id="Flow_MS_mid2" isImmediate="true" name="" sourceRef="Event_Catch_MS" targetRef="Task_MS_9" />
+      <sequenceFlow id="Flow_MS_mid3" isImmediate="true" name="" sourceRef="Task_MS_9" targetRef="Task_MS_10" />
+      <sequenceFlow id="Flow_MS_mid4" isImmediate="true" name="" sourceRef="Task_MS_10" targetRef="End_MS" />
+   </process>
+
+   <process id="Process_SME" isClosed="false" isExecutable="true" name="SME" processType="None">
+      <startEvent id="Start_SME" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_SME_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_SME" isMarkerVisible="true" name="required">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_SME_1</incoming>
+         <outgoing>Flow_SME_yes</outgoing>
+         <outgoing>Flow_SME_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_SME_1" isForCompensation="false" name="Share interests and needs" startQuantity="1">
+         <incoming>Flow_SME_yes</incoming>
+         <outgoing>Flow_SME_mid1</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_SME_2" isForCompensation="false" name="transmit interests and needs to the Member State" startQuantity="1">
+         <incoming>Flow_SME_mid1</incoming>
+         <outgoing>Flow_SME_mid2</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="XOR_Merge_SME" isMarkerVisible="true" name="">
+         <incoming>Flow_SME_no</incoming>
+         <incoming>Flow_SME_mid2</incoming>
+         <outgoing>Flow_SME_out</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="End_SME" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_SME_out</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_SME_1" isImmediate="true" name="" sourceRef="Start_SME" targetRef="XOR_SME" />
+      <sequenceFlow id="Flow_SME_yes" isImmediate="true" name="yes" sourceRef="XOR_SME" targetRef="Task_SME_1" />
+      <sequenceFlow id="Flow_SME_no" isImmediate="true" name="no" sourceRef="XOR_SME" targetRef="XOR_Merge_SME" />
+      <sequenceFlow id="Flow_SME_mid1" isImmediate="true" name="" sourceRef="Task_SME_1" targetRef="Task_SME_2" />
+      <sequenceFlow id="Flow_SME_mid2" isImmediate="true" name="" sourceRef="Task_SME_2" targetRef="XOR_Merge_SME" />
+      <sequenceFlow id="Flow_SME_out" isImmediate="true" name="" sourceRef="XOR_Merge_SME" targetRef="End_SME" />
+   </process>
+
+   <process id="Process_Board" isClosed="false" isExecutable="true" name="Board" processType="None">
+      <startEvent id="Start_Board" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_Board_1</outgoing>
+      </startEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_Board" isMarkerVisible="true" name="required">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_Board_1</incoming>
+         <outgoing>Flow_Board_yes</outgoing>
+         <outgoing>Flow_Board_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_Board_1" isForCompensation="false" name="Request standardised templates" startQuantity="1">
+         <incoming>Flow_Board_yes</incoming>
+         <outgoing>Flow_Board_mid1</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_Board_2" isForCompensation="false" name="send the request to the AI Office" startQuantity="1">
+         <incoming>Flow_Board_mid1</incoming>
+         <outgoing>Flow_Board_mid2</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="XOR_Merge_Board" isMarkerVisible="true" name="">
+         <incoming>Flow_Board_no</incoming>
+         <incoming>Flow_Board_mid2</incoming>
+         <outgoing>Flow_Board_out</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="End_Board" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_Board_out</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_Board_1" isImmediate="true" name="" sourceRef="Start_Board" targetRef="XOR_Board" />
+      <sequenceFlow id="Flow_Board_yes" isImmediate="true" name="yes" sourceRef="XOR_Board" targetRef="Task_Board_1" />
+      <sequenceFlow id="Flow_Board_no" isImmediate="true" name="no" sourceRef="XOR_Board" targetRef="XOR_Merge_Board" />
+      <sequenceFlow id="Flow_Board_mid1" isImmediate="true" name="" sourceRef="Task_Board_1" targetRef="Task_Board_2" />
+      <sequenceFlow id="Flow_Board_mid2" isImmediate="true" name="" sourceRef="Task_Board_2" targetRef="XOR_Merge_Board" />
+      <sequenceFlow id="Flow_Board_out" isImmediate="true" name="" sourceRef="XOR_Merge_Board" targetRef="End_Board" />
+   </process>
+
+   <process id="Process_AIOffice" isClosed="false" isExecutable="true" name="AI Office" processType="None">
+      <startEvent id="Start_AI" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>Flow_AI_1</outgoing>
+      </startEvent>
+
+      <parallelGateway gatewayDirection="Diverging" id="AND_Split_AI" name="">
+         <incoming>Flow_AI_1</incoming>
+         <outgoing>Flow_AI_B1</outgoing>
+         <outgoing>Flow_AI_B2</outgoing>
+         <outgoing>Flow_AI_B3</outgoing>
+         <outgoing>Flow_AI_B4</outgoing>
+      </parallelGateway>
+
+      <!-- Branch 1 -->
+      <intermediateCatchEvent id="Event_Catch_AI" name="Receive the request">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_AI_B1</incoming>
+         <outgoing>Flow_AI_B1_mid1</outgoing>
+         <messageEventDefinition id="MsgDef_AI" />
+      </intermediateCatchEvent>
+
+      <exclusiveGateway gatewayDirection="Diverging" id="XOR_AI" isMarkerVisible="true" name="as specified by the Board in its request">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_AI_B1_mid1</incoming>
+         <outgoing>Flow_AI_yes</outgoing>
+         <outgoing>Flow_AI_no</outgoing>
+      </exclusiveGateway>
+
+      <task completionQuantity="1" id="Task_AI_1" isForCompensation="false" name="Provide standardised templates" startQuantity="1">
+         <incoming>Flow_AI_yes</incoming>
+         <outgoing>Flow_AI_B1_mid2</outgoing>
+      </task>
+
+      <exclusiveGateway gatewayDirection="Converging" id="XOR_Merge_AIB1" isMarkerVisible="true" name="">
+         <incoming>Flow_AI_no</incoming>
+         <incoming>Flow_AI_B1_mid2</incoming>
+         <outgoing>Flow_AI_B1_out</outgoing>
+      </exclusiveGateway>
+
+      <!-- Branch 2 -->
+      <task completionQuantity="1" id="Task_AI_2" isForCompensation="false" name="Develop a single information platform" startQuantity="1">
+         <incoming>Flow_AI_B2</incoming>
+         <outgoing>Flow_AI_B2_mid1</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_AI_3" isForCompensation="false" name="Maintain a single information platform" startQuantity="1">
+         <incoming>Flow_AI_B2_mid1</incoming>
+         <outgoing>Flow_AI_B2_out</outgoing>
+      </task>
+
+      <!-- Branch 3 -->
+      <task completionQuantity="1" id="Task_AI_4" isForCompensation="false" name="Organise appropriate communication campaigns" startQuantity="1">
+         <incoming>Flow_AI_B3</incoming>
+         <outgoing>Flow_AI_B3_out</outgoing>
+      </task>
+
+      <!-- Branch 4 -->
+      <task completionQuantity="1" id="Task_AI_5" isForCompensation="false" name="Evaluate the convergence of best practices" startQuantity="1">
+         <incoming>Flow_AI_B4</incoming>
+         <outgoing>Flow_AI_B4_mid1</outgoing>
+      </task>
+
+      <task completionQuantity="1" id="Task_AI_6" isForCompensation="false" name="Promote the convergence of best practices" startQuantity="1">
+         <incoming>Flow_AI_B4_mid1</incoming>
+         <outgoing>Flow_AI_B4_out</outgoing>
+      </task>
+
+      <parallelGateway gatewayDirection="Converging" id="AND_Merge_AI" name="">
+         <incoming>Flow_AI_B1_out</incoming>
+         <incoming>Flow_AI_B2_out</incoming>
+         <incoming>Flow_AI_B3_out</incoming>
+         <incoming>Flow_AI_B4_out</incoming>
+         <outgoing>Flow_AI_mid1</outgoing>
+      </parallelGateway>
+
+      <endEvent id="End_AI" name="End">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="20.0" y="-8.0"/>
+         </extensionElements>
+         <incoming>Flow_AI_mid1</incoming>
+      </endEvent>
+
+      <sequenceFlow id="Flow_AI_1" isImmediate="true" name="" sourceRef="Start_AI" targetRef="AND_Split_AI" />
+
+      <sequenceFlow id="Flow_AI_B1" isImmediate="true" name="" sourceRef="AND_Split_AI" targetRef="Event_Catch_AI" />
+      <sequenceFlow id="Flow_AI_B1_mid1" isImmediate="true" name="" sourceRef="Event_Catch_AI" targetRef="XOR_AI" />
+      <sequenceFlow id="Flow_AI_yes" isImmediate="true" name="yes" sourceRef="XOR_AI" targetRef="Task_AI_1" />
+      <sequenceFlow id="Flow_AI_no" isImmediate="true" name="no" sourceRef="XOR_AI" targetRef="XOR_Merge_AIB1" />
+      <sequenceFlow id="Flow_AI_B1_mid2" isImmediate="true" name="" sourceRef="Task_AI_1" targetRef="XOR_Merge_AIB1" />
+      <sequenceFlow id="Flow_AI_B1_out" isImmediate="true" name="" sourceRef="XOR_Merge_AIB1" targetRef="AND_Merge_AI" />
+
+      <sequenceFlow id="Flow_AI_B2" isImmediate="true" name="" sourceRef="AND_Split_AI" targetRef="Task_AI_2" />
+      <sequenceFlow id="Flow_AI_B2_mid1" isImmediate="true" name="" sourceRef="Task_AI_2" targetRef="Task_AI_3" />
+      <sequenceFlow id="Flow_AI_B2_out" isImmediate="true" name="" sourceRef="Task_AI_3" targetRef="AND_Merge_AI" />
+
+      <sequenceFlow id="Flow_AI_B3" isImmediate="true" name="" sourceRef="AND_Split_AI" targetRef="Task_AI_4" />
+      <sequenceFlow id="Flow_AI_B3_out" isImmediate="true" name="" sourceRef="Task_AI_4" targetRef="AND_Merge_AI" />
+
+      <sequenceFlow id="Flow_AI_B4" isImmediate="true" name="" sourceRef="AND_Split_AI" targetRef="Task_AI_5" />
+      <sequenceFlow id="Flow_AI_B4_mid1" isImmediate="true" name="" sourceRef="Task_AI_5" targetRef="Task_AI_6" />
+      <sequenceFlow id="Flow_AI_B4_out" isImmediate="true" name="" sourceRef="Task_AI_6" targetRef="AND_Merge_AI" />
+
+      <sequenceFlow id="Flow_AI_mid1" isImmediate="true" name="" sourceRef="AND_Merge_AI" targetRef="End_AI" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="Diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="Collab_1" id="Plane_1">
+         
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="Pool_MS" id="Shape_Pool_MS" isHorizontal="true">
+            <omgdc:Bounds height="500.0" width="1800.0" x="50.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_SME" id="Shape_Pool_SME" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1800.0" x="50.0" y="600.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_Board" id="Shape_Pool_Board" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1800.0" x="50.0" y="850.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Pool_AIOffice" id="Shape_Pool_AIOffice" isHorizontal="true">
+            <omgdc:Bounds height="450.0" width="1800.0" x="50.0" y="1100.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="Start_MS" id="Shape_Start_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="285.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="AND_Split_MS" id="Shape_AND_Split_MS">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="280.0" />
+         </bpmndi:BPMNShape>
+         
+         <!-- MS Branch 1 -->
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_1" id="Shape_XOR_MS_1">
+            <omgdc:Bounds height="40.0" width="40.0" x="300.0" y="90.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_1" id="Shape_Task_MS_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="70.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_2" id="Shape_XOR_MS_2">
+            <omgdc:Bounds height="40.0" width="40.0" x="550.0" y="90.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_2" id="Shape_Task_MS_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="70.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Merge_B1" id="Shape_XOR_Merge_B1">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="90.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MS Branch 2 -->
+         <bpmndi:BPMNShape bpmnElement="Task_MS_3" id="Shape_Task_MS_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="180.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MS Branch 3 -->
+         <bpmndi:BPMNShape bpmnElement="Task_MS_4" id="Shape_Task_MS_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="320.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_MS_3" id="Shape_XOR_MS_3">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_5" id="Shape_Task_MS_5">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="320.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Merge_B3" id="Shape_XOR_Merge_B3">
+            <omgdc:Bounds height="40.0" width="40.0" x="700.0" y="340.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_6" id="Shape_Task_MS_6">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="320.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_7" id="Shape_Task_MS_7">
+            <omgdc:Bounds height="80.0" width="100.0" x="950.0" y="320.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MS Branch 4 -->
+         <bpmndi:BPMNShape bpmnElement="Task_MS_8" id="Shape_Task_MS_8">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="440.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MS Merge and End -->
+         <bpmndi:BPMNShape bpmnElement="AND_Merge_MS" id="Shape_AND_Merge_MS">
+            <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="280.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Event_Catch_MS" id="Shape_Event_Catch_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="1200.0" y="285.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_9" id="Shape_Task_MS_9">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="260.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_MS_10" id="Shape_Task_MS_10">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="260.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_MS" id="Shape_End_MS">
+            <omgdc:Bounds height="30.0" width="30.0" x="1600.0" y="285.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- SME ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="Start_SME" id="Shape_Start_SME">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="685.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_SME" id="Shape_XOR_SME">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="680.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SME_1" id="Shape_Task_SME_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="660.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_SME_2" id="Shape_Task_SME_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="450.0" y="660.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Merge_SME" id="Shape_XOR_Merge_SME">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="680.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_SME" id="Shape_End_SME">
+            <omgdc:Bounds height="30.0" width="30.0" x="700.0" y="685.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- BOARD ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="Start_Board" id="Shape_Start_Board">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="935.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Board" id="Shape_XOR_Board">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Board_1" id="Shape_Task_Board_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="910.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_Board_2" id="Shape_Task_Board_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="450.0" y="910.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Merge_Board" id="Shape_XOR_Merge_Board">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="930.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_Board" id="Shape_End_Board">
+            <omgdc:Bounds height="30.0" width="30.0" x="700.0" y="935.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI OFFICE ELEMENTS -->
+         <bpmndi:BPMNShape bpmnElement="Start_AI" id="Shape_Start_AI">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="1315.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="AND_Split_AI" id="Shape_AND_Split_AI">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="1310.0" />
+         </bpmndi:BPMNShape>
+         
+         <!-- AI Branch 1 -->
+         <bpmndi:BPMNShape bpmnElement="Event_Catch_AI" id="Shape_Event_Catch_AI">
+            <omgdc:Bounds height="30.0" width="30.0" x="300.0" y="1155.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_AI" id="Shape_XOR_AI">
+            <omgdc:Bounds height="40.0" width="40.0" x="400.0" y="1150.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_1" id="Shape_Task_AI_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="1130.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="XOR_Merge_AIB1" id="Shape_XOR_Merge_AIB1">
+            <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="1150.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI Branch 2 -->
+         <bpmndi:BPMNShape bpmnElement="Task_AI_2" id="Shape_Task_AI_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="1250.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_3" id="Shape_Task_AI_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="1250.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI Branch 3 -->
+         <bpmndi:BPMNShape bpmnElement="Task_AI_4" id="Shape_Task_AI_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="1370.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI Branch 4 -->
+         <bpmndi:BPMNShape bpmnElement="Task_AI_5" id="Shape_Task_AI_5">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="1460.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="Task_AI_6" id="Shape_Task_AI_6">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="1460.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- AI Merge and End -->
+         <bpmndi:BPMNShape bpmnElement="AND_Merge_AI" id="Shape_AND_Merge_AI">
+            <omgdc:Bounds height="40.0" width="40.0" x="800.0" y="1310.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="End_AI" id="Shape_End_AI">
+            <omgdc:Bounds height="30.0" width="30.0" x="900.0" y="1315.0" />
+         </bpmndi:BPMNShape>
+
+
+         <!-- EDGES MS -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_1" id="Edge_Flow_MS_1">
+            <omgdi:waypoint x="150.0" y="300.0" />
+            <omgdi:waypoint x="200.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1" id="Edge_Flow_MS_B1">
+            <omgdi:waypoint x="220.0" y="280.0" />
+            <omgdi:waypoint x="220.0" y="110.0" />
+            <omgdi:waypoint x="300.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_yes" id="Edge_Flow_MS_B1_yes">
+            <omgdi:waypoint x="340.0" y="110.0" />
+            <omgdi:waypoint x="400.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_no" id="Edge_Flow_MS_B1_no">
+            <omgdi:waypoint x="320.0" y="90.0" />
+            <omgdi:waypoint x="320.0" y="40.0" />
+            <omgdi:waypoint x="820.0" y="40.0" />
+            <omgdi:waypoint x="820.0" y="90.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_mid1" id="Edge_Flow_MS_B1_mid1">
+            <omgdi:waypoint x="500.0" y="110.0" />
+            <omgdi:waypoint x="550.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_mid1_yes" id="Edge_Flow_MS_B1_mid1_yes">
+            <omgdi:waypoint x="590.0" y="110.0" />
+            <omgdi:waypoint x="650.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_mid1_no" id="Edge_Flow_MS_B1_mid1_no">
+            <omgdi:waypoint x="570.0" y="90.0" />
+            <omgdi:waypoint x="570.0" y="55.0" />
+            <omgdi:waypoint x="800.0" y="55.0" />
+            <omgdi:waypoint x="800.0" y="90.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_mid2" id="Edge_Flow_MS_B1_mid2">
+            <omgdi:waypoint x="750.0" y="110.0" />
+            <omgdi:waypoint x="800.0" y="110.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B1_out" id="Edge_Flow_MS_B1_out">
+            <omgdi:waypoint x="840.0" y="110.0" />
+            <omgdi:waypoint x="1120.0" y="110.0" />
+            <omgdi:waypoint x="1120.0" y="280.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B2" id="Edge_Flow_MS_B2">
+            <omgdi:waypoint x="220.0" y="280.0" />
+            <omgdi:waypoint x="220.0" y="220.0" />
+            <omgdi:waypoint x="400.0" y="220.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B2_out" id="Edge_Flow_MS_B2_out">
+            <omgdi:waypoint x="500.0" y="220.0" />
+            <omgdi:waypoint x="1120.0" y="220.0" />
+            <omgdi:waypoint x="1120.0" y="280.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3" id="Edge_Flow_MS_B3">
+            <omgdi:waypoint x="220.0" y="320.0" />
+            <omgdi:waypoint x="220.0" y="360.0" />
+            <omgdi:waypoint x="300.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid1" id="Edge_Flow_MS_B3_mid1">
+            <omgdi:waypoint x="400.0" y="360.0" />
+            <omgdi:waypoint x="450.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid1_yes" id="Edge_Flow_MS_B3_mid1_yes">
+            <omgdi:waypoint x="490.0" y="360.0" />
+            <omgdi:waypoint x="550.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid1_no" id="Edge_Flow_MS_B3_mid1_no">
+            <omgdi:waypoint x="470.0" y="380.0" />
+            <omgdi:waypoint x="470.0" y="415.0" />
+            <omgdi:waypoint x="720.0" y="415.0" />
+            <omgdi:waypoint x="720.0" y="380.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid2" id="Edge_Flow_MS_B3_mid2">
+            <omgdi:waypoint x="650.0" y="360.0" />
+            <omgdi:waypoint x="700.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid3" id="Edge_Flow_MS_B3_mid3">
+            <omgdi:waypoint x="740.0" y="360.0" />
+            <omgdi:waypoint x="800.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_mid4" id="Edge_Flow_MS_B3_mid4">
+            <omgdi:waypoint x="900.0" y="360.0" />
+            <omgdi:waypoint x="950.0" y="360.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B3_out" id="Edge_Flow_MS_B3_out">
+            <omgdi:waypoint x="1050.0" y="360.0" />
+            <omgdi:waypoint x="1120.0" y="360.0" />
+            <omgdi:waypoint x="1120.0" y="320.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B4" id="Edge_Flow_MS_B4">
+            <omgdi:waypoint x="220.0" y="320.0" />
+            <omgdi:waypoint x="220.0" y="480.0" />
+            <omgdi:waypoint x="400.0" y="480.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_B4_out" id="Edge_Flow_MS_B4_out">
+            <omgdi:waypoint x="500.0" y="480.0" />
+            <omgdi:waypoint x="1120.0" y="480.0" />
+            <omgdi:waypoint x="1120.0" y="320.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_mid1" id="Edge_Flow_MS_mid1">
+            <omgdi:waypoint x="1140.0" y="300.0" />
+            <omgdi:waypoint x="1200.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_mid2" id="Edge_Flow_MS_mid2">
+            <omgdi:waypoint x="1230.0" y="300.0" />
+            <omgdi:waypoint x="1300.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_mid3" id="Edge_Flow_MS_mid3">
+            <omgdi:waypoint x="1400.0" y="300.0" />
+            <omgdi:waypoint x="1450.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_MS_mid4" id="Edge_Flow_MS_mid4">
+            <omgdi:waypoint x="1550.0" y="300.0" />
+            <omgdi:waypoint x="1600.0" y="300.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES SME -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_1" id="Edge_Flow_SME_1">
+            <omgdi:waypoint x="150.0" y="700.0" />
+            <omgdi:waypoint x="200.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_yes" id="Edge_Flow_SME_yes">
+            <omgdi:waypoint x="240.0" y="700.0" />
+            <omgdi:waypoint x="300.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_no" id="Edge_Flow_SME_no">
+            <omgdi:waypoint x="220.0" y="720.0" />
+            <omgdi:waypoint x="220.0" y="760.0" />
+            <omgdi:waypoint x="620.0" y="760.0" />
+            <omgdi:waypoint x="620.0" y="720.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_mid1" id="Edge_Flow_SME_mid1">
+            <omgdi:waypoint x="400.0" y="700.0" />
+            <omgdi:waypoint x="450.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_mid2" id="Edge_Flow_SME_mid2">
+            <omgdi:waypoint x="550.0" y="700.0" />
+            <omgdi:waypoint x="600.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_SME_out" id="Edge_Flow_SME_out">
+            <omgdi:waypoint x="640.0" y="700.0" />
+            <omgdi:waypoint x="700.0" y="700.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES BOARD -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_1" id="Edge_Flow_Board_1">
+            <omgdi:waypoint x="150.0" y="950.0" />
+            <omgdi:waypoint x="200.0" y="950.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_yes" id="Edge_Flow_Board_yes">
+            <omgdi:waypoint x="240.0" y="950.0" />
+            <omgdi:waypoint x="300.0" y="950.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_no" id="Edge_Flow_Board_no">
+            <omgdi:waypoint x="220.0" y="970.0" />
+            <omgdi:waypoint x="220.0" y="1010.0" />
+            <omgdi:waypoint x="620.0" y="1010.0" />
+            <omgdi:waypoint x="620.0" y="970.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_mid1" id="Edge_Flow_Board_mid1">
+            <omgdi:waypoint x="400.0" y="950.0" />
+            <omgdi:waypoint x="450.0" y="950.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_mid2" id="Edge_Flow_Board_mid2">
+            <omgdi:waypoint x="550.0" y="950.0" />
+            <omgdi:waypoint x="600.0" y="950.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_Board_out" id="Edge_Flow_Board_out">
+            <omgdi:waypoint x="640.0" y="950.0" />
+            <omgdi:waypoint x="700.0" y="950.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES AI OFFICE -->
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_1" id="Edge_Flow_AI_1">
+            <omgdi:waypoint x="150.0" y="1330.0" />
+            <omgdi:waypoint x="200.0" y="1330.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B1" id="Edge_Flow_AI_B1">
+            <omgdi:waypoint x="220.0" y="1310.0" />
+            <omgdi:waypoint x="220.0" y="1170.0" />
+            <omgdi:waypoint x="300.0" y="1170.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B1_mid1" id="Edge_Flow_AI_B1_mid1">
+            <omgdi:waypoint x="330.0" y="1170.0" />
+            <omgdi:waypoint x="400.0" y="1170.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_yes" id="Edge_Flow_AI_yes">
+            <omgdi:waypoint x="440.0" y="1170.0" />
+            <omgdi:waypoint x="500.0" y="1170.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_no" id="Edge_Flow_AI_no">
+            <omgdi:waypoint x="420.0" y="1150.0" />
+            <omgdi:waypoint x="420.0" y="1110.0" />
+            <omgdi:waypoint x="670.0" y="1110.0" />
+            <omgdi:waypoint x="670.0" y="1150.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B1_mid2" id="Edge_Flow_AI_B1_mid2">
+            <omgdi:waypoint x="600.0" y="1170.0" />
+            <omgdi:waypoint x="650.0" y="1170.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B1_out" id="Edge_Flow_AI_B1_out">
+            <omgdi:waypoint x="690.0" y="1170.0" />
+            <omgdi:waypoint x="820.0" y="1170.0" />
+            <omgdi:waypoint x="820.0" y="1310.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B2" id="Edge_Flow_AI_B2">
+            <omgdi:waypoint x="220.0" y="1310.0" />
+            <omgdi:waypoint x="220.0" y="1290.0" />
+            <omgdi:waypoint x="350.0" y="1290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B2_mid1" id="Edge_Flow_AI_B2_mid1">
+            <omgdi:waypoint x="450.0" y="1290.0" />
+            <omgdi:waypoint x="500.0" y="1290.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B2_out" id="Edge_Flow_AI_B2_out">
+            <omgdi:waypoint x="600.0" y="1290.0" />
+            <omgdi:waypoint x="820.0" y="1290.0" />
+            <omgdi:waypoint x="820.0" y="1310.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B3" id="Edge_Flow_AI_B3">
+            <omgdi:waypoint x="220.0" y="1350.0" />
+            <omgdi:waypoint x="220.0" y="1410.0" />
+            <omgdi:waypoint x="400.0" y="1410.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B3_out" id="Edge_Flow_AI_B3_out">
+            <omgdi:waypoint x="500.0" y="1410.0" />
+            <omgdi:waypoint x="820.0" y="1410.0" />
+            <omgdi:waypoint x="820.0" y="1350.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B4" id="Edge_Flow_AI_B4">
+            <omgdi:waypoint x="220.0" y="1350.0" />
+            <omgdi:waypoint x="220.0" y="1500.0" />
+            <omgdi:waypoint x="350.0" y="1500.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B4_mid1" id="Edge_Flow_AI_B4_mid1">
+            <omgdi:waypoint x="450.0" y="1500.0" />
+            <omgdi:waypoint x="500.0" y="1500.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_B4_out" id="Edge_Flow_AI_B4_out">
+            <omgdi:waypoint x="600.0" y="1500.0" />
+            <omgdi:waypoint x="820.0" y="1500.0" />
+            <omgdi:waypoint x="820.0" y="1350.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="Flow_AI_mid1" id="Edge_Flow_AI_mid1">
+            <omgdi:waypoint x="840.0" y="1330.0" />
+            <omgdi:waypoint x="900.0" y="1330.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOWS -->
+         <bpmndi:BPMNEdge bpmnElement="MF_SME_to_MS" id="Edge_MF_SME_to_MS">
+            <omgdi:waypoint x="500.0" y="660.0" />
+            <omgdi:waypoint x="1215.0" y="315.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF_Board_to_AI" id="Edge_MF_Board_to_AI">
+            <omgdi:waypoint x="500.0" y="990.0" />
+            <omgdi:waypoint x="315.0" y="1155.0" />
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

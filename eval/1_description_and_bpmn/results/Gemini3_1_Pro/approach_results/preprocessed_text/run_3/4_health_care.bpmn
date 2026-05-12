@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-process-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collab_1">
+      <participant id="pool_commission" name="Commission" processRef="proc_commission">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="pool_applicant" name="Applicant / Representative" processRef="proc_applicant">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="pool_hp" name="Health Professional" processRef="proc_hp">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      <participant id="pool_ca" name="Competent Authority" processRef="proc_ca">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </participant>
+      
+      <messageFlow id="msg_app_hp" sourceRef="task_app_notify" targetRef="start_hp">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+      <messageFlow id="msg_hp_ca" sourceRef="task_hp_transmit_ca" targetRef="start_ca">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>
+         </extensionElements>
+      </messageFlow>
+   </collaboration>
+
+   <!-- Process: Commission -->
+   <process id="proc_commission" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <laneSet id="laneset_comm">
+         <lane id="lane_comm">
+            <flowNodeRef>start_comm</flowNodeRef>
+            <flowNodeRef>task_comm_1</flowNodeRef>
+            <flowNodeRef>task_comm_2</flowNodeRef>
+            <flowNodeRef>task_comm_3</flowNodeRef>
+            <flowNodeRef>task_comm_4</flowNodeRef>
+            <flowNodeRef>end_comm</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="start_comm" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>seq_comm_1</outgoing>
+      </startEvent>
+      
+      <task id="task_comm_1" name="Draw up the common health certificate">
+         <incoming>seq_comm_1</incoming>
+         <outgoing>seq_comm_2</outgoing>
+      </task>
+      
+      <task id="task_comm_2" name="Adopt implementing acts">
+         <incoming>seq_comm_2</incoming>
+         <outgoing>seq_comm_3</outgoing>
+      </task>
+      
+      <task id="task_comm_3" name="Adopt uniform conditions and practical arrangements for exchanging the information">
+         <incoming>seq_comm_3</incoming>
+         <outgoing>seq_comm_4</outgoing>
+      </task>
+      
+      <task id="task_comm_4" name="Adopt those implementing acts">
+         <incoming>seq_comm_4</incoming>
+         <outgoing>seq_comm_5</outgoing>
+      </task>
+      
+      <endEvent id="end_comm" name="regulatory framework established end event">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>seq_comm_5</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="seq_comm_1" isImmediate="true" sourceRef="start_comm" targetRef="task_comm_1"/>
+      <sequenceFlow id="seq_comm_2" isImmediate="true" sourceRef="task_comm_1" targetRef="task_comm_2"/>
+      <sequenceFlow id="seq_comm_3" isImmediate="true" sourceRef="task_comm_2" targetRef="task_comm_3"/>
+      <sequenceFlow id="seq_comm_4" isImmediate="true" sourceRef="task_comm_3" targetRef="task_comm_4"/>
+      <sequenceFlow id="seq_comm_5" isImmediate="true" sourceRef="task_comm_4" targetRef="end_comm"/>
+   </process>
+
+   <!-- Process: Applicant / Representative -->
+   <process id="proc_applicant" isClosed="false" isExecutable="false" name="Applicant / Representative" processType="None">
+      <laneSet id="laneset_app">
+         <lane id="lane_app">
+            <flowNodeRef>start_app</flowNodeRef>
+            <flowNodeRef>gw_app_split</flowNodeRef>
+            <flowNodeRef>task_app_yes</flowNodeRef>
+            <flowNodeRef>task_app_no</flowNodeRef>
+            <flowNodeRef>gw_app_merge</flowNodeRef>
+            <flowNodeRef>task_app_notify</flowNodeRef>
+            <flowNodeRef>end_app</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="start_app" name="Start">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>seq_app_1</outgoing>
+      </startEvent>
+      
+      <exclusiveGateway id="gw_app_split" name="assess whether to consent to the transmission of information" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>seq_app_1</incoming>
+         <outgoing>seq_app_yes</outgoing>
+         <outgoing>seq_app_no</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_app_yes" name="Provide consent">
+         <incoming>seq_app_yes</incoming>
+         <outgoing>seq_app_merge_1</outgoing>
+      </task>
+      
+      <task id="task_app_no" name="Refuse consent">
+         <incoming>seq_app_no</incoming>
+         <outgoing>seq_app_merge_2</outgoing>
+      </task>
+      
+      <exclusiveGateway id="gw_app_merge" name="" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>seq_app_merge_1</incoming>
+         <incoming>seq_app_merge_2</incoming>
+         <outgoing>seq_app_2</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_app_notify" name="notify the consent decision to the Health Professional">
+         <incoming>seq_app_2</incoming>
+         <outgoing>seq_app_3</outgoing>
+      </task>
+      
+      <endEvent id="end_app" name="consent decision end event">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>seq_app_3</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="seq_app_1" isImmediate="true" sourceRef="start_app" targetRef="gw_app_split"/>
+      <sequenceFlow id="seq_app_yes" name="consent is given" isImmediate="true" sourceRef="gw_app_split" targetRef="task_app_yes"/>
+      <sequenceFlow id="seq_app_no" name="consent is denied" isImmediate="true" sourceRef="gw_app_split" targetRef="task_app_no"/>
+      <sequenceFlow id="seq_app_merge_1" isImmediate="true" sourceRef="task_app_yes" targetRef="gw_app_merge"/>
+      <sequenceFlow id="seq_app_merge_2" isImmediate="true" sourceRef="task_app_no" targetRef="gw_app_merge"/>
+      <sequenceFlow id="seq_app_2" isImmediate="true" sourceRef="gw_app_merge" targetRef="task_app_notify"/>
+      <sequenceFlow id="seq_app_3" isImmediate="true" sourceRef="task_app_notify" targetRef="end_app"/>
+   </process>
+
+   <!-- Process: Health Professional -->
+   <process id="proc_hp" isClosed="false" isExecutable="false" name="Health Professional" processType="None">
+      <laneSet id="laneset_hp">
+         <lane id="lane_hp">
+            <flowNodeRef>start_hp</flowNodeRef>
+            <flowNodeRef>task_hp_1</flowNodeRef>
+            <flowNodeRef>task_hp_2</flowNodeRef>
+            <flowNodeRef>gw_hp_split</flowNodeRef>
+            <flowNodeRef>task_hp_transmit</flowNodeRef>
+            <flowNodeRef>gw_hp_merge</flowNodeRef>
+            <flowNodeRef>task_hp_include</flowNodeRef>
+            <flowNodeRef>task_hp_transmit_ca</flowNodeRef>
+            <flowNodeRef>task_hp_exchange</flowNodeRef>
+            <flowNodeRef>task_hp_use</flowNodeRef>
+            <flowNodeRef>task_hp_not_process</flowNodeRef>
+            <flowNodeRef>end_hp</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="start_hp" name="Receive consent decision">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>seq_hp_1</outgoing>
+         <messageEventDefinition id="msg_def_hp"/>
+      </startEvent>
+      
+      <task id="task_hp_1" name="Obtain explicit consent prior to transmitting the information, except where necessary to protect vital interests">
+         <incoming>seq_hp_1</incoming>
+         <outgoing>seq_hp_2</outgoing>
+      </task>
+      
+      <task id="task_hp_2" name="Carry out the processing of personal health data">
+         <incoming>seq_hp_2</incoming>
+         <outgoing>seq_hp_3</outgoing>
+      </task>
+      
+      <exclusiveGateway id="gw_hp_split" name="assess whether the data is for the sole purpose of the provision of medical care..." gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="20.0" y="45.0"/>
+         </extensionElements>
+         <incoming>seq_hp_3</incoming>
+         <outgoing>seq_hp_true</outgoing>
+         <outgoing>seq_hp_false</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_hp_transmit" name="Transmit to the Member State responsible information">
+         <incoming>seq_hp_true</incoming>
+         <outgoing>seq_hp_merge_1</outgoing>
+      </task>
+      
+      <exclusiveGateway id="gw_hp_merge" name="" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>seq_hp_merge_1</incoming>
+         <incoming>seq_hp_false</incoming>
+         <outgoing>seq_hp_4</outgoing>
+      </exclusiveGateway>
+      
+      <task id="task_hp_include" name="Include information on physical or mental health in specific cases">
+         <incoming>seq_hp_4</incoming>
+         <outgoing>seq_hp_5</outgoing>
+      </task>
+      
+      <task id="task_hp_transmit_ca" name="transmit the information to the Competent Authority">
+         <incoming>seq_hp_5</incoming>
+         <outgoing>seq_hp_6</outgoing>
+      </task>
+      
+      <task id="task_hp_exchange" name="Exchange information">
+         <incoming>seq_hp_6</incoming>
+         <outgoing>seq_hp_7</outgoing>
+      </task>
+      
+      <task id="task_hp_use" name="Use exchanged information if only for the purposes set out in paragraph 1">
+         <incoming>seq_hp_7</incoming>
+         <outgoing>seq_hp_8</outgoing>
+      </task>
+      
+      <task id="task_hp_not_process" name="not Further process the information">
+         <incoming>seq_hp_8</incoming>
+         <outgoing>seq_hp_9</outgoing>
+      </task>
+      
+      <endEvent id="end_hp" name="information exchanged end event">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>seq_hp_9</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="seq_hp_1" isImmediate="true" sourceRef="start_hp" targetRef="task_hp_1"/>
+      <sequenceFlow id="seq_hp_2" isImmediate="true" sourceRef="task_hp_1" targetRef="task_hp_2"/>
+      <sequenceFlow id="seq_hp_3" isImmediate="true" sourceRef="task_hp_2" targetRef="gw_hp_split"/>
+      <sequenceFlow id="seq_hp_true" name="conditions are true" isImmediate="true" sourceRef="gw_hp_split" targetRef="task_hp_transmit"/>
+      <sequenceFlow id="seq_hp_false" name="conditions are false" isImmediate="true" sourceRef="gw_hp_split" targetRef="gw_hp_merge"/>
+      <sequenceFlow id="seq_hp_merge_1" isImmediate="true" sourceRef="task_hp_transmit" targetRef="gw_hp_merge"/>
+      <sequenceFlow id="seq_hp_4" isImmediate="true" sourceRef="gw_hp_merge" targetRef="task_hp_include"/>
+      <sequenceFlow id="seq_hp_5" isImmediate="true" sourceRef="task_hp_include" targetRef="task_hp_transmit_ca"/>
+      <sequenceFlow id="seq_hp_6" isImmediate="true" sourceRef="task_hp_transmit_ca" targetRef="task_hp_exchange"/>
+      <sequenceFlow id="seq_hp_7" isImmediate="true" sourceRef="task_hp_exchange" targetRef="task_hp_use"/>
+      <sequenceFlow id="seq_hp_8" isImmediate="true" sourceRef="task_hp_use" targetRef="task_hp_not_process"/>
+      <sequenceFlow id="seq_hp_9" isImmediate="true" sourceRef="task_hp_not_process" targetRef="end_hp"/>
+   </process>
+
+   <!-- Process: Competent Authority -->
+   <process id="proc_ca" isClosed="false" isExecutable="false" name="Competent Authority" processType="None">
+      <laneSet id="laneset_ca">
+         <lane id="lane_ca">
+            <flowNodeRef>start_ca</flowNodeRef>
+            <flowNodeRef>task_ca_1</flowNodeRef>
+            <flowNodeRef>end_ca</flowNodeRef>
+         </lane>
+      </laneSet>
+      
+      <startEvent id="start_ca" name="Receive the information">
+         <extensionElements>
+            <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="false" top="true" valign="bottom" x="15.0" y="-8.0"/>
+         </extensionElements>
+         <outgoing>seq_ca_1</outgoing>
+         <messageEventDefinition id="msg_def_ca"/>
+      </startEvent>
+      
+      <task id="task_ca_1" name="Ensure that special needs are adequately addressed">
+         <incoming>seq_ca_1</incoming>
+         <outgoing>seq_ca_2</outgoing>
+      </task>
+      
+      <endEvent id="end_ca" name="special needs addressed end event">
+         <extensionElements>
+            <signavio:signavioLabel bottom="true" left="false" ref="text_name" right="false" top="false" valign="top" x="15.0" y="35.0"/>
+         </extensionElements>
+         <incoming>seq_ca_2</incoming>
+      </endEvent>
+      
+      <sequenceFlow id="seq_ca_1" isImmediate="true" sourceRef="start_ca" targetRef="task_ca_1"/>
+      <sequenceFlow id="seq_ca_2" isImmediate="true" sourceRef="task_ca_1" targetRef="end_ca"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="shape_pool_commission" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1000.0" x="10.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_applicant" id="shape_pool_applicant" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1000.0" x="10.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_hp" id="shape_pool_hp" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2200.0" x="10.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pool_ca" id="shape_pool_ca" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1800.0" x="10.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         
+         <!-- LANES -->
+         <bpmndi:BPMNShape bpmnElement="lane_comm" id="shape_lane_comm" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="970.0" x="40.0" y="10.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_app" id="shape_lane_app" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="970.0" x="40.0" y="200.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_hp" id="shape_lane_hp" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2170.0" x="40.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ca" id="shape_lane_ca" isHorizontal="true">
+            <omgdc:Bounds height="150.0" width="1770.0" x="40.0" y="760.0"/>
+         </bpmndi:BPMNShape>
+         
+         <!-- NODES: Commission -->
+         <bpmndi:BPMNShape bpmnElement="start_comm" id="shape_start_comm">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_1" id="shape_task_comm_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_2" id="shape_task_comm_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_3" id="shape_task_comm_3">
+            <omgdc:Bounds height="80.0" width="100.0" x="500.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_4" id="shape_task_comm_4">
+            <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="45.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_comm" id="shape_end_comm">
+            <omgdc:Bounds height="30.0" width="30.0" x="800.0" y="70.0"/>
+         </bpmndi:BPMNShape>
+         
+         <!-- NODES: Applicant -->
+         <bpmndi:BPMNShape bpmnElement="start_app" id="shape_start_app">
+            <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_split" id="shape_gw_app_split">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_app_yes" id="shape_task_app_yes">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="225.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_app_no" id="shape_task_app_no">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="345.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_app_merge" id="shape_gw_app_merge">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="305.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_app_notify" id="shape_task_app_notify">
+            <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="285.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_app" id="shape_end_app">
+            <omgdc:Bounds height="30.0" width="30.0" x="700.0" y="310.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- NODES: Health Professional -->
+         <bpmndi:BPMNShape bpmnElement="start_hp" id="shape_start_hp">
+            <omgdc:Bounds height="30.0" width="30.0" x="585.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_1" id="shape_task_hp_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="660.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_2" id="shape_task_hp_2">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_split" id="shape_gw_hp_split">
+            <omgdc:Bounds height="40.0" width="40.0" x="950.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_transmit" id="shape_task_hp_transmit">
+            <omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="485.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_hp_merge" id="shape_gw_hp_merge">
+            <omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_include" id="shape_task_hp_include">
+            <omgdc:Bounds height="80.0" width="100.0" x="1300.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_transmit_ca" id="shape_task_hp_transmit_ca">
+            <omgdc:Bounds height="80.0" width="100.0" x="1450.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_exchange" id="shape_task_hp_exchange">
+            <omgdc:Bounds height="80.0" width="100.0" x="1600.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_use" id="shape_task_hp_use">
+            <omgdc:Bounds height="80.0" width="100.0" x="1750.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_hp_not_process" id="shape_task_hp_not_process">
+            <omgdc:Bounds height="80.0" width="100.0" x="1900.0" y="545.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_hp" id="shape_end_hp">
+            <omgdc:Bounds height="30.0" width="30.0" x="2050.0" y="570.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- NODES: Competent Authority -->
+         <bpmndi:BPMNShape bpmnElement="start_ca" id="shape_start_ca">
+            <omgdc:Bounds height="30.0" width="30.0" x="1485.0" y="820.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ca_1" id="shape_task_ca_1">
+            <omgdc:Bounds height="80.0" width="100.0" x="1560.0" y="795.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ca" id="shape_end_ca">
+            <omgdc:Bounds height="30.0" width="30.0" x="1710.0" y="820.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- EDGES: Commission -->
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_1" id="edge_seq_comm_1">
+            <omgdi:waypoint x="130.0" y="85.0"/>
+            <omgdi:waypoint x="200.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_2" id="edge_seq_comm_2">
+            <omgdi:waypoint x="300.0" y="85.0"/>
+            <omgdi:waypoint x="350.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_3" id="edge_seq_comm_3">
+            <omgdi:waypoint x="450.0" y="85.0"/>
+            <omgdi:waypoint x="500.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_4" id="edge_seq_comm_4">
+            <omgdi:waypoint x="600.0" y="85.0"/>
+            <omgdi:waypoint x="650.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_comm_5" id="edge_seq_comm_5">
+            <omgdi:waypoint x="750.0" y="85.0"/>
+            <omgdi:waypoint x="800.0" y="85.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: Applicant -->
+         <bpmndi:BPMNEdge bpmnElement="seq_app_1" id="edge_seq_app_1">
+            <omgdi:waypoint x="130.0" y="325.0"/>
+            <omgdi:waypoint x="200.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_yes" id="edge_seq_app_yes">
+            <omgdi:waypoint x="220.0" y="305.0"/>
+            <omgdi:waypoint x="220.0" y="265.0"/>
+            <omgdi:waypoint x="300.0" y="265.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_no" id="edge_seq_app_no">
+            <omgdi:waypoint x="220.0" y="345.0"/>
+            <omgdi:waypoint x="220.0" y="385.0"/>
+            <omgdi:waypoint x="300.0" y="385.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_merge_1" id="edge_seq_app_merge_1">
+            <omgdi:waypoint x="400.0" y="265.0"/>
+            <omgdi:waypoint x="470.0" y="265.0"/>
+            <omgdi:waypoint x="470.0" y="305.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_merge_2" id="edge_seq_app_merge_2">
+            <omgdi:waypoint x="400.0" y="385.0"/>
+            <omgdi:waypoint x="470.0" y="385.0"/>
+            <omgdi:waypoint x="470.0" y="345.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_2" id="edge_seq_app_2">
+            <omgdi:waypoint x="490.0" y="325.0"/>
+            <omgdi:waypoint x="550.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_app_3" id="edge_seq_app_3">
+            <omgdi:waypoint x="650.0" y="325.0"/>
+            <omgdi:waypoint x="700.0" y="325.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: Health Professional -->
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_1" id="edge_seq_hp_1">
+            <omgdi:waypoint x="615.0" y="585.0"/>
+            <omgdi:waypoint x="660.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_2" id="edge_seq_hp_2">
+            <omgdi:waypoint x="760.0" y="585.0"/>
+            <omgdi:waypoint x="800.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_3" id="edge_seq_hp_3">
+            <omgdi:waypoint x="900.0" y="585.0"/>
+            <omgdi:waypoint x="950.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_true" id="edge_seq_hp_true">
+            <omgdi:waypoint x="970.0" y="565.0"/>
+            <omgdi:waypoint x="970.0" y="525.0"/>
+            <omgdi:waypoint x="1050.0" y="525.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_false" id="edge_seq_hp_false">
+            <omgdi:waypoint x="990.0" y="585.0"/>
+            <omgdi:waypoint x="1200.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_merge_1" id="edge_seq_hp_merge_1">
+            <omgdi:waypoint x="1150.0" y="525.0"/>
+            <omgdi:waypoint x="1220.0" y="525.0"/>
+            <omgdi:waypoint x="1220.0" y="565.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_4" id="edge_seq_hp_4">
+            <omgdi:waypoint x="1240.0" y="585.0"/>
+            <omgdi:waypoint x="1300.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_5" id="edge_seq_hp_5">
+            <omgdi:waypoint x="1400.0" y="585.0"/>
+            <omgdi:waypoint x="1450.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_6" id="edge_seq_hp_6">
+            <omgdi:waypoint x="1550.0" y="585.0"/>
+            <omgdi:waypoint x="1600.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_7" id="edge_seq_hp_7">
+            <omgdi:waypoint x="1700.0" y="585.0"/>
+            <omgdi:waypoint x="1750.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_8" id="edge_seq_hp_8">
+            <omgdi:waypoint x="1850.0" y="585.0"/>
+            <omgdi:waypoint x="1900.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_hp_9" id="edge_seq_hp_9">
+            <omgdi:waypoint x="2000.0" y="585.0"/>
+            <omgdi:waypoint x="2050.0" y="585.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES: Competent Authority -->
+         <bpmndi:BPMNEdge bpmnElement="seq_ca_1" id="edge_seq_ca_1">
+            <omgdi:waypoint x="1515.0" y="835.0"/>
+            <omgdi:waypoint x="1560.0" y="835.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq_ca_2" id="edge_seq_ca_2">
+            <omgdi:waypoint x="1660.0" y="835.0"/>
+            <omgdi:waypoint x="1710.0" y="835.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOWS -->
+         <bpmndi:BPMNEdge bpmnElement="msg_app_hp" id="edge_msg_app_hp">
+            <omgdi:waypoint x="600.0" y="365.0"/>
+            <omgdi:waypoint x="600.0" y="570.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="msg_hp_ca" id="edge_msg_hp_ca">
+            <omgdi:waypoint x="1500.0" y="625.0"/>
+            <omgdi:waypoint x="1500.0" y="820.0"/>
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

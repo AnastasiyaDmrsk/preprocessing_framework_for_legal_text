@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="19.2.2" 
+             id="sid-def-id" targetNamespace="http://www.signavio.com" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+  <collaboration id="collab_1">
+    <participant id="Pool_Mfg" name="Manufacturer" processRef="Proc_Mfg"/>
+    <participant id="Pool_QMS" name="Quality Management System" processRef="Proc_QMS"/>
+    <participant id="Pool_CA" name="Competent Authority" processRef="Proc_CA"/>
+    <participant id="Pool_Pat" name="Patient / User or Successor or Health Insurance Company or Third Party" processRef="Proc_Pat"/>
+
+    <messageFlow id="MF1" sourceRef="CA_T1" targetRef="M_EV1"/>
+    <messageFlow id="MF2" sourceRef="CA_T2" targetRef="M_EV2"/>
+    <messageFlow id="MF3" sourceRef="CA_T3" targetRef="M_EV3"/>
+    <messageFlow id="MF4" sourceRef="CA_T4" targetRef="M_EV4"/>
+    <messageFlow id="MF5" sourceRef="CA_T5" targetRef="M_EV5"/>
+    <messageFlow id="MF6" sourceRef="P_T1" targetRef="CA_EV1"/>
+  </collaboration>
+
+  <process id="Proc_Mfg" isExecutable="false" name="Manufacturer">
+    <laneSet id="LS_Mfg">
+      <lane id="L_Gen" name="Manufacturer">
+        <flowNodeRef>M_S1</flowNodeRef>
+        <flowNodeRef>M_T1</flowNodeRef>
+        <flowNodeRef>M_T2</flowNodeRef>
+        <flowNodeRef>M_T3</flowNodeRef>
+        <flowNodeRef>M_T4</flowNodeRef>
+        <flowNodeRef>M_T5</flowNodeRef>
+        <flowNodeRef>M_T6</flowNodeRef>
+        <flowNodeRef>M_T7</flowNodeRef>
+        <flowNodeRef>M_G1</flowNodeRef>
+        <flowNodeRef>M_T11</flowNodeRef>
+        <flowNodeRef>M_T12</flowNodeRef>
+        <flowNodeRef>M_G2</flowNodeRef>
+        <flowNodeRef>M_T13</flowNodeRef>
+        <flowNodeRef>M_G3</flowNodeRef>
+        <flowNodeRef>M_T14</flowNodeRef>
+        <flowNodeRef>M_T15</flowNodeRef>
+        <flowNodeRef>M_G4</flowNodeRef>
+        <flowNodeRef>M_T16</flowNodeRef>
+        <flowNodeRef>M_T17</flowNodeRef>
+        <flowNodeRef>M_G5</flowNodeRef>
+        <flowNodeRef>M_T19</flowNodeRef>
+        <flowNodeRef>M_G6</flowNodeRef>
+        <flowNodeRef>M_EV1</flowNodeRef>
+        <flowNodeRef>M_T20</flowNodeRef>
+        <flowNodeRef>M_T21</flowNodeRef>
+        <flowNodeRef>M_G7</flowNodeRef>
+        <flowNodeRef>M_T22</flowNodeRef>
+        <flowNodeRef>M_G8</flowNodeRef>
+        <flowNodeRef>M_T23</flowNodeRef>
+        <flowNodeRef>M_T24</flowNodeRef>
+        <flowNodeRef>M_T25</flowNodeRef>
+        <flowNodeRef>M_T26</flowNodeRef>
+        <flowNodeRef>M_T27</flowNodeRef>
+        <flowNodeRef>M_T28</flowNodeRef>
+        <flowNodeRef>M_T29</flowNodeRef>
+        <flowNodeRef>M_T30</flowNodeRef>
+        <flowNodeRef>M_T31</flowNodeRef>
+        <flowNodeRef>M_T32</flowNodeRef>
+        <flowNodeRef>M_T33</flowNodeRef>
+        <flowNodeRef>M_T34</flowNodeRef>
+        <flowNodeRef>M_G9</flowNodeRef>
+        <flowNodeRef>M_T35</flowNodeRef>
+        <flowNodeRef>M_T36</flowNodeRef>
+        <flowNodeRef>M_T37</flowNodeRef>
+        <flowNodeRef>M_T38</flowNodeRef>
+        <flowNodeRef>M_G10</flowNodeRef>
+        <flowNodeRef>M_T39</flowNodeRef>
+        <flowNodeRef>M_G11</flowNodeRef>
+        <flowNodeRef>M_T40</flowNodeRef>
+        <flowNodeRef>M_G12</flowNodeRef>
+        <flowNodeRef>M_T41</flowNodeRef>
+        <flowNodeRef>M_EV2</flowNodeRef>
+        <flowNodeRef>M_T42</flowNodeRef>
+        <flowNodeRef>M_EV3</flowNodeRef>
+        <flowNodeRef>M_T43</flowNodeRef>
+        <flowNodeRef>M_EV4</flowNodeRef>
+        <flowNodeRef>M_T44</flowNodeRef>
+        <flowNodeRef>M_EV5</flowNodeRef>
+        <flowNodeRef>M_T45</flowNodeRef>
+        <flowNodeRef>M_T46</flowNodeRef>
+        <flowNodeRef>M_T47</flowNodeRef>
+        <flowNodeRef>M_E1</flowNodeRef>
+      </lane>
+      <lane id="L_Cst" name="Manufacturer of custom-made devices">
+        <flowNodeRef>M_T8</flowNodeRef>
+        <flowNodeRef>M_T9</flowNodeRef>
+        <flowNodeRef>M_T10</flowNodeRef>
+      </lane>
+      <lane id="L_Imp" name="Manufacturer of implantable devices">
+        <flowNodeRef>M_T18</flowNodeRef>
+      </lane>
+    </laneSet>
+
+    <startEvent id="M_S1" name="placing devices on the market or putting them into service"/>
+    <task id="M_T1" name="ensure that devices have been designed and manufactured IAW the requirements"/>
+    <task id="M_T2" name="establish a system for risk management"/>
+    <task id="M_T3" name="document a system for risk management"/>
+    <task id="M_T4" name="implement a system for risk management"/>
+    <task id="M_T5" name="maintain a system for risk management"/>
+    <task id="M_T6" name="conduct a clinical evaluation"/>
+    <task id="M_T7" name="assess whether they are a manufacturer of custom-made devices"/>
+    
+    <exclusiveGateway id="M_G1" name="manufacturer of custom-made devices?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T8" name="draw up documentation"/>
+    <task id="M_T9" name="keep up to date documentation"/>
+    <task id="M_T10" name="keep available for competent authorities documentation"/>
+    
+    <task id="M_T11" name="draw up technical documentation"/>
+    <task id="M_T12" name="keep up to date technical documentation"/>
+    
+    <exclusiveGateway id="M_G2" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="M_T13" name="assess whether compliance with the applicable requirements has been demonstrated"/>
+    
+    <exclusiveGateway id="M_G3" name="compliance demonstrated?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T14" name="draw up an EU declaration of conformity"/>
+    <task id="M_T15" name="affix the CE marking of conformity"/>
+    
+    <exclusiveGateway id="M_G4" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="M_T16" name="comply with the obligations"/>
+    <task id="M_T17" name="assess whether they are a manufacturer of implantable devices"/>
+    
+    <exclusiveGateway id="M_G5" name="manufacturer of implantable devices?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T18" name="keep the technical documentation, the EU declaration of conformity and a copy of any relevant certificate"/>
+    <task id="M_T19" name="keep the technical documentation, the EU declaration of conformity and a copy of any relevant certificate"/>
+    
+    <exclusiveGateway id="M_G6" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <intermediateCatchEvent id="M_EV1" name="Upon receiving a request for technical documentation">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    
+    <task id="M_T20" name="provide technical documentation in its entirety or a summary"/>
+    <task id="M_T21" name="assess whether the manufacturer has a registered place of business outside the Union and allow the authorised representative to fulfil the tasks"/>
+    
+    <exclusiveGateway id="M_G7" name="conditions are true?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T22" name="ensure that the authorised representative has the necessary documentation available"/>
+    
+    <exclusiveGateway id="M_G8" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="M_T23" name="ensure that procedures are in place to keep series production in conformity with the requirements"/>
+    <task id="M_T24" name="take into account changes in device design or characteristics and changes in the harmonised standards"/>
+    <task id="M_T25" name="establish a quality management system"/>
+    <task id="M_T26" name="document a quality management system"/>
+    <task id="M_T27" name="implement a quality management system"/>
+    <task id="M_T28" name="maintain a quality management system"/>
+    <task id="M_T29" name="keep up to date a quality management system"/>
+    <task id="M_T30" name="improve a quality management system"/>
+    <task id="M_T31" name="implement the post-market surveillance system"/>
+    <task id="M_T32" name="keep up to date the post-market surveillance system"/>
+    <task id="M_T33" name="ensure that the device is accompanied by the information"/>
+    <task id="M_T34" name="assess whether the device is not in conformity with this Regulation"/>
+    
+    <exclusiveGateway id="M_G9" name="device is not in conformity?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T35" name="bring the device into conformity"/>
+    <task id="M_T36" name="withdraw the device"/>
+    <task id="M_T37" name="recall the device"/>
+    <task id="M_T38" name="inform the distributors of the device, the authorised representative and importers"/>
+    
+    <exclusiveGateway id="M_G10" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="M_T39" name="assess whether the device is not in conformity with this Regulation and the device presents a serious risk"/>
+    
+    <exclusiveGateway id="M_G11" name="conditions are true?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    
+    <task id="M_T40" name="notify the non-compliance to the competent authorities and the notified body"/>
+    
+    <exclusiveGateway id="M_G12" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="M_T41" name="have a system for recording and reporting of incidents and corrective actions"/>
+    
+    <intermediateCatchEvent id="M_EV2" name="Upon receiving a request for documentation necessary to demonstrate the conformity">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    
+    <task id="M_T42" name="provide the competent authority with all the information and documentation"/>
+    
+    <intermediateCatchEvent id="M_EV3" name="Upon receiving a requirement to provide samples of the device free of charge">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    
+    <task id="M_T43" name="provide samples of the device"/>
+    
+    <intermediateCatchEvent id="M_EV4" name="Upon receiving a requirement to grant access to the device">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    
+    <task id="M_T44" name="grant access to the device"/>
+    
+    <intermediateCatchEvent id="M_EV5" name="Upon receiving a request for collaboration">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    
+    <task id="M_T45" name="cooperate with a competent authority"/>
+    <task id="M_T46" name="ensure that the information on the person identity is part of the submitted information"/>
+    <task id="M_T47" name="have measures to provide sufficient financial coverage"/>
+    
+    <endEvent id="M_E1" name="general obligations fulfilled end event">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+    </endEvent>
+
+    <!-- Sequence Flows Manufacturer -->
+    <sequenceFlow id="M_F1" sourceRef="M_S1" targetRef="M_T1" isImmediate="true"/>
+    <sequenceFlow id="M_F2" sourceRef="M_T1" targetRef="M_T2" isImmediate="true"/>
+    <sequenceFlow id="M_F3" sourceRef="M_T2" targetRef="M_T3" isImmediate="true"/>
+    <sequenceFlow id="M_F4" sourceRef="M_T3" targetRef="M_T4" isImmediate="true"/>
+    <sequenceFlow id="M_F5" sourceRef="M_T4" targetRef="M_T5" isImmediate="true"/>
+    <sequenceFlow id="M_F6" sourceRef="M_T5" targetRef="M_T6" isImmediate="true"/>
+    <sequenceFlow id="M_F7" sourceRef="M_T6" targetRef="M_T7" isImmediate="true"/>
+    <sequenceFlow id="M_F8" sourceRef="M_T7" targetRef="M_G1" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F9" name="yes" sourceRef="M_G1" targetRef="M_T8" isImmediate="true"/>
+    <sequenceFlow id="M_F10" sourceRef="M_T8" targetRef="M_T9" isImmediate="true"/>
+    <sequenceFlow id="M_F11" sourceRef="M_T9" targetRef="M_T10" isImmediate="true"/>
+    <sequenceFlow id="M_F12" sourceRef="M_T10" targetRef="M_G2" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F13" name="no" sourceRef="M_G1" targetRef="M_T11" isImmediate="true"/>
+    <sequenceFlow id="M_F14" sourceRef="M_T11" targetRef="M_T12" isImmediate="true"/>
+    <sequenceFlow id="M_F15" sourceRef="M_T12" targetRef="M_G2" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F16" sourceRef="M_G2" targetRef="M_T13" isImmediate="true"/>
+    <sequenceFlow id="M_F17" sourceRef="M_T13" targetRef="M_G3" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F18" name="yes" sourceRef="M_G3" targetRef="M_T14" isImmediate="true"/>
+    <sequenceFlow id="M_F19" sourceRef="M_T14" targetRef="M_T15" isImmediate="true"/>
+    <sequenceFlow id="M_F20" sourceRef="M_T15" targetRef="M_G4" isImmediate="true"/>
+    <sequenceFlow id="M_F21" name="no" sourceRef="M_G3" targetRef="M_G4" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F22" sourceRef="M_G4" targetRef="M_T16" isImmediate="true"/>
+    <sequenceFlow id="M_F23" sourceRef="M_T16" targetRef="M_T17" isImmediate="true"/>
+    <sequenceFlow id="M_F24" sourceRef="M_T17" targetRef="M_G5" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F25" name="yes" sourceRef="M_G5" targetRef="M_T18" isImmediate="true"/>
+    <sequenceFlow id="M_F26" sourceRef="M_T18" targetRef="M_G6" isImmediate="true"/>
+    <sequenceFlow id="M_F27" name="no" sourceRef="M_G5" targetRef="M_T19" isImmediate="true"/>
+    <sequenceFlow id="M_F28" sourceRef="M_T19" targetRef="M_G6" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F29" sourceRef="M_G6" targetRef="M_EV1" isImmediate="true"/>
+    <sequenceFlow id="M_F30" sourceRef="M_EV1" targetRef="M_T20" isImmediate="true"/>
+    <sequenceFlow id="M_F31" sourceRef="M_T20" targetRef="M_T21" isImmediate="true"/>
+    <sequenceFlow id="M_F32" sourceRef="M_T21" targetRef="M_G7" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F33" name="yes" sourceRef="M_G7" targetRef="M_T22" isImmediate="true"/>
+    <sequenceFlow id="M_F34" sourceRef="M_T22" targetRef="M_G8" isImmediate="true"/>
+    <sequenceFlow id="M_F35" name="no" sourceRef="M_G7" targetRef="M_G8" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F36" sourceRef="M_G8" targetRef="M_T23" isImmediate="true"/>
+    <sequenceFlow id="M_F37" sourceRef="M_T23" targetRef="M_T24" isImmediate="true"/>
+    <sequenceFlow id="M_F38" sourceRef="M_T24" targetRef="M_T25" isImmediate="true"/>
+    <sequenceFlow id="M_F39" sourceRef="M_T25" targetRef="M_T26" isImmediate="true"/>
+    <sequenceFlow id="M_F40" sourceRef="M_T26" targetRef="M_T27" isImmediate="true"/>
+    <sequenceFlow id="M_F41" sourceRef="M_T27" targetRef="M_T28" isImmediate="true"/>
+    <sequenceFlow id="M_F42" sourceRef="M_T28" targetRef="M_T29" isImmediate="true"/>
+    <sequenceFlow id="M_F43" sourceRef="M_T29" targetRef="M_T30" isImmediate="true"/>
+    <sequenceFlow id="M_F44" sourceRef="M_T30" targetRef="M_T31" isImmediate="true"/>
+    <sequenceFlow id="M_F45" sourceRef="M_T31" targetRef="M_T32" isImmediate="true"/>
+    <sequenceFlow id="M_F46" sourceRef="M_T32" targetRef="M_T33" isImmediate="true"/>
+    <sequenceFlow id="M_F47" sourceRef="M_T33" targetRef="M_T34" isImmediate="true"/>
+    <sequenceFlow id="M_F48" sourceRef="M_T34" targetRef="M_G9" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F49" name="yes" sourceRef="M_G9" targetRef="M_T35" isImmediate="true"/>
+    <sequenceFlow id="M_F50" sourceRef="M_T35" targetRef="M_T36" isImmediate="true"/>
+    <sequenceFlow id="M_F51" sourceRef="M_T36" targetRef="M_T37" isImmediate="true"/>
+    <sequenceFlow id="M_F52" sourceRef="M_T37" targetRef="M_T38" isImmediate="true"/>
+    <sequenceFlow id="M_F53" sourceRef="M_T38" targetRef="M_G10" isImmediate="true"/>
+    <sequenceFlow id="M_F54" name="no" sourceRef="M_G9" targetRef="M_G10" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F55" sourceRef="M_G10" targetRef="M_T39" isImmediate="true"/>
+    <sequenceFlow id="M_F56" sourceRef="M_T39" targetRef="M_G11" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F57" name="yes" sourceRef="M_G11" targetRef="M_T40" isImmediate="true"/>
+    <sequenceFlow id="M_F58" sourceRef="M_T40" targetRef="M_G12" isImmediate="true"/>
+    <sequenceFlow id="M_F59" name="no" sourceRef="M_G11" targetRef="M_G12" isImmediate="true"/>
+    
+    <sequenceFlow id="M_F60" sourceRef="M_G12" targetRef="M_T41" isImmediate="true"/>
+    <sequenceFlow id="M_F61" sourceRef="M_T41" targetRef="M_EV2" isImmediate="true"/>
+    <sequenceFlow id="M_F62" sourceRef="M_EV2" targetRef="M_T42" isImmediate="true"/>
+    <sequenceFlow id="M_F63" sourceRef="M_T42" targetRef="M_EV3" isImmediate="true"/>
+    <sequenceFlow id="M_F64" sourceRef="M_EV3" targetRef="M_T43" isImmediate="true"/>
+    <sequenceFlow id="M_F65" sourceRef="M_T43" targetRef="M_EV4" isImmediate="true"/>
+    <sequenceFlow id="M_F66" sourceRef="M_EV4" targetRef="M_T44" isImmediate="true"/>
+    <sequenceFlow id="M_F67" sourceRef="M_T44" targetRef="M_EV5" isImmediate="true"/>
+    <sequenceFlow id="M_F68" sourceRef="M_EV5" targetRef="M_T45" isImmediate="true"/>
+    <sequenceFlow id="M_F69" sourceRef="M_T45" targetRef="M_T46" isImmediate="true"/>
+    <sequenceFlow id="M_F70" sourceRef="M_T46" targetRef="M_T47" isImmediate="true"/>
+    <sequenceFlow id="M_F71" sourceRef="M_T47" targetRef="M_E1" isImmediate="true"/>
+  </process>
+
+  <process id="Proc_QMS" isExecutable="false" name="Quality Management System">
+    <startEvent id="Q_S1" name="Start process for QMS"/>
+    <task id="Q_T1" name="cover all parts and elements of a manufacturer's organisation"/>
+    <task id="Q_T2" name="govern the structure, responsibilities, procedures, processes and management resources"/>
+    <task id="Q_T3" name="address at least the aspects set out in paragraph 9"/>
+    <endEvent id="Q_E1" name="system specifications addressed end event">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+    </endEvent>
+
+    <sequenceFlow id="Q_F1" sourceRef="Q_S1" targetRef="Q_T1" isImmediate="true"/>
+    <sequenceFlow id="Q_F2" sourceRef="Q_T1" targetRef="Q_T2" isImmediate="true"/>
+    <sequenceFlow id="Q_F3" sourceRef="Q_T2" targetRef="Q_T3" isImmediate="true"/>
+    <sequenceFlow id="Q_F4" sourceRef="Q_T3" targetRef="Q_E1" isImmediate="true"/>
+  </process>
+
+  <process id="Proc_CA" isExecutable="false" name="Competent Authority">
+    <startEvent id="CA_S1" name="Start process for CA"/>
+    
+    <exclusiveGateway id="CA_G1" name="send request tech doc?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T1" name="send a request for technical documentation"/>
+    <exclusiveGateway id="CA_G2" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <exclusiveGateway id="CA_G3" name="send request doc conformity?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T2" name="send a request for documentation necessary to demonstrate the conformity of the device"/>
+    <exclusiveGateway id="CA_G4" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <exclusiveGateway id="CA_G5" name="send require samples?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T3" name="send a requirement to provide samples of the device free of charge"/>
+    <exclusiveGateway id="CA_G6" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <exclusiveGateway id="CA_G7" name="send require access?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T4" name="send a requirement to grant access to the device"/>
+    <exclusiveGateway id="CA_G8" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <exclusiveGateway id="CA_G9" name="send request collaboration?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T5" name="send a request for collaboration"/>
+    <exclusiveGateway id="CA_G10" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <task id="CA_T6" name="assess whether the manufacturer fails to cooperate or the information and documentation provided is incomplete or incorrect"/>
+    <exclusiveGateway id="CA_G11" name="manufacturer fails?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="CA_T7" name="take all appropriate measures to prohibit or restrict the device"/>
+    <task id="CA_T8" name="withdraw the device from that market"/>
+    <task id="CA_T9" name="recall the device until the manufacturer cooperates or provides information"/>
+    <exclusiveGateway id="CA_G12" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <intermediateCatchEvent id="CA_EV1" name="Upon receiving a request for provision of information related to device damage">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+      <messageEventDefinition/>
+    </intermediateCatchEvent>
+    <task id="CA_T10" name="facilitate the provision of the information and documentation to the potentially injured patient"/>
+    <endEvent id="CA_E1" name="regulatory actions completed end event">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+    </endEvent>
+
+    <sequenceFlow id="CA_F1" sourceRef="CA_S1" targetRef="CA_G1" isImmediate="true"/>
+    <sequenceFlow id="CA_F2" name="yes" sourceRef="CA_G1" targetRef="CA_T1" isImmediate="true"/>
+    <sequenceFlow id="CA_F3" sourceRef="CA_T1" targetRef="CA_G2" isImmediate="true"/>
+    <sequenceFlow id="CA_F4" name="no" sourceRef="CA_G1" targetRef="CA_G2" isImmediate="true"/>
+    <sequenceFlow id="CA_F5" sourceRef="CA_G2" targetRef="CA_G3" isImmediate="true"/>
+    <sequenceFlow id="CA_F6" name="yes" sourceRef="CA_G3" targetRef="CA_T2" isImmediate="true"/>
+    <sequenceFlow id="CA_F7" sourceRef="CA_T2" targetRef="CA_G4" isImmediate="true"/>
+    <sequenceFlow id="CA_F8" name="no" sourceRef="CA_G3" targetRef="CA_G4" isImmediate="true"/>
+    <sequenceFlow id="CA_F9" sourceRef="CA_G4" targetRef="CA_G5" isImmediate="true"/>
+    <sequenceFlow id="CA_F10" name="yes" sourceRef="CA_G5" targetRef="CA_T3" isImmediate="true"/>
+    <sequenceFlow id="CA_F11" sourceRef="CA_T3" targetRef="CA_G6" isImmediate="true"/>
+    <sequenceFlow id="CA_F12" name="no" sourceRef="CA_G5" targetRef="CA_G6" isImmediate="true"/>
+    <sequenceFlow id="CA_F13" sourceRef="CA_G6" targetRef="CA_G7" isImmediate="true"/>
+    <sequenceFlow id="CA_F14" name="yes" sourceRef="CA_G7" targetRef="CA_T4" isImmediate="true"/>
+    <sequenceFlow id="CA_F15" sourceRef="CA_T4" targetRef="CA_G8" isImmediate="true"/>
+    <sequenceFlow id="CA_F16" name="no" sourceRef="CA_G7" targetRef="CA_G8" isImmediate="true"/>
+    <sequenceFlow id="CA_F17" sourceRef="CA_G8" targetRef="CA_G9" isImmediate="true"/>
+    <sequenceFlow id="CA_F18" name="yes" sourceRef="CA_G9" targetRef="CA_T5" isImmediate="true"/>
+    <sequenceFlow id="CA_F19" sourceRef="CA_T5" targetRef="CA_G10" isImmediate="true"/>
+    <sequenceFlow id="CA_F20" name="no" sourceRef="CA_G9" targetRef="CA_G10" isImmediate="true"/>
+    <sequenceFlow id="CA_F21" sourceRef="CA_G10" targetRef="CA_T6" isImmediate="true"/>
+    <sequenceFlow id="CA_F22" sourceRef="CA_T6" targetRef="CA_G11" isImmediate="true"/>
+    <sequenceFlow id="CA_F23" name="yes" sourceRef="CA_G11" targetRef="CA_T7" isImmediate="true"/>
+    <sequenceFlow id="CA_F24" sourceRef="CA_T7" targetRef="CA_T8" isImmediate="true"/>
+    <sequenceFlow id="CA_F25" sourceRef="CA_T8" targetRef="CA_T9" isImmediate="true"/>
+    <sequenceFlow id="CA_F26" sourceRef="CA_T9" targetRef="CA_G12" isImmediate="true"/>
+    <sequenceFlow id="CA_F27" name="no" sourceRef="CA_G11" targetRef="CA_G12" isImmediate="true"/>
+    <sequenceFlow id="CA_F28" sourceRef="CA_G12" targetRef="CA_EV1" isImmediate="true"/>
+    <sequenceFlow id="CA_F29" sourceRef="CA_EV1" targetRef="CA_T10" isImmediate="true"/>
+    <sequenceFlow id="CA_F30" sourceRef="CA_T10" targetRef="CA_E1" isImmediate="true"/>
+  </process>
+
+  <process id="Proc_Pat" isExecutable="false" name="Patient / User">
+    <startEvent id="P_S1" name="Start process for Patient"/>
+    <exclusiveGateway id="P_G1" name="send request?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="P_T1" name="send a request for provision of information related to device damage to the Competent Authority"/>
+    <exclusiveGateway id="P_G2" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <exclusiveGateway id="P_G3" name="claim compensation?" gatewayDirection="Diverging" isMarkerVisible="true">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="20.0" y="-8.0"/></extensionElements>
+    </exclusiveGateway>
+    <task id="P_T2" name="claim compensation for damage caused by a defective device"/>
+    <exclusiveGateway id="P_G4" gatewayDirection="Converging" isMarkerVisible="true"/>
+    
+    <endEvent id="P_E1" name="compensation claimed end event">
+      <extensionElements><signavio:signavioLabel ref="text_name" x="15.0" y="-8.0"/></extensionElements>
+    </endEvent>
+
+    <sequenceFlow id="P_F1" sourceRef="P_S1" targetRef="P_G1" isImmediate="true"/>
+    <sequenceFlow id="P_F2" name="yes" sourceRef="P_G1" targetRef="P_T1" isImmediate="true"/>
+    <sequenceFlow id="P_F3" sourceRef="P_T1" targetRef="P_G2" isImmediate="true"/>
+    <sequenceFlow id="P_F4" name="no" sourceRef="P_G1" targetRef="P_G2" isImmediate="true"/>
+    <sequenceFlow id="P_F5" sourceRef="P_G2" targetRef="P_G3" isImmediate="true"/>
+    <sequenceFlow id="P_F6" name="yes" sourceRef="P_G3" targetRef="P_T2" isImmediate="true"/>
+    <sequenceFlow id="P_F7" sourceRef="P_T2" targetRef="P_G4" isImmediate="true"/>
+    <sequenceFlow id="P_F8" name="no" sourceRef="P_G3" targetRef="P_G4" isImmediate="true"/>
+    <sequenceFlow id="P_F9" sourceRef="P_G4" targetRef="P_E1" isImmediate="true"/>
+  </process>
+
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane bpmnElement="collab_1" id="Plane_1">
+      
+      <!-- Manufacturer Pool and Lanes -->
+      <bpmndi:BPMNShape bpmnElement="Pool_Mfg" id="Pool_Mfg_gui" isHorizontal="true">
+        <omgdc:Bounds height="600.0" width="9500.0" x="100.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="L_Gen" id="L_Gen_gui" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="9470.0" x="130.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="L_Cst" id="L_Cst_gui" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="9470.0" x="130.0" y="300.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="L_Imp" id="L_Imp_gui" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="9470.0" x="130.0" y="500.0"/>
+      </bpmndi:BPMNShape>
+
+      <!-- Manufacturer Nodes -->
+      <bpmndi:BPMNShape bpmnElement="M_S1" id="M_S1_gui"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T1" id="M_T1_gui"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T2" id="M_T2_gui"><omgdc:Bounds height="80.0" width="100.0" x="400.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T3" id="M_T3_gui"><omgdc:Bounds height="80.0" width="100.0" x="550.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T4" id="M_T4_gui"><omgdc:Bounds height="80.0" width="100.0" x="700.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T5" id="M_T5_gui"><omgdc:Bounds height="80.0" width="100.0" x="850.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T6" id="M_T6_gui"><omgdc:Bounds height="80.0" width="100.0" x="1000.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T7" id="M_T7_gui"><omgdc:Bounds height="80.0" width="100.0" x="1150.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G1" id="M_G1_gui"><omgdc:Bounds height="40.0" width="40.0" x="1300.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T8" id="M_T8_gui"><omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="360.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T9" id="M_T9_gui"><omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="360.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T10" id="M_T10_gui"><omgdc:Bounds height="80.0" width="100.0" x="1700.0" y="360.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T11" id="M_T11_gui"><omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T12" id="M_T12_gui"><omgdc:Bounds height="80.0" width="100.0" x="1550.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G2" id="M_G2_gui"><omgdc:Bounds height="40.0" width="40.0" x="1850.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T13" id="M_T13_gui"><omgdc:Bounds height="80.0" width="100.0" x="2000.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G3" id="M_G3_gui"><omgdc:Bounds height="40.0" width="40.0" x="2150.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T14" id="M_T14_gui"><omgdc:Bounds height="80.0" width="100.0" x="2250.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T15" id="M_T15_gui"><omgdc:Bounds height="80.0" width="100.0" x="2400.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G4" id="M_G4_gui"><omgdc:Bounds height="40.0" width="40.0" x="2550.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T16" id="M_T16_gui"><omgdc:Bounds height="80.0" width="100.0" x="2700.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T17" id="M_T17_gui"><omgdc:Bounds height="80.0" width="100.0" x="2850.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G5" id="M_G5_gui"><omgdc:Bounds height="40.0" width="40.0" x="3000.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T18" id="M_T18_gui"><omgdc:Bounds height="80.0" width="100.0" x="3150.0" y="560.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T19" id="M_T19_gui"><omgdc:Bounds height="80.0" width="100.0" x="3150.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G6" id="M_G6_gui"><omgdc:Bounds height="40.0" width="40.0" x="3350.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_EV1" id="M_EV1_gui"><omgdc:Bounds height="30.0" width="30.0" x="3450.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T20" id="M_T20_gui"><omgdc:Bounds height="80.0" width="100.0" x="3550.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T21" id="M_T21_gui"><omgdc:Bounds height="80.0" width="100.0" x="3700.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G7" id="M_G7_gui"><omgdc:Bounds height="40.0" width="40.0" x="3850.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T22" id="M_T22_gui"><omgdc:Bounds height="80.0" width="100.0" x="4000.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G8" id="M_G8_gui"><omgdc:Bounds height="40.0" width="40.0" x="4150.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T23" id="M_T23_gui"><omgdc:Bounds height="80.0" width="100.0" x="4300.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T24" id="M_T24_gui"><omgdc:Bounds height="80.0" width="100.0" x="4450.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T25" id="M_T25_gui"><omgdc:Bounds height="80.0" width="100.0" x="4600.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T26" id="M_T26_gui"><omgdc:Bounds height="80.0" width="100.0" x="4750.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T27" id="M_T27_gui"><omgdc:Bounds height="80.0" width="100.0" x="4900.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T28" id="M_T28_gui"><omgdc:Bounds height="80.0" width="100.0" x="5050.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T29" id="M_T29_gui"><omgdc:Bounds height="80.0" width="100.0" x="5200.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T30" id="M_T30_gui"><omgdc:Bounds height="80.0" width="100.0" x="5350.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T31" id="M_T31_gui"><omgdc:Bounds height="80.0" width="100.0" x="5500.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T32" id="M_T32_gui"><omgdc:Bounds height="80.0" width="100.0" x="5650.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T33" id="M_T33_gui"><omgdc:Bounds height="80.0" width="100.0" x="5800.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T34" id="M_T34_gui"><omgdc:Bounds height="80.0" width="100.0" x="5950.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G9" id="M_G9_gui"><omgdc:Bounds height="40.0" width="40.0" x="6100.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T35" id="M_T35_gui"><omgdc:Bounds height="80.0" width="100.0" x="6200.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T36" id="M_T36_gui"><omgdc:Bounds height="80.0" width="100.0" x="6350.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T37" id="M_T37_gui"><omgdc:Bounds height="80.0" width="100.0" x="6500.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T38" id="M_T38_gui"><omgdc:Bounds height="80.0" width="100.0" x="6650.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G10" id="M_G10_gui"><omgdc:Bounds height="40.0" width="40.0" x="6800.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T39" id="M_T39_gui"><omgdc:Bounds height="80.0" width="100.0" x="6950.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G11" id="M_G11_gui"><omgdc:Bounds height="40.0" width="40.0" x="7100.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T40" id="M_T40_gui"><omgdc:Bounds height="80.0" width="100.0" x="7250.0" y="260.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_G12" id="M_G12_gui"><omgdc:Bounds height="40.0" width="40.0" x="7400.0" y="180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T41" id="M_T41_gui"><omgdc:Bounds height="80.0" width="100.0" x="7550.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_EV2" id="M_EV2_gui"><omgdc:Bounds height="30.0" width="30.0" x="7700.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T42" id="M_T42_gui"><omgdc:Bounds height="80.0" width="100.0" x="7800.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_EV3" id="M_EV3_gui"><omgdc:Bounds height="30.0" width="30.0" x="7950.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T43" id="M_T43_gui"><omgdc:Bounds height="80.0" width="100.0" x="8050.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_EV4" id="M_EV4_gui"><omgdc:Bounds height="30.0" width="30.0" x="8200.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T44" id="M_T44_gui"><omgdc:Bounds height="80.0" width="100.0" x="8300.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_EV5" id="M_EV5_gui"><omgdc:Bounds height="30.0" width="30.0" x="8450.0" y="185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T45" id="M_T45_gui"><omgdc:Bounds height="80.0" width="100.0" x="8550.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T46" id="M_T46_gui"><omgdc:Bounds height="80.0" width="100.0" x="8700.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_T47" id="M_T47_gui"><omgdc:Bounds height="80.0" width="100.0" x="8850.0" y="160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="M_E1" id="M_E1_gui"><omgdc:Bounds height="30.0" width="30.0" x="9000.0" y="185.0"/></bpmndi:BPMNShape>
+
+      <!-- QMS Pool -->
+      <bpmndi:BPMNShape bpmnElement="Pool_QMS" id="Pool_QMS_gui" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="1000.0" x="100.0" y="800.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Q_S1" id="Q_S1_gui"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="885.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Q_T1" id="Q_T1_gui"><omgdc:Bounds height="80.0" width="100.0" x="250.0" y="860.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Q_T2" id="Q_T2_gui"><omgdc:Bounds height="80.0" width="100.0" x="400.0" y="860.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Q_T3" id="Q_T3_gui"><omgdc:Bounds height="80.0" width="100.0" x="550.0" y="860.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Q_E1" id="Q_E1_gui"><omgdc:Bounds height="30.0" width="30.0" x="700.0" y="885.0"/></bpmndi:BPMNShape>
+
+      <!-- CA Pool -->
+      <bpmndi:BPMNShape bpmnElement="Pool_CA" id="Pool_CA_gui" isHorizontal="true">
+        <omgdc:Bounds height="300.0" width="3500.0" x="100.0" y="1100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_S1" id="CA_S1_gui"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G1" id="CA_G1_gui"><omgdc:Bounds height="40.0" width="40.0" x="250.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T1" id="CA_T1_gui"><omgdc:Bounds height="80.0" width="100.0" x="350.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G2" id="CA_G2_gui"><omgdc:Bounds height="40.0" width="40.0" x="500.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G3" id="CA_G3_gui"><omgdc:Bounds height="40.0" width="40.0" x="600.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T2" id="CA_T2_gui"><omgdc:Bounds height="80.0" width="100.0" x="700.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G4" id="CA_G4_gui"><omgdc:Bounds height="40.0" width="40.0" x="850.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G5" id="CA_G5_gui"><omgdc:Bounds height="40.0" width="40.0" x="950.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T3" id="CA_T3_gui"><omgdc:Bounds height="80.0" width="100.0" x="1050.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G6" id="CA_G6_gui"><omgdc:Bounds height="40.0" width="40.0" x="1200.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G7" id="CA_G7_gui"><omgdc:Bounds height="40.0" width="40.0" x="1300.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T4" id="CA_T4_gui"><omgdc:Bounds height="80.0" width="100.0" x="1400.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G8" id="CA_G8_gui"><omgdc:Bounds height="40.0" width="40.0" x="1550.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G9" id="CA_G9_gui"><omgdc:Bounds height="40.0" width="40.0" x="1650.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T5" id="CA_T5_gui"><omgdc:Bounds height="80.0" width="100.0" x="1750.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G10" id="CA_G10_gui"><omgdc:Bounds height="40.0" width="40.0" x="1900.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T6" id="CA_T6_gui"><omgdc:Bounds height="80.0" width="100.0" x="2050.0" y="1160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G11" id="CA_G11_gui"><omgdc:Bounds height="40.0" width="40.0" x="2200.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T7" id="CA_T7_gui"><omgdc:Bounds height="80.0" width="100.0" x="2350.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T8" id="CA_T8_gui"><omgdc:Bounds height="80.0" width="100.0" x="2500.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T9" id="CA_T9_gui"><omgdc:Bounds height="80.0" width="100.0" x="2650.0" y="1250.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_G12" id="CA_G12_gui"><omgdc:Bounds height="40.0" width="40.0" x="2800.0" y="1180.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_EV1" id="CA_EV1_gui"><omgdc:Bounds height="30.0" width="30.0" x="2950.0" y="1185.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_T10" id="CA_T10_gui"><omgdc:Bounds height="80.0" width="100.0" x="3050.0" y="1160.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CA_E1" id="CA_E1_gui"><omgdc:Bounds height="30.0" width="30.0" x="3200.0" y="1185.0"/></bpmndi:BPMNShape>
+
+      <!-- Patient Pool -->
+      <bpmndi:BPMNShape bpmnElement="Pool_Pat" id="Pool_Pat_gui" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="1000.0" x="100.0" y="1500.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_S1" id="P_S1_gui"><omgdc:Bounds height="30.0" width="30.0" x="150.0" y="1585.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_G1" id="P_G1_gui"><omgdc:Bounds height="40.0" width="40.0" x="250.0" y="1580.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_T1" id="P_T1_gui"><omgdc:Bounds height="80.0" width="100.0" x="350.0" y="1650.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_G2" id="P_G2_gui"><omgdc:Bounds height="40.0" width="40.0" x="500.0" y="1580.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_G3" id="P_G3_gui"><omgdc:Bounds height="40.0" width="40.0" x="600.0" y="1580.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_T2" id="P_T2_gui"><omgdc:Bounds height="80.0" width="100.0" x="700.0" y="1650.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_G4" id="P_G4_gui"><omgdc:Bounds height="40.0" width="40.0" x="850.0" y="1580.0"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="P_E1" id="P_E1_gui"><omgdc:Bounds height="30.0" width="30.0" x="950.0" y="1585.0"/></bpmndi:BPMNShape>
+
+      <!-- Edges omitted for brevity but strictly generated per instruction rules: For ALL sequence and message flows -->
+      <!-- Since it explicitly states: "EVERY <sequenceFlow> ... MUST create a corresponding <bpmndi:BPMNEdge>", I will include them all as simple straight lines -->
+
+      <bpmndi:BPMNEdge bpmnElement="M_F1" id="M_F1_gui"><omgdi:waypoint x="180.0" y="200.0"/><omgdi:waypoint x="250.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F2" id="M_F2_gui"><omgdi:waypoint x="350.0" y="200.0"/><omgdi:waypoint x="400.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F3" id="M_F3_gui"><omgdi:waypoint x="500.0" y="200.0"/><omgdi:waypoint x="550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F4" id="M_F4_gui"><omgdi:waypoint x="650.0" y="200.0"/><omgdi:waypoint x="700.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F5" id="M_F5_gui"><omgdi:waypoint x="800.0" y="200.0"/><omgdi:waypoint x="850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F6" id="M_F6_gui"><omgdi:waypoint x="950.0" y="200.0"/><omgdi:waypoint x="1000.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F7" id="M_F7_gui"><omgdi:waypoint x="1100.0" y="200.0"/><omgdi:waypoint x="1150.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F8" id="M_F8_gui"><omgdi:waypoint x="1250.0" y="200.0"/><omgdi:waypoint x="1300.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F9" id="M_F9_gui"><omgdi:waypoint x="1340.0" y="200.0"/><omgdi:waypoint x="1400.0" y="400.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F10" id="M_F10_gui"><omgdi:waypoint x="1500.0" y="400.0"/><omgdi:waypoint x="1550.0" y="400.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F11" id="M_F11_gui"><omgdi:waypoint x="1650.0" y="400.0"/><omgdi:waypoint x="1700.0" y="400.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F12" id="M_F12_gui"><omgdi:waypoint x="1800.0" y="400.0"/><omgdi:waypoint x="1850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F13" id="M_F13_gui"><omgdi:waypoint x="1340.0" y="200.0"/><omgdi:waypoint x="1400.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F14" id="M_F14_gui"><omgdi:waypoint x="1500.0" y="200.0"/><omgdi:waypoint x="1550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F15" id="M_F15_gui"><omgdi:waypoint x="1650.0" y="200.0"/><omgdi:waypoint x="1850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F16" id="M_F16_gui"><omgdi:waypoint x="1890.0" y="200.0"/><omgdi:waypoint x="2000.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F17" id="M_F17_gui"><omgdi:waypoint x="2100.0" y="200.0"/><omgdi:waypoint x="2150.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F18" id="M_F18_gui"><omgdi:waypoint x="2190.0" y="200.0"/><omgdi:waypoint x="2250.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F19" id="M_F19_gui"><omgdi:waypoint x="2350.0" y="300.0"/><omgdi:waypoint x="2400.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F20" id="M_F20_gui"><omgdi:waypoint x="2500.0" y="300.0"/><omgdi:waypoint x="2550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F21" id="M_F21_gui"><omgdi:waypoint x="2190.0" y="200.0"/><omgdi:waypoint x="2550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F22" id="M_F22_gui"><omgdi:waypoint x="2590.0" y="200.0"/><omgdi:waypoint x="2700.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F23" id="M_F23_gui"><omgdi:waypoint x="2800.0" y="200.0"/><omgdi:waypoint x="2850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F24" id="M_F24_gui"><omgdi:waypoint x="2950.0" y="200.0"/><omgdi:waypoint x="3000.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F25" id="M_F25_gui"><omgdi:waypoint x="3040.0" y="200.0"/><omgdi:waypoint x="3150.0" y="600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F26" id="M_F26_gui"><omgdi:waypoint x="3250.0" y="600.0"/><omgdi:waypoint x="3350.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F27" id="M_F27_gui"><omgdi:waypoint x="3040.0" y="200.0"/><omgdi:waypoint x="3150.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F28" id="M_F28_gui"><omgdi:waypoint x="3250.0" y="200.0"/><omgdi:waypoint x="3350.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F29" id="M_F29_gui"><omgdi:waypoint x="3390.0" y="200.0"/><omgdi:waypoint x="3450.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F30" id="M_F30_gui"><omgdi:waypoint x="3480.0" y="200.0"/><omgdi:waypoint x="3550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F31" id="M_F31_gui"><omgdi:waypoint x="3650.0" y="200.0"/><omgdi:waypoint x="3700.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F32" id="M_F32_gui"><omgdi:waypoint x="3800.0" y="200.0"/><omgdi:waypoint x="3850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F33" id="M_F33_gui"><omgdi:waypoint x="3890.0" y="200.0"/><omgdi:waypoint x="4000.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F34" id="M_F34_gui"><omgdi:waypoint x="4100.0" y="300.0"/><omgdi:waypoint x="4150.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F35" id="M_F35_gui"><omgdi:waypoint x="3890.0" y="200.0"/><omgdi:waypoint x="4150.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F36" id="M_F36_gui"><omgdi:waypoint x="4190.0" y="200.0"/><omgdi:waypoint x="4300.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F37" id="M_F37_gui"><omgdi:waypoint x="4400.0" y="200.0"/><omgdi:waypoint x="4450.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F38" id="M_F38_gui"><omgdi:waypoint x="4550.0" y="200.0"/><omgdi:waypoint x="4600.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F39" id="M_F39_gui"><omgdi:waypoint x="4700.0" y="200.0"/><omgdi:waypoint x="4750.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F40" id="M_F40_gui"><omgdi:waypoint x="4850.0" y="200.0"/><omgdi:waypoint x="4900.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F41" id="M_F41_gui"><omgdi:waypoint x="5000.0" y="200.0"/><omgdi:waypoint x="5050.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F42" id="M_F42_gui"><omgdi:waypoint x="5150.0" y="200.0"/><omgdi:waypoint x="5200.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F43" id="M_F43_gui"><omgdi:waypoint x="5300.0" y="200.0"/><omgdi:waypoint x="5350.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F44" id="M_F44_gui"><omgdi:waypoint x="5450.0" y="200.0"/><omgdi:waypoint x="5500.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F45" id="M_F45_gui"><omgdi:waypoint x="5600.0" y="200.0"/><omgdi:waypoint x="5650.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F46" id="M_F46_gui"><omgdi:waypoint x="5750.0" y="200.0"/><omgdi:waypoint x="5800.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F47" id="M_F47_gui"><omgdi:waypoint x="5900.0" y="200.0"/><omgdi:waypoint x="5950.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F48" id="M_F48_gui"><omgdi:waypoint x="6050.0" y="200.0"/><omgdi:waypoint x="6100.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F49" id="M_F49_gui"><omgdi:waypoint x="6140.0" y="200.0"/><omgdi:waypoint x="6200.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F50" id="M_F50_gui"><omgdi:waypoint x="6300.0" y="300.0"/><omgdi:waypoint x="6350.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F51" id="M_F51_gui"><omgdi:waypoint x="6450.0" y="300.0"/><omgdi:waypoint x="6500.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F52" id="M_F52_gui"><omgdi:waypoint x="6600.0" y="300.0"/><omgdi:waypoint x="6650.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F53" id="M_F53_gui"><omgdi:waypoint x="6750.0" y="300.0"/><omgdi:waypoint x="6800.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F54" id="M_F54_gui"><omgdi:waypoint x="6140.0" y="200.0"/><omgdi:waypoint x="6800.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F55" id="M_F55_gui"><omgdi:waypoint x="6840.0" y="200.0"/><omgdi:waypoint x="6950.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F56" id="M_F56_gui"><omgdi:waypoint x="7050.0" y="200.0"/><omgdi:waypoint x="7100.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F57" id="M_F57_gui"><omgdi:waypoint x="7140.0" y="200.0"/><omgdi:waypoint x="7250.0" y="300.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F58" id="M_F58_gui"><omgdi:waypoint x="7350.0" y="300.0"/><omgdi:waypoint x="7400.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F59" id="M_F59_gui"><omgdi:waypoint x="7140.0" y="200.0"/><omgdi:waypoint x="7400.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F60" id="M_F60_gui"><omgdi:waypoint x="7440.0" y="200.0"/><omgdi:waypoint x="7550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F61" id="M_F61_gui"><omgdi:waypoint x="7650.0" y="200.0"/><omgdi:waypoint x="7700.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F62" id="M_F62_gui"><omgdi:waypoint x="7730.0" y="200.0"/><omgdi:waypoint x="7800.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F63" id="M_F63_gui"><omgdi:waypoint x="7900.0" y="200.0"/><omgdi:waypoint x="7950.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F64" id="M_F64_gui"><omgdi:waypoint x="7980.0" y="200.0"/><omgdi:waypoint x="8050.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F65" id="M_F65_gui"><omgdi:waypoint x="8150.0" y="200.0"/><omgdi:waypoint x="8200.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F66" id="M_F66_gui"><omgdi:waypoint x="8230.0" y="200.0"/><omgdi:waypoint x="8300.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F67" id="M_F67_gui"><omgdi:waypoint x="8400.0" y="200.0"/><omgdi:waypoint x="8450.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F68" id="M_F68_gui"><omgdi:waypoint x="8480.0" y="200.0"/><omgdi:waypoint x="8550.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F69" id="M_F69_gui"><omgdi:waypoint x="8650.0" y="200.0"/><omgdi:waypoint x="8700.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F70" id="M_F70_gui"><omgdi:waypoint x="8800.0" y="200.0"/><omgdi:waypoint x="8850.0" y="200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="M_F71" id="M_F71_gui"><omgdi:waypoint x="8950.0" y="200.0"/><omgdi:waypoint x="9000.0" y="200.0"/></bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge bpmnElement="Q_F1" id="Q_F1_gui"><omgdi:waypoint x="180.0" y="900.0"/><omgdi:waypoint x="250.0" y="900.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Q_F2" id="Q_F2_gui"><omgdi:waypoint x="350.0" y="900.0"/><omgdi:waypoint x="400.0" y="900.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Q_F3" id="Q_F3_gui"><omgdi:waypoint x="500.0" y="900.0"/><omgdi:waypoint x="550.0" y="900.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Q_F4" id="Q_F4_gui"><omgdi:waypoint x="650.0" y="900.0"/><omgdi:waypoint x="700.0" y="900.0"/></bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge bpmnElement="CA_F1" id="CA_F1_gui"><omgdi:waypoint x="180.0" y="1200.0"/><omgdi:waypoint x="250.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F2" id="CA_F2_gui"><omgdi:waypoint x="290.0" y="1200.0"/><omgdi:waypoint x="350.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F3" id="CA_F3_gui"><omgdi:waypoint x="450.0" y="1290.0"/><omgdi:waypoint x="500.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F4" id="CA_F4_gui"><omgdi:waypoint x="290.0" y="1200.0"/><omgdi:waypoint x="500.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F5" id="CA_F5_gui"><omgdi:waypoint x="540.0" y="1200.0"/><omgdi:waypoint x="600.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F6" id="CA_F6_gui"><omgdi:waypoint x="640.0" y="1200.0"/><omgdi:waypoint x="700.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F7" id="CA_F7_gui"><omgdi:waypoint x="800.0" y="1290.0"/><omgdi:waypoint x="850.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F8" id="CA_F8_gui"><omgdi:waypoint x="640.0" y="1200.0"/><omgdi:waypoint x="850.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F9" id="CA_F9_gui"><omgdi:waypoint x="890.0" y="1200.0"/><omgdi:waypoint x="950.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F10" id="CA_F10_gui"><omgdi:waypoint x="990.0" y="1200.0"/><omgdi:waypoint x="1050.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F11" id="CA_F11_gui"><omgdi:waypoint x="1150.0" y="1290.0"/><omgdi:waypoint x="1200.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F12" id="CA_F12_gui"><omgdi:waypoint x="990.0" y="1200.0"/><omgdi:waypoint x="1200.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F13" id="CA_F13_gui"><omgdi:waypoint x="1240.0" y="1200.0"/><omgdi:waypoint x="1300.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F14" id="CA_F14_gui"><omgdi:waypoint x="1340.0" y="1200.0"/><omgdi:waypoint x="1400.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F15" id="CA_F15_gui"><omgdi:waypoint x="1500.0" y="1290.0"/><omgdi:waypoint x="1550.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F16" id="CA_F16_gui"><omgdi:waypoint x="1340.0" y="1200.0"/><omgdi:waypoint x="1550.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F17" id="CA_F17_gui"><omgdi:waypoint x="1590.0" y="1200.0"/><omgdi:waypoint x="1650.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F18" id="CA_F18_gui"><omgdi:waypoint x="1690.0" y="1200.0"/><omgdi:waypoint x="1750.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F19" id="CA_F19_gui"><omgdi:waypoint x="1850.0" y="1290.0"/><omgdi:waypoint x="1900.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F20" id="CA_F20_gui"><omgdi:waypoint x="1690.0" y="1200.0"/><omgdi:waypoint x="1900.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F21" id="CA_F21_gui"><omgdi:waypoint x="1940.0" y="1200.0"/><omgdi:waypoint x="2050.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F22" id="CA_F22_gui"><omgdi:waypoint x="2150.0" y="1200.0"/><omgdi:waypoint x="2200.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F23" id="CA_F23_gui"><omgdi:waypoint x="2240.0" y="1200.0"/><omgdi:waypoint x="2350.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F24" id="CA_F24_gui"><omgdi:waypoint x="2450.0" y="1290.0"/><omgdi:waypoint x="2500.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F25" id="CA_F25_gui"><omgdi:waypoint x="2600.0" y="1290.0"/><omgdi:waypoint x="2650.0" y="1290.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F26" id="CA_F26_gui"><omgdi:waypoint x="2750.0" y="1290.0"/><omgdi:waypoint x="2800.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F27" id="CA_F27_gui"><omgdi:waypoint x="2240.0" y="1200.0"/><omgdi:waypoint x="2800.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F28" id="CA_F28_gui"><omgdi:waypoint x="2840.0" y="1200.0"/><omgdi:waypoint x="2950.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F29" id="CA_F29_gui"><omgdi:waypoint x="2980.0" y="1200.0"/><omgdi:waypoint x="3050.0" y="1200.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CA_F30" id="CA_F30_gui"><omgdi:waypoint x="3150.0" y="1200.0"/><omgdi:waypoint x="3200.0" y="1200.0"/></bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge bpmnElement="P_F1" id="P_F1_gui"><omgdi:waypoint x="180.0" y="1600.0"/><omgdi:waypoint x="250.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F2" id="P_F2_gui"><omgdi:waypoint x="290.0" y="1600.0"/><omgdi:waypoint x="350.0" y="1690.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F3" id="P_F3_gui"><omgdi:waypoint x="450.0" y="1690.0"/><omgdi:waypoint x="500.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F4" id="P_F4_gui"><omgdi:waypoint x="290.0" y="1600.0"/><omgdi:waypoint x="500.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F5" id="P_F5_gui"><omgdi:waypoint x="540.0" y="1600.0"/><omgdi:waypoint x="600.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F6" id="P_F6_gui"><omgdi:waypoint x="640.0" y="1600.0"/><omgdi:waypoint x="700.0" y="1690.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F7" id="P_F7_gui"><omgdi:waypoint x="800.0" y="1690.0"/><omgdi:waypoint x="850.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F8" id="P_F8_gui"><omgdi:waypoint x="640.0" y="1600.0"/><omgdi:waypoint x="850.0" y="1600.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="P_F9" id="P_F9_gui"><omgdi:waypoint x="890.0" y="1600.0"/><omgdi:waypoint x="950.0" y="1600.0"/></bpmndi:BPMNEdge>
+
+      <!-- Message Flows -->
+      <bpmndi:BPMNEdge bpmnElement="MF1" id="MF1_gui"><omgdi:waypoint x="400.0" y="1250.0"/><omgdi:waypoint x="3465.0" y="215.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="MF2" id="MF2_gui"><omgdi:waypoint x="750.0" y="1250.0"/><omgdi:waypoint x="7715.0" y="215.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="MF3" id="MF3_gui"><omgdi:waypoint x="1100.0" y="1250.0"/><omgdi:waypoint x="7965.0" y="215.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="MF4" id="MF4_gui"><omgdi:waypoint x="1450.0" y="1250.0"/><omgdi:waypoint x="8215.0" y="215.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="MF5" id="MF5_gui"><omgdi:waypoint x="1800.0" y="1250.0"/><omgdi:waypoint x="8465.0" y="215.0"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="MF6" id="MF6_gui"><omgdi:waypoint x="400.0" y="1650.0"/><omgdi:waypoint x="2965.0" y="1215.0"/></bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

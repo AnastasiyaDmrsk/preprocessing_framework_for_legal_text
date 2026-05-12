@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-main-definitions" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_1">
+      <participant id="part_ms" name="Member State" processRef="proc_ms" />
+      <participant id="part_cus" name="Customer or Beneficial Owner" processRef="proc_cus" />
+      <participant id="part_obl" name="Obliged Entity" processRef="proc_obl" />
+   </collaboration>
+
+   <!-- POOL 1: Member State -->
+   <process id="proc_ms" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <laneSet id="ls_ms">
+         <lane id="lane_ms">
+            <flowNodeRef>start_ms</flowNodeRef>
+            <flowNodeRef>task_ms_1</flowNodeRef>
+            <flowNodeRef>task_ms_2</flowNodeRef>
+            <flowNodeRef>gw_ms_split</flowNodeRef>
+            <flowNodeRef>task_ms_3</flowNodeRef>
+            <flowNodeRef>gw_ms_merge</flowNodeRef>
+            <flowNodeRef>task_ms_4</flowNodeRef>
+            <flowNodeRef>task_ms_5</flowNodeRef>
+            <flowNodeRef>end_ms</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ms" name="intention to establish a business relationship or carry out a transaction">
+         <outgoing>sf_ms_1</outgoing>
+      </startEvent>
+
+      <task id="task_ms_1" name="require verification of the identity before the establishment of a business relationship or the carrying out of the transaction">
+         <incoming>sf_ms_1</incoming>
+         <outgoing>sf_ms_2</outgoing>
+      </task>
+
+      <task id="task_ms_2" name="assess whether it is necessary so as not to interrupt the normal conduct of business and where there is little risk of money laundering or terrorist financing">
+         <incoming>sf_ms_2</incoming>
+         <outgoing>sf_ms_3</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_ms_split" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_ms_3</incoming>
+         <outgoing>sf_ms_yes</outgoing>
+         <outgoing>sf_ms_no</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ms_3" name="allow verification of the identity to be completed during the relationship establishment">
+         <incoming>sf_ms_yes</incoming>
+         <outgoing>sf_ms_4</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_ms_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_ms_4</incoming>
+         <incoming>sf_ms_no</incoming>
+         <outgoing>sf_ms_5</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_ms_4" name="allow the opening of an account provided that there are adequate safeguards in place">
+         <incoming>sf_ms_5</incoming>
+         <outgoing>sf_ms_6</outgoing>
+      </task>
+
+      <task id="task_ms_5" name="require that obliged entities apply the customer due diligence measures">
+         <incoming>sf_ms_6</incoming>
+         <outgoing>sf_ms_7</outgoing>
+      </task>
+
+      <endEvent id="end_ms" name="End">
+         <incoming>sf_ms_7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_ms_1" isImmediate="true" sourceRef="start_ms" targetRef="task_ms_1" />
+      <sequenceFlow id="sf_ms_2" isImmediate="true" sourceRef="task_ms_1" targetRef="task_ms_2" />
+      <sequenceFlow id="sf_ms_3" isImmediate="true" sourceRef="task_ms_2" targetRef="gw_ms_split" />
+      <sequenceFlow id="sf_ms_yes" isImmediate="true" name="yes" sourceRef="gw_ms_split" targetRef="task_ms_3" />
+      <sequenceFlow id="sf_ms_no" isImmediate="true" name="no" sourceRef="gw_ms_split" targetRef="gw_ms_merge" />
+      <sequenceFlow id="sf_ms_4" isImmediate="true" sourceRef="task_ms_3" targetRef="gw_ms_merge" />
+      <sequenceFlow id="sf_ms_5" isImmediate="true" sourceRef="gw_ms_merge" targetRef="task_ms_4" />
+      <sequenceFlow id="sf_ms_6" isImmediate="true" sourceRef="task_ms_4" targetRef="task_ms_5" />
+      <sequenceFlow id="sf_ms_7" isImmediate="true" sourceRef="task_ms_5" targetRef="end_ms" />
+   </process>
+
+   <!-- POOL 2: Customer or Beneficial Owner -->
+   <process id="proc_cus" isClosed="false" isExecutable="false" name="Customer or Beneficial Owner" processType="None">
+      <laneSet id="ls_cus">
+         <lane id="lane_cus">
+            <flowNodeRef>start_cus</flowNodeRef>
+            <flowNodeRef>task_cus_1</flowNodeRef>
+            <flowNodeRef>task_cus_2</flowNodeRef>
+            <flowNodeRef>gw_cus_split</flowNodeRef>
+            <flowNodeRef>task_cus_3</flowNodeRef>
+            <flowNodeRef>gw_cus_merge</flowNodeRef>
+            <flowNodeRef>end_cus</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_cus" name="Start">
+         <outgoing>sf_cus_1</outgoing>
+      </startEvent>
+
+      <task id="task_cus_1" name="verify the identity before the establishment of a business relationship or the carrying out of the transaction">
+         <incoming>sf_cus_1</incoming>
+         <outgoing>sf_cus_2</outgoing>
+      </task>
+
+      <task id="task_cus_2" name="assess whether verification of the identity is allowed to be completed during the establishment of a business relationship">
+         <incoming>sf_cus_2</incoming>
+         <outgoing>sf_cus_3</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_cus_split" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_cus_3</incoming>
+         <outgoing>sf_cus_yes</outgoing>
+         <outgoing>sf_cus_no</outgoing>
+      </exclusiveGateway>
+
+      <task id="task_cus_3" name="complete identity verification procedures as soon as practicable after initial contact">
+         <incoming>sf_cus_yes</incoming>
+         <outgoing>sf_cus_4</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_cus_merge" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_cus_4</incoming>
+         <incoming>sf_cus_no</incoming>
+         <outgoing>sf_cus_5</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="end_cus" name="End">
+         <incoming>sf_cus_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_cus_1" isImmediate="true" sourceRef="start_cus" targetRef="task_cus_1" />
+      <sequenceFlow id="sf_cus_2" isImmediate="true" sourceRef="task_cus_1" targetRef="task_cus_2" />
+      <sequenceFlow id="sf_cus_3" isImmediate="true" sourceRef="task_cus_2" targetRef="gw_cus_split" />
+      <sequenceFlow id="sf_cus_yes" isImmediate="true" name="yes" sourceRef="gw_cus_split" targetRef="task_cus_3" />
+      <sequenceFlow id="sf_cus_no" isImmediate="true" name="no" sourceRef="gw_cus_split" targetRef="gw_cus_merge" />
+      <sequenceFlow id="sf_cus_4" isImmediate="true" sourceRef="task_cus_3" targetRef="gw_cus_merge" />
+      <sequenceFlow id="sf_cus_5" isImmediate="true" sourceRef="gw_cus_merge" targetRef="end_cus" />
+   </process>
+
+   <!-- POOL 3: Obliged Entity -->
+   <process id="proc_obl" isClosed="false" isExecutable="false" name="Obliged Entity" processType="None">
+      <laneSet id="ls_obl">
+         <lane id="lane_obl">
+            <flowNodeRef>start_obl</flowNodeRef>
+            <flowNodeRef>task_obl_1</flowNodeRef>
+            <flowNodeRef>task_obl_2</flowNodeRef>
+            <flowNodeRef>gw_obl_split_xor</flowNodeRef>
+            <flowNodeRef>gw_obl_split_and</flowNodeRef>
+            <flowNodeRef>task_obl_3_1</flowNodeRef>
+            <flowNodeRef>task_obl_3_2</flowNodeRef>
+            <flowNodeRef>task_obl_3_3</flowNodeRef>
+            <flowNodeRef>task_obl_3_4</flowNodeRef>
+            <flowNodeRef>task_obl_3_5</flowNodeRef>
+            <flowNodeRef>gw_obl_merge_and</flowNodeRef>
+            <flowNodeRef>gw_obl_merge_xor</flowNodeRef>
+            <flowNodeRef>end_obl</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_obl" name="Start">
+         <outgoing>sf_obl_1</outgoing>
+      </startEvent>
+
+      <task id="task_obl_1" name="apply the customer due diligence measures">
+         <incoming>sf_obl_1</incoming>
+         <outgoing>sf_obl_2</outgoing>
+      </task>
+
+      <task id="task_obl_2" name="assess whether an obliged entity is unable to comply with the customer due diligence requirements">
+         <incoming>sf_obl_2</incoming>
+         <outgoing>sf_obl_3</outgoing>
+      </task>
+
+      <exclusiveGateway id="gw_obl_split_xor" gatewayDirection="Diverging" isMarkerVisible="true">
+         <incoming>sf_obl_3</incoming>
+         <outgoing>sf_obl_yes</outgoing>
+         <outgoing>sf_obl_no</outgoing>
+      </exclusiveGateway>
+
+      <parallelGateway id="gw_obl_split_and" gatewayDirection="Diverging">
+         <incoming>sf_obl_yes</incoming>
+         <outgoing>sf_obl_p1</outgoing>
+         <outgoing>sf_obl_p2</outgoing>
+         <outgoing>sf_obl_p3</outgoing>
+         <outgoing>sf_obl_p4</outgoing>
+         <outgoing>sf_obl_p5</outgoing>
+      </parallelGateway>
+
+      <task id="task_obl_3_1" name="not carry out a transaction through a bank account">
+         <incoming>sf_obl_p1</incoming>
+         <outgoing>sf_obl_p1_out</outgoing>
+      </task>
+
+      <task id="task_obl_3_2" name="not establish a business relationship">
+         <incoming>sf_obl_p2</incoming>
+         <outgoing>sf_obl_p2_out</outgoing>
+      </task>
+
+      <task id="task_obl_3_3" name="not carry out the transaction">
+         <incoming>sf_obl_p3</incoming>
+         <outgoing>sf_obl_p3_out</outgoing>
+      </task>
+
+      <task id="task_obl_3_4" name="terminate the business relationship">
+         <incoming>sf_obl_p4</incoming>
+         <outgoing>sf_obl_p4_out</outgoing>
+      </task>
+
+      <task id="task_obl_3_5" name="consider making a suspicious transaction report to the FIU">
+         <incoming>sf_obl_p5</incoming>
+         <outgoing>sf_obl_p5_out</outgoing>
+      </task>
+
+      <parallelGateway id="gw_obl_merge_and" gatewayDirection="Converging">
+         <incoming>sf_obl_p1_out</incoming>
+         <incoming>sf_obl_p2_out</incoming>
+         <incoming>sf_obl_p3_out</incoming>
+         <incoming>sf_obl_p4_out</incoming>
+         <incoming>sf_obl_p5_out</incoming>
+         <outgoing>sf_obl_and_out</outgoing>
+      </parallelGateway>
+
+      <exclusiveGateway id="gw_obl_merge_xor" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>sf_obl_and_out</incoming>
+         <incoming>sf_obl_no</incoming>
+         <outgoing>sf_obl_end</outgoing>
+      </exclusiveGateway>
+
+      <endEvent id="end_obl" name="End">
+         <incoming>sf_obl_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_obl_1" isImmediate="true" sourceRef="start_obl" targetRef="task_obl_1" />
+      <sequenceFlow id="sf_obl_2" isImmediate="true" sourceRef="task_obl_1" targetRef="task_obl_2" />
+      <sequenceFlow id="sf_obl_3" isImmediate="true" sourceRef="task_obl_2" targetRef="gw_obl_split_xor" />
+      
+      <sequenceFlow id="sf_obl_yes" isImmediate="true" name="yes" sourceRef="gw_obl_split_xor" targetRef="gw_obl_split_and" />
+      <sequenceFlow id="sf_obl_no" isImmediate="true" name="no" sourceRef="gw_obl_split_xor" targetRef="gw_obl_merge_xor" />
+      
+      <sequenceFlow id="sf_obl_p1" isImmediate="true" sourceRef="gw_obl_split_and" targetRef="task_obl_3_1" />
+      <sequenceFlow id="sf_obl_p2" isImmediate="true" sourceRef="gw_obl_split_and" targetRef="task_obl_3_2" />
+      <sequenceFlow id="sf_obl_p3" isImmediate="true" sourceRef="gw_obl_split_and" targetRef="task_obl_3_3" />
+      <sequenceFlow id="sf_obl_p4" isImmediate="true" sourceRef="gw_obl_split_and" targetRef="task_obl_3_4" />
+      <sequenceFlow id="sf_obl_p5" isImmediate="true" sourceRef="gw_obl_split_and" targetRef="task_obl_3_5" />
+      
+      <sequenceFlow id="sf_obl_p1_out" isImmediate="true" sourceRef="task_obl_3_1" targetRef="gw_obl_merge_and" />
+      <sequenceFlow id="sf_obl_p2_out" isImmediate="true" sourceRef="task_obl_3_2" targetRef="gw_obl_merge_and" />
+      <sequenceFlow id="sf_obl_p3_out" isImmediate="true" sourceRef="task_obl_3_3" targetRef="gw_obl_merge_and" />
+      <sequenceFlow id="sf_obl_p4_out" isImmediate="true" sourceRef="task_obl_3_4" targetRef="gw_obl_merge_and" />
+      <sequenceFlow id="sf_obl_p5_out" isImmediate="true" sourceRef="task_obl_3_5" targetRef="gw_obl_merge_and" />
+      
+      <sequenceFlow id="sf_obl_and_out" isImmediate="true" sourceRef="gw_obl_merge_and" targetRef="gw_obl_merge_xor" />
+      <sequenceFlow id="sf_obl_end" isImmediate="true" sourceRef="gw_obl_merge_xor" targetRef="end_obl" />
+   </process>
+
+   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="BPMNPlane_1">
+         
+         <!-- PARTICIPANTS & LANES -->
+         <bpmndi:BPMNShape bpmnElement="part_ms" id="part_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1300.0" x="100.0" y="50.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1270.0" x="130.0" y="50.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_cus" id="part_cus_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1300.0" x="100.0" y="350.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_cus" id="lane_cus_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1270.0" x="130.0" y="350.0" />
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="part_obl" id="part_obl_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="1300.0" x="100.0" y="650.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_obl" id="lane_obl_gui" isHorizontal="true">
+            <omgdc:Bounds height="750.0" width="1270.0" x="130.0" y="650.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE NODES -->
+         <bpmndi:BPMNShape bpmnElement="start_ms" id="start_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="180.0" y="160.0" />
+            <bpmndi:BPMNLabel>
+               <omgdc:Bounds height="40.0" width="80.0" x="155.0" y="195.0" />
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_1" id="task_ms_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_2" id="task_ms_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_split" id="gw_ms_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="155.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_3" id="task_ms_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="610.0" y="60.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_ms_merge" id="gw_ms_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="155.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_4" id="task_ms_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="830.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ms_5" id="task_ms_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="970.0" y="135.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="end_ms_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1110.0" y="161.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- CUSTOMER NODES -->
+         <bpmndi:BPMNShape bpmnElement="start_cus" id="start_cus_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="180.0" y="460.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_cus_1" id="task_cus_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="435.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_cus_2" id="task_cus_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="435.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_cus_split" id="gw_cus_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="455.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_cus_3" id="task_cus_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="610.0" y="360.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_cus_merge" id="gw_cus_merge_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="455.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_cus" id="end_cus_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="830.0" y="461.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- OBLIGED ENTITY NODES -->
+         <bpmndi:BPMNShape bpmnElement="start_obl" id="start_obl_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="180.0" y="960.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_1" id="task_obl_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="935.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_2" id="task_obl_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="935.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_obl_split_xor" id="gw_obl_split_xor_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="955.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_obl_split_and" id="gw_obl_split_and_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="610.0" y="955.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_3_1" id="task_obl_3_1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="700.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_3_2" id="task_obl_3_2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="800.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_3_3" id="task_obl_3_3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="900.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_3_4" id="task_obl_3_4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="1000.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_obl_3_5" id="task_obl_3_5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="730.0" y="1100.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_obl_merge_and" id="gw_obl_merge_and_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="890.0" y="955.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_obl_merge_xor" id="gw_obl_merge_xor_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="990.0" y="955.0" />
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_obl" id="end_obl_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1090.0" y="961.0" />
+         </bpmndi:BPMNShape>
+
+         <!-- MEMBER STATE EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_1" id="sf_ms_1_gui">
+            <omgdi:waypoint x="210.0" y="175.0" />
+            <omgdi:waypoint x="250.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_2" id="sf_ms_2_gui">
+            <omgdi:waypoint x="350.0" y="175.0" />
+            <omgdi:waypoint x="390.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_3" id="sf_ms_3_gui">
+            <omgdi:waypoint x="490.0" y="175.0" />
+            <omgdi:waypoint x="530.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_yes" id="sf_ms_yes_gui">
+            <omgdi:waypoint x="550.0" y="155.0" />
+            <omgdi:waypoint x="550.0" y="100.0" />
+            <omgdi:waypoint x="610.0" y="100.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_no" id="sf_ms_no_gui">
+            <omgdi:waypoint x="570.0" y="175.0" />
+            <omgdi:waypoint x="750.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_4" id="sf_ms_4_gui">
+            <omgdi:waypoint x="710.0" y="100.0" />
+            <omgdi:waypoint x="770.0" y="100.0" />
+            <omgdi:waypoint x="770.0" y="155.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_5" id="sf_ms_5_gui">
+            <omgdi:waypoint x="790.0" y="175.0" />
+            <omgdi:waypoint x="830.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_6" id="sf_ms_6_gui">
+            <omgdi:waypoint x="930.0" y="175.0" />
+            <omgdi:waypoint x="970.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_ms_7" id="sf_ms_7_gui">
+            <omgdi:waypoint x="1070.0" y="175.0" />
+            <omgdi:waypoint x="1110.0" y="175.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- CUSTOMER EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_1" id="sf_cus_1_gui">
+            <omgdi:waypoint x="210.0" y="475.0" />
+            <omgdi:waypoint x="250.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_2" id="sf_cus_2_gui">
+            <omgdi:waypoint x="350.0" y="475.0" />
+            <omgdi:waypoint x="390.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_3" id="sf_cus_3_gui">
+            <omgdi:waypoint x="490.0" y="475.0" />
+            <omgdi:waypoint x="530.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_yes" id="sf_cus_yes_gui">
+            <omgdi:waypoint x="550.0" y="455.0" />
+            <omgdi:waypoint x="550.0" y="400.0" />
+            <omgdi:waypoint x="610.0" y="400.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_no" id="sf_cus_no_gui">
+            <omgdi:waypoint x="570.0" y="475.0" />
+            <omgdi:waypoint x="750.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_4" id="sf_cus_4_gui">
+            <omgdi:waypoint x="710.0" y="400.0" />
+            <omgdi:waypoint x="770.0" y="400.0" />
+            <omgdi:waypoint x="770.0" y="455.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_cus_5" id="sf_cus_5_gui">
+            <omgdi:waypoint x="790.0" y="475.0" />
+            <omgdi:waypoint x="830.0" y="475.0" />
+         </bpmndi:BPMNEdge>
+
+         <!-- OBLIGED ENTITY EDGES -->
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_1" id="sf_obl_1_gui">
+            <omgdi:waypoint x="210.0" y="975.0" />
+            <omgdi:waypoint x="250.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_2" id="sf_obl_2_gui">
+            <omgdi:waypoint x="350.0" y="975.0" />
+            <omgdi:waypoint x="390.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_3" id="sf_obl_3_gui">
+            <omgdi:waypoint x="490.0" y="975.0" />
+            <omgdi:waypoint x="530.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_yes" id="sf_obl_yes_gui">
+            <omgdi:waypoint x="570.0" y="975.0" />
+            <omgdi:waypoint x="610.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_no" id="sf_obl_no_gui">
+            <omgdi:waypoint x="550.0" y="995.0" />
+            <omgdi:waypoint x="550.0" y="1250.0" />
+            <omgdi:waypoint x="1010.0" y="1250.0" />
+            <omgdi:waypoint x="1010.0" y="995.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p1" id="sf_obl_p1_gui">
+            <omgdi:waypoint x="630.0" y="955.0" />
+            <omgdi:waypoint x="630.0" y="740.0" />
+            <omgdi:waypoint x="730.0" y="740.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p2" id="sf_obl_p2_gui">
+            <omgdi:waypoint x="650.0" y="975.0" />
+            <omgdi:waypoint x="650.0" y="840.0" />
+            <omgdi:waypoint x="730.0" y="840.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p3" id="sf_obl_p3_gui">
+            <omgdi:waypoint x="650.0" y="975.0" />
+            <omgdi:waypoint x="730.0" y="940.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p4" id="sf_obl_p4_gui">
+            <omgdi:waypoint x="650.0" y="975.0" />
+            <omgdi:waypoint x="650.0" y="1040.0" />
+            <omgdi:waypoint x="730.0" y="1040.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p5" id="sf_obl_p5_gui">
+            <omgdi:waypoint x="630.0" y="995.0" />
+            <omgdi:waypoint x="630.0" y="1140.0" />
+            <omgdi:waypoint x="730.0" y="1140.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p1_out" id="sf_obl_p1_out_gui">
+            <omgdi:waypoint x="830.0" y="740.0" />
+            <omgdi:waypoint x="910.0" y="740.0" />
+            <omgdi:waypoint x="910.0" y="955.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p2_out" id="sf_obl_p2_out_gui">
+            <omgdi:waypoint x="830.0" y="840.0" />
+            <omgdi:waypoint x="890.0" y="840.0" />
+            <omgdi:waypoint x="890.0" y="955.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p3_out" id="sf_obl_p3_out_gui">
+            <omgdi:waypoint x="830.0" y="940.0" />
+            <omgdi:waypoint x="890.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p4_out" id="sf_obl_p4_out_gui">
+            <omgdi:waypoint x="830.0" y="1040.0" />
+            <omgdi:waypoint x="890.0" y="1040.0" />
+            <omgdi:waypoint x="890.0" y="995.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_p5_out" id="sf_obl_p5_out_gui">
+            <omgdi:waypoint x="830.0" y="1140.0" />
+            <omgdi:waypoint x="910.0" y="1140.0" />
+            <omgdi:waypoint x="910.0" y="995.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_and_out" id="sf_obl_and_out_gui">
+            <omgdi:waypoint x="930.0" y="975.0" />
+            <omgdi:waypoint x="990.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_obl_end" id="sf_obl_end_gui">
+            <omgdi:waypoint x="1030.0" y="975.0" />
+            <omgdi:waypoint x="1090.0" y="975.0" />
+         </bpmndi:BPMNEdge>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

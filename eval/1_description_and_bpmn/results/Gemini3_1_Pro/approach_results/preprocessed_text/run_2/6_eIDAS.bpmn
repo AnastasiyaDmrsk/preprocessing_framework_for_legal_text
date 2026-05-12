@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-trust-services" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="collab_1">
+      <participant id="P1" name="Member State" processRef="P1_process"/>
+      <participant id="P2" name="Supervisory Body" processRef="P2_process"/>
+      <participant id="P3" name="Another Supervisory Body" processRef="P3_process"/>
+      <participant id="P4" name="Conformity Assessment Body" processRef="P4_process"/>
+      <participant id="P5" name="Qualified or Non-qualified Trust Service Provider" processRef="P5_process"/>
+      <participant id="P6" name="Commission" processRef="P6_process"/>
+      
+      <messageFlow id="MF1" sourceRef="P1_T3" targetRef="P6_START"/>
+      <messageFlow id="MF2" sourceRef="P2_T17" targetRef="P6_START"/>
+      <messageFlow id="MF3" sourceRef="P2_T_req_cab" targetRef="P4_START"/>
+      <messageFlow id="MF4" sourceRef="P4_END" targetRef="P2"/>
+      <messageFlow id="MF5" sourceRef="P3_T1" targetRef="P2_CATCH_REQ"/>
+      <messageFlow id="MF6" sourceRef="P5_T5" targetRef="P2_CATCH_BREACH"/>
+   </collaboration>
+
+   <!-- Member State Process -->
+   <process id="P1_process" isClosed="false" isExecutable="false" name="Member State" processType="None">
+      <startEvent id="P1_START" name="Need to establish supervision">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <outgoing>P1_F1</outgoing>
+      </startEvent>
+      <task id="P1_T1" name="Designate a supervisory body">
+         <incoming>P1_F1</incoming>
+         <outgoing>P1_F2</outgoing>
+      </task>
+      <task id="P1_T2" name="Give powers and resources">
+         <incoming>P1_F2</incoming>
+         <outgoing>P1_F3</outgoing>
+      </task>
+      <task id="P1_T3" name="Notify Commission">
+         <incoming>P1_F3</incoming>
+         <outgoing>P1_F4</outgoing>
+      </task>
+      <exclusiveGateway id="P1_GW1" name="Trust infrastructure required?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P1_F4</incoming>
+         <outgoing>P1_F5</outgoing>
+         <outgoing>P1_F6</outgoing>
+      </exclusiveGateway>
+      <task id="P1_T4" name="Require trust infrastructure">
+         <incoming>P1_F5</incoming>
+         <outgoing>P1_F7</outgoing>
+      </task>
+      <exclusiveGateway id="P1_GW2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P1_F6</incoming>
+         <incoming>P1_F7</incoming>
+         <outgoing>P1_F8</outgoing>
+      </exclusiveGateway>
+      <exclusiveGateway id="P1_GW3" name="Authorise joint investigations?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P1_F8</incoming>
+         <outgoing>P1_F9</outgoing>
+         <outgoing>P1_F13</outgoing>
+      </exclusiveGateway>
+      <task id="P1_T5" name="Authorise joint investigations">
+         <incoming>P1_F9</incoming>
+         <outgoing>P1_F10</outgoing>
+      </task>
+      <task id="P1_T6" name="Agree on arrangements">
+         <incoming>P1_F10</incoming>
+         <outgoing>P1_F11</outgoing>
+      </task>
+      <task id="P1_T7" name="Establish arrangements">
+         <incoming>P1_F11</incoming>
+         <outgoing>P1_F12</outgoing>
+      </task>
+      <exclusiveGateway id="P1_GW4" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P1_F12</incoming>
+         <incoming>P1_F13</incoming>
+         <outgoing>P1_F14</outgoing>
+      </exclusiveGateway>
+      <endEvent id="P1_END" name="Completion of establishment">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <incoming>P1_F14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="P1_F1" isImmediate="true" sourceRef="P1_START" targetRef="P1_T1"/>
+      <sequenceFlow id="P1_F2" isImmediate="true" sourceRef="P1_T1" targetRef="P1_T2"/>
+      <sequenceFlow id="P1_F3" isImmediate="true" sourceRef="P1_T2" targetRef="P1_T3"/>
+      <sequenceFlow id="P1_F4" isImmediate="true" sourceRef="P1_T3" targetRef="P1_GW1"/>
+      <sequenceFlow id="P1_F5" name="yes" isImmediate="true" sourceRef="P1_GW1" targetRef="P1_T4"/>
+      <sequenceFlow id="P1_F6" name="no" isImmediate="true" sourceRef="P1_GW1" targetRef="P1_GW2"/>
+      <sequenceFlow id="P1_F7" isImmediate="true" sourceRef="P1_T4" targetRef="P1_GW2"/>
+      <sequenceFlow id="P1_F8" isImmediate="true" sourceRef="P1_GW2" targetRef="P1_GW3"/>
+      <sequenceFlow id="P1_F9" name="yes" isImmediate="true" sourceRef="P1_GW3" targetRef="P1_T5"/>
+      <sequenceFlow id="P1_F10" isImmediate="true" sourceRef="P1_T5" targetRef="P1_T6"/>
+      <sequenceFlow id="P1_F11" isImmediate="true" sourceRef="P1_T6" targetRef="P1_T7"/>
+      <sequenceFlow id="P1_F12" isImmediate="true" sourceRef="P1_T7" targetRef="P1_GW4"/>
+      <sequenceFlow id="P1_F13" name="no" isImmediate="true" sourceRef="P1_GW3" targetRef="P1_GW4"/>
+      <sequenceFlow id="P1_F14" isImmediate="true" sourceRef="P1_GW4" targetRef="P1_END"/>
+   </process>
+
+   <!-- Supervisory Body Process -->
+   <process id="P2_process" isClosed="false" isExecutable="false" name="Supervisory Body" processType="None">
+      <startEvent id="P2_START" name="Designation by MS">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <outgoing>P2_F1</outgoing>
+      </startEvent>
+      <parallelGateway id="P2_GW1" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F1</incoming>
+         <outgoing>P2_F2</outgoing>
+         <outgoing>P2_F3</outgoing>
+      </parallelGateway>
+      <task id="P2_T1" name="Supervise qualified providers"><incoming>P2_F2</incoming><outgoing>P2_F4</outgoing></task>
+      <task id="P2_T2" name="Take action on non-qualified"><incoming>P2_F3</incoming><outgoing>P2_F5</outgoing></task>
+      <parallelGateway id="P2_GW2" gatewayDirection="Converging">
+         <incoming>P2_F4</incoming><incoming>P2_F5</incoming><outgoing>P2_F6</outgoing>
+      </parallelGateway>
+      <parallelGateway id="P2_GW3" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F6</incoming>
+         <outgoing>P2_F7</outgoing> <outgoing>P2_F10</outgoing> <outgoing>P2_F12</outgoing> 
+         <outgoing>P2_F14</outgoing> <outgoing>P2_F20</outgoing> <outgoing>P2_F23</outgoing> 
+         <outgoing>P2_F26</outgoing> <outgoing>P2_F28</outgoing> <outgoing>P2_F30</outgoing>
+      </parallelGateway>
+      
+      <!-- Path 1 -->
+      <task id="P2_T3" name="Cooperate with bodies"><incoming>P2_F7</incoming><outgoing>P2_F8</outgoing></task>
+      <task id="P2_T4" name="Provide assistance"><incoming>P2_F8</incoming><outgoing>P2_F9</outgoing></task>
+      <!-- Path 2 -->
+      <task id="P2_T5" name="Analyse conformity reports"><incoming>P2_F10</incoming><outgoing>P2_F11</outgoing></task>
+      <!-- Path 3 -->
+      <task id="P2_T6" name="Inform about breaches"><incoming>P2_F12</incoming><outgoing>P2_F13</outgoing></task>
+      <!-- Path 4 -->
+      <exclusiveGateway id="P2_GW_X1" name="Audit or Request CAB" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F14</incoming>
+         <outgoing>P2_F15</outgoing><outgoing>P2_F16</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T_audit" name="Carry out audits"><incoming>P2_F15</incoming><outgoing>P2_F17</outgoing></task>
+      <task id="P2_T_req_cab" name="Request CAB"><incoming>P2_F16</incoming><outgoing>P2_F18</outgoing></task>
+      <exclusiveGateway id="P2_GW_X2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P2_F17</incoming><incoming>P2_F18</incoming><outgoing>P2_F19</outgoing>
+      </exclusiveGateway>
+      <!-- Path 5 -->
+      <task id="P2_T7" name="Cooperate with DP"><incoming>P2_F20</incoming><outgoing>P2_F21</outgoing></task>
+      <task id="P2_T8" name="Inform DP results"><incoming>P2_F21</incoming><outgoing>P2_F22</outgoing></task>
+      <!-- Path 6 -->
+      <task id="P2_T9" name="Grant qualified status"><incoming>P2_F23</incoming><outgoing>P2_F24</outgoing></task>
+      <task id="P2_T10" name="Withdraw qualified status"><incoming>P2_F24</incoming><outgoing>P2_F25</outgoing></task>
+      <!-- Path 7 -->
+      <task id="P2_T11" name="Inform list body"><incoming>P2_F26</incoming><outgoing>P2_F27</outgoing></task>
+      <!-- Path 8 -->
+      <task id="P2_T12" name="Verify termination plans"><incoming>P2_F28</incoming><outgoing>P2_F29</outgoing></task>
+      <!-- Path 9 -->
+      <task id="P2_T13" name="Require remedy"><incoming>P2_F30</incoming><outgoing>P2_F31</outgoing></task>
+
+      <parallelGateway id="P2_GW4" gatewayDirection="Converging">
+         <incoming>P2_F9</incoming><incoming>P2_F11</incoming><incoming>P2_F13</incoming>
+         <incoming>P2_F19</incoming><incoming>P2_F22</incoming><incoming>P2_F25</incoming>
+         <incoming>P2_F27</incoming><incoming>P2_F29</incoming><incoming>P2_F31</incoming>
+         <outgoing>P2_F32</outgoing>
+      </parallelGateway>
+      
+      <task id="P2_T14" name="Establish infrastructure"><incoming>P2_F32</incoming><outgoing>P2_F33</outgoing></task>
+      <task id="P2_T15" name="Maintain infrastructure"><incoming>P2_F33</incoming><outgoing>P2_F34</outgoing></task>
+      <task id="P2_T16" name="Update infrastructure"><incoming>P2_F34</incoming><outgoing>P2_F35</outgoing></task>
+      <task id="P2_T17" name="Submit report to Commission"><incoming>P2_F35</incoming><outgoing>P2_F36</outgoing></task>
+      
+      <intermediateCatchEvent id="P2_CATCH_REQ" name="Receive request">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <incoming>P2_F36</incoming><outgoing>P2_F37</outgoing>
+         <messageEventDefinition id="med_1"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="P2_GW_R1" name="Refuse or Provide?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F37</incoming>
+         <outgoing>P2_F38</outgoing><outgoing>P2_F39</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T18" name="Refuse assistance"><incoming>P2_F38</incoming><outgoing>P2_F40</outgoing></task>
+      <task id="P2_T19" name="Provide assistance"><incoming>P2_F39</incoming><outgoing>P2_F41</outgoing></task>
+      <exclusiveGateway id="P2_GW_R2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P2_F40</incoming><incoming>P2_F41</incoming><outgoing>P2_F42</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T20" name="Carry out joint investigations"><incoming>P2_F42</incoming><outgoing>P2_F43</outgoing></task>
+      
+      <intermediateCatchEvent id="P2_CATCH_BREACH" name="Receive breach notification">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <incoming>P2_F43</incoming><outgoing>P2_F44</outgoing>
+         <messageEventDefinition id="med_2"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="P2_GW_B1" name="Concerns 2+ MS?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F44</incoming>
+         <outgoing>P2_F45</outgoing><outgoing>P2_F46</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T21" name="Inform other bodies"><incoming>P2_F45</incoming><outgoing>P2_F47</outgoing></task>
+      <exclusiveGateway id="P2_GW_B2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P2_F46</incoming><incoming>P2_F47</incoming><outgoing>P2_F48</outgoing>
+      </exclusiveGateway>
+      
+      <exclusiveGateway id="P2_GW_P1" name="In public interest?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P2_F48</incoming>
+         <outgoing>P2_F49</outgoing><outgoing>P2_F50</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T22" name="Inform public"><incoming>P2_F49</incoming><outgoing>P2_F51</outgoing></task>
+      <task id="P2_T23" name="Require TSP to inform"><incoming>P2_F51</incoming><outgoing>P2_F52</outgoing></task>
+      <exclusiveGateway id="P2_GW_P2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P2_F50</incoming><incoming>P2_F52</incoming><outgoing>P2_F53</outgoing>
+      </exclusiveGateway>
+      <task id="P2_T24" name="Provide ENISA summary"><incoming>P2_F53</incoming><outgoing>P2_F54</outgoing></task>
+      <endEvent id="P2_END" name="Completion of duties">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements>
+         <incoming>P2_F54</incoming>
+      </endEvent>
+
+      <sequenceFlow id="P2_F1" isImmediate="true" sourceRef="P2_START" targetRef="P2_GW1"/>
+      <sequenceFlow id="P2_F2" isImmediate="true" sourceRef="P2_GW1" targetRef="P2_T1"/>
+      <sequenceFlow id="P2_F3" isImmediate="true" sourceRef="P2_GW1" targetRef="P2_T2"/>
+      <sequenceFlow id="P2_F4" isImmediate="true" sourceRef="P2_T1" targetRef="P2_GW2"/>
+      <sequenceFlow id="P2_F5" isImmediate="true" sourceRef="P2_T2" targetRef="P2_GW2"/>
+      <sequenceFlow id="P2_F6" isImmediate="true" sourceRef="P2_GW2" targetRef="P2_GW3"/>
+      
+      <sequenceFlow id="P2_F7" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T3"/>
+      <sequenceFlow id="P2_F8" isImmediate="true" sourceRef="P2_T3" targetRef="P2_T4"/>
+      <sequenceFlow id="P2_F9" isImmediate="true" sourceRef="P2_T4" targetRef="P2_GW4"/>
+      <sequenceFlow id="P2_F10" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T5"/>
+      <sequenceFlow id="P2_F11" isImmediate="true" sourceRef="P2_T5" targetRef="P2_GW4"/>
+      <sequenceFlow id="P2_F12" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T6"/>
+      <sequenceFlow id="P2_F13" isImmediate="true" sourceRef="P2_T6" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F14" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_GW_X1"/>
+      <sequenceFlow id="P2_F15" name="carry out audits" isImmediate="true" sourceRef="P2_GW_X1" targetRef="P2_T_audit"/>
+      <sequenceFlow id="P2_F16" name="request conformity" isImmediate="true" sourceRef="P2_GW_X1" targetRef="P2_T_req_cab"/>
+      <sequenceFlow id="P2_F17" isImmediate="true" sourceRef="P2_T_audit" targetRef="P2_GW_X2"/>
+      <sequenceFlow id="P2_F18" isImmediate="true" sourceRef="P2_T_req_cab" targetRef="P2_GW_X2"/>
+      <sequenceFlow id="P2_F19" isImmediate="true" sourceRef="P2_GW_X2" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F20" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T7"/>
+      <sequenceFlow id="P2_F21" isImmediate="true" sourceRef="P2_T7" targetRef="P2_T8"/>
+      <sequenceFlow id="P2_F22" isImmediate="true" sourceRef="P2_T8" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F23" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T9"/>
+      <sequenceFlow id="P2_F24" isImmediate="true" sourceRef="P2_T9" targetRef="P2_T10"/>
+      <sequenceFlow id="P2_F25" isImmediate="true" sourceRef="P2_T10" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F26" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T11"/>
+      <sequenceFlow id="P2_F27" isImmediate="true" sourceRef="P2_T11" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F28" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T12"/>
+      <sequenceFlow id="P2_F29" isImmediate="true" sourceRef="P2_T12" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F30" isImmediate="true" sourceRef="P2_GW3" targetRef="P2_T13"/>
+      <sequenceFlow id="P2_F31" isImmediate="true" sourceRef="P2_T13" targetRef="P2_GW4"/>
+      
+      <sequenceFlow id="P2_F32" isImmediate="true" sourceRef="P2_GW4" targetRef="P2_T14"/>
+      <sequenceFlow id="P2_F33" isImmediate="true" sourceRef="P2_T14" targetRef="P2_T15"/>
+      <sequenceFlow id="P2_F34" isImmediate="true" sourceRef="P2_T15" targetRef="P2_T16"/>
+      <sequenceFlow id="P2_F35" isImmediate="true" sourceRef="P2_T16" targetRef="P2_T17"/>
+      <sequenceFlow id="P2_F36" isImmediate="true" sourceRef="P2_T17" targetRef="P2_CATCH_REQ"/>
+      <sequenceFlow id="P2_F37" isImmediate="true" sourceRef="P2_CATCH_REQ" targetRef="P2_GW_R1"/>
+      <sequenceFlow id="P2_F38" name="true" isImmediate="true" sourceRef="P2_GW_R1" targetRef="P2_T18"/>
+      <sequenceFlow id="P2_F39" name="false" isImmediate="true" sourceRef="P2_GW_R1" targetRef="P2_T19"/>
+      <sequenceFlow id="P2_F40" isImmediate="true" sourceRef="P2_T18" targetRef="P2_GW_R2"/>
+      <sequenceFlow id="P2_F41" isImmediate="true" sourceRef="P2_T19" targetRef="P2_GW_R2"/>
+      <sequenceFlow id="P2_F42" isImmediate="true" sourceRef="P2_GW_R2" targetRef="P2_T20"/>
+      <sequenceFlow id="P2_F43" isImmediate="true" sourceRef="P2_T20" targetRef="P2_CATCH_BREACH"/>
+      <sequenceFlow id="P2_F44" isImmediate="true" sourceRef="P2_CATCH_BREACH" targetRef="P2_GW_B1"/>
+      <sequenceFlow id="P2_F45" name="true" isImmediate="true" sourceRef="P2_GW_B1" targetRef="P2_T21"/>
+      <sequenceFlow id="P2_F46" name="false" isImmediate="true" sourceRef="P2_GW_B1" targetRef="P2_GW_B2"/>
+      <sequenceFlow id="P2_F47" isImmediate="true" sourceRef="P2_T21" targetRef="P2_GW_B2"/>
+      <sequenceFlow id="P2_F48" isImmediate="true" sourceRef="P2_GW_B2" targetRef="P2_GW_P1"/>
+      <sequenceFlow id="P2_F49" name="yes" isImmediate="true" sourceRef="P2_GW_P1" targetRef="P2_T22"/>
+      <sequenceFlow id="P2_F50" name="no" isImmediate="true" sourceRef="P2_GW_P1" targetRef="P2_GW_P2"/>
+      <sequenceFlow id="P2_F51" isImmediate="true" sourceRef="P2_T22" targetRef="P2_T23"/>
+      <sequenceFlow id="P2_F52" isImmediate="true" sourceRef="P2_T23" targetRef="P2_GW_P2"/>
+      <sequenceFlow id="P2_F53" isImmediate="true" sourceRef="P2_GW_P2" targetRef="P2_T24"/>
+      <sequenceFlow id="P2_F54" isImmediate="true" sourceRef="P2_T24" targetRef="P2_END"/>
+   </process>
+
+   <!-- Another Supervisory Body Process -->
+   <process id="P3_process" isClosed="false" isExecutable="false" name="Another Supervisory Body" processType="None">
+      <startEvent id="P3_START" name="Need for cooperation"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><outgoing>P3_F1</outgoing></startEvent>
+      <task id="P3_T1" name="Request assistance"><incoming>P3_F1</incoming><outgoing>P3_F2</outgoing></task>
+      <task id="P3_T2" name="Carry out joint investigations"><incoming>P3_F2</incoming><outgoing>P3_F3</outgoing></task>
+      <endEvent id="P3_END" name="Completion of cooperation"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><incoming>P3_F3</incoming></endEvent>
+      <sequenceFlow id="P3_F1" isImmediate="true" sourceRef="P3_START" targetRef="P3_T1"/>
+      <sequenceFlow id="P3_F2" isImmediate="true" sourceRef="P3_T1" targetRef="P3_T2"/>
+      <sequenceFlow id="P3_F3" isImmediate="true" sourceRef="P3_T2" targetRef="P3_END"/>
+   </process>
+
+   <!-- Conformity Assessment Body Process -->
+   <process id="P4_process" isClosed="false" isExecutable="false" name="Conformity Assessment Body" processType="None">
+      <startEvent id="P4_START" name="Receive request"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><outgoing>P4_F1</outgoing></startEvent>
+      <task id="P4_T1" name="Perform conformity assessment"><incoming>P4_F1</incoming><outgoing>P4_F2</outgoing></task>
+      <endEvent id="P4_END" name="Delivery of assessment"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><incoming>P4_F2</incoming></endEvent>
+      <sequenceFlow id="P4_F1" isImmediate="true" sourceRef="P4_START" targetRef="P4_T1"/>
+      <sequenceFlow id="P4_F2" isImmediate="true" sourceRef="P4_T1" targetRef="P4_END"/>
+   </process>
+
+   <!-- Trust Service Provider Process -->
+   <process id="P5_process" isClosed="false" isExecutable="false" name="Trust Service Provider" processType="None">
+      <startEvent id="P5_START" name="Provision of services"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><outgoing>P5_F1</outgoing></startEvent>
+      <task id="P5_T1" name="Manage risks"><incoming>P5_F1</incoming><outgoing>P5_F2</outgoing></task>
+      <task id="P5_T2" name="Prevent and minimise impact"><incoming>P5_F2</incoming><outgoing>P5_F3</outgoing></task>
+      <task id="P5_T3" name="Inform stakeholders"><incoming>P5_F3</incoming><outgoing>P5_F4</outgoing></task>
+      <task id="P5_T4" name="Remedy failures"><incoming>P5_F4</incoming><outgoing>P5_F5</outgoing></task>
+      <task id="P5_T5" name="Notify supervisory body"><incoming>P5_F5</incoming><outgoing>P5_F6</outgoing></task>
+      <task id="P5_T6" name="Notify person"><incoming>P5_F6</incoming><outgoing>P5_F7</outgoing></task>
+      <task id="P5_T7" name="Inform public"><incoming>P5_F7</incoming><outgoing>P5_F8</outgoing></task>
+      <endEvent id="P5_END" name="Continued operation"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><incoming>P5_F8</incoming></endEvent>
+      <sequenceFlow id="P5_F1" isImmediate="true" sourceRef="P5_START" targetRef="P5_T1"/>
+      <sequenceFlow id="P5_F2" isImmediate="true" sourceRef="P5_T1" targetRef="P5_T2"/>
+      <sequenceFlow id="P5_F3" isImmediate="true" sourceRef="P5_T2" targetRef="P5_T3"/>
+      <sequenceFlow id="P5_F4" isImmediate="true" sourceRef="P5_T3" targetRef="P5_T4"/>
+      <sequenceFlow id="P5_F5" isImmediate="true" sourceRef="P5_T4" targetRef="P5_T5"/>
+      <sequenceFlow id="P5_F6" isImmediate="true" sourceRef="P5_T5" targetRef="P5_T6"/>
+      <sequenceFlow id="P5_F7" isImmediate="true" sourceRef="P5_T6" targetRef="P5_T7"/>
+      <sequenceFlow id="P5_F8" isImmediate="true" sourceRef="P5_T7" targetRef="P5_END"/>
+   </process>
+
+   <!-- Commission Process -->
+   <process id="P6_process" isClosed="false" isExecutable="false" name="Commission" processType="None">
+      <startEvent id="P6_START" name="Receiving notifications"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><outgoing>P6_F1</outgoing></startEvent>
+      <task id="P6_T1" name="Make report available"><incoming>P6_F1</incoming><outgoing>P6_F2</outgoing></task>
+      <exclusiveGateway id="P6_GW1" name="Adjustments needed?" gatewayDirection="Diverging" isMarkerVisible="true">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P6_F2</incoming>
+         <outgoing>P6_F3</outgoing><outgoing>P6_F4</outgoing>
+      </exclusiveGateway>
+      <task id="P6_T2" name="Define formats"><incoming>P6_F3</incoming><outgoing>P6_F5</outgoing></task>
+      <exclusiveGateway id="P6_GW2" gatewayDirection="Converging" isMarkerVisible="true">
+         <incoming>P6_F4</incoming><incoming>P6_F5</incoming><outgoing>P6_F6</outgoing>
+      </exclusiveGateway>
+      <task id="P6_T3" name="Adopt implementing acts"><incoming>P6_F6</incoming><outgoing>P6_F7</outgoing></task>
+      <parallelGateway id="P6_GW3" gatewayDirection="Diverging">
+         <extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="20.0" y="45.0"/></extensionElements>
+         <incoming>P6_F7</incoming>
+         <outgoing>P6_F8</outgoing><outgoing>P6_F9</outgoing>
+      </parallelGateway>
+      <task id="P6_T4" name="Specify measures"><incoming>P6_F8</incoming><outgoing>P6_F10</outgoing></task>
+      <task id="P6_T5" name="Define formats procedures"><incoming>P6_F9</incoming><outgoing>P6_F11</outgoing></task>
+      <parallelGateway id="P6_GW4" gatewayDirection="Converging">
+         <incoming>P6_F10</incoming><incoming>P6_F11</incoming><outgoing>P6_F12</outgoing>
+      </parallelGateway>
+      <endEvent id="P6_END" name="Completion of tasks"><extensionElements><signavio:signavioLabel align="center" ref="text_name" valign="middle" x="15.0" y="40.0"/></extensionElements><incoming>P6_F12</incoming></endEvent>
+      <sequenceFlow id="P6_F1" isImmediate="true" sourceRef="P6_START" targetRef="P6_T1"/>
+      <sequenceFlow id="P6_F2" isImmediate="true" sourceRef="P6_T1" targetRef="P6_GW1"/>
+      <sequenceFlow id="P6_F3" name="yes" isImmediate="true" sourceRef="P6_GW1" targetRef="P6_T2"/>
+      <sequenceFlow id="P6_F4" name="no" isImmediate="true" sourceRef="P6_GW1" targetRef="P6_GW2"/>
+      <sequenceFlow id="P6_F5" isImmediate="true" sourceRef="P6_T2" targetRef="P6_GW2"/>
+      <sequenceFlow id="P6_F6" isImmediate="true" sourceRef="P6_GW2" targetRef="P6_T3"/>
+      <sequenceFlow id="P6_F7" isImmediate="true" sourceRef="P6_T3" targetRef="P6_GW3"/>
+      <sequenceFlow id="P6_F8" isImmediate="true" sourceRef="P6_GW3" targetRef="P6_T4"/>
+      <sequenceFlow id="P6_F9" isImmediate="true" sourceRef="P6_GW3" targetRef="P6_T5"/>
+      <sequenceFlow id="P6_F10" isImmediate="true" sourceRef="P6_T4" targetRef="P6_GW4"/>
+      <sequenceFlow id="P6_F11" isImmediate="true" sourceRef="P6_T5" targetRef="P6_GW4"/>
+      <sequenceFlow id="P6_F12" isImmediate="true" sourceRef="P6_GW4" targetRef="P6_END"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="diag_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+         
+         <!-- P1 MEMBER STATE -->
+         <bpmndi:BPMNShape bpmnElement="P1" id="P1_gui" isHorizontal="true"><omgdc:Bounds height="250" width="1900" x="50" y="50"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_START" id="P1_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="150"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T1" id="P1_T1_gui"><omgdc:Bounds height="80" width="100" x="180" y="125"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T2" id="P1_T2_gui"><omgdc:Bounds height="80" width="100" x="330" y="125"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T3" id="P1_T3_gui"><omgdc:Bounds height="80" width="100" x="480" y="125"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_GW1" id="P1_GW1_gui"><omgdc:Bounds height="40" width="40" x="630" y="145"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T4" id="P1_T4_gui"><omgdc:Bounds height="80" width="100" x="720" y="75"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_GW2" id="P1_GW2_gui"><omgdc:Bounds height="40" width="40" x="870" y="145"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_GW3" id="P1_GW3_gui"><omgdc:Bounds height="40" width="40" x="960" y="145"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T5" id="P1_T5_gui"><omgdc:Bounds height="80" width="100" x="1050" y="75"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T6" id="P1_T6_gui"><omgdc:Bounds height="80" width="100" x="1200" y="75"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_T7" id="P1_T7_gui"><omgdc:Bounds height="80" width="100" x="1350" y="75"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_GW4" id="P1_GW4_gui"><omgdc:Bounds height="40" width="40" x="1500" y="145"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P1_END" id="P1_END_gui"><omgdc:Bounds height="30" width="30" x="1600" y="150"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="P1_F1" id="P1_F1_gui"><omgdi:waypoint x="130" y="165"/><omgdi:waypoint x="180" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F2" id="P1_F2_gui"><omgdi:waypoint x="280" y="165"/><omgdi:waypoint x="330" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F3" id="P1_F3_gui"><omgdi:waypoint x="430" y="165"/><omgdi:waypoint x="480" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F4" id="P1_F4_gui"><omgdi:waypoint x="580" y="165"/><omgdi:waypoint x="630" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F5" id="P1_F5_gui"><omgdi:waypoint x="650" y="145"/><omgdi:waypoint x="650" y="115"/><omgdi:waypoint x="720" y="115"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F6" id="P1_F6_gui"><omgdi:waypoint x="670" y="165"/><omgdi:waypoint x="870" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F7" id="P1_F7_gui"><omgdi:waypoint x="820" y="115"/><omgdi:waypoint x="890" y="115"/><omgdi:waypoint x="890" y="145"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F8" id="P1_F8_gui"><omgdi:waypoint x="910" y="165"/><omgdi:waypoint x="960" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F9" id="P1_F9_gui"><omgdi:waypoint x="980" y="145"/><omgdi:waypoint x="980" y="115"/><omgdi:waypoint x="1050" y="115"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F10" id="P1_F10_gui"><omgdi:waypoint x="1150" y="115"/><omgdi:waypoint x="1200" y="115"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F11" id="P1_F11_gui"><omgdi:waypoint x="1300" y="115"/><omgdi:waypoint x="1350" y="115"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F12" id="P1_F12_gui"><omgdi:waypoint x="1450" y="115"/><omgdi:waypoint x="1520" y="115"/><omgdi:waypoint x="1520" y="145"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F13" id="P1_F13_gui"><omgdi:waypoint x="1000" y="165"/><omgdi:waypoint x="1500" y="165"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P1_F14" id="P1_F14_gui"><omgdi:waypoint x="1540" y="165"/><omgdi:waypoint x="1600" y="165"/></bpmndi:BPMNEdge>
+
+         <!-- P2 SUPERVISORY BODY -->
+         <bpmndi:BPMNShape bpmnElement="P2" id="P2_gui" isHorizontal="true"><omgdc:Bounds height="1400" width="4500" x="50" y="350"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_START" id="P2_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="450"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW1" id="P2_GW1_gui"><omgdc:Bounds height="40" width="40" x="180" y="445"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T1" id="P2_T1_gui"><omgdc:Bounds height="80" width="100" x="270" y="400"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T2" id="P2_T2_gui"><omgdc:Bounds height="80" width="100" x="270" y="500"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW2" id="P2_GW2_gui"><omgdc:Bounds height="40" width="40" x="420" y="445"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW3" id="P2_GW3_gui"><omgdc:Bounds height="40" width="40" x="510" y="445"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="P2_T3" id="P2_T3_gui"><omgdc:Bounds height="80" width="100" x="650" y="400"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T4" id="P2_T4_gui"><omgdc:Bounds height="80" width="100" x="800" y="400"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T5" id="P2_T5_gui"><omgdc:Bounds height="80" width="100" x="650" y="500"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T6" id="P2_T6_gui"><omgdc:Bounds height="80" width="100" x="650" y="600"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_X1" id="P2_GW_X1_gui"><omgdc:Bounds height="40" width="40" x="600" y="725"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T_audit" id="P2_T_audit_gui"><omgdc:Bounds height="80" width="100" x="700" y="680"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T_req_cab" id="P2_T_req_cab_gui"><omgdc:Bounds height="80" width="100" x="700" y="780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_X2" id="P2_GW_X2_gui"><omgdc:Bounds height="40" width="40" x="850" y="725"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T7" id="P2_T7_gui"><omgdc:Bounds height="80" width="100" x="650" y="900"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T8" id="P2_T8_gui"><omgdc:Bounds height="80" width="100" x="800" y="900"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T9" id="P2_T9_gui"><omgdc:Bounds height="80" width="100" x="650" y="1000"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T10" id="P2_T10_gui"><omgdc:Bounds height="80" width="100" x="800" y="1000"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T11" id="P2_T11_gui"><omgdc:Bounds height="80" width="100" x="650" y="1100"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T12" id="P2_T12_gui"><omgdc:Bounds height="80" width="100" x="650" y="1200"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T13" id="P2_T13_gui"><omgdc:Bounds height="80" width="100" x="650" y="1300"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="P2_GW4" id="P2_GW4_gui"><omgdc:Bounds height="40" width="40" x="1000" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T14" id="P2_T14_gui"><omgdc:Bounds height="80" width="100" x="1100" y="780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T15" id="P2_T15_gui"><omgdc:Bounds height="80" width="100" x="1250" y="780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T16" id="P2_T16_gui"><omgdc:Bounds height="80" width="100" x="1400" y="780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T17" id="P2_T17_gui"><omgdc:Bounds height="80" width="100" x="1550" y="780"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="P2_CATCH_REQ" id="P2_CATCH_REQ_gui"><omgdc:Bounds height="30" width="30" x="1750" y="805"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_R1" id="P2_GW_R1_gui"><omgdc:Bounds height="40" width="40" x="1850" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T18" id="P2_T18_gui"><omgdc:Bounds height="80" width="100" x="1950" y="720"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T19" id="P2_T19_gui"><omgdc:Bounds height="80" width="100" x="1950" y="840"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_R2" id="P2_GW_R2_gui"><omgdc:Bounds height="40" width="40" x="2100" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T20" id="P2_T20_gui"><omgdc:Bounds height="80" width="100" x="2200" y="780"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="P2_CATCH_BREACH" id="P2_CATCH_BREACH_gui"><omgdc:Bounds height="30" width="30" x="2350" y="805"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_B1" id="P2_GW_B1_gui"><omgdc:Bounds height="40" width="40" x="2450" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T21" id="P2_T21_gui"><omgdc:Bounds height="80" width="100" x="2550" y="720"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_B2" id="P2_GW_B2_gui"><omgdc:Bounds height="40" width="40" x="2700" y="800"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNShape bpmnElement="P2_GW_P1" id="P2_GW_P1_gui"><omgdc:Bounds height="40" width="40" x="2800" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T22" id="P2_T22_gui"><omgdc:Bounds height="80" width="100" x="2900" y="720"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T23" id="P2_T23_gui"><omgdc:Bounds height="80" width="100" x="3050" y="720"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_GW_P2" id="P2_GW_P2_gui"><omgdc:Bounds height="40" width="40" x="3200" y="800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_T24" id="P2_T24_gui"><omgdc:Bounds height="80" width="100" x="3300" y="780"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P2_END" id="P2_END_gui"><omgdc:Bounds height="30" width="30" x="3450" y="805"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNEdge bpmnElement="P2_F1" id="P2_F1_gui"><omgdi:waypoint x="130" y="465"/><omgdi:waypoint x="180" y="465"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F2" id="P2_F2_gui"><omgdi:waypoint x="200" y="445"/><omgdi:waypoint x="200" y="440"/><omgdi:waypoint x="270" y="440"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F3" id="P2_F3_gui"><omgdi:waypoint x="200" y="485"/><omgdi:waypoint x="200" y="540"/><omgdi:waypoint x="270" y="540"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F4" id="P2_F4_gui"><omgdi:waypoint x="370" y="440"/><omgdi:waypoint x="440" y="440"/><omgdi:waypoint x="440" y="445"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F5" id="P2_F5_gui"><omgdi:waypoint x="370" y="540"/><omgdi:waypoint x="440" y="540"/><omgdi:waypoint x="440" y="485"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F6" id="P2_F6_gui"><omgdi:waypoint x="460" y="465"/><omgdi:waypoint x="510" y="465"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="P2_F7" id="P2_F7_gui"><omgdi:waypoint x="530" y="445"/><omgdi:waypoint x="530" y="440"/><omgdi:waypoint x="650" y="440"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F8" id="P2_F8_gui"><omgdi:waypoint x="750" y="440"/><omgdi:waypoint x="800" y="440"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F9" id="P2_F9_gui"><omgdi:waypoint x="900" y="440"/><omgdi:waypoint x="1020" y="440"/><omgdi:waypoint x="1020" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F10" id="P2_F10_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="540"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F11" id="P2_F11_gui"><omgdi:waypoint x="750" y="540"/><omgdi:waypoint x="1020" y="540"/><omgdi:waypoint x="1020" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F12" id="P2_F12_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="640"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F13" id="P2_F13_gui"><omgdi:waypoint x="750" y="640"/><omgdi:waypoint x="1020" y="640"/><omgdi:waypoint x="1020" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F14" id="P2_F14_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="600" y="745"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F15" id="P2_F15_gui"><omgdi:waypoint x="620" y="725"/><omgdi:waypoint x="620" y="720"/><omgdi:waypoint x="700" y="720"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F16" id="P2_F16_gui"><omgdi:waypoint x="620" y="765"/><omgdi:waypoint x="620" y="820"/><omgdi:waypoint x="700" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F17" id="P2_F17_gui"><omgdi:waypoint x="800" y="720"/><omgdi:waypoint x="870" y="720"/><omgdi:waypoint x="870" y="725"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F18" id="P2_F18_gui"><omgdi:waypoint x="800" y="820"/><omgdi:waypoint x="870" y="820"/><omgdi:waypoint x="870" y="765"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F19" id="P2_F19_gui"><omgdi:waypoint x="890" y="745"/><omgdi:waypoint x="1020" y="745"/><omgdi:waypoint x="1020" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F20" id="P2_F20_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="940"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F21" id="P2_F21_gui"><omgdi:waypoint x="750" y="940"/><omgdi:waypoint x="800" y="940"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F22" id="P2_F22_gui"><omgdi:waypoint x="900" y="940"/><omgdi:waypoint x="1020" y="940"/><omgdi:waypoint x="1020" y="840"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F23" id="P2_F23_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="1040"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F24" id="P2_F24_gui"><omgdi:waypoint x="750" y="1040"/><omgdi:waypoint x="800" y="1040"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F25" id="P2_F25_gui"><omgdi:waypoint x="900" y="1040"/><omgdi:waypoint x="1020" y="1040"/><omgdi:waypoint x="1020" y="840"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F26" id="P2_F26_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="1140"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F27" id="P2_F27_gui"><omgdi:waypoint x="750" y="1140"/><omgdi:waypoint x="1020" y="1140"/><omgdi:waypoint x="1020" y="840"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F28" id="P2_F28_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="1240"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F29" id="P2_F29_gui"><omgdi:waypoint x="750" y="1240"/><omgdi:waypoint x="1020" y="1240"/><omgdi:waypoint x="1020" y="840"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F30" id="P2_F30_gui"><omgdi:waypoint x="550" y="465"/><omgdi:waypoint x="650" y="1340"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F31" id="P2_F31_gui"><omgdi:waypoint x="750" y="1340"/><omgdi:waypoint x="1020" y="1340"/><omgdi:waypoint x="1020" y="840"/></bpmndi:BPMNEdge>
+         
+         <bpmndi:BPMNEdge bpmnElement="P2_F32" id="P2_F32_gui"><omgdi:waypoint x="1040" y="820"/><omgdi:waypoint x="1100" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F33" id="P2_F33_gui"><omgdi:waypoint x="1200" y="820"/><omgdi:waypoint x="1250" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F34" id="P2_F34_gui"><omgdi:waypoint x="1350" y="820"/><omgdi:waypoint x="1400" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F35" id="P2_F35_gui"><omgdi:waypoint x="1500" y="820"/><omgdi:waypoint x="1550" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F36" id="P2_F36_gui"><omgdi:waypoint x="1650" y="820"/><omgdi:waypoint x="1750" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F37" id="P2_F37_gui"><omgdi:waypoint x="1780" y="820"/><omgdi:waypoint x="1850" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F38" id="P2_F38_gui"><omgdi:waypoint x="1870" y="800"/><omgdi:waypoint x="1870" y="760"/><omgdi:waypoint x="1950" y="760"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F39" id="P2_F39_gui"><omgdi:waypoint x="1870" y="840"/><omgdi:waypoint x="1870" y="880"/><omgdi:waypoint x="1950" y="880"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F40" id="P2_F40_gui"><omgdi:waypoint x="2050" y="760"/><omgdi:waypoint x="2120" y="760"/><omgdi:waypoint x="2120" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F41" id="P2_F41_gui"><omgdi:waypoint x="2050" y="880"/><omgdi:waypoint x="2120" y="880"/><omgdi:waypoint x="2120" y="840"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F42" id="P2_F42_gui"><omgdi:waypoint x="2140" y="820"/><omgdi:waypoint x="2200" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F43" id="P2_F43_gui"><omgdi:waypoint x="2300" y="820"/><omgdi:waypoint x="2350" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F44" id="P2_F44_gui"><omgdi:waypoint x="2380" y="820"/><omgdi:waypoint x="2450" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F45" id="P2_F45_gui"><omgdi:waypoint x="2470" y="800"/><omgdi:waypoint x="2470" y="760"/><omgdi:waypoint x="2550" y="760"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F46" id="P2_F46_gui"><omgdi:waypoint x="2490" y="820"/><omgdi:waypoint x="2700" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F47" id="P2_F47_gui"><omgdi:waypoint x="2650" y="760"/><omgdi:waypoint x="2720" y="760"/><omgdi:waypoint x="2720" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F48" id="P2_F48_gui"><omgdi:waypoint x="2740" y="820"/><omgdi:waypoint x="2800" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F49" id="P2_F49_gui"><omgdi:waypoint x="2820" y="800"/><omgdi:waypoint x="2820" y="760"/><omgdi:waypoint x="2900" y="760"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F50" id="P2_F50_gui"><omgdi:waypoint x="2840" y="820"/><omgdi:waypoint x="3200" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F51" id="P2_F51_gui"><omgdi:waypoint x="3000" y="760"/><omgdi:waypoint x="3050" y="760"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F52" id="P2_F52_gui"><omgdi:waypoint x="3150" y="760"/><omgdi:waypoint x="3220" y="760"/><omgdi:waypoint x="3220" y="800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F53" id="P2_F53_gui"><omgdi:waypoint x="3240" y="820"/><omgdi:waypoint x="3300" y="820"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P2_F54" id="P2_F54_gui"><omgdi:waypoint x="3400" y="820"/><omgdi:waypoint x="3450" y="820"/></bpmndi:BPMNEdge>
+
+         <!-- P3 ANOTHER SUPERVISORY BODY -->
+         <bpmndi:BPMNShape bpmnElement="P3" id="P3_gui" isHorizontal="true"><omgdc:Bounds height="250" width="1000" x="50" y="1800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P3_START" id="P3_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="1900"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P3_T1" id="P3_T1_gui"><omgdc:Bounds height="80" width="100" x="200" y="1875"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P3_T2" id="P3_T2_gui"><omgdc:Bounds height="80" width="100" x="350" y="1875"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P3_END" id="P3_END_gui"><omgdc:Bounds height="30" width="30" x="500" y="1900"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="P3_F1" id="P3_F1_gui"><omgdi:waypoint x="130" y="1915"/><omgdi:waypoint x="200" y="1915"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P3_F2" id="P3_F2_gui"><omgdi:waypoint x="300" y="1915"/><omgdi:waypoint x="350" y="1915"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P3_F3" id="P3_F3_gui"><omgdi:waypoint x="450" y="1915"/><omgdi:waypoint x="500" y="1915"/></bpmndi:BPMNEdge>
+
+         <!-- P4 CAB -->
+         <bpmndi:BPMNShape bpmnElement="P4" id="P4_gui" isHorizontal="true"><omgdc:Bounds height="250" width="1000" x="50" y="2100"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P4_START" id="P4_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="2200"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P4_T1" id="P4_T1_gui"><omgdc:Bounds height="80" width="100" x="200" y="2175"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P4_END" id="P4_END_gui"><omgdc:Bounds height="30" width="30" x="350" y="2200"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="P4_F1" id="P4_F1_gui"><omgdi:waypoint x="130" y="2215"/><omgdi:waypoint x="200" y="2215"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P4_F2" id="P4_F2_gui"><omgdi:waypoint x="300" y="2215"/><omgdi:waypoint x="350" y="2215"/></bpmndi:BPMNEdge>
+
+         <!-- P5 TSP -->
+         <bpmndi:BPMNShape bpmnElement="P5" id="P5_gui" isHorizontal="true"><omgdc:Bounds height="250" width="1600" x="50" y="2400"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_START" id="P5_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="2500"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T1" id="P5_T1_gui"><omgdc:Bounds height="80" width="100" x="200" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T2" id="P5_T2_gui"><omgdc:Bounds height="80" width="100" x="350" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T3" id="P5_T3_gui"><omgdc:Bounds height="80" width="100" x="500" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T4" id="P5_T4_gui"><omgdc:Bounds height="80" width="100" x="650" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T5" id="P5_T5_gui"><omgdc:Bounds height="80" width="100" x="800" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T6" id="P5_T6_gui"><omgdc:Bounds height="80" width="100" x="950" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_T7" id="P5_T7_gui"><omgdc:Bounds height="80" width="100" x="1100" y="2475"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P5_END" id="P5_END_gui"><omgdc:Bounds height="30" width="30" x="1250" y="2500"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNEdge bpmnElement="P5_F1" id="P5_F1_gui"><omgdi:waypoint x="130" y="2515"/><omgdi:waypoint x="200" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F2" id="P5_F2_gui"><omgdi:waypoint x="300" y="2515"/><omgdi:waypoint x="350" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F3" id="P5_F3_gui"><omgdi:waypoint x="450" y="2515"/><omgdi:waypoint x="500" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F4" id="P5_F4_gui"><omgdi:waypoint x="600" y="2515"/><omgdi:waypoint x="650" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F5" id="P5_F5_gui"><omgdi:waypoint x="750" y="2515"/><omgdi:waypoint x="800" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F6" id="P5_F6_gui"><omgdi:waypoint x="900" y="2515"/><omgdi:waypoint x="950" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F7" id="P5_F7_gui"><omgdi:waypoint x="1050" y="2515"/><omgdi:waypoint x="1100" y="2515"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P5_F8" id="P5_F8_gui"><omgdi:waypoint x="1200" y="2515"/><omgdi:waypoint x="1250" y="2515"/></bpmndi:BPMNEdge>
+
+         <!-- P6 COMMISSION -->
+         <bpmndi:BPMNShape bpmnElement="P6" id="P6_gui" isHorizontal="true"><omgdc:Bounds height="300" width="1600" x="50" y="2700"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_START" id="P6_START_gui"><omgdc:Bounds height="30" width="30" x="100" y="2800"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_T1" id="P6_T1_gui"><omgdc:Bounds height="80" width="100" x="200" y="2775"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_GW1" id="P6_GW1_gui"><omgdc:Bounds height="40" width="40" x="350" y="2795"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_T2" id="P6_T2_gui"><omgdc:Bounds height="80" width="100" x="450" y="2715"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_GW2" id="P6_GW2_gui"><omgdc:Bounds height="40" width="40" x="600" y="2795"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_T3" id="P6_T3_gui"><omgdc:Bounds height="80" width="100" x="700" y="2775"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_GW3" id="P6_GW3_gui"><omgdc:Bounds height="40" width="40" x="850" y="2795"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_T4" id="P6_T4_gui"><omgdc:Bounds height="80" width="100" x="950" y="2715"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_T5" id="P6_T5_gui"><omgdc:Bounds height="80" width="100" x="950" y="2815"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_GW4" id="P6_GW4_gui"><omgdc:Bounds height="40" width="40" x="1100" y="2795"/></bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="P6_END" id="P6_END_gui"><omgdc:Bounds height="30" width="30" x="1200" y="2800"/></bpmndi:BPMNShape>
+         
+         <bpmndi:BPMNEdge bpmnElement="P6_F1" id="P6_F1_gui"><omgdi:waypoint x="130" y="2815"/><omgdi:waypoint x="200" y="2815"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F2" id="P6_F2_gui"><omgdi:waypoint x="300" y="2815"/><omgdi:waypoint x="350" y="2815"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F3" id="P6_F3_gui"><omgdi:waypoint x="370" y="2795"/><omgdi:waypoint x="370" y="2755"/><omgdi:waypoint x="450" y="2755"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F4" id="P6_F4_gui"><omgdi:waypoint x="390" y="2815"/><omgdi:waypoint x="600" y="2815"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F5" id="P6_F5_gui"><omgdi:waypoint x="550" y="2755"/><omgdi:waypoint x="620" y="2755"/><omgdi:waypoint x="620" y="2795"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F6" id="P6_F6_gui"><omgdi:waypoint x="640" y="2815"/><omgdi:waypoint x="700" y="2815"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F7" id="P6_F7_gui"><omgdi:waypoint x="800" y="2815"/><omgdi:waypoint x="850" y="2815"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F8" id="P6_F8_gui"><omgdi:waypoint x="870" y="2795"/><omgdi:waypoint x="870" y="2755"/><omgdi:waypoint x="950" y="2755"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F9" id="P6_F9_gui"><omgdi:waypoint x="870" y="2835"/><omgdi:waypoint x="870" y="2855"/><omgdi:waypoint x="950" y="2855"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F10" id="P6_F10_gui"><omgdi:waypoint x="1050" y="2755"/><omgdi:waypoint x="1120" y="2755"/><omgdi:waypoint x="1120" y="2795"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F11" id="P6_F11_gui"><omgdi:waypoint x="1050" y="2855"/><omgdi:waypoint x="1120" y="2855"/><omgdi:waypoint x="1120" y="2835"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="P6_F12" id="P6_F12_gui"><omgdi:waypoint x="1140" y="2815"/><omgdi:waypoint x="1200" y="2815"/></bpmndi:BPMNEdge>
+
+         <!-- Message Flows -->
+         <bpmndi:BPMNEdge bpmnElement="MF1" id="MF1_gui"><omgdi:waypoint x="530" y="205"/><omgdi:waypoint x="115" y="2800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF2" id="MF2_gui"><omgdi:waypoint x="1600" y="860"/><omgdi:waypoint x="115" y="2800"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF3" id="MF3_gui"><omgdi:waypoint x="750" y="860"/><omgdi:waypoint x="115" y="2200"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF4" id="MF4_gui"><omgdi:waypoint x="365" y="2200"/><omgdi:waypoint x="365" y="1750"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF5" id="MF5_gui"><omgdi:waypoint x="250" y="1875"/><omgdi:waypoint x="1765" y="835"/></bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="MF6" id="MF6_gui"><omgdi:waypoint x="850" y="2475"/><omgdi:waypoint x="2365" y="835"/></bpmndi:BPMNEdge>
+         
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:signavio="http://www.signavio.com" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             exporter="Signavio Process Editor, http://www.signavio.com" 
+             exporterVersion="19.2.2" 
+             expressionLanguage="http://www.w3.org/TR/XPath" 
+             id="sid-d41d8cd98f00b204e9800998ecf8427e" 
+             targetNamespace="http://www.signavio.com" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   
+   <collaboration id="sid-collab-1">
+      <participant id="sid-pool-opp" name="Online Platform Provider" processRef="sid-proc-opp">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-dsc" name="Digital Services Coordinator" processRef="sid-proc-dsc">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-tf" name="Trusted Flagger" processRef="sid-proc-tf">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-c" name="Commission" processRef="sid-proc-c">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+      <participant id="sid-pool-b" name="Board" processRef="sid-proc-b">
+         <extensionElements>
+            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>
+         </extensionElements>
+      </participant>
+
+      <messageFlow id="mf-opp-dsc" sourceRef="sid-opp-t5" targetRef="sid-dsc-ce1" />
+      <messageFlow id="mf-dsc-c" sourceRef="sid-dsc-t2" targetRef="sid-c-start" />
+      <messageFlow id="mf-dsc-b" sourceRef="sid-dsc-t2" targetRef="sid-pool-b" />
+      <messageFlow id="mf-tf-dsc" sourceRef="sid-tf-t2" targetRef="sid-pool-dsc" />
+      <messageFlow id="mf-dsc-tf" sourceRef="sid-dsc-t6" targetRef="sid-tf-ce1" />
+      <messageFlow id="mf-tf-dsc2" sourceRef="sid-tf-t4" targetRef="sid-dsc-ce2" />
+      <messageFlow id="mf-c-b" sourceRef="sid-c-t3" targetRef="sid-b-start" />
+   </collaboration>
+
+   <process id="sid-proc-opp" isClosed="false" isExecutable="false" name="Online Platform Provider">
+      <laneSet id="sid-laneSet-opp">
+         <lane id="sid-lane-opp">
+            <flowNodeRef>sid-opp-start</flowNodeRef>
+            <flowNodeRef>sid-opp-t1</flowNodeRef>
+            <flowNodeRef>sid-opp-gw1</flowNodeRef>
+            <flowNodeRef>sid-opp-t2</flowNodeRef>
+            <flowNodeRef>sid-opp-t3</flowNodeRef>
+            <flowNodeRef>sid-opp-t4</flowNodeRef>
+            <flowNodeRef>sid-opp-gw2</flowNodeRef>
+            <flowNodeRef>sid-opp-gw3</flowNodeRef>
+            <flowNodeRef>sid-opp-t5</flowNodeRef>
+            <flowNodeRef>sid-opp-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-opp-start" name="Start">
+         <outgoing>seq-opp-1</outgoing>
+      </startEvent>
+      <task id="sid-opp-t1" name="take the necessary technical and organisational measures for notices">
+         <incoming>seq-opp-1</incoming>
+         <outgoing>seq-opp-2</outgoing>
+      </task>
+      <parallelGateway id="sid-opp-gw1" gatewayDirection="Diverging">
+         <incoming>seq-opp-2</incoming>
+         <outgoing>seq-opp-3</outgoing>
+         <outgoing>seq-opp-4</outgoing>
+         <outgoing>seq-opp-5</outgoing>
+      </parallelGateway>
+      <task id="sid-opp-t2" name="give priority for notices">
+         <incoming>seq-opp-3</incoming>
+         <outgoing>seq-opp-6</outgoing>
+      </task>
+      <task id="sid-opp-t3" name="process notices">
+         <incoming>seq-opp-4</incoming>
+         <outgoing>seq-opp-7</outgoing>
+      </task>
+      <task id="sid-opp-t4" name="decide upon notices">
+         <incoming>seq-opp-5</incoming>
+         <outgoing>seq-opp-8</outgoing>
+      </task>
+      <parallelGateway id="sid-opp-gw2" gatewayDirection="Converging">
+         <incoming>seq-opp-6</incoming>
+         <incoming>seq-opp-7</incoming>
+         <incoming>seq-opp-8</incoming>
+         <outgoing>seq-opp-9</outgoing>
+      </parallelGateway>
+      <exclusiveGateway id="sid-opp-gw3" gatewayDirection="Diverging" isMarkerVisible="true" name="assess whether a trusted flagger has submitted insufficiently precise, inaccurate or inadequately substantiated notices">
+         <incoming>seq-opp-9</incoming>
+         <outgoing>seq-opp-10</outgoing>
+         <outgoing>seq-opp-11</outgoing>
+      </exclusiveGateway>
+      <task id="sid-opp-t5" name="communicate information to the Digital Services Coordinator">
+         <incoming>seq-opp-10</incoming>
+         <outgoing>seq-opp-12</outgoing>
+      </task>
+      <endEvent id="sid-opp-end" name="notice handling end event">
+         <incoming>seq-opp-11</incoming>
+         <incoming>seq-opp-12</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq-opp-1" isImmediate="true" sourceRef="sid-opp-start" targetRef="sid-opp-t1"/>
+      <sequenceFlow id="seq-opp-2" isImmediate="true" sourceRef="sid-opp-t1" targetRef="sid-opp-gw1"/>
+      <sequenceFlow id="seq-opp-3" isImmediate="true" sourceRef="sid-opp-gw1" targetRef="sid-opp-t2"/>
+      <sequenceFlow id="seq-opp-4" isImmediate="true" sourceRef="sid-opp-gw1" targetRef="sid-opp-t3"/>
+      <sequenceFlow id="seq-opp-5" isImmediate="true" sourceRef="sid-opp-gw1" targetRef="sid-opp-t4"/>
+      <sequenceFlow id="seq-opp-6" isImmediate="true" sourceRef="sid-opp-t2" targetRef="sid-opp-gw2"/>
+      <sequenceFlow id="seq-opp-7" isImmediate="true" sourceRef="sid-opp-t3" targetRef="sid-opp-gw2"/>
+      <sequenceFlow id="seq-opp-8" isImmediate="true" sourceRef="sid-opp-t4" targetRef="sid-opp-gw2"/>
+      <sequenceFlow id="seq-opp-9" isImmediate="true" sourceRef="sid-opp-gw2" targetRef="sid-opp-gw3"/>
+      <sequenceFlow id="seq-opp-10" isImmediate="true" name="has submitted insufficiently precise, inaccurate or inadequately substantiated notices" sourceRef="sid-opp-gw3" targetRef="sid-opp-t5"/>
+      <sequenceFlow id="seq-opp-11" isImmediate="true" name="no" sourceRef="sid-opp-gw3" targetRef="sid-opp-end"/>
+      <sequenceFlow id="seq-opp-12" isImmediate="true" sourceRef="sid-opp-t5" targetRef="sid-opp-end"/>
+   </process>
+
+   <process id="sid-proc-dsc" isClosed="false" isExecutable="false" name="Digital Services Coordinator">
+      <laneSet id="sid-laneSet-dsc">
+         <lane id="sid-lane-dsc">
+            <flowNodeRef>sid-dsc-start</flowNodeRef>
+            <flowNodeRef>sid-dsc-t1</flowNodeRef>
+            <flowNodeRef>sid-dsc-t2</flowNodeRef>
+            <flowNodeRef>sid-dsc-ce1</flowNodeRef>
+            <flowNodeRef>sid-dsc-gw1</flowNodeRef>
+            <flowNodeRef>sid-dsc-t3</flowNodeRef>
+            <flowNodeRef>sid-dsc-t4</flowNodeRef>
+            <flowNodeRef>sid-dsc-gw2</flowNodeRef>
+            <flowNodeRef>sid-dsc-t5</flowNodeRef>
+            <flowNodeRef>sid-dsc-t6</flowNodeRef>
+            <flowNodeRef>sid-dsc-ce2</flowNodeRef>
+            <flowNodeRef>sid-dsc-t7</flowNodeRef>
+            <flowNodeRef>sid-dsc-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-dsc-start" name="Start">
+         <outgoing>seq-dsc-1</outgoing>
+      </startEvent>
+      <task id="sid-dsc-t1" name="award the status of trusted flagger">
+         <incoming>seq-dsc-1</incoming>
+         <outgoing>seq-dsc-2</outgoing>
+      </task>
+      <task id="sid-dsc-t2" name="communicate to the Commission and the Board the names, addresses and email addresses">
+         <incoming>seq-dsc-2</incoming>
+         <outgoing>seq-dsc-3</outgoing>
+      </task>
+      <intermediateCatchEvent id="sid-dsc-ce1" name="Upon receiving information from an Online Platform Provider">
+         <incoming>seq-dsc-3</incoming>
+         <outgoing>seq-dsc-4</outgoing>
+         <messageEventDefinition id="sid-msg-1"/>
+      </intermediateCatchEvent>
+      <exclusiveGateway id="sid-dsc-gw1" gatewayDirection="Diverging" isMarkerVisible="true" name="assess whether there are legitimate reasons to open an investigation">
+         <incoming>seq-dsc-4</incoming>
+         <outgoing>seq-dsc-5</outgoing>
+         <outgoing>seq-dsc-6</outgoing>
+      </exclusiveGateway>
+      <task id="sid-dsc-t3" name="suspend the status of trusted flagger">
+         <incoming>seq-dsc-5</incoming>
+         <outgoing>seq-dsc-7</outgoing>
+      </task>
+      <task id="sid-dsc-t4" name="carry out the investigation">
+         <incoming>seq-dsc-7</incoming>
+         <outgoing>seq-dsc-8</outgoing>
+      </task>
+      <exclusiveGateway id="sid-dsc-gw2" gatewayDirection="Diverging" isMarkerVisible="true" name="assess whether the entity no longer meets the conditions">
+         <incoming>seq-dsc-8</incoming>
+         <outgoing>seq-dsc-9</outgoing>
+         <outgoing>seq-dsc-10</outgoing>
+      </exclusiveGateway>
+      <task id="sid-dsc-t5" name="afford the entity an opportunity to react to the investigation findings">
+         <incoming>seq-dsc-9</incoming>
+         <outgoing>seq-dsc-11</outgoing>
+      </task>
+      <task id="sid-dsc-t6" name="transmit the investigation findings to the Trusted Flagger">
+         <incoming>seq-dsc-11</incoming>
+         <outgoing>seq-dsc-12</outgoing>
+      </task>
+      <intermediateCatchEvent id="sid-dsc-ce2" name="Upon receiving the reaction to the investigation findings">
+         <incoming>seq-dsc-12</incoming>
+         <outgoing>seq-dsc-13</outgoing>
+         <messageEventDefinition id="sid-msg-2"/>
+      </intermediateCatchEvent>
+      <task id="sid-dsc-t7" name="revoke the trusted flagger status">
+         <incoming>seq-dsc-13</incoming>
+         <outgoing>seq-dsc-14</outgoing>
+      </task>
+      <endEvent id="sid-dsc-end" name="status determination end event">
+         <incoming>seq-dsc-6</incoming>
+         <incoming>seq-dsc-10</incoming>
+         <incoming>seq-dsc-14</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq-dsc-1" isImmediate="true" sourceRef="sid-dsc-start" targetRef="sid-dsc-t1"/>
+      <sequenceFlow id="seq-dsc-2" isImmediate="true" sourceRef="sid-dsc-t1" targetRef="sid-dsc-t2"/>
+      <sequenceFlow id="seq-dsc-3" isImmediate="true" sourceRef="sid-dsc-t2" targetRef="sid-dsc-ce1"/>
+      <sequenceFlow id="seq-dsc-4" isImmediate="true" sourceRef="sid-dsc-ce1" targetRef="sid-dsc-gw1"/>
+      <sequenceFlow id="seq-dsc-5" isImmediate="true" name="legitimate reasons" sourceRef="sid-dsc-gw1" targetRef="sid-dsc-t3"/>
+      <sequenceFlow id="seq-dsc-6" isImmediate="true" name="no legitimate reasons" sourceRef="sid-dsc-gw1" targetRef="sid-dsc-end"/>
+      <sequenceFlow id="seq-dsc-7" isImmediate="true" sourceRef="sid-dsc-t3" targetRef="sid-dsc-t4"/>
+      <sequenceFlow id="seq-dsc-8" isImmediate="true" sourceRef="sid-dsc-t4" targetRef="sid-dsc-gw2"/>
+      <sequenceFlow id="seq-dsc-9" isImmediate="true" name="no longer meets conditions" sourceRef="sid-dsc-gw2" targetRef="sid-dsc-t5"/>
+      <sequenceFlow id="seq-dsc-10" isImmediate="true" name="meets conditions" sourceRef="sid-dsc-gw2" targetRef="sid-dsc-end"/>
+      <sequenceFlow id="seq-dsc-11" isImmediate="true" sourceRef="sid-dsc-t5" targetRef="sid-dsc-t6"/>
+      <sequenceFlow id="seq-dsc-12" isImmediate="true" sourceRef="sid-dsc-t6" targetRef="sid-dsc-ce2"/>
+      <sequenceFlow id="seq-dsc-13" isImmediate="true" sourceRef="sid-dsc-ce2" targetRef="sid-dsc-t7"/>
+      <sequenceFlow id="seq-dsc-14" isImmediate="true" sourceRef="sid-dsc-t7" targetRef="sid-dsc-end"/>
+   </process>
+
+   <process id="sid-proc-tf" isClosed="false" isExecutable="false" name="Trusted Flagger">
+      <laneSet id="sid-laneSet-tf">
+         <lane id="sid-lane-tf">
+            <flowNodeRef>sid-tf-start</flowNodeRef>
+            <flowNodeRef>sid-tf-gw1</flowNodeRef>
+            <flowNodeRef>sid-tf-t1</flowNodeRef>
+            <flowNodeRef>sid-tf-t2</flowNodeRef>
+            <flowNodeRef>sid-tf-t3</flowNodeRef>
+            <flowNodeRef>sid-tf-gw2</flowNodeRef>
+            <flowNodeRef>sid-tf-ce1</flowNodeRef>
+            <flowNodeRef>sid-tf-t4</flowNodeRef>
+            <flowNodeRef>sid-tf-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-tf-start" name="Start">
+         <outgoing>seq-tf-1</outgoing>
+      </startEvent>
+      <parallelGateway id="sid-tf-gw1" gatewayDirection="Diverging">
+         <incoming>seq-tf-1</incoming>
+         <outgoing>seq-tf-2</outgoing>
+         <outgoing>seq-tf-3</outgoing>
+         <outgoing>seq-tf-4</outgoing>
+      </parallelGateway>
+      <task id="sid-tf-t1" name="publish reports on notices submitted">
+         <incoming>seq-tf-2</incoming>
+         <outgoing>seq-tf-5</outgoing>
+      </task>
+      <task id="sid-tf-t2" name="send reports to the Digital Services Coordinator">
+         <incoming>seq-tf-3</incoming>
+         <outgoing>seq-tf-6</outgoing>
+      </task>
+      <task id="sid-tf-t3" name="make reports publicly available">
+         <incoming>seq-tf-4</incoming>
+         <outgoing>seq-tf-7</outgoing>
+      </task>
+      <parallelGateway id="sid-tf-gw2" gatewayDirection="Converging">
+         <incoming>seq-tf-5</incoming>
+         <incoming>seq-tf-6</incoming>
+         <incoming>seq-tf-7</incoming>
+         <outgoing>seq-tf-8</outgoing>
+      </parallelGateway>
+      <intermediateCatchEvent id="sid-tf-ce1" name="Upon receiving the investigation findings">
+         <incoming>seq-tf-8</incoming>
+         <outgoing>seq-tf-9</outgoing>
+         <messageEventDefinition id="sid-msg-3"/>
+      </intermediateCatchEvent>
+      <task id="sid-tf-t4" name="react to the investigation findings">
+         <incoming>seq-tf-9</incoming>
+         <outgoing>seq-tf-10</outgoing>
+      </task>
+      <endEvent id="sid-tf-end" name="compliance and response end event">
+         <incoming>seq-tf-10</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq-tf-1" isImmediate="true" sourceRef="sid-tf-start" targetRef="sid-tf-gw1"/>
+      <sequenceFlow id="seq-tf-2" isImmediate="true" sourceRef="sid-tf-gw1" targetRef="sid-tf-t1"/>
+      <sequenceFlow id="seq-tf-3" isImmediate="true" sourceRef="sid-tf-gw1" targetRef="sid-tf-t2"/>
+      <sequenceFlow id="seq-tf-4" isImmediate="true" sourceRef="sid-tf-gw1" targetRef="sid-tf-t3"/>
+      <sequenceFlow id="seq-tf-5" isImmediate="true" sourceRef="sid-tf-t1" targetRef="sid-tf-gw2"/>
+      <sequenceFlow id="seq-tf-6" isImmediate="true" sourceRef="sid-tf-t2" targetRef="sid-tf-gw2"/>
+      <sequenceFlow id="seq-tf-7" isImmediate="true" sourceRef="sid-tf-t3" targetRef="sid-tf-gw2"/>
+      <sequenceFlow id="seq-tf-8" isImmediate="true" sourceRef="sid-tf-gw2" targetRef="sid-tf-ce1"/>
+      <sequenceFlow id="seq-tf-9" isImmediate="true" sourceRef="sid-tf-ce1" targetRef="sid-tf-t4"/>
+      <sequenceFlow id="seq-tf-10" isImmediate="true" sourceRef="sid-tf-t4" targetRef="sid-tf-end"/>
+   </process>
+
+   <process id="sid-proc-c" isClosed="false" isExecutable="false" name="Commission">
+      <laneSet id="sid-laneSet-c">
+         <lane id="sid-lane-c">
+            <flowNodeRef>sid-c-start</flowNodeRef>
+            <flowNodeRef>sid-c-t1</flowNodeRef>
+            <flowNodeRef>sid-c-t2</flowNodeRef>
+            <flowNodeRef>sid-c-gw1</flowNodeRef>
+            <flowNodeRef>sid-c-t3</flowNodeRef>
+            <flowNodeRef>sid-c-t4</flowNodeRef>
+            <flowNodeRef>sid-c-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-c-start" name="Receive names, addresses and email addresses">
+         <outgoing>seq-c-1</outgoing>
+         <messageEventDefinition id="sid-msg-4"/>
+      </startEvent>
+      <task id="sid-c-t1" name="publish information in a publicly available database">
+         <incoming>seq-c-1</incoming>
+         <outgoing>seq-c-2</outgoing>
+      </task>
+      <task id="sid-c-t2" name="keep database up to date">
+         <incoming>seq-c-2</incoming>
+         <outgoing>seq-c-3</outgoing>
+      </task>
+      <exclusiveGateway id="sid-c-gw1" gatewayDirection="Diverging" isMarkerVisible="true" name="assess whether guidelines are necessary">
+         <incoming>seq-c-3</incoming>
+         <outgoing>seq-c-4</outgoing>
+         <outgoing>seq-c-5</outgoing>
+      </exclusiveGateway>
+      <task id="sid-c-t3" name="consult before issuing guidelines under paragraph 8">
+         <incoming>seq-c-4</incoming>
+         <outgoing>seq-c-6</outgoing>
+      </task>
+      <task id="sid-c-t4" name="issue guidelines">
+         <incoming>seq-c-6</incoming>
+         <outgoing>seq-c-7</outgoing>
+      </task>
+      <endEvent id="sid-c-end" name="guidelines publication end event">
+         <incoming>seq-c-5</incoming>
+         <incoming>seq-c-7</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq-c-1" isImmediate="true" sourceRef="sid-c-start" targetRef="sid-c-t1"/>
+      <sequenceFlow id="seq-c-2" isImmediate="true" sourceRef="sid-c-t1" targetRef="sid-c-t2"/>
+      <sequenceFlow id="seq-c-3" isImmediate="true" sourceRef="sid-c-t2" targetRef="sid-c-gw1"/>
+      <sequenceFlow id="seq-c-4" isImmediate="true" name="necessary" sourceRef="sid-c-gw1" targetRef="sid-c-t3"/>
+      <sequenceFlow id="seq-c-5" isImmediate="true" name="not necessary" sourceRef="sid-c-gw1" targetRef="sid-c-end"/>
+      <sequenceFlow id="seq-c-6" isImmediate="true" sourceRef="sid-c-t3" targetRef="sid-c-t4"/>
+      <sequenceFlow id="seq-c-7" isImmediate="true" sourceRef="sid-c-t4" targetRef="sid-c-end"/>
+   </process>
+
+   <process id="sid-proc-b" isClosed="false" isExecutable="false" name="Board">
+      <laneSet id="sid-laneSet-b">
+         <lane id="sid-lane-b">
+            <flowNodeRef>sid-b-start</flowNodeRef>
+            <flowNodeRef>sid-b-t1</flowNodeRef>
+            <flowNodeRef>sid-b-end</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="sid-b-start" name="Receive consultation request">
+         <outgoing>seq-b-1</outgoing>
+         <messageEventDefinition id="sid-msg-5"/>
+      </startEvent>
+      <task id="sid-b-t1" name="consult before issuing guidelines under paragraph 8">
+         <incoming>seq-b-1</incoming>
+         <outgoing>seq-b-2</outgoing>
+      </task>
+      <endEvent id="sid-b-end" name="consultation end event">
+         <incoming>seq-b-2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="seq-b-1" isImmediate="true" sourceRef="sid-b-start" targetRef="sid-b-t1"/>
+      <sequenceFlow id="seq-b-2" isImmediate="true" sourceRef="sid-b-t1" targetRef="sid-b-end"/>
+   </process>
+
+   <bpmndi:BPMNDiagram id="sid-diagram-1">
+      <bpmndi:BPMNPlane bpmnElement="sid-collab-1" id="sid-plane-1">
+         <!-- POOLS -->
+         <bpmndi:BPMNShape bpmnElement="sid-pool-opp" id="sid-pool-opp_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1600.0" x="50.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-dsc" id="sid-pool-dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1600.0" x="50.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-tf" id="sid-pool-tf_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1600.0" x="50.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-c" id="sid-pool-c_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1600.0" x="50.0" y="1100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-pool-b" id="sid-pool-b_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1600.0" x="50.0" y="1400.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- LANES -->
+         <bpmndi:BPMNShape bpmnElement="sid-lane-opp" id="sid-lane-opp_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1570.0" x="80.0" y="50.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-dsc" id="sid-lane-dsc_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1570.0" x="80.0" y="400.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-tf" id="sid-lane-tf_gui" isHorizontal="true">
+            <omgdc:Bounds height="300.0" width="1570.0" x="80.0" y="750.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-c" id="sid-lane-c_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="1570.0" x="80.0" y="1100.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-lane-b" id="sid-lane-b_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="1570.0" x="80.0" y="1400.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- OPP SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-opp-start" id="sid-opp-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="185.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-t1" id="sid-opp-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-gw1" id="sid-opp-gw1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="350.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-t2" id="sid-opp-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="450.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-t3" id="sid-opp-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="450.0" y="160.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-t4" id="sid-opp-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="450.0" y="260.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-gw2" id="sid-opp-gw2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-gw3" id="sid-opp-gw3_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="700.0" y="180.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-t5" id="sid-opp-t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="800.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-opp-end" id="sid-opp-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="950.0" y="186.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- DSC SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-start" id="sid-dsc-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="535.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t1" id="sid-dsc-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="510.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t2" id="sid-dsc-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="510.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-ce1" id="sid-dsc-ce1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="500.0" y="535.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-gw1" id="sid-dsc-gw1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="580.0" y="530.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t3" id="sid-dsc-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="670.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t4" id="sid-dsc-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-gw2" id="sid-dsc-gw2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="970.0" y="440.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t5" id="sid-dsc-t5_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1060.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t6" id="sid-dsc-t6_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1210.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-ce2" id="sid-dsc-ce2_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1360.0" y="445.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-t7" id="sid-dsc-t7_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="1440.0" y="420.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-dsc-end" id="sid-dsc-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="1570.0" y="536.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- TF SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-tf-start" id="sid-tf-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="885.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-gw1" id="sid-tf-gw1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="200.0" y="880.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-t1" id="sid-tf-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="770.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-t2" id="sid-tf-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="860.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-t3" id="sid-tf-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="300.0" y="950.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-gw2" id="sid-tf-gw2_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="450.0" y="880.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-ce1" id="sid-tf-ce1_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="550.0" y="885.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-t4" id="sid-tf-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="860.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-tf-end" id="sid-tf-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="780.0" y="886.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- C SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-c-start" id="sid-c-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="1215.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-t1" id="sid-c-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="1190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-t2" id="sid-c-t2_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="1190.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-gw1" id="sid-c-gw1_gui">
+            <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="1210.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-t3" id="sid-c-t3_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="1120.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-t4" id="sid-c-t4_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="1120.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-c-end" id="sid-c-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="900.0" y="1216.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- B SHAPES -->
+         <bpmndi:BPMNShape bpmnElement="sid-b-start" id="sid-b-start_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="1485.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-b-t1" id="sid-b-t1_gui">
+            <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="1460.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="sid-b-end" id="sid-b-end_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="350.0" y="1486.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- EDGES OPP -->
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-1" id="seq-opp-1_gui">
+            <omgdi:waypoint x="150.0" y="200.0"/>
+            <omgdi:waypoint x="200.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-2" id="seq-opp-2_gui">
+            <omgdi:waypoint x="300.0" y="200.0"/>
+            <omgdi:waypoint x="350.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-3" id="seq-opp-3_gui">
+            <omgdi:waypoint x="370.0" y="180.0"/>
+            <omgdi:waypoint x="370.0" y="100.0"/>
+            <omgdi:waypoint x="450.0" y="100.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-4" id="seq-opp-4_gui">
+            <omgdi:waypoint x="390.0" y="200.0"/>
+            <omgdi:waypoint x="450.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-5" id="seq-opp-5_gui">
+            <omgdi:waypoint x="370.0" y="220.0"/>
+            <omgdi:waypoint x="370.0" y="300.0"/>
+            <omgdi:waypoint x="450.0" y="300.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-6" id="seq-opp-6_gui">
+            <omgdi:waypoint x="550.0" y="100.0"/>
+            <omgdi:waypoint x="620.0" y="100.0"/>
+            <omgdi:waypoint x="620.0" y="180.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-7" id="seq-opp-7_gui">
+            <omgdi:waypoint x="550.0" y="200.0"/>
+            <omgdi:waypoint x="600.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-8" id="seq-opp-8_gui">
+            <omgdi:waypoint x="550.0" y="300.0"/>
+            <omgdi:waypoint x="620.0" y="300.0"/>
+            <omgdi:waypoint x="620.0" y="220.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-9" id="seq-opp-9_gui">
+            <omgdi:waypoint x="640.0" y="200.0"/>
+            <omgdi:waypoint x="700.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-10" id="seq-opp-10_gui">
+            <omgdi:waypoint x="720.0" y="180.0"/>
+            <omgdi:waypoint x="720.0" y="100.0"/>
+            <omgdi:waypoint x="800.0" y="100.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-11" id="seq-opp-11_gui">
+            <omgdi:waypoint x="740.0" y="200.0"/>
+            <omgdi:waypoint x="950.0" y="200.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-opp-12" id="seq-opp-12_gui">
+            <omgdi:waypoint x="900.0" y="100.0"/>
+            <omgdi:waypoint x="964.0" y="100.0"/>
+            <omgdi:waypoint x="964.0" y="186.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES DSC -->
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-1" id="seq-dsc-1_gui">
+            <omgdi:waypoint x="150.0" y="550.0"/>
+            <omgdi:waypoint x="200.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-2" id="seq-dsc-2_gui">
+            <omgdi:waypoint x="300.0" y="550.0"/>
+            <omgdi:waypoint x="350.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-3" id="seq-dsc-3_gui">
+            <omgdi:waypoint x="450.0" y="550.0"/>
+            <omgdi:waypoint x="500.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-4" id="seq-dsc-4_gui">
+            <omgdi:waypoint x="530.0" y="550.0"/>
+            <omgdi:waypoint x="580.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-5" id="seq-dsc-5_gui">
+            <omgdi:waypoint x="600.0" y="530.0"/>
+            <omgdi:waypoint x="600.0" y="460.0"/>
+            <omgdi:waypoint x="670.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-6" id="seq-dsc-6_gui">
+            <omgdi:waypoint x="600.0" y="570.0"/>
+            <omgdi:waypoint x="600.0" y="600.0"/>
+            <omgdi:waypoint x="1584.0" y="600.0"/>
+            <omgdi:waypoint x="1584.0" y="564.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-7" id="seq-dsc-7_gui">
+            <omgdi:waypoint x="770.0" y="460.0"/>
+            <omgdi:waypoint x="820.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-8" id="seq-dsc-8_gui">
+            <omgdi:waypoint x="920.0" y="460.0"/>
+            <omgdi:waypoint x="970.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-9" id="seq-dsc-9_gui">
+            <omgdi:waypoint x="1010.0" y="460.0"/>
+            <omgdi:waypoint x="1060.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-10" id="seq-dsc-10_gui">
+            <omgdi:waypoint x="990.0" y="480.0"/>
+            <omgdi:waypoint x="990.0" y="550.0"/>
+            <omgdi:waypoint x="1570.0" y="550.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-11" id="seq-dsc-11_gui">
+            <omgdi:waypoint x="1160.0" y="460.0"/>
+            <omgdi:waypoint x="1210.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-12" id="seq-dsc-12_gui">
+            <omgdi:waypoint x="1310.0" y="460.0"/>
+            <omgdi:waypoint x="1360.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-13" id="seq-dsc-13_gui">
+            <omgdi:waypoint x="1390.0" y="460.0"/>
+            <omgdi:waypoint x="1440.0" y="460.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-dsc-14" id="seq-dsc-14_gui">
+            <omgdi:waypoint x="1540.0" y="460.0"/>
+            <omgdi:waypoint x="1584.0" y="460.0"/>
+            <omgdi:waypoint x="1584.0" y="536.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES TF -->
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-1" id="seq-tf-1_gui">
+            <omgdi:waypoint x="150.0" y="900.0"/>
+            <omgdi:waypoint x="200.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-2" id="seq-tf-2_gui">
+            <omgdi:waypoint x="220.0" y="880.0"/>
+            <omgdi:waypoint x="220.0" y="810.0"/>
+            <omgdi:waypoint x="300.0" y="810.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-3" id="seq-tf-3_gui">
+            <omgdi:waypoint x="240.0" y="900.0"/>
+            <omgdi:waypoint x="300.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-4" id="seq-tf-4_gui">
+            <omgdi:waypoint x="220.0" y="920.0"/>
+            <omgdi:waypoint x="220.0" y="990.0"/>
+            <omgdi:waypoint x="300.0" y="990.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-5" id="seq-tf-5_gui">
+            <omgdi:waypoint x="400.0" y="810.0"/>
+            <omgdi:waypoint x="470.0" y="810.0"/>
+            <omgdi:waypoint x="470.0" y="880.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-6" id="seq-tf-6_gui">
+            <omgdi:waypoint x="400.0" y="900.0"/>
+            <omgdi:waypoint x="450.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-7" id="seq-tf-7_gui">
+            <omgdi:waypoint x="400.0" y="990.0"/>
+            <omgdi:waypoint x="470.0" y="990.0"/>
+            <omgdi:waypoint x="470.0" y="920.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-8" id="seq-tf-8_gui">
+            <omgdi:waypoint x="490.0" y="900.0"/>
+            <omgdi:waypoint x="550.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-9" id="seq-tf-9_gui">
+            <omgdi:waypoint x="580.0" y="900.0"/>
+            <omgdi:waypoint x="630.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-tf-10" id="seq-tf-10_gui">
+            <omgdi:waypoint x="730.0" y="900.0"/>
+            <omgdi:waypoint x="780.0" y="900.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES C -->
+         <bpmndi:BPMNEdge bpmnElement="seq-c-1" id="seq-c-1_gui">
+            <omgdi:waypoint x="150.0" y="1230.0"/>
+            <omgdi:waypoint x="200.0" y="1230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-2" id="seq-c-2_gui">
+            <omgdi:waypoint x="300.0" y="1230.0"/>
+            <omgdi:waypoint x="350.0" y="1230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-3" id="seq-c-3_gui">
+            <omgdi:waypoint x="450.0" y="1230.0"/>
+            <omgdi:waypoint x="500.0" y="1230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-4" id="seq-c-4_gui">
+            <omgdi:waypoint x="520.0" y="1210.0"/>
+            <omgdi:waypoint x="520.0" y="1160.0"/>
+            <omgdi:waypoint x="600.0" y="1160.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-5" id="seq-c-5_gui">
+            <omgdi:waypoint x="540.0" y="1230.0"/>
+            <omgdi:waypoint x="900.0" y="1230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-6" id="seq-c-6_gui">
+            <omgdi:waypoint x="700.0" y="1160.0"/>
+            <omgdi:waypoint x="750.0" y="1160.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-c-7" id="seq-c-7_gui">
+            <omgdi:waypoint x="850.0" y="1160.0"/>
+            <omgdi:waypoint x="914.0" y="1160.0"/>
+            <omgdi:waypoint x="914.0" y="1216.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- EDGES B -->
+         <bpmndi:BPMNEdge bpmnElement="seq-b-1" id="seq-b-1_gui">
+            <omgdi:waypoint x="150.0" y="1500.0"/>
+            <omgdi:waypoint x="200.0" y="1500.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="seq-b-2" id="seq-b-2_gui">
+            <omgdi:waypoint x="300.0" y="1500.0"/>
+            <omgdi:waypoint x="350.0" y="1500.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- MESSAGE FLOWS -->
+         <bpmndi:BPMNEdge bpmnElement="mf-opp-dsc" id="mf-opp-dsc_gui">
+            <omgdi:waypoint x="850.0" y="140.0"/>
+            <omgdi:waypoint x="850.0" y="300.0"/>
+            <omgdi:waypoint x="515.0" y="300.0"/>
+            <omgdi:waypoint x="515.0" y="535.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-dsc-c" id="mf-dsc-c_gui">
+            <omgdi:waypoint x="400.0" y="590.0"/>
+            <omgdi:waypoint x="400.0" y="800.0"/>
+            <omgdi:waypoint x="135.0" y="800.0"/>
+            <omgdi:waypoint x="135.0" y="1215.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-dsc-b" id="mf-dsc-b_gui">
+            <omgdi:waypoint x="420.0" y="590.0"/>
+            <omgdi:waypoint x="420.0" y="1400.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-tf-dsc" id="mf-tf-dsc_gui">
+            <omgdi:waypoint x="350.0" y="860.0"/>
+            <omgdi:waypoint x="350.0" y="700.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-dsc-tf" id="mf-dsc-tf_gui">
+            <omgdi:waypoint x="1260.0" y="500.0"/>
+            <omgdi:waypoint x="1260.0" y="650.0"/>
+            <omgdi:waypoint x="565.0" y="650.0"/>
+            <omgdi:waypoint x="565.0" y="885.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-tf-dsc2" id="mf-tf-dsc2_gui">
+            <omgdi:waypoint x="680.0" y="860.0"/>
+            <omgdi:waypoint x="680.0" y="750.0"/>
+            <omgdi:waypoint x="1375.0" y="750.0"/>
+            <omgdi:waypoint x="1375.0" y="475.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf-c-b" id="mf-c-b_gui">
+            <omgdi:waypoint x="650.0" y="1200.0"/>
+            <omgdi:waypoint x="650.0" y="1300.0"/>
+            <omgdi:waypoint x="135.0" y="1300.0"/>
+            <omgdi:waypoint x="135.0" y="1485.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>
