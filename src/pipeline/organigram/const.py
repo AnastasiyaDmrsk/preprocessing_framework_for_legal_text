@@ -147,7 +147,6 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
        - B is an internal body, board, unit or department of A (e.g. "Management Board of ENISA"), or
        - B is structurally located within A (e.g. "Management Board in the Member State").
        - B is a specialization of A (e.g. "Transferring Member State" and "Member State Responsible" are both child units of "Member State").
-       - B is a unit of any role (if B does not have a role, then B is a role itself and should be handled in the ROLE-UNIT hierarchy below).
 
     2. ROLE–ROLE hierarchy:
        A role D is the parent of role C if the text or domain conventions indicate: 
@@ -183,7 +182,7 @@ HIERARCHY_EXTRACTION_PROMPT = """ Each line above has the form:
     CHILD_ROLE | PARENT_ROLE | ROLE
 
     For ROLE–UNIT relations:
-    CHILD_ROLE | PARENT_ROLE | ROLE-UNIT
+    CHILD_ROLE | PARENT_UNIT | ROLE-UNIT
 
     Where the last field is the indicator of the hierarchy type.
     If a child has multiple parents, emit one line per parent.
@@ -211,7 +210,7 @@ ACTIVE PARTICIPATION: include if the actor:
 (b) Performs an action in the process both explicitly and implicitly, e.g, "X notifies Y" makes X ACTIVE OR in passive voice "Y is notified by X" makes X ACTIVE.
 (c) Is the SOURCE or TARGET of a delegated obligation: "X shall ensure/require/oblige/
     order/direct that Y [verb]" indicates that X and Y are ACTIVE (Y performs the action which is required by X). 
-    The same case implies X shall do something upon Y's request, so X and Y are active actors.
+    The same case implies X shall do something upon Y's request, so X and Y are active actors. Example: "X shall, upon request [by / from / of Y], [verb]", then Y is also active, holding the task "request."
 (d) Exercises a decision or power affecting the process, so that the process cannot continue without this actor in it, 
 e.g., "X shall adjust rules after the feedback of Y" means that Y may provide feedback and only then X shall adjust rules.
 In this case, both actors are active.    
@@ -242,7 +241,8 @@ Scan the INPUT TEXT independently for ACTIVE actors not in the candidate list:
 (not through its organs, e.g., Member State does specific tasks directly and not though other organs referred to it), then classify it as BOTH.
 6. If multiple actors share the same name but have different obligations, classify them as separate UNITs (e.g., "Sending Member State" and "Receiving Member State") 
 or ROLEs if they are under the same UNIT (e.g., "Competent Authority" and "Other Competent Authority" both under the same "Member State" UNIT). 
-7. Define the TYPE (UNIT / ROLE / BOTH) of any newly found actors. A unit should always have a role which performs the action as its organ. If it is not the case, then it is BOTH UNIT and ROLE.
+7. If the same actor has different subtypes with different obligations, create for each subtype a ROLE, e.g., "in case of online shop providers" results into "Online Shop Provider" ROLE, while "Mobile phone providers shall comply" results into "Mobile Phone Provider" ROLE under "Provider" UNIT.
+8. Define the TYPE (UNIT / ROLE / BOTH) of any newly found actors. A unit should always have a role which performs the action as its organ. If it is not the case, then it is BOTH UNIT and ROLE.
 
 At least one actor must be a ROLE and a UNIT!
 ___
@@ -276,7 +276,7 @@ ACTIVE PARTICIPATION RULES:
 An actor is ACTIVE and should be INCLUDED if it:
 (a) Carries an explicit or implicit obligation or task in the process: "shall / must / may / should".
 (b) Initiates an action: notifies, submits, adopts, cooperates, consults, establishes, publishes, etc.
-(c) Is the TARGET or SOURCE of a delegated obligation: "X shall ensure/require/etc that Y [verb]" indicates that X and Y are active.
+(c) Is the TARGET or SOURCE of a delegated obligation: "X shall ensure/require/etc that Y [verb]" indicates that X and Y are active. The same case implies X shall do something upon Y's request, so X and Y are active actors. Example: "X shall, upon request [by / from / of Y], [verb]", then Y is also active, holding the task "request."
 (d) Responds to a request: "X requests Y to [verb]", X and Y are ACTIVE.
 (e) Affects the process, so that the process cannot continue without this actor, 
 e.g., "X shall adjust rules based on the feedback of Y" means that Y may provide feedback and then X shall adjust rules, 
@@ -296,7 +296,7 @@ CHECKS TO PERFORM (reason through each explicitly before outputting):
 Especially, check if the actor was assigned to ROLE and UNIT (BOTH or in two lines) that there is no other unit or role which the actor might refer to, 
 e.g, "Customer and its representative" should identify representative as a ROLE under "Customer" UNIT since representative alone without customer would not make any sense and is normally assigned by the customer.
 4. MISSING ACTORS: Is there any actor in the text satisfying the active participation
-   rules that is NOT in the proposed list? If yes, add it.
+   rules that is NOT in the proposed list? Are there any subtypes which are missing even though they have different obligation in the process? If yes, add it.
 5. NAMING: Are names in title case, singular, without leading articles, separated with "/" if "ACTOR1 or ACTOR2" is used in the whole process? If not, correct them.
 
 IMPORTANT: Reason step by step for each actor before producing the final list.

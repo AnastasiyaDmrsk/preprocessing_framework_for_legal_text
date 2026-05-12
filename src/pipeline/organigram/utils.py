@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 from xml.dom import minidom
 
-from .const import (
+from src.pipeline.organigram.const import (
     BLACKLIST_RE,
     ROLE_SUFFIXES,
     UNIT_SUFFIXES,
@@ -12,7 +12,7 @@ from .const import (
     HIERARCHY_EXTRACTION_PROMPT,
     PRE_EXTRACTED_ACTORS_IDENTIFIED,
 )
-from .models import OrganizationalEntity, Subject
+from src.pipeline.organigram.models import OrganizationalEntity, Subject
 
 
 def _generate_organigram_xml(

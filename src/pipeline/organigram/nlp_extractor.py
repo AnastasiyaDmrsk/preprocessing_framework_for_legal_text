@@ -6,7 +6,7 @@ import spacy
 from gliner import GLiNER
 from spacy.matcher import PhraseMatcher
 
-from .const import (
+from src.pipeline.organigram.const import (
     ACTOR_DEPS,
     PROCESS_ACTION_VERBS,
     GLINER_LABELS,
@@ -15,7 +15,7 @@ from .const import (
     DEFAULT_GLINER_THRESHOLD,
     EU_INSTITUTIONS,
 )
-from .utils import normalize_name, is_actor, infer_type
+from src.pipeline.organigram.utils import normalize_name, is_actor, infer_type
 
 
 class NLPActorCandidateExtractor:

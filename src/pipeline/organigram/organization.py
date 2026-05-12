@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from .const import (
+from src.pipeline.organigram.const import (
     DEFAULT_MODEL,
     DEFAULT_SPACY_MODEL,
     DEFAULT_GLINER_MODEL,
@@ -8,9 +8,9 @@ from .const import (
     DEFAULT_NLP_MIN_CANDIDATES,
     DEFAULT_VALIDATOR_MODEL,
 )
-from .llm_extractor import LLMOrganizationalExtractor
-from .nlp_extractor import NLPActorCandidateExtractor
-from .utils import _build_pre_extracted_actors_hierarchy_prompt
+from src.pipeline.organigram.llm_extractor import LLMOrganizationalExtractor
+from src.pipeline.organigram.nlp_extractor import NLPActorCandidateExtractor
+from src.pipeline.organigram.utils import _build_pre_extracted_actors_hierarchy_prompt
 
 
 class HybridOrganizationalExtractor(LLMOrganizationalExtractor):

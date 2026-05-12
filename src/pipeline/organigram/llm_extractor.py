@@ -13,8 +13,8 @@ from .const import (
     ACTOR_VALIDATION_PROMPT,
     HIERARCHY_VALIDATION_PROMPT,
 )
-from .models import OrganizationalEntity, Subject
-from .utils import (
+from src.pipeline.organigram.models import OrganizationalEntity, Subject
+from src.pipeline.organigram.utils import (
     _build_hierarchy_extraction_prompt,
     _build_actor_extraction_prompt,
     _generate_organigram_xml,
