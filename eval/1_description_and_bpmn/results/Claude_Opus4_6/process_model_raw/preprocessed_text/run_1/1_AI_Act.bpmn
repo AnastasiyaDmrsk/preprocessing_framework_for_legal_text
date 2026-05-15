@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <collaboration id="collab_1">
+      <participant id="pool_MS" name="Member States" processRef="proc_MS"/>
+      <participant id="pool_AIO" name="AI Office" processRef="proc_AIO"/>
+   </collaboration>
+
+   <!-- ===== MEMBER STATES PROCESS ===== -->
+   <process id="proc_MS" name="Member States" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_MS">
+         <lane id="lane_MS">
+            <flowNodeRef>start_MS</flowNodeRef>
+            <flowNodeRef>fork1</flowNodeRef>
+            <flowNodeRef>task_1a</flowNodeRef>
+            <flowNodeRef>task_1b</flowNodeRef>
+            <flowNodeRef>task_1c</flowNodeRef>
+            <flowNodeRef>task_1d</flowNodeRef>
+            <flowNodeRef>join1</flowNodeRef>
+            <flowNodeRef>task_2</flowNodeRef>
+            <flowNodeRef>end_MS</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_MS" name="Start">
+         <outgoing>sf_start_fork1</outgoing>
+      </startEvent>
+
+      <parallelGateway id="fork1" name="" gatewayDirection="Diverging">
+         <incoming>sf_start_fork1</incoming>
+         <outgoing>sf_fork1_1a</outgoing>
+         <outgoing>sf_fork1_1b</outgoing>
+         <outgoing>sf_fork1_1c</outgoing>
+         <outgoing>sf_fork1_1d</outgoing>
+      </parallelGateway>
+
+      <task id="task_1a" name="provide SMEs with priority access to AI regulatory sandboxes">
+         <incoming>sf_fork1_1a</incoming>
+         <outgoing>sf_1a_join1</outgoing>
+      </task>
+
+      <task id="task_1b" name="organise awareness raising and training activities">
+         <incoming>sf_fork1_1b</incoming>
+         <outgoing>sf_1b_join1</outgoing>
+      </task>
+
+      <task id="task_1c" name="utilise existing and establish new channels for communication with SMEs">
+         <incoming>sf_fork1_1c</incoming>
+         <outgoing>sf_1c_join1</outgoing>
+      </task>
+
+      <task id="task_1d" name="facilitate the participation of SMEs in the standardisation development process">
+         <incoming>sf_fork1_1d</incoming>
+         <outgoing>sf_1d_join1</outgoing>
+      </task>
+
+      <parallelGateway id="join1" name="" gatewayDirection="Converging">
+         <incoming>sf_1a_join1</incoming>
+         <incoming>sf_1b_join1</incoming>
+         <incoming>sf_1c_join1</incoming>
+         <incoming>sf_1d_join1</incoming>
+         <outgoing>sf_join1_task2</outgoing>
+      </parallelGateway>
+
+      <task id="task_2" name="take into account interests and needs of SME providers when setting conformity assessment fees">
+         <incoming>sf_join1_task2</incoming>
+         <outgoing>sf_task2_end</outgoing>
+      </task>
+
+      <endEvent id="end_MS" name="End">
+         <incoming>sf_task2_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_start_fork1" sourceRef="start_MS" targetRef="fork1"/>
+      <sequenceFlow id="sf_fork1_1a" sourceRef="fork1" targetRef="task_1a"/>
+      <sequenceFlow id="sf_fork1_1b" sourceRef="fork1" targetRef="task_1b"/>
+      <sequenceFlow id="sf_fork1_1c" sourceRef="fork1" targetRef="task_1c"/>
+      <sequenceFlow id="sf_fork1_1d" sourceRef="fork1" targetRef="task_1d"/>
+      <sequenceFlow id="sf_1a_join1" sourceRef="task_1a" targetRef="join1"/>
+      <sequenceFlow id="sf_1b_join1" sourceRef="task_1b" targetRef="join1"/>
+      <sequenceFlow id="sf_1c_join1" sourceRef="task_1c" targetRef="join1"/>
+      <sequenceFlow id="sf_1d_join1" sourceRef="task_1d" targetRef="join1"/>
+      <sequenceFlow id="sf_join1_task2" sourceRef="join1" targetRef="task_2"/>
+      <sequenceFlow id="sf_task2_end" sourceRef="task_2" targetRef="end_MS"/>
+   </process>
+
+   <!-- ===== AI OFFICE PROCESS ===== -->
+   <process id="proc_AIO" name="AI Office" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_AIO">
+         <lane id="lane_AIO">
+            <flowNodeRef>start_AIO</flowNodeRef>
+            <flowNodeRef>fork2</flowNodeRef>
+            <flowNodeRef>task_3a</flowNodeRef>
+            <flowNodeRef>task_3b</flowNodeRef>
+            <flowNodeRef>task_3c</flowNodeRef>
+            <flowNodeRef>task_3d</flowNodeRef>
+            <flowNodeRef>join2</flowNodeRef>
+            <flowNodeRef>end_AIO</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_AIO" name="Start">
+         <outgoing>sf_start_fork2</outgoing>
+      </startEvent>
+
+      <parallelGateway id="fork2" name="" gatewayDirection="Diverging">
+         <incoming>sf_start_fork2</incoming>
+         <outgoing>sf_fork2_3a</outgoing>
+         <outgoing>sf_fork2_3b</outgoing>
+         <outgoing>sf_fork2_3c</outgoing>
+         <outgoing>sf_fork2_3d</outgoing>
+      </parallelGateway>
+
+      <task id="task_3a" name="provide standardised templates for areas covered by this Regulation">
+         <incoming>sf_fork2_3a</incoming>
+         <outgoing>sf_3a_join2</outgoing>
+      </task>
+
+      <task id="task_3b" name="develop and maintain a single information platform">
+         <incoming>sf_fork2_3b</incoming>
+         <outgoing>sf_3b_join2</outgoing>
+      </task>
+
+      <task id="task_3c" name="organise communication campaigns to raise awareness">
+         <incoming>sf_fork2_3c</incoming>
+         <outgoing>sf_3c_join2</outgoing>
+      </task>
+
+      <task id="task_3d" name="evaluate and promote convergence of best practices in public procurement">
+         <incoming>sf_fork2_3d</incoming>
+         <outgoing>sf_3d_join2</outgoing>
+      </task>
+
+      <parallelGateway id="join2" name="" gatewayDirection="Converging">
+         <incoming>sf_3a_join2</incoming>
+         <incoming>sf_3b_join2</incoming>
+         <incoming>sf_3c_join2</incoming>
+         <incoming>sf_3d_join2</incoming>
+         <outgoing>sf_join2_end</outgoing>
+      </parallelGateway>
+
+      <endEvent id="end_AIO" name="End">
+         <incoming>sf_join2_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_start_fork2" sourceRef="start_AIO" targetRef="fork2"/>
+      <sequenceFlow id="sf_fork2_3a" sourceRef="fork2" targetRef="task_3a"/>
+      <sequenceFlow id="sf_fork2_3b" sourceRef="fork2" targetRef="task_3b"/>
+      <sequenceFlow id="sf_fork2_3c" sourceRef="fork2" targetRef="task_3c"/>
+      <sequenceFlow id="sf_fork2_3d" sourceRef="fork2" targetRef="task_3d"/>
+      <sequenceFlow id="sf_3a_join2" sourceRef="task_3a" targetRef="join2"/>
+      <sequenceFlow id="sf_3b_join2" sourceRef="task_3b" targetRef="join2"/>
+      <sequenceFlow id="sf_3c_join2" sourceRef="task_3c" targetRef="join2"/>
+      <sequenceFlow id="sf_3d_join2" sourceRef="task_3d" targetRef="join2"/>
+      <sequenceFlow id="sf_join2_end" sourceRef="join2" targetRef="end_AIO"/>
+   </process>
+
+   <!-- ===== DIAGRAM ===== -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- Member States Pool -->
+         <bpmndi:BPMNShape bpmnElement="pool_MS" id="pool_MS_gui" isHorizontal="true">
+            <omgdc:Bounds x="120" y="60" width="1020" height="420"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_MS" id="lane_MS_gui" isHorizontal="true">
+            <omgdc:Bounds x="150" y="60" width="990" height="420"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Start -->
+         <bpmndi:BPMNShape bpmnElement="start_MS" id="start_MS_gui">
+            <omgdc:Bounds x="195" y="252" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Fork Gateway -->
+         <bpmndi:BPMNShape bpmnElement="fork1" id="fork1_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="280" y="247" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Parallel Tasks -->
+         <bpmndi:BPMNShape bpmnElement="task_1a" id="task_1a_gui">
+            <omgdc:Bounds x="390" y="80" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_1b" id="task_1b_gui">
+            <omgdc:Bounds x="390" y="170" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_1c" id="task_1c_gui">
+            <omgdc:Bounds x="390" y="260" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_1d" id="task_1d_gui">
+            <omgdc:Bounds x="390" y="350" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Join Gateway -->
+         <bpmndi:BPMNShape bpmnElement="join1" id="join1_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="640" y="247" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS Task 2 -->
+         <bpmndi:BPMNShape bpmnElement="task_2" id="task_2_gui">
+            <omgdc:Bounds x="750" y="237" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+
+         <!-- MS End -->
+         <bpmndi:BPMNShape bpmnElement="end_MS" id="end_MS_gui">
+            <omgdc:Bounds x="1000" y="253" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AI Office Pool -->
+         <bpmndi:BPMNShape bpmnElement="pool_AIO" id="pool_AIO_gui" isHorizontal="true">
+            <omgdc:Bounds x="120" y="530" width="820" height="420"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_AIO" id="lane_AIO_gui" isHorizontal="true">
+            <omgdc:Bounds x="150" y="530" width="790" height="420"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO Start -->
+         <bpmndi:BPMNShape bpmnElement="start_AIO" id="start_AIO_gui">
+            <omgdc:Bounds x="195" y="722" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO Fork Gateway -->
+         <bpmndi:BPMNShape bpmnElement="fork2" id="fork2_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="280" y="717" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO Parallel Tasks -->
+         <bpmndi:BPMNShape bpmnElement="task_3a" id="task_3a_gui">
+            <omgdc:Bounds x="390" y="550" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_3b" id="task_3b_gui">
+            <omgdc:Bounds x="390" y="640" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_3c" id="task_3c_gui">
+            <omgdc:Bounds x="390" y="730" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_3d" id="task_3d_gui">
+            <omgdc:Bounds x="390" y="820" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO Join Gateway -->
+         <bpmndi:BPMNShape bpmnElement="join2" id="join2_gui" isMarkerVisible="true">
+            <omgdc:Bounds x="640" y="717" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+
+         <!-- AIO End -->
+         <bpmndi:BPMNShape bpmnElement="end_AIO" id="end_AIO_gui">
+            <omgdc:Bounds x="750" y="723" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== EDGES: Member States ===== -->
+         <bpmndi:BPMNEdge bpmnElement="sf_start_fork1" id="sf_start_fork1_gui">
+            <omgdi:waypoint x="225" y="267"/>
+            <omgdi:waypoint x="280" y="267"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_fork1_1a" id="sf_fork1_1a_gui">
+            <omgdi:waypoint x="300" y="247"/>
+            <omgdi:waypoint x="300" y="110"/>
+            <omgdi:waypoint x="390" y="110"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork1_1b" id="sf_fork1_1b_gui">
+            <omgdi:waypoint x="300" y="247"/>
+            <omgdi:waypoint x="300" y="200"/>
+            <omgdi:waypoint x="390" y="200"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork1_1c" id="sf_fork1_1c_gui">
+            <omgdi:waypoint x="320" y="267"/>
+            <omgdi:waypoint x="355" y="267"/>
+            <omgdi:waypoint x="355" y="290"/>
+            <omgdi:waypoint x="390" y="290"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork1_1d" id="sf_fork1_1d_gui">
+            <omgdi:waypoint x="300" y="287"/>
+            <omgdi:waypoint x="300" y="380"/>
+            <omgdi:waypoint x="390" y="380"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_1a_join1" id="sf_1a_join1_gui">
+            <omgdi:waypoint x="570" y="110"/>
+            <omgdi:waypoint x="660" y="110"/>
+            <omgdi:waypoint x="660" y="247"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_1b_join1" id="sf_1b_join1_gui">
+            <omgdi:waypoint x="570" y="200"/>
+            <omgdi:waypoint x="660" y="200"/>
+            <omgdi:waypoint x="660" y="247"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_1c_join1" id="sf_1c_join1_gui">
+            <omgdi:waypoint x="570" y="290"/>
+            <omgdi:waypoint x="605" y="290"/>
+            <omgdi:waypoint x="605" y="267"/>
+            <omgdi:waypoint x="640" y="267"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_1d_join1" id="sf_1d_join1_gui">
+            <omgdi:waypoint x="570" y="380"/>
+            <omgdi:waypoint x="660" y="380"/>
+            <omgdi:waypoint x="660" y="287"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_join1_task2" id="sf_join1_task2_gui">
+            <omgdi:waypoint x="680" y="267"/>
+            <omgdi:waypoint x="750" y="267"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_task2_end" id="sf_task2_end_gui">
+            <omgdi:waypoint x="930" y="267"/>
+            <omgdi:waypoint x="1000" y="267"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== EDGES: AI Office ===== -->
+         <bpmndi:BPMNEdge bpmnElement="sf_start_fork2" id="sf_start_fork2_gui">
+            <omgdi:waypoint x="225" y="737"/>
+            <omgdi:waypoint x="280" y="737"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_fork2_3a" id="sf_fork2_3a_gui">
+            <omgdi:waypoint x="300" y="717"/>
+            <omgdi:waypoint x="300" y="580"/>
+            <omgdi:waypoint x="390" y="580"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork2_3b" id="sf_fork2_3b_gui">
+            <omgdi:waypoint x="300" y="717"/>
+            <omgdi:waypoint x="300" y="670"/>
+            <omgdi:waypoint x="390" y="670"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork2_3c" id="sf_fork2_3c_gui">
+            <omgdi:waypoint x="320" y="737"/>
+            <omgdi:waypoint x="355" y="737"/>
+            <omgdi:waypoint x="355" y="760"/>
+            <omgdi:waypoint x="390" y="760"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_fork2_3d" id="sf_fork2_3d_gui">
+            <omgdi:waypoint x="300" y="757"/>
+            <omgdi:waypoint x="300" y="850"/>
+            <omgdi:waypoint x="390" y="850"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_3a_join2" id="sf_3a_join2_gui">
+            <omgdi:waypoint x="570" y="580"/>
+            <omgdi:waypoint x="660" y="580"/>
+            <omgdi:waypoint x="660" y="717"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_3b_join2" id="sf_3b_join2_gui">
+            <omgdi:waypoint x="570" y="670"/>
+            <omgdi:waypoint x="660" y="670"/>
+            <omgdi:waypoint x="660" y="717"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_3c_join2" id="sf_3c_join2_gui">
+            <omgdi:waypoint x="570" y="760"/>
+            <omgdi:waypoint x="605" y="760"/>
+            <omgdi:waypoint x="605" y="737"/>
+            <omgdi:waypoint x="640" y="737"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_3d_join2" id="sf_3d_join2_gui">
+            <omgdi:waypoint x="570" y="850"/>
+            <omgdi:waypoint x="660" y="850"/>
+            <omgdi:waypoint x="660" y="757"/>
+         </bpmndi:BPMNEdge>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_join2_end" id="sf_join2_end_gui">
+            <omgdi:waypoint x="680" y="737"/>
+            <omgdi:waypoint x="750" y="737"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

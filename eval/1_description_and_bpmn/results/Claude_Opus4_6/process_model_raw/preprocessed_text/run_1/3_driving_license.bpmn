@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             exporter="Claude"
+             exporterVersion="1.0"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="pool_ms" name="Member States" processRef="proc_ms"/>
+      <participant id="pool_applicant" name="Applicant / Holder" processRef="proc_applicant"/>
+      <participant id="pool_commission" name="Commission" processRef="proc_commission"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_exam_request" name="require examination" sourceRef="task_ms_ensure_exam_first" targetRef="task_app_undergo_exam"/>
+      <messageFlow id="mf_renewal_request" name="require renewal examination" sourceRef="task_ms_require_exam_renewal" targetRef="task_app_undergo_exam_renewal"/>
+      <messageFlow id="mf_self_assess" name="require self-assessment" sourceRef="task_ms_require_self_assessment" targetRef="task_app_fill_self_assessment"/>
+      <messageFlow id="mf_inform_commission" name="inform" sourceRef="task_ms_inform_commission" targetRef="start_commission"/>
+      <messageFlow id="mf_condition_exam" name="require examination" sourceRef="task_ms_ensure_exam_condition" targetRef="task_app_undergo_exam_condition"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Member States                                        -->
+   <!-- ============================================================ -->
+   <process id="proc_ms" name="Member States" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_ms">
+         <lane id="lane_ms" name="">
+            <flowNodeRef>start_ms</flowNodeRef>
+            <flowNodeRef>task_ms_ensure_exam_first</flowNodeRef>
+            <flowNodeRef>task_ms_require_exam_cat_c</flowNodeRef>
+            <flowNodeRef>task_ms_require_exam_renewal</flowNodeRef>
+            <flowNodeRef>pg_split</flowNodeRef>
+            <flowNodeRef>task_ms_require_self_assessment</flowNodeRef>
+            <flowNodeRef>task_ms_establish_national_system</flowNodeRef>
+            <flowNodeRef>pg_join</flowNodeRef>
+            <flowNodeRef>task_ms_provide_measures</flowNodeRef>
+            <flowNodeRef>task_ms_apply_monitoring</flowNodeRef>
+            <flowNodeRef>xg_condition_split</flowNodeRef>
+            <flowNodeRef>task_ms_ensure_exam_condition</flowNodeRef>
+            <flowNodeRef>xg_condition_join</flowNodeRef>
+            <flowNodeRef>task_ms_raise_awareness</flowNodeRef>
+            <flowNodeRef>task_ms_inform_commission</flowNodeRef>
+            <flowNodeRef>task_ms_set_stricter_standards</flowNodeRef>
+            <flowNodeRef>end_ms</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_ms" name="Start">
+         <outgoing>sf_1</outgoing>
+      </startEvent>
+
+      <!-- Para 1: ensure medical examination before first issuance -->
+      <task id="task_ms_ensure_exam_first" name="Ensure medical examination for first issuance" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_1</incoming>
+         <outgoing>sf_2</outgoing>
+      </task>
+
+      <!-- Para 1 cont.: require medical examination for C/CE/C1/C1E/D/D1/DE/D1E -->
+      <task id="task_ms_require_exam_cat_c" name="Require medical examination for categories C, CE, C1, C1E, D, D1, DE, D1E" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_2</incoming>
+         <outgoing>sf_3</outgoing>
+      </task>
+
+      <!-- Para 2: require medical examination before renewal -->
+      <task id="task_ms_require_exam_renewal" name="Require medical examination before renewal" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_3</incoming>
+         <outgoing>sf_4</outgoing>
+      </task>
+
+      <!-- Para 3: Parallel gateway split for alternative measures -->
+      <parallelGateway id="pg_split" name="Alternative measures" gatewayDirection="Diverging">
+         <incoming>sf_4</incoming>
+         <outgoing>sf_5a</outgoing>
+         <outgoing>sf_5b</outgoing>
+      </parallelGateway>
+
+      <!-- Para 3(a): require self-assessment form -->
+      <task id="task_ms_require_self_assessment" name="Require applicant to fill in self-assessment form" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_5a</incoming>
+         <outgoing>sf_6a</outgoing>
+      </task>
+
+      <!-- Para 3(b): establish national assessment system -->
+      <task id="task_ms_establish_national_system" name="Establish national system of assessment of fitness to drive" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_5b</incoming>
+         <outgoing>sf_6b</outgoing>
+      </task>
+
+      <!-- Parallel gateway join -->
+      <parallelGateway id="pg_join" name="" gatewayDirection="Converging">
+         <incoming>sf_6a</incoming>
+         <incoming>sf_6b</incoming>
+         <outgoing>sf_7</outgoing>
+      </parallelGateway>
+
+      <!-- Para 4: provide appropriate measures -->
+      <task id="task_ms_provide_measures" name="Provide appropriate measures for non-compliance with self-assessment" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_7</incoming>
+         <outgoing>sf_8</outgoing>
+      </task>
+
+      <!-- Para 5: apply alternative measure for monitoring -->
+      <task id="task_ms_apply_monitoring" name="Apply alternative measure for monitoring fitness to drive" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_8</incoming>
+         <outgoing>sf_9</outgoing>
+      </task>
+
+      <!-- Para 6: Exclusive gateway - medical condition apparent? -->
+      <exclusiveGateway id="xg_condition_split" name="Medical condition apparent?" gatewayDirection="Diverging">
+         <incoming>sf_9</incoming>
+         <outgoing>sf_10_yes</outgoing>
+         <outgoing>sf_10_no</outgoing>
+      </exclusiveGateway>
+
+      <!-- Para 6: ensure applicant undergoes medical examination -->
+      <task id="task_ms_ensure_exam_condition" name="Ensure applicant undergoes medical examination prior to issuing or renewing licence" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_10_yes</incoming>
+         <outgoing>sf_11</outgoing>
+      </task>
+
+      <!-- Exclusive gateway merge -->
+      <exclusiveGateway id="xg_condition_join" name="" gatewayDirection="Converging">
+         <incoming>sf_11</incoming>
+         <incoming>sf_10_no</incoming>
+         <outgoing>sf_12</outgoing>
+      </exclusiveGateway>
+
+      <!-- Para 7: take measures to raise awareness -->
+      <task id="task_ms_raise_awareness" name="Take measures to raise awareness about minimum fitness standards" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_12</incoming>
+         <outgoing>sf_13</outgoing>
+      </task>
+
+      <!-- Para 7: inform Commission -->
+      <task id="task_ms_inform_commission" name="Inform Commission of adopted guidelines or campaigns" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_13</incoming>
+         <outgoing>sf_14</outgoing>
+      </task>
+
+      <!-- Para 8: set stricter standards -->
+      <task id="task_ms_set_stricter_standards" name="Set stricter standards for issuance or renewal if applicable" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_14</incoming>
+         <outgoing>sf_15</outgoing>
+      </task>
+
+      <endEvent id="end_ms" name="End">
+         <incoming>sf_15</incoming>
+      </endEvent>
+
+      <!-- Sequence Flows -->
+      <sequenceFlow id="sf_1" sourceRef="start_ms" targetRef="task_ms_ensure_exam_first"/>
+      <sequenceFlow id="sf_2" sourceRef="task_ms_ensure_exam_first" targetRef="task_ms_require_exam_cat_c"/>
+      <sequenceFlow id="sf_3" sourceRef="task_ms_require_exam_cat_c" targetRef="task_ms_require_exam_renewal"/>
+      <sequenceFlow id="sf_4" sourceRef="task_ms_require_exam_renewal" targetRef="pg_split"/>
+      <sequenceFlow id="sf_5a" sourceRef="pg_split" targetRef="task_ms_require_self_assessment"/>
+      <sequenceFlow id="sf_5b" sourceRef="pg_split" targetRef="task_ms_establish_national_system"/>
+      <sequenceFlow id="sf_6a" sourceRef="task_ms_require_self_assessment" targetRef="pg_join"/>
+      <sequenceFlow id="sf_6b" sourceRef="task_ms_establish_national_system" targetRef="pg_join"/>
+      <sequenceFlow id="sf_7" sourceRef="pg_join" targetRef="task_ms_provide_measures"/>
+      <sequenceFlow id="sf_8" sourceRef="task_ms_provide_measures" targetRef="task_ms_apply_monitoring"/>
+      <sequenceFlow id="sf_9" sourceRef="task_ms_apply_monitoring" targetRef="xg_condition_split"/>
+      <sequenceFlow id="sf_10_yes" name="Yes" sourceRef="xg_condition_split" targetRef="task_ms_ensure_exam_condition"/>
+      <sequenceFlow id="sf_10_no" name="No" sourceRef="xg_condition_split" targetRef="xg_condition_join"/>
+      <sequenceFlow id="sf_11" sourceRef="task_ms_ensure_exam_condition" targetRef="xg_condition_join"/>
+      <sequenceFlow id="sf_12" sourceRef="xg_condition_join" targetRef="task_ms_raise_awareness"/>
+      <sequenceFlow id="sf_13" sourceRef="task_ms_raise_awareness" targetRef="task_ms_inform_commission"/>
+      <sequenceFlow id="sf_14" sourceRef="task_ms_inform_commission" targetRef="task_ms_set_stricter_standards"/>
+      <sequenceFlow id="sf_15" sourceRef="task_ms_set_stricter_standards" targetRef="end_ms"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Applicant / Holder                                   -->
+   <!-- ============================================================ -->
+   <process id="proc_applicant" name="Applicant / Holder" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_app">
+         <lane id="lane_app" name="">
+            <flowNodeRef>start_app</flowNodeRef>
+            <flowNodeRef>task_app_undergo_exam</flowNodeRef>
+            <flowNodeRef>task_app_undergo_exam_renewal</flowNodeRef>
+            <flowNodeRef>task_app_fill_self_assessment</flowNodeRef>
+            <flowNodeRef>task_app_undergo_exam_condition</flowNodeRef>
+            <flowNodeRef>end_app</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_app" name="Start">
+         <outgoing>sf_app_1</outgoing>
+      </startEvent>
+
+      <task id="task_app_undergo_exam" name="Undergo medical examination (first issuance)" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_app_1</incoming>
+         <outgoing>sf_app_2</outgoing>
+      </task>
+
+      <task id="task_app_undergo_exam_renewal" name="Undergo medical examination (renewal)" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_app_2</incoming>
+         <outgoing>sf_app_3</outgoing>
+      </task>
+
+      <task id="task_app_fill_self_assessment" name="Fill in self-assessment form" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_app_3</incoming>
+         <outgoing>sf_app_4</outgoing>
+      </task>
+
+      <task id="task_app_undergo_exam_condition" name="Undergo medical examination (condition apparent)" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_app_4</incoming>
+         <outgoing>sf_app_5</outgoing>
+      </task>
+
+      <endEvent id="end_app" name="End">
+         <incoming>sf_app_5</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_app_1" sourceRef="start_app" targetRef="task_app_undergo_exam"/>
+      <sequenceFlow id="sf_app_2" sourceRef="task_app_undergo_exam" targetRef="task_app_undergo_exam_renewal"/>
+      <sequenceFlow id="sf_app_3" sourceRef="task_app_undergo_exam_renewal" targetRef="task_app_fill_self_assessment"/>
+      <sequenceFlow id="sf_app_4" sourceRef="task_app_fill_self_assessment" targetRef="task_app_undergo_exam_condition"/>
+      <sequenceFlow id="sf_app_5" sourceRef="task_app_undergo_exam_condition" targetRef="end_app"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Commission                                           -->
+   <!-- ============================================================ -->
+   <process id="proc_commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_comm">
+         <lane id="lane_comm" name="">
+            <flowNodeRef>start_commission</flowNodeRef>
+            <flowNodeRef>task_comm_make_available</flowNodeRef>
+            <flowNodeRef>end_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_commission" name="Receive information from Member States">
+         <outgoing>sf_comm_1</outgoing>
+         <messageEventDefinition id="med_comm_start"/>
+      </startEvent>
+
+      <task id="task_comm_make_available" name="Make guidelines and information available to other Member States" completionQuantity="1" startQuantity="1" isForCompensation="false">
+         <incoming>sf_comm_1</incoming>
+         <outgoing>sf_comm_2</outgoing>
+      </task>
+
+      <endEvent id="end_commission" name="End">
+         <incoming>sf_comm_2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_comm_1" sourceRef="start_commission" targetRef="task_comm_make_available"/>
+      <sequenceFlow id="sf_comm_2" sourceRef="task_comm_make_available" targetRef="end_commission"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- ===== POOL: Member States ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_ms" id="pool_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="380.0" width="2200.0" x="60.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ms" id="lane_ms_gui" isHorizontal="true">
+            <omgdc:Bounds height="380.0" width="2170.0" x="90.0" y="60.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Start -->
+         <bpmndi:BPMNShape bpmnElement="start_ms" id="start_ms_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="235.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Ensure medical examination first issuance -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_ensure_exam_first" id="task_ms_ensure_exam_first_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="190.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Require exam cat C -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_require_exam_cat_c" id="task_ms_require_exam_cat_c_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="350.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Require exam renewal -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_require_exam_renewal" id="task_ms_require_exam_renewal_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="510.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Split -->
+         <bpmndi:BPMNShape bpmnElement="pg_split" id="pg_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="680.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Require self-assessment (upper branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_require_self_assessment" id="task_ms_require_self_assessment_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="770.0" y="120.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Establish national system (lower branch) -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_establish_national_system" id="task_ms_establish_national_system_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="770.0" y="300.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Parallel Gateway Join -->
+         <bpmndi:BPMNShape bpmnElement="pg_join" id="pg_join_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="940.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Provide appropriate measures -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_provide_measures" id="task_ms_provide_measures_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1020.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Apply monitoring -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_apply_monitoring" id="task_ms_apply_monitoring_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1180.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Exclusive Gateway Split: condition apparent? -->
+         <bpmndi:BPMNShape bpmnElement="xg_condition_split" id="xg_condition_split_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1340.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Ensure exam condition -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_ensure_exam_condition" id="task_ms_ensure_exam_condition_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1420.0" y="120.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Exclusive Gateway Join -->
+         <bpmndi:BPMNShape bpmnElement="xg_condition_join" id="xg_condition_join_gui" isMarkerVisible="true">
+            <omgdc:Bounds height="40.0" width="40.0" x="1580.0" y="230.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Raise awareness -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_raise_awareness" id="task_ms_raise_awareness_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1660.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Inform Commission -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_inform_commission" id="task_ms_inform_commission_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1820.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Task: Set stricter standards -->
+         <bpmndi:BPMNShape bpmnElement="task_ms_set_stricter_standards" id="task_ms_set_stricter_standards_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1980.0" y="210.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- End -->
+         <bpmndi:BPMNShape bpmnElement="end_ms" id="end_ms_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2140.0" y="236.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== POOL: Applicant / Holder ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_applicant" id="pool_applicant_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2200.0" x="60.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_app" id="lane_app_gui" isHorizontal="true">
+            <omgdc:Bounds height="250.0" width="2170.0" x="90.0" y="480.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_app" id="start_app_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="590.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_app_undergo_exam" id="task_app_undergo_exam_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="190.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_app_undergo_exam_renewal" id="task_app_undergo_exam_renewal_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="510.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_app_fill_self_assessment" id="task_app_fill_self_assessment_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="770.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_app_undergo_exam_condition" id="task_app_undergo_exam_condition_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1420.0" y="565.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_app" id="end_app_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2140.0" y="591.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== POOL: Commission ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="pool_commission_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2200.0" x="60.0" y="770.0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_comm" id="lane_comm_gui" isHorizontal="true">
+            <omgdc:Bounds height="200.0" width="2170.0" x="90.0" y="770.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_commission" id="start_commission_gui">
+            <omgdc:Bounds height="30.0" width="30.0" x="1865.0" y="855.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="task_comm_make_available" id="task_comm_make_available_gui">
+            <omgdc:Bounds height="80.0" width="120.0" x="1940.0" y="830.0"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="end_commission" id="end_commission_gui">
+            <omgdc:Bounds height="28.0" width="28.0" x="2100.0" y="856.0"/>
+         </bpmndi:BPMNShape>
+
+         <!-- ===== SEQUENCE FLOW EDGES: Member States ===== -->
+         <bpmndi:BPMNEdge bpmnElement="sf_1" id="sf_1_gui">
+            <omgdi:waypoint x="150.0" y="250.0"/>
+            <omgdi:waypoint x="190.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_2" id="sf_2_gui">
+            <omgdi:waypoint x="310.0" y="250.0"/>
+            <omgdi:waypoint x="350.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_3" id="sf_3_gui">
+            <omgdi:waypoint x="470.0" y="250.0"/>
+            <omgdi:waypoint x="510.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_4" id="sf_4_gui">
+            <omgdi:waypoint x="630.0" y="250.0"/>
+            <omgdi:waypoint x="680.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_5a" id="sf_5a_gui">
+            <omgdi:waypoint x="700.0" y="230.0"/>
+            <omgdi:waypoint x="700.0" y="160.0"/>
+            <omgdi:waypoint x="770.0" y="160.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_5b" id="sf_5b_gui">
+            <omgdi:waypoint x="700.0" y="270.0"/>
+            <omgdi:waypoint x="700.0" y="340.0"/>
+            <omgdi:waypoint x="770.0" y="340.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_6a" id="sf_6a_gui">
+            <omgdi:waypoint x="890.0" y="160.0"/>
+            <omgdi:waypoint x="960.0" y="160.0"/>
+            <omgdi:waypoint x="960.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_6b" id="sf_6b_gui">
+            <omgdi:waypoint x="890.0" y="340.0"/>
+            <omgdi:waypoint x="960.0" y="340.0"/>
+            <omgdi:waypoint x="960.0" y="270.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_7" id="sf_7_gui">
+            <omgdi:waypoint x="980.0" y="250.0"/>
+            <omgdi:waypoint x="1020.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_8" id="sf_8_gui">
+            <omgdi:waypoint x="1140.0" y="250.0"/>
+            <omgdi:waypoint x="1180.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_9" id="sf_9_gui">
+            <omgdi:waypoint x="1300.0" y="250.0"/>
+            <omgdi:waypoint x="1340.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_10_yes" id="sf_10_yes_gui">
+            <omgdi:waypoint x="1360.0" y="230.0"/>
+            <omgdi:waypoint x="1360.0" y="160.0"/>
+            <omgdi:waypoint x="1420.0" y="160.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_10_no" id="sf_10_no_gui">
+            <omgdi:waypoint x="1380.0" y="250.0"/>
+            <omgdi:waypoint x="1580.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_11" id="sf_11_gui">
+            <omgdi:waypoint x="1540.0" y="160.0"/>
+            <omgdi:waypoint x="1600.0" y="160.0"/>
+            <omgdi:waypoint x="1600.0" y="230.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_12" id="sf_12_gui">
+            <omgdi:waypoint x="1620.0" y="250.0"/>
+            <omgdi:waypoint x="1660.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_13" id="sf_13_gui">
+            <omgdi:waypoint x="1780.0" y="250.0"/>
+            <omgdi:waypoint x="1820.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_14" id="sf_14_gui">
+            <omgdi:waypoint x="1940.0" y="250.0"/>
+            <omgdi:waypoint x="1980.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_15" id="sf_15_gui">
+            <omgdi:waypoint x="2100.0" y="250.0"/>
+            <omgdi:waypoint x="2140.0" y="250.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== SEQUENCE FLOW EDGES: Applicant ===== -->
+         <bpmndi:BPMNEdge bpmnElement="sf_app_1" id="sf_app_1_gui">
+            <omgdi:waypoint x="150.0" y="605.0"/>
+            <omgdi:waypoint x="190.0" y="605.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_2" id="sf_app_2_gui">
+            <omgdi:waypoint x="310.0" y="605.0"/>
+            <omgdi:waypoint x="510.0" y="605.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_3" id="sf_app_3_gui">
+            <omgdi:waypoint x="630.0" y="605.0"/>
+            <omgdi:waypoint x="770.0" y="605.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_4" id="sf_app_4_gui">
+            <omgdi:waypoint x="890.0" y="605.0"/>
+            <omgdi:waypoint x="1420.0" y="605.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_app_5" id="sf_app_5_gui">
+            <omgdi:waypoint x="1540.0" y="605.0"/>
+            <omgdi:waypoint x="2140.0" y="605.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== SEQUENCE FLOW EDGES: Commission ===== -->
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_1" id="sf_comm_1_gui">
+            <omgdi:waypoint x="1895.0" y="870.0"/>
+            <omgdi:waypoint x="1940.0" y="870.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_2" id="sf_comm_2_gui">
+            <omgdi:waypoint x="2060.0" y="870.0"/>
+            <omgdi:waypoint x="2100.0" y="870.0"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== MESSAGE FLOW EDGES ===== -->
+         <bpmndi:BPMNEdge bpmnElement="mf_exam_request" id="mf_exam_request_gui">
+            <omgdi:waypoint x="250.0" y="290.0"/>
+            <omgdi:waypoint x="250.0" y="565.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_renewal_request" id="mf_renewal_request_gui">
+            <omgdi:waypoint x="570.0" y="290.0"/>
+            <omgdi:waypoint x="570.0" y="565.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_self_assess" id="mf_self_assess_gui">
+            <omgdi:waypoint x="830.0" y="200.0"/>
+            <omgdi:waypoint x="830.0" y="565.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_condition_exam" id="mf_condition_exam_gui">
+            <omgdi:waypoint x="1480.0" y="200.0"/>
+            <omgdi:waypoint x="1480.0" y="565.0"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_inform_commission" id="mf_inform_commission_gui">
+            <omgdi:waypoint x="1880.0" y="290.0"/>
+            <omgdi:waypoint x="1880.0" y="855.0"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+
+</definitions>
