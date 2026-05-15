@@ -1,0 +1,25 @@
+The process begins with a "startevent" which initiates the "Application for Trusted Flagger Status" task.
+
+Following this, the "Digital Services Coordinator Reviews Application" task is performed. The outcome of this review is then evaluated at a decision point.
+
+If the application "Meets Conditions", the "Award Trusted Flagger Status" task is executed. After this, another decision point is reached. If the condition is "true", the process proceeds to the "Trusted Flagger Publishes Annual Report" task. This is followed by the "Trusted Flagger Sends Report to DSC" task, and then the "Trusted Flagger Makes Report Publicly Available" task. Subsequently, the "DSC Communicates Trusted Flagger Info to Commission and Board" task takes place.
+
+After this communication, a series of decision points are encountered. One path leads to the "Commission Issues Guidelines if Necessary" task, which is then followed by another decision point. Another path from the initial decision point after communication leads to the "Commission Publishes Trusted Flagger Database" task.
+
+The process then enters a complex series of decision points. One branch from these decision points, labeled "No Issues Reported", leads to the "Trusted Flagger Continues Operations" task. This task then loops back to the "Trusted Flagger Publishes Annual Report" task.
+
+Another branch from the decision points, labeled "Provider Reports Issues", leads to the "Provider Reports Insufficiently Precise/Inaccurate Notices" task. This is followed by the "DSC Investigates Reported Issues" task.
+
+The outcome of the investigation is then evaluated at a decision point. If the "Investigation Finds Grounds for Revocation", the "DSC Revokes Trusted Flagger Status" task is performed. This is followed by a series of decision points, which eventually lead to the "DSC Communicates Revocation to Commission and Board" task. This task then leads to the "Commission Publishes Trusted Flagger Database" task.
+
+If the "Investigation Finds No Grounds for Revocation", the "DSC Suspends Trusted Flagger Status During Investigation" task is executed. This is followed by a series of decision points, which then lead to the "DSC Revokes Trusted Flagger Status" task. This task, in turn, leads to a series of decision points, culminating in the "DSC Communicates Revocation to Commission and Board" task, which then leads to the "Commission Publishes Trusted Flagger Database" task.
+
+Another path from the "DSC Suspends Trusted Flagger Status During Investigation" task leads to the "DSC Closes Investigation" task. This task is followed by a series of decision points. One path from these decision points leads to the "DSC Communicates Status Update to Commission and Board" task, which then leads to the "Commission Publishes Trusted Flagger Database" task. Another path from these decision points also leads to the "DSC Communicates Status Update to Commission and Board" task, which again leads to the "Commission Publishes Trusted Flagger Database" task.
+
+The process also includes a path where the "Commission Issues Guidelines if Necessary" task is performed, followed by a decision point. If the condition is "true", the "Commission Publishes Trusted Flagger Database" task is executed.
+
+The "Commission Publishes Trusted Flagger Database" task appears in multiple branches of the process.
+
+If the application for Trusted Flagger Status "Does Not Meet Conditions", the "Reject Application" task is performed, and the process ends at an "endevent".
+
+The process model also contains several "escalate" events, indicated by a caret symbol, which seem to represent points where the process might escalate or terminate. These escalate events are connected to various decision points.

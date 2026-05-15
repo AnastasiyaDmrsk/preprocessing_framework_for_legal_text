@@ -1,0 +1,49 @@
+The process begins with a start event. The first step is to "Determine Licence Category". Following this, there is a decision point.
+
+If the licence category is "AM Category", the process proceeds to another decision point.
+If the licence category is not "AM Category", it is labeled as "AM Category - Not Required". This path then leads to a decision point.
+
+From the "AM Category" path, if it's not "AM Category - Not Required", it leads to a decision point.
+From the "AM Category - Not Required" path, it leads to a decision point.
+
+The process then branches based on whether it's a "Renewal" or "First Issuance".
+
+If it's a "Renewal":
+A medical examination is conducted.
+Following the medical examination, there are multiple decision points, each leading to an "Assess Fitness to Drive" task. After assessing fitness to drive, there are further decision points that eventually merge back.
+
+If it's a "First Issuance":
+A medical examination is conducted.
+Similar to the "Renewal" path, there are multiple decision points, each followed by an "Assess Fitness to Drive" task, with subsequent decision points merging back.
+
+There's another path from the initial "AM Category - Not Required" decision point, which also leads to a "First Issuance" scenario. This path also involves a medical examination, followed by multiple "Assess Fitness to Drive" tasks and subsequent decision points.
+
+After these branches, the process converges at a point where the "AM Category - Not Required" decision is made again, leading to a merge.
+
+Another main branch from the initial "Determine Licence Category" step is for "Other Categories".
+If it's "Other Categories":
+This path also branches into "Renewal" and "First Issuance".
+
+If it's a "Renewal" under "Other Categories":
+A medical examination is conducted.
+This is followed by multiple "Assess Fitness to Drive" tasks and subsequent decision points.
+
+If it's a "First Issuance" under "Other Categories":
+A medical examination is conducted.
+This is also followed by multiple "Assess Fitness to Drive" tasks and subsequent decision points.
+
+After these branches, the process converges again.
+
+There is a point where "Medical Conditions Identified" is considered.
+If medical conditions are identified, an "Apply Alternative Measures" task is performed.
+This task leads to a decision point with two outcomes: "Non-compliance or Incorrect Info" and "Compliance".
+If there is "Non-compliance or Incorrect Info", a task to "Address Non-compliance" is performed.
+If there is "Compliance", the process moves to a decision point.
+
+From the "Compliance" path, if there is "No Significant Change" in fitness, a license is issued or renewed.
+If there is a "Significant Change in Fitness", a medical examination is conducted again.
+This medical examination is followed by multiple "Assess Fitness to Drive" tasks, each with several decision points. These decision points lead to escalations.
+
+The process also includes several points where tasks like "Assess Fitness to Drive" are followed by numerous decision points that all seem to lead to an escalation.
+
+The process concludes with an end event.
