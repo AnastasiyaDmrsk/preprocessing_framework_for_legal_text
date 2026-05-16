@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.signavio.com"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============================================================ -->
+   <!-- COLLABORATION                                                 -->
+   <!-- ============================================================ -->
+   <collaboration id="collab_1">
+      <participant id="pool_Commission" name="Commission" processRef="proc_Commission"/>
+      <participant id="pool_ENISA" name="ENISA" processRef="proc_ENISA"/>
+      <participant id="pool_ECCG" name="ECCG" processRef="proc_ECCG"/>
+      <participant id="pool_MgmtBoard" name="Management Board" processRef="proc_MgmtBoard"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_CommissionRequestToENISA" name="request" sourceRef="task_RequestSchemePreparation" targetRef="startEvt_ENISA_ReceiveRequest"/>
+      <messageFlow id="mf_ECCGRequestToENISA" name="request (ECCG)" sourceRef="task_ECCG_RequestPreparation" targetRef="startEvt_ENISA_ReceiveRequest"/>
+      <messageFlow id="mf_RefusalToMgmtBoard" name="refusal decision" sourceRef="task_RefuseRequest" targetRef="startEvt_MgmtBoard"/>
+      <messageFlow id="mf_ECCGProvideAdvice" name="assistance and opinion" sourceRef="task_ProvideAssistanceAdoptOpinion" targetRef="task_TakeAccountOfOpinion"/>
+      <messageFlow id="mf_TransmitToCommission" name="candidate scheme" sourceRef="task_TransmitCandidateScheme" targetRef="task_AdoptImplementingActs"/>
+      <messageFlow id="mf_EvaluationTrigger" name="revision request" sourceRef="task_RequestRevision" targetRef="evt_EvaluationStart"/>
+   </collaboration>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Commission                                           -->
+   <!-- ============================================================ -->
+   <process id="proc_Commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_Commission">
+         <lane id="lane_Commission" name="Commission">
+            <flowNodeRef>startEvt_Commission</flowNodeRef>
+            <flowNodeRef>task_RequestSchemePreparation</flowNodeRef>
+            <flowNodeRef>task_AdoptImplementingActs</flowNodeRef>
+            <flowNodeRef>task_RequestRevision</flowNodeRef>
+            <flowNodeRef>endEvt_Commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="startEvt_Commission" name="Start">
+         <outgoing>sf_c1</outgoing>
+      </startEvent>
+      <task id="task_RequestSchemePreparation" name="Request preparation or review of certification scheme">
+         <incoming>sf_c1</incoming>
+         <outgoing>sf_c2</outgoing>
+      </task>
+      <task id="task_AdoptImplementingActs" name="Adopt implementing acts for certification scheme">
+         <incoming>sf_c2</incoming>
+         <outgoing>sf_c3</outgoing>
+      </task>
+      <task id="task_RequestRevision" name="Request revision of scheme (if necessary)">
+         <incoming>sf_c3</incoming>
+         <outgoing>sf_c4</outgoing>
+      </task>
+      <endEvent id="endEvt_Commission" name="End">
+         <incoming>sf_c4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_c1" sourceRef="startEvt_Commission" targetRef="task_RequestSchemePreparation"/>
+      <sequenceFlow id="sf_c2" sourceRef="task_RequestSchemePreparation" targetRef="task_AdoptImplementingActs"/>
+      <sequenceFlow id="sf_c3" sourceRef="task_AdoptImplementingActs" targetRef="task_RequestRevision"/>
+      <sequenceFlow id="sf_c4" sourceRef="task_RequestRevision" targetRef="endEvt_Commission"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: ENISA                                                -->
+   <!-- ============================================================ -->
+   <process id="proc_ENISA" name="ENISA" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_ENISA">
+         <lane id="lane_ENISA" name="ENISA">
+            <flowNodeRef>startEvt_ENISA_ReceiveRequest</flowNodeRef>
+            <flowNodeRef>gw_AcceptOrRefuse</flowNodeRef>
+            <flowNodeRef>task_RefuseRequest</flowNodeRef>
+            <flowNodeRef>endEvt_ENISA_Refused</flowNodeRef>
+            <flowNodeRef>task_ConsultStakeholders</flowNodeRef>
+            <flowNodeRef>task_EstablishWorkingGroup</flowNodeRef>
+            <flowNodeRef>task_TakeAccountOfOpinion</flowNodeRef>
+            <flowNodeRef>task_TransmitCandidateScheme</flowNodeRef>
+            <flowNodeRef>evt_EvaluationStart</flowNodeRef>
+            <flowNodeRef>task_EvaluateScheme</flowNodeRef>
+            <flowNodeRef>endEvt_ENISA</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="startEvt_ENISA_ReceiveRequest" name="Receive request">
+         <outgoing>sf_e1</outgoing>
+         <messageEventDefinition id="msgEvtDef_ReceiveRequest"/>
+      </startEvent>
+
+      <exclusiveGateway id="gw_AcceptOrRefuse" name="Accept request?" gatewayDirection="Diverging">
+         <incoming>sf_e1</incoming>
+         <outgoing>sf_e_refuse</outgoing>
+         <outgoing>sf_e_accept</outgoing>
+      </exclusiveGateway>
+
+      <!-- Refuse path -->
+      <task id="task_RefuseRequest" name="Refuse request and give reasons">
+         <incoming>sf_e_refuse</incoming>
+         <outgoing>sf_e_refuseEnd</outgoing>
+      </task>
+      <endEvent id="endEvt_ENISA_Refused" name="Request refused">
+         <incoming>sf_e_refuseEnd</incoming>
+      </endEvent>
+
+      <!-- Accept path -->
+      <task id="task_ConsultStakeholders" name="Consult relevant stakeholders">
+         <incoming>sf_e_accept</incoming>
+         <outgoing>sf_e3</outgoing>
+      </task>
+      <task id="task_EstablishWorkingGroup" name="Establish ad hoc working group">
+         <incoming>sf_e3</incoming>
+         <outgoing>sf_e4</outgoing>
+      </task>
+      <task id="task_TakeAccountOfOpinion" name="Take utmost account of ECCG opinion">
+         <incoming>sf_e4</incoming>
+         <outgoing>sf_e5</outgoing>
+      </task>
+      <task id="task_TransmitCandidateScheme" name="Transmit candidate scheme to Commission">
+         <incoming>sf_e5</incoming>
+         <outgoing>sf_e6</outgoing>
+      </task>
+
+      <intermediateCatchEvent id="evt_EvaluationStart" name="Evaluation cycle (every 5 years)">
+         <incoming>sf_e6</incoming>
+         <outgoing>sf_e7</outgoing>
+         <timerEventDefinition id="timerDef_eval">
+            <timeCycle>R/P5Y</timeCycle>
+         </timerEventDefinition>
+      </intermediateCatchEvent>
+
+      <task id="task_EvaluateScheme" name="Evaluate adopted certification scheme">
+         <incoming>sf_e7</incoming>
+         <outgoing>sf_e8</outgoing>
+      </task>
+      <endEvent id="endEvt_ENISA" name="End">
+         <incoming>sf_e8</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_e1" sourceRef="startEvt_ENISA_ReceiveRequest" targetRef="gw_AcceptOrRefuse"/>
+      <sequenceFlow id="sf_e_refuse" name="Refuse" sourceRef="gw_AcceptOrRefuse" targetRef="task_RefuseRequest"/>
+      <sequenceFlow id="sf_e_accept" name="Accept" sourceRef="gw_AcceptOrRefuse" targetRef="task_ConsultStakeholders"/>
+      <sequenceFlow id="sf_e_refuseEnd" sourceRef="task_RefuseRequest" targetRef="endEvt_ENISA_Refused"/>
+      <sequenceFlow id="sf_e3" sourceRef="task_ConsultStakeholders" targetRef="task_EstablishWorkingGroup"/>
+      <sequenceFlow id="sf_e4" sourceRef="task_EstablishWorkingGroup" targetRef="task_TakeAccountOfOpinion"/>
+      <sequenceFlow id="sf_e5" sourceRef="task_TakeAccountOfOpinion" targetRef="task_TransmitCandidateScheme"/>
+      <sequenceFlow id="sf_e6" sourceRef="task_TransmitCandidateScheme" targetRef="evt_EvaluationStart"/>
+      <sequenceFlow id="sf_e7" sourceRef="evt_EvaluationStart" targetRef="task_EvaluateScheme"/>
+      <sequenceFlow id="sf_e8" sourceRef="task_EvaluateScheme" targetRef="endEvt_ENISA"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: ECCG                                                 -->
+   <!-- ============================================================ -->
+   <process id="proc_ECCG" name="ECCG" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_ECCG">
+         <lane id="lane_ECCG" name="ECCG">
+            <flowNodeRef>startEvt_ECCG</flowNodeRef>
+            <flowNodeRef>task_ECCG_RequestPreparation</flowNodeRef>
+            <flowNodeRef>task_ProvideAssistanceAdoptOpinion</flowNodeRef>
+            <flowNodeRef>task_UpdateRollingWorkProgramme</flowNodeRef>
+            <flowNodeRef>endEvt_ECCG</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="startEvt_ECCG" name="Start">
+         <outgoing>sf_g1</outgoing>
+      </startEvent>
+      <task id="task_ECCG_RequestPreparation" name="Request ENISA to prepare or review scheme">
+         <incoming>sf_g1</incoming>
+         <outgoing>sf_g2</outgoing>
+      </task>
+      <task id="task_ProvideAssistanceAdoptOpinion" name="Provide assistance and adopt opinion on candidate scheme">
+         <incoming>sf_g2</incoming>
+         <outgoing>sf_g3</outgoing>
+      </task>
+      <task id="task_UpdateRollingWorkProgramme" name="Update Union rolling work programme">
+         <incoming>sf_g3</incoming>
+         <outgoing>sf_g4</outgoing>
+      </task>
+      <endEvent id="endEvt_ECCG" name="End">
+         <incoming>sf_g4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_g1" sourceRef="startEvt_ECCG" targetRef="task_ECCG_RequestPreparation"/>
+      <sequenceFlow id="sf_g2" sourceRef="task_ECCG_RequestPreparation" targetRef="task_ProvideAssistanceAdoptOpinion"/>
+      <sequenceFlow id="sf_g3" sourceRef="task_ProvideAssistanceAdoptOpinion" targetRef="task_UpdateRollingWorkProgramme"/>
+      <sequenceFlow id="sf_g4" sourceRef="task_UpdateRollingWorkProgramme" targetRef="endEvt_ECCG"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- PROCESS: Management Board                                     -->
+   <!-- ============================================================ -->
+   <process id="proc_MgmtBoard" name="Management Board" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_MgmtBoard">
+         <lane id="lane_MgmtBoard" name="Management Board">
+            <flowNodeRef>startEvt_MgmtBoard</flowNodeRef>
+            <flowNodeRef>task_DecideOnRefusal</flowNodeRef>
+            <flowNodeRef>endEvt_MgmtBoard</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="startEvt_MgmtBoard" name="Receive refusal case">
+         <outgoing>sf_m1</outgoing>
+         <messageEventDefinition id="msgEvtDef_MgmtBoard"/>
+      </startEvent>
+      <task id="task_DecideOnRefusal" name="Take decision on refusal of request">
+         <incoming>sf_m1</incoming>
+         <outgoing>sf_m2</outgoing>
+      </task>
+      <endEvent id="endEvt_MgmtBoard" name="End">
+         <incoming>sf_m2</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_m1" sourceRef="startEvt_MgmtBoard" targetRef="task_DecideOnRefusal"/>
+      <sequenceFlow id="sf_m2" sourceRef="task_DecideOnRefusal" targetRef="endEvt_MgmtBoard"/>
+   </process>
+
+   <!-- ============================================================ -->
+   <!-- DIAGRAM (DI)                                                  -->
+   <!-- ============================================================ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- === POOL: Commission === -->
+         <bpmndi:BPMNShape bpmnElement="pool_Commission" id="shape_pool_Commission" isHorizontal="true">
+            <omgdc:Bounds x="60" y="30" width="1440" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_Commission" id="shape_lane_Commission" isHorizontal="true">
+            <omgdc:Bounds x="90" y="30" width="1410" height="150"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="startEvt_Commission" id="shape_startEvt_Commission">
+            <omgdc:Bounds x="140" y="90" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_RequestSchemePreparation" id="shape_task_RequestScheme">
+            <omgdc:Bounds x="220" y="65" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_AdoptImplementingActs" id="shape_task_AdoptActs">
+            <omgdc:Bounds x="1020" y="65" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_RequestRevision" id="shape_task_RequestRevision">
+            <omgdc:Bounds x="1270" y="65" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvt_Commission" id="shape_endEvt_Commission">
+            <omgdc:Bounds x="1450" y="91" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_c1" id="edge_sf_c1">
+            <omgdi:waypoint x="170" y="105"/>
+            <omgdi:waypoint x="220" y="105"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c2" id="edge_sf_c2">
+            <omgdi:waypoint x="420" y="105"/>
+            <omgdi:waypoint x="1020" y="105"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c3" id="edge_sf_c3">
+            <omgdi:waypoint x="1220" y="105"/>
+            <omgdi:waypoint x="1270" y="105"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c4" id="edge_sf_c4">
+            <omgdi:waypoint x="1410" y="105"/>
+            <omgdi:waypoint x="1450" y="105"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: ENISA === -->
+         <bpmndi:BPMNShape bpmnElement="pool_ENISA" id="shape_pool_ENISA" isHorizontal="true">
+            <omgdc:Bounds x="60" y="210" width="1440" height="300"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ENISA" id="shape_lane_ENISA" isHorizontal="true">
+            <omgdc:Bounds x="90" y="210" width="1410" height="300"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="startEvt_ENISA_ReceiveRequest" id="shape_startEvt_ENISA">
+            <omgdc:Bounds x="140" y="335" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="gw_AcceptOrRefuse" id="shape_gw_AcceptOrRefuse" isMarkerVisible="true">
+            <omgdc:Bounds x="230" y="330" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- Refuse path (upper) -->
+         <bpmndi:BPMNShape bpmnElement="task_RefuseRequest" id="shape_task_RefuseRequest">
+            <omgdc:Bounds x="320" y="230" width="180" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvt_ENISA_Refused" id="shape_endEvt_ENISA_Refused">
+            <omgdc:Bounds x="550" y="246" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+         <!-- Accept path (lower main) -->
+         <bpmndi:BPMNShape bpmnElement="task_ConsultStakeholders" id="shape_task_Consult">
+            <omgdc:Bounds x="340" y="390" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_EstablishWorkingGroup" id="shape_task_EstWG">
+            <omgdc:Bounds x="550" y="390" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_TakeAccountOfOpinion" id="shape_task_TakeAccount">
+            <omgdc:Bounds x="760" y="390" width="170" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_TransmitCandidateScheme" id="shape_task_Transmit">
+            <omgdc:Bounds x="980" y="390" width="200" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="evt_EvaluationStart" id="shape_evt_EvalStart">
+            <omgdc:Bounds x="1215" y="405" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_EvaluateScheme" id="shape_task_Evaluate">
+            <omgdc:Bounds x="1280" y="390" width="140" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvt_ENISA" id="shape_endEvt_ENISA">
+            <omgdc:Bounds x="1450" y="406" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_e1" id="edge_sf_e1">
+            <omgdi:waypoint x="170" y="350"/>
+            <omgdi:waypoint x="230" y="350"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e_refuse" id="edge_sf_e_refuse">
+            <omgdi:waypoint x="250" y="330"/>
+            <omgdi:waypoint x="250" y="260"/>
+            <omgdi:waypoint x="320" y="260"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e_accept" id="edge_sf_e_accept">
+            <omgdi:waypoint x="250" y="370"/>
+            <omgdi:waypoint x="250" y="420"/>
+            <omgdi:waypoint x="340" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e_refuseEnd" id="edge_sf_e_refuseEnd">
+            <omgdi:waypoint x="500" y="260"/>
+            <omgdi:waypoint x="550" y="260"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e3" id="edge_sf_e3">
+            <omgdi:waypoint x="500" y="420"/>
+            <omgdi:waypoint x="550" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e4" id="edge_sf_e4">
+            <omgdi:waypoint x="710" y="420"/>
+            <omgdi:waypoint x="760" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5" id="edge_sf_e5">
+            <omgdi:waypoint x="930" y="420"/>
+            <omgdi:waypoint x="980" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6" id="edge_sf_e6">
+            <omgdi:waypoint x="1180" y="420"/>
+            <omgdi:waypoint x="1215" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e7" id="edge_sf_e7">
+            <omgdi:waypoint x="1245" y="420"/>
+            <omgdi:waypoint x="1280" y="420"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e8" id="edge_sf_e8">
+            <omgdi:waypoint x="1420" y="420"/>
+            <omgdi:waypoint x="1450" y="420"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: ECCG === -->
+         <bpmndi:BPMNShape bpmnElement="pool_ECCG" id="shape_pool_ECCG" isHorizontal="true">
+            <omgdc:Bounds x="60" y="540" width="1440" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_ECCG" id="shape_lane_ECCG" isHorizontal="true">
+            <omgdc:Bounds x="90" y="540" width="1410" height="150"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="startEvt_ECCG" id="shape_startEvt_ECCG">
+            <omgdc:Bounds x="140" y="600" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ECCG_RequestPreparation" id="shape_task_ECCG_Request">
+            <omgdc:Bounds x="220" y="580" width="200" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_ProvideAssistanceAdoptOpinion" id="shape_task_ProvideAdvice">
+            <omgdc:Bounds x="760" y="580" width="200" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_UpdateRollingWorkProgramme" id="shape_task_UpdateWP">
+            <omgdc:Bounds x="1020" y="580" width="200" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvt_ECCG" id="shape_endEvt_ECCG">
+            <omgdc:Bounds x="1270" y="596" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_g1" id="edge_sf_g1">
+            <omgdi:waypoint x="170" y="615"/>
+            <omgdi:waypoint x="220" y="610"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_g2" id="edge_sf_g2">
+            <omgdi:waypoint x="420" y="610"/>
+            <omgdi:waypoint x="760" y="610"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_g3" id="edge_sf_g3">
+            <omgdi:waypoint x="960" y="610"/>
+            <omgdi:waypoint x="1020" y="610"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_g4" id="edge_sf_g4">
+            <omgdi:waypoint x="1220" y="610"/>
+            <omgdi:waypoint x="1270" y="610"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: Management Board === -->
+         <bpmndi:BPMNShape bpmnElement="pool_MgmtBoard" id="shape_pool_MgmtBoard" isHorizontal="true">
+            <omgdc:Bounds x="60" y="720" width="1440" height="130"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_MgmtBoard" id="shape_lane_MgmtBoard" isHorizontal="true">
+            <omgdc:Bounds x="90" y="720" width="1410" height="130"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="startEvt_MgmtBoard" id="shape_startEvt_MgmtBoard">
+            <omgdc:Bounds x="370" y="770" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_DecideOnRefusal" id="shape_task_Decide">
+            <omgdc:Bounds x="450" y="755" width="200" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="endEvt_MgmtBoard" id="shape_endEvt_MgmtBoard">
+            <omgdc:Bounds x="700" y="771" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_m1" id="edge_sf_m1">
+            <omgdi:waypoint x="400" y="785"/>
+            <omgdi:waypoint x="450" y="785"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m2" id="edge_sf_m2">
+            <omgdi:waypoint x="650" y="785"/>
+            <omgdi:waypoint x="700" y="785"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === MESSAGE FLOWS === -->
+         <bpmndi:BPMNEdge bpmnElement="mf_CommissionRequestToENISA" id="edge_mf_CommReq">
+            <omgdi:waypoint x="320" y="145"/>
+            <omgdi:waypoint x="155" y="335"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_ECCGRequestToENISA" id="edge_mf_ECCGReq">
+            <omgdi:waypoint x="320" y="580"/>
+            <omgdi:waypoint x="155" y="365"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_RefusalToMgmtBoard" id="edge_mf_Refusal">
+            <omgdi:waypoint x="410" y="290"/>
+            <omgdi:waypoint x="385" y="770"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_ECCGProvideAdvice" id="edge_mf_Advice">
+            <omgdi:waypoint x="860" y="580"/>
+            <omgdi:waypoint x="845" y="450"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_TransmitToCommission" id="edge_mf_Transmit">
+            <omgdi:waypoint x="1080" y="390"/>
+            <omgdi:waypoint x="1120" y="145"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_EvaluationTrigger" id="edge_mf_EvalTrigger">
+            <omgdi:waypoint x="1340" y="145"/>
+            <omgdi:waypoint x="1230" y="405"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+
+</definitions>
