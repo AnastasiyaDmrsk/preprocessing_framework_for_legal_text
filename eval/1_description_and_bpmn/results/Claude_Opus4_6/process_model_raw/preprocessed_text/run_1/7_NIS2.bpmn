@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             exporter="Claude"
+             exporterVersion="1.0"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ============ COLLABORATION ============ -->
+   <collaboration id="collab_1">
+      <participant id="pool_entities" name="Essential / Important Entities" processRef="proc_entities"/>
+      <participant id="pool_csirt" name="CSIRT / Competent Authority" processRef="proc_csirt"/>
+      <participant id="pool_spoc" name="Single Point of Contact" processRef="proc_spoc"/>
+      <participant id="pool_enisa" name="ENISA" processRef="proc_enisa"/>
+      <participant id="pool_commission" name="Commission" processRef="proc_commission"/>
+
+      <!-- Message flows between pools -->
+      <messageFlow id="mf_notify_csirt" name="Significant incident notification" sourceRef="task_notify_incident" targetRef="start_csirt_receive"/>
+      <messageFlow id="mf_early_warning" name="Early warning" sourceRef="task_submit_early_warning" targetRef="task_provide_response"/>
+      <messageFlow id="mf_incident_notif" name="Incident notification" sourceRef="task_submit_incident_notif" targetRef="task_provide_response"/>
+      <messageFlow id="mf_intermediate" name="Intermediate report" sourceRef="task_submit_intermediate" targetRef="task_provide_tech_support"/>
+      <messageFlow id="mf_final_report" name="Final report" sourceRef="task_submit_final_report" targetRef="task_provide_tech_support"/>
+      <messageFlow id="mf_forward_notif" name="Forward notification" sourceRef="task_forward_to_csirt" targetRef="start_spoc"/>
+      <messageFlow id="mf_inform_enisa" name="Inform ENISA" sourceRef="task_inform_ms_enisa" targetRef="start_enisa"/>
+      <messageFlow id="mf_summary_enisa" name="Summary report" sourceRef="task_submit_summary" targetRef="task_receive_summary"/>
+   </collaboration>
+
+   <!-- ============ PROCESS: ENTITIES ============ -->
+   <process id="proc_entities" name="Essential / Important Entities" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_entities">
+         <lane id="lane_entities" name="Entities">
+            <flowNodeRef>start_entities</flowNodeRef>
+            <flowNodeRef>task_notify_incident</flowNodeRef>
+            <flowNodeRef>task_notify_recipients</flowNodeRef>
+            <flowNodeRef>task_report_crossborder</flowNodeRef>
+            <flowNodeRef>gw_par_split</flowNodeRef>
+            <flowNodeRef>task_submit_early_warning</flowNodeRef>
+            <flowNodeRef>task_submit_incident_notif</flowNodeRef>
+            <flowNodeRef>task_submit_intermediate</flowNodeRef>
+            <flowNodeRef>task_submit_final_report</flowNodeRef>
+            <flowNodeRef>task_submit_progress</flowNodeRef>
+            <flowNodeRef>gw_par_join</flowNodeRef>
+            <flowNodeRef>task_communicate_measures</flowNodeRef>
+            <flowNodeRef>end_entities</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_entities" name="Significant incident detected">
+         <outgoing>sf_e1</outgoing>
+      </startEvent>
+      <task id="task_notify_incident" name="Notify CSIRT / competent authority of significant incident">
+         <incoming>sf_e1</incoming>
+         <outgoing>sf_e2</outgoing>
+      </task>
+      <task id="task_notify_recipients" name="Notify recipients of significant incident">
+         <incoming>sf_e2</incoming>
+         <outgoing>sf_e3</outgoing>
+      </task>
+      <task id="task_report_crossborder" name="Report cross-border impact information">
+         <incoming>sf_e3</incoming>
+         <outgoing>sf_e4</outgoing>
+      </task>
+      <parallelGateway id="gw_par_split" name="Submit parallel reports" gatewayDirection="Diverging">
+         <incoming>sf_e4</incoming>
+         <outgoing>sf_e5a</outgoing>
+         <outgoing>sf_e5b</outgoing>
+         <outgoing>sf_e5c</outgoing>
+         <outgoing>sf_e5d</outgoing>
+         <outgoing>sf_e5e</outgoing>
+      </parallelGateway>
+      <task id="task_submit_early_warning" name="Submit early warning (within 24 hours)">
+         <incoming>sf_e5a</incoming>
+         <outgoing>sf_e6a</outgoing>
+      </task>
+      <task id="task_submit_incident_notif" name="Submit incident notification (within 72 hours)">
+         <incoming>sf_e5b</incoming>
+         <outgoing>sf_e6b</outgoing>
+      </task>
+      <task id="task_submit_intermediate" name="Submit intermediate report on request">
+         <incoming>sf_e5c</incoming>
+         <outgoing>sf_e6c</outgoing>
+      </task>
+      <task id="task_submit_final_report" name="Submit final report (within one month)">
+         <incoming>sf_e5d</incoming>
+         <outgoing>sf_e6d</outgoing>
+      </task>
+      <task id="task_submit_progress" name="Submit progress report if incident ongoing">
+         <incoming>sf_e5e</incoming>
+         <outgoing>sf_e6e</outgoing>
+      </task>
+      <parallelGateway id="gw_par_join" name="" gatewayDirection="Converging">
+         <incoming>sf_e6a</incoming>
+         <incoming>sf_e6b</incoming>
+         <incoming>sf_e6c</incoming>
+         <incoming>sf_e6d</incoming>
+         <incoming>sf_e6e</incoming>
+         <outgoing>sf_e7</outgoing>
+      </parallelGateway>
+      <task id="task_communicate_measures" name="Communicate measures / remedies to affected recipients">
+         <incoming>sf_e7</incoming>
+         <outgoing>sf_e8</outgoing>
+      </task>
+      <endEvent id="end_entities" name="End">
+         <incoming>sf_e8</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_e1" sourceRef="start_entities" targetRef="task_notify_incident"/>
+      <sequenceFlow id="sf_e2" sourceRef="task_notify_incident" targetRef="task_notify_recipients"/>
+      <sequenceFlow id="sf_e3" sourceRef="task_notify_recipients" targetRef="task_report_crossborder"/>
+      <sequenceFlow id="sf_e4" sourceRef="task_report_crossborder" targetRef="gw_par_split"/>
+      <sequenceFlow id="sf_e5a" sourceRef="gw_par_split" targetRef="task_submit_early_warning"/>
+      <sequenceFlow id="sf_e5b" sourceRef="gw_par_split" targetRef="task_submit_incident_notif"/>
+      <sequenceFlow id="sf_e5c" sourceRef="gw_par_split" targetRef="task_submit_intermediate"/>
+      <sequenceFlow id="sf_e5d" sourceRef="gw_par_split" targetRef="task_submit_final_report"/>
+      <sequenceFlow id="sf_e5e" sourceRef="gw_par_split" targetRef="task_submit_progress"/>
+      <sequenceFlow id="sf_e6a" sourceRef="task_submit_early_warning" targetRef="gw_par_join"/>
+      <sequenceFlow id="sf_e6b" sourceRef="task_submit_incident_notif" targetRef="gw_par_join"/>
+      <sequenceFlow id="sf_e6c" sourceRef="task_submit_intermediate" targetRef="gw_par_join"/>
+      <sequenceFlow id="sf_e6d" sourceRef="task_submit_final_report" targetRef="gw_par_join"/>
+      <sequenceFlow id="sf_e6e" sourceRef="task_submit_progress" targetRef="gw_par_join"/>
+      <sequenceFlow id="sf_e7" sourceRef="gw_par_join" targetRef="task_communicate_measures"/>
+      <sequenceFlow id="sf_e8" sourceRef="task_communicate_measures" targetRef="end_entities"/>
+   </process>
+
+   <!-- ============ PROCESS: CSIRT / COMPETENT AUTHORITY ============ -->
+   <process id="proc_csirt" name="CSIRT / Competent Authority" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_csirt">
+         <lane id="lane_csirt" name="CSIRT / Competent Authority">
+            <flowNodeRef>start_csirt_receive</flowNodeRef>
+            <flowNodeRef>task_forward_to_csirt</flowNodeRef>
+            <flowNodeRef>task_provide_response</flowNodeRef>
+            <flowNodeRef>task_provide_tech_support</flowNodeRef>
+            <flowNodeRef>task_guidance_law_enforcement</flowNodeRef>
+            <flowNodeRef>task_inform_ms_enisa</flowNodeRef>
+            <flowNodeRef>task_inform_public</flowNodeRef>
+            <flowNodeRef>task_provide_info_competent</flowNodeRef>
+            <flowNodeRef>end_csirt</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_csirt_receive" name="Receive significant incident notification">
+         <outgoing>sf_c1</outgoing>
+         <messageEventDefinition id="med_csirt_start"/>
+      </startEvent>
+      <task id="task_forward_to_csirt" name="Forward notification to CSIRT (if received by competent authority)">
+         <incoming>sf_c1</incoming>
+         <outgoing>sf_c2</outgoing>
+      </task>
+      <task id="task_provide_response" name="Provide response and initial feedback (within 24 hours)">
+         <incoming>sf_c2</incoming>
+         <outgoing>sf_c3</outgoing>
+      </task>
+      <task id="task_provide_tech_support" name="Provide additional technical support">
+         <incoming>sf_c3</incoming>
+         <outgoing>sf_c4</outgoing>
+      </task>
+      <task id="task_guidance_law_enforcement" name="Provide guidance on reporting to law enforcement">
+         <incoming>sf_c4</incoming>
+         <outgoing>sf_c5</outgoing>
+      </task>
+      <task id="task_inform_ms_enisa" name="Inform other affected Member States and ENISA">
+         <incoming>sf_c5</incoming>
+         <outgoing>sf_c6</outgoing>
+      </task>
+      <task id="task_inform_public" name="Inform public about significant incident">
+         <incoming>sf_c6</incoming>
+         <outgoing>sf_c7</outgoing>
+      </task>
+      <task id="task_provide_info_competent" name="Provide information on incidents to competent authorities">
+         <incoming>sf_c7</incoming>
+         <outgoing>sf_c8</outgoing>
+      </task>
+      <endEvent id="end_csirt" name="End">
+         <incoming>sf_c8</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_c1" sourceRef="start_csirt_receive" targetRef="task_forward_to_csirt"/>
+      <sequenceFlow id="sf_c2" sourceRef="task_forward_to_csirt" targetRef="task_provide_response"/>
+      <sequenceFlow id="sf_c3" sourceRef="task_provide_response" targetRef="task_provide_tech_support"/>
+      <sequenceFlow id="sf_c4" sourceRef="task_provide_tech_support" targetRef="task_guidance_law_enforcement"/>
+      <sequenceFlow id="sf_c5" sourceRef="task_guidance_law_enforcement" targetRef="task_inform_ms_enisa"/>
+      <sequenceFlow id="sf_c6" sourceRef="task_inform_ms_enisa" targetRef="task_inform_public"/>
+      <sequenceFlow id="sf_c7" sourceRef="task_inform_public" targetRef="task_provide_info_competent"/>
+      <sequenceFlow id="sf_c8" sourceRef="task_provide_info_competent" targetRef="end_csirt"/>
+   </process>
+
+   <!-- ============ PROCESS: SINGLE POINT OF CONTACT ============ -->
+   <process id="proc_spoc" name="Single Point of Contact" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_spoc">
+         <lane id="lane_spoc" name="Single Point of Contact">
+            <flowNodeRef>start_spoc</flowNodeRef>
+            <flowNodeRef>task_forward_to_other_spoc</flowNodeRef>
+            <flowNodeRef>task_submit_summary</flowNodeRef>
+            <flowNodeRef>end_spoc</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_spoc" name="Receive forwarded notification">
+         <outgoing>sf_s1</outgoing>
+         <messageEventDefinition id="med_spoc_start"/>
+      </startEvent>
+      <task id="task_forward_to_other_spoc" name="Forward notifications to single points of contact of other affected Member States">
+         <incoming>sf_s1</incoming>
+         <outgoing>sf_s2</outgoing>
+      </task>
+      <task id="task_submit_summary" name="Submit summary report to ENISA every three months">
+         <incoming>sf_s2</incoming>
+         <outgoing>sf_s3</outgoing>
+      </task>
+      <endEvent id="end_spoc" name="End">
+         <incoming>sf_s3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_s1" sourceRef="start_spoc" targetRef="task_forward_to_other_spoc"/>
+      <sequenceFlow id="sf_s2" sourceRef="task_forward_to_other_spoc" targetRef="task_submit_summary"/>
+      <sequenceFlow id="sf_s3" sourceRef="task_submit_summary" targetRef="end_spoc"/>
+   </process>
+
+   <!-- ============ PROCESS: ENISA ============ -->
+   <process id="proc_enisa" name="ENISA" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_enisa">
+         <lane id="lane_enisa" name="ENISA">
+            <flowNodeRef>start_enisa</flowNodeRef>
+            <flowNodeRef>task_receive_summary</flowNodeRef>
+            <flowNodeRef>task_adopt_guidance</flowNodeRef>
+            <flowNodeRef>task_inform_coop_group</flowNodeRef>
+            <flowNodeRef>end_enisa</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_enisa" name="Receive information from CSIRT / Member States">
+         <outgoing>sf_n1</outgoing>
+         <messageEventDefinition id="med_enisa_start"/>
+      </startEvent>
+      <task id="task_receive_summary" name="Receive summary report from single point of contact">
+         <incoming>sf_n1</incoming>
+         <outgoing>sf_n2</outgoing>
+      </task>
+      <task id="task_adopt_guidance" name="Adopt technical guidance on information parameters">
+         <incoming>sf_n2</incoming>
+         <outgoing>sf_n3</outgoing>
+      </task>
+      <task id="task_inform_coop_group" name="Inform Cooperation Group and CSIRTs network every six months">
+         <incoming>sf_n3</incoming>
+         <outgoing>sf_n4</outgoing>
+      </task>
+      <endEvent id="end_enisa" name="End">
+         <incoming>sf_n4</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_n1" sourceRef="start_enisa" targetRef="task_receive_summary"/>
+      <sequenceFlow id="sf_n2" sourceRef="task_receive_summary" targetRef="task_adopt_guidance"/>
+      <sequenceFlow id="sf_n3" sourceRef="task_adopt_guidance" targetRef="task_inform_coop_group"/>
+      <sequenceFlow id="sf_n4" sourceRef="task_inform_coop_group" targetRef="end_enisa"/>
+   </process>
+
+   <!-- ============ PROCESS: COMMISSION ============ -->
+   <process id="proc_commission" name="Commission" isExecutable="false" isClosed="false" processType="None">
+      <laneSet id="ls_commission">
+         <lane id="lane_commission" name="Commission">
+            <flowNodeRef>start_commission</flowNodeRef>
+            <flowNodeRef>task_adopt_implementing</flowNodeRef>
+            <flowNodeRef>task_exchange_advice</flowNodeRef>
+            <flowNodeRef>end_commission</flowNodeRef>
+         </lane>
+      </laneSet>
+
+      <startEvent id="start_commission" name="Start">
+         <outgoing>sf_m1</outgoing>
+      </startEvent>
+      <task id="task_adopt_implementing" name="Adopt implementing acts specifying notification type, format and procedure">
+         <incoming>sf_m1</incoming>
+         <outgoing>sf_m2</outgoing>
+      </task>
+      <task id="task_exchange_advice" name="Exchange advice and cooperate with Cooperation Group on draft implementing acts">
+         <incoming>sf_m2</incoming>
+         <outgoing>sf_m3</outgoing>
+      </task>
+      <endEvent id="end_commission" name="End">
+         <incoming>sf_m3</incoming>
+      </endEvent>
+
+      <sequenceFlow id="sf_m1" sourceRef="start_commission" targetRef="task_adopt_implementing"/>
+      <sequenceFlow id="sf_m2" sourceRef="task_adopt_implementing" targetRef="task_exchange_advice"/>
+      <sequenceFlow id="sf_m3" sourceRef="task_exchange_advice" targetRef="end_commission"/>
+   </process>
+
+   <!-- ============ DIAGRAM (DI) ============ -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- ===== POOL: Entities (y=60, height=350) ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_entities" id="shape_pool_entities" isHorizontal="true">
+            <omgdc:Bounds x="60" y="60" width="1700" height="350"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_entities" id="shape_lane_entities" isHorizontal="true">
+            <omgdc:Bounds x="90" y="60" width="1670" height="350"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Start -->
+         <bpmndi:BPMNShape bpmnElement="start_entities" id="shape_start_entities">
+            <omgdc:Bounds x="130" y="212" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <!-- Notify incident -->
+         <bpmndi:BPMNShape bpmnElement="task_notify_incident" id="shape_task_notify_incident">
+            <omgdc:Bounds x="210" y="190" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <!-- Notify recipients -->
+         <bpmndi:BPMNShape bpmnElement="task_notify_recipients" id="shape_task_notify_recipients">
+            <omgdc:Bounds x="390" y="190" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <!-- Report cross-border -->
+         <bpmndi:BPMNShape bpmnElement="task_report_crossborder" id="shape_task_report_crossborder">
+            <omgdc:Bounds x="570" y="190" width="140" height="80"/>
+         </bpmndi:BPMNShape>
+         <!-- Parallel split -->
+         <bpmndi:BPMNShape bpmnElement="gw_par_split" id="shape_gw_par_split" isMarkerVisible="true">
+            <omgdc:Bounds x="750" y="210" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- Early warning -->
+         <bpmndi:BPMNShape bpmnElement="task_submit_early_warning" id="shape_task_submit_early_warning">
+            <omgdc:Bounds x="840" y="80" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- Incident notification -->
+         <bpmndi:BPMNShape bpmnElement="task_submit_incident_notif" id="shape_task_submit_incident_notif">
+            <omgdc:Bounds x="840" y="150" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- Intermediate report -->
+         <bpmndi:BPMNShape bpmnElement="task_submit_intermediate" id="shape_task_submit_intermediate">
+            <omgdc:Bounds x="840" y="220" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- Final report -->
+         <bpmndi:BPMNShape bpmnElement="task_submit_final_report" id="shape_task_submit_final_report">
+            <omgdc:Bounds x="840" y="290" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- Progress report -->
+         <bpmndi:BPMNShape bpmnElement="task_submit_progress" id="shape_task_submit_progress">
+            <omgdc:Bounds x="840" y="360" width="160" height="60"/>
+         </bpmndi:BPMNShape>
+         <!-- Parallel join -->
+         <bpmndi:BPMNShape bpmnElement="gw_par_join" id="shape_gw_par_join" isMarkerVisible="true">
+            <omgdc:Bounds x="1060" y="210" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <!-- Communicate measures -->
+         <bpmndi:BPMNShape bpmnElement="task_communicate_measures" id="shape_task_communicate_measures">
+            <omgdc:Bounds x="1150" y="190" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <!-- End -->
+         <bpmndi:BPMNShape bpmnElement="end_entities" id="shape_end_entities">
+            <omgdc:Bounds x="1360" y="216" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence flows - Entities -->
+         <bpmndi:BPMNEdge bpmnElement="sf_e1" id="edge_sf_e1">
+            <omgdi:waypoint x="166" y="230"/>
+            <omgdi:waypoint x="210" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e2" id="edge_sf_e2">
+            <omgdi:waypoint x="350" y="230"/>
+            <omgdi:waypoint x="390" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e3" id="edge_sf_e3">
+            <omgdi:waypoint x="530" y="230"/>
+            <omgdi:waypoint x="570" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e4" id="edge_sf_e4">
+            <omgdi:waypoint x="710" y="230"/>
+            <omgdi:waypoint x="750" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5a" id="edge_sf_e5a">
+            <omgdi:waypoint x="790" y="220"/>
+            <omgdi:waypoint x="790" y="110"/>
+            <omgdi:waypoint x="840" y="110"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5b" id="edge_sf_e5b">
+            <omgdi:waypoint x="790" y="220"/>
+            <omgdi:waypoint x="790" y="180"/>
+            <omgdi:waypoint x="840" y="180"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5c" id="edge_sf_e5c">
+            <omgdi:waypoint x="790" y="240"/>
+            <omgdi:waypoint x="790" y="250"/>
+            <omgdi:waypoint x="840" y="250"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5d" id="edge_sf_e5d">
+            <omgdi:waypoint x="790" y="250"/>
+            <omgdi:waypoint x="790" y="320"/>
+            <omgdi:waypoint x="840" y="320"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e5e" id="edge_sf_e5e">
+            <omgdi:waypoint x="790" y="250"/>
+            <omgdi:waypoint x="790" y="390"/>
+            <omgdi:waypoint x="840" y="390"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6a" id="edge_sf_e6a">
+            <omgdi:waypoint x="1000" y="110"/>
+            <omgdi:waypoint x="1080" y="110"/>
+            <omgdi:waypoint x="1080" y="210"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6b" id="edge_sf_e6b">
+            <omgdi:waypoint x="1000" y="180"/>
+            <omgdi:waypoint x="1080" y="180"/>
+            <omgdi:waypoint x="1080" y="210"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6c" id="edge_sf_e6c">
+            <omgdi:waypoint x="1000" y="250"/>
+            <omgdi:waypoint x="1080" y="250"/>
+            <omgdi:waypoint x="1080" y="240"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6d" id="edge_sf_e6d">
+            <omgdi:waypoint x="1000" y="320"/>
+            <omgdi:waypoint x="1080" y="320"/>
+            <omgdi:waypoint x="1080" y="250"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e6e" id="edge_sf_e6e">
+            <omgdi:waypoint x="1000" y="390"/>
+            <omgdi:waypoint x="1080" y="390"/>
+            <omgdi:waypoint x="1080" y="250"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e7" id="edge_sf_e7">
+            <omgdi:waypoint x="1100" y="230"/>
+            <omgdi:waypoint x="1150" y="230"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_e8" id="edge_sf_e8">
+            <omgdi:waypoint x="1310" y="230"/>
+            <omgdi:waypoint x="1360" y="230"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== POOL: CSIRT / Competent Authority (y=450, height=180) ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_csirt" id="shape_pool_csirt" isHorizontal="true">
+            <omgdc:Bounds x="60" y="450" width="1700" height="180"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_csirt" id="shape_lane_csirt" isHorizontal="true">
+            <omgdc:Bounds x="90" y="450" width="1670" height="180"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_csirt_receive" id="shape_start_csirt_receive">
+            <omgdc:Bounds x="130" y="522" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_forward_to_csirt" id="shape_task_forward_to_csirt">
+            <omgdc:Bounds x="210" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_provide_response" id="shape_task_provide_response">
+            <omgdc:Bounds x="410" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_provide_tech_support" id="shape_task_provide_tech_support">
+            <omgdc:Bounds x="610" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_guidance_law_enforcement" id="shape_task_guidance_law_enforcement">
+            <omgdc:Bounds x="810" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_ms_enisa" id="shape_task_inform_ms_enisa">
+            <omgdc:Bounds x="1010" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_public" id="shape_task_inform_public">
+            <omgdc:Bounds x="1210" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_provide_info_competent" id="shape_task_provide_info_competent">
+            <omgdc:Bounds x="1410" y="500" width="160" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_csirt" id="shape_end_csirt">
+            <omgdc:Bounds x="1620" y="526" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Sequence flows - CSIRT -->
+         <bpmndi:BPMNEdge bpmnElement="sf_c1" id="edge_sf_c1">
+            <omgdi:waypoint x="166" y="540"/>
+            <omgdi:waypoint x="210" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c2" id="edge_sf_c2">
+            <omgdi:waypoint x="370" y="540"/>
+            <omgdi:waypoint x="410" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c3" id="edge_sf_c3">
+            <omgdi:waypoint x="570" y="540"/>
+            <omgdi:waypoint x="610" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c4" id="edge_sf_c4">
+            <omgdi:waypoint x="770" y="540"/>
+            <omgdi:waypoint x="810" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c5" id="edge_sf_c5">
+            <omgdi:waypoint x="970" y="540"/>
+            <omgdi:waypoint x="1010" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c6" id="edge_sf_c6">
+            <omgdi:waypoint x="1170" y="540"/>
+            <omgdi:waypoint x="1210" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c7" id="edge_sf_c7">
+            <omgdi:waypoint x="1370" y="540"/>
+            <omgdi:waypoint x="1410" y="540"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_c8" id="edge_sf_c8">
+            <omgdi:waypoint x="1570" y="540"/>
+            <omgdi:waypoint x="1620" y="540"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== POOL: Single Point of Contact (y=670, height=140) ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_spoc" id="shape_pool_spoc" isHorizontal="true">
+            <omgdc:Bounds x="60" y="670" width="1000" height="140"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_spoc" id="shape_lane_spoc" isHorizontal="true">
+            <omgdc:Bounds x="90" y="670" width="970" height="140"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_spoc" id="shape_start_spoc">
+            <omgdc:Bounds x="130" y="722" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_forward_to_other_spoc" id="shape_task_forward_to_other_spoc">
+            <omgdc:Bounds x="220" y="700" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_submit_summary" id="shape_task_submit_summary">
+            <omgdc:Bounds x="480" y="700" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_spoc" id="shape_end_spoc">
+            <omgdc:Bounds x="740" y="726" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_s1" id="edge_sf_s1">
+            <omgdi:waypoint x="166" y="740"/>
+            <omgdi:waypoint x="220" y="740"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_s2" id="edge_sf_s2">
+            <omgdi:waypoint x="420" y="740"/>
+            <omgdi:waypoint x="480" y="740"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_s3" id="edge_sf_s3">
+            <omgdi:waypoint x="680" y="740"/>
+            <omgdi:waypoint x="740" y="740"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== POOL: ENISA (y=850, height=140) ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_enisa" id="shape_pool_enisa" isHorizontal="true">
+            <omgdc:Bounds x="60" y="850" width="1000" height="140"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_enisa" id="shape_lane_enisa" isHorizontal="true">
+            <omgdc:Bounds x="90" y="850" width="970" height="140"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_enisa" id="shape_start_enisa">
+            <omgdc:Bounds x="130" y="902" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_receive_summary" id="shape_task_receive_summary">
+            <omgdc:Bounds x="220" y="880" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_guidance" id="shape_task_adopt_guidance">
+            <omgdc:Bounds x="470" y="880" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_inform_coop_group" id="shape_task_inform_coop_group">
+            <omgdc:Bounds x="720" y="880" width="200" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_enisa" id="shape_end_enisa">
+            <omgdc:Bounds x="970" y="906" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_n1" id="edge_sf_n1">
+            <omgdi:waypoint x="166" y="920"/>
+            <omgdi:waypoint x="220" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_n2" id="edge_sf_n2">
+            <omgdi:waypoint x="420" y="920"/>
+            <omgdi:waypoint x="470" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_n3" id="edge_sf_n3">
+            <omgdi:waypoint x="670" y="920"/>
+            <omgdi:waypoint x="720" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_n4" id="edge_sf_n4">
+            <omgdi:waypoint x="920" y="920"/>
+            <omgdi:waypoint x="970" y="920"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== POOL: Commission (y=1030, height=140) ===== -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="shape_pool_commission" isHorizontal="true">
+            <omgdc:Bounds x="60" y="1030" width="1000" height="140"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_commission" id="shape_lane_commission" isHorizontal="true">
+            <omgdc:Bounds x="90" y="1030" width="970" height="140"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNShape bpmnElement="start_commission" id="shape_start_commission">
+            <omgdc:Bounds x="130" y="1082" width="36" height="36"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_adopt_implementing" id="shape_task_adopt_implementing">
+            <omgdc:Bounds x="220" y="1060" width="250" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_exchange_advice" id="shape_task_exchange_advice">
+            <omgdc:Bounds x="520" y="1060" width="250" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_commission" id="shape_end_commission">
+            <omgdc:Bounds x="820" y="1086" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <bpmndi:BPMNEdge bpmnElement="sf_m1" id="edge_sf_m1">
+            <omgdi:waypoint x="166" y="1100"/>
+            <omgdi:waypoint x="220" y="1100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m2" id="edge_sf_m2">
+            <omgdi:waypoint x="470" y="1100"/>
+            <omgdi:waypoint x="520" y="1100"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_m3" id="edge_sf_m3">
+            <omgdi:waypoint x="770" y="1100"/>
+            <omgdi:waypoint x="820" y="1100"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- ===== MESSAGE FLOWS ===== -->
+         <bpmndi:BPMNEdge bpmnElement="mf_notify_csirt" id="edge_mf_notify_csirt">
+            <omgdi:waypoint x="280" y="270"/>
+            <omgdi:waypoint x="148" y="522"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_early_warning" id="edge_mf_early_warning">
+            <omgdi:waypoint x="920" y="140"/>
+            <omgdi:waypoint x="490" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_incident_notif" id="edge_mf_incident_notif">
+            <omgdi:waypoint x="920" y="210"/>
+            <omgdi:waypoint x="490" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_intermediate" id="edge_mf_intermediate">
+            <omgdi:waypoint x="920" y="280"/>
+            <omgdi:waypoint x="690" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_final_report" id="edge_mf_final_report">
+            <omgdi:waypoint x="920" y="350"/>
+            <omgdi:waypoint x="690" y="500"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_forward_notif" id="edge_mf_forward_notif">
+            <omgdi:waypoint x="290" y="580"/>
+            <omgdi:waypoint x="148" y="722"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_inform_enisa" id="edge_mf_inform_enisa">
+            <omgdi:waypoint x="1090" y="580"/>
+            <omgdi:waypoint x="148" y="902"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_summary_enisa" id="edge_mf_summary_enisa">
+            <omgdi:waypoint x="580" y="780"/>
+            <omgdi:waypoint x="320" y="880"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+</definitions>

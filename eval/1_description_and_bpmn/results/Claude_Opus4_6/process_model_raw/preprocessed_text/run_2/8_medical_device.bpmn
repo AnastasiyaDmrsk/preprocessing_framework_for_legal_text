@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  targetNamespace="http://example.org/bpmn"
+  id="definitions_1">
+  <collaboration id="collab_1">
+    <participant id="pool_manufacturers" name="Manufacturers" processRef="proc_manufacturers"/>
+  </collaboration>
+  <process id="proc_manufacturers" name="Manufacturers" isExecutable="false">
+    <laneSet id="ls_1">
+      <lane id="lane_manufacturers" name="Manufacturers">
+        <flowNodeRef>start_evt</flowNodeRef>
+        <flowNodeRef>task_1</flowNodeRef>
+        <flowNodeRef>task_2</flowNodeRef>
+        <flowNodeRef>task_3</flowNodeRef>
+        <flowNodeRef>task_4</flowNodeRef>
+        <flowNodeRef>task_5</flowNodeRef>
+        <flowNodeRef>task_6</flowNodeRef>
+        <flowNodeRef>task_7</flowNodeRef>
+        <flowNodeRef>task_8</flowNodeRef>
+        <flowNodeRef>gw_par_split</flowNodeRef>
+        <flowNodeRef>task_9a</flowNodeRef>
+        <flowNodeRef>task_9b</flowNodeRef>
+        <flowNodeRef>task_9c</flowNodeRef>
+        <flowNodeRef>task_9d</flowNodeRef>
+        <flowNodeRef>task_9e</flowNodeRef>
+        <flowNodeRef>task_9f</flowNodeRef>
+        <flowNodeRef>task_9g</flowNodeRef>
+        <flowNodeRef>task_9h</flowNodeRef>
+        <flowNodeRef>task_9i</flowNodeRef>
+        <flowNodeRef>task_9j</flowNodeRef>
+        <flowNodeRef>task_9k</flowNodeRef>
+        <flowNodeRef>task_9l</flowNodeRef>
+        <flowNodeRef>task_9m</flowNodeRef>
+        <flowNodeRef>gw_par_join</flowNodeRef>
+        <flowNodeRef>task_10</flowNodeRef>
+        <flowNodeRef>task_11</flowNodeRef>
+        <flowNodeRef>task_12</flowNodeRef>
+        <flowNodeRef>task_13</flowNodeRef>
+        <flowNodeRef>task_14</flowNodeRef>
+        <flowNodeRef>task_15</flowNodeRef>
+        <flowNodeRef>task_16</flowNodeRef>
+        <flowNodeRef>end_evt</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_evt" name="Start">
+      <outgoing>sf_start_1</outgoing>
+    </startEvent>
+    <task id="task_1" name="Ensure devices designed and manufactured IAW requirements">
+      <incoming>sf_start_1</incoming>
+      <outgoing>sf_1_2</outgoing>
+    </task>
+    <task id="task_2" name="Establish and maintain risk management system">
+      <incoming>sf_1_2</incoming>
+      <outgoing>sf_2_3</outgoing>
+    </task>
+    <task id="task_3" name="Conduct clinical evaluation including PMCF">
+      <incoming>sf_2_3</incoming>
+      <outgoing>sf_3_4</outgoing>
+    </task>
+    <task id="task_4" name="Draw up and maintain technical documentation (non-custom)">
+      <incoming>sf_3_4</incoming>
+      <outgoing>sf_4_5</outgoing>
+    </task>
+    <task id="task_5" name="Draw up and maintain documentation (custom devices)">
+      <incoming>sf_4_5</incoming>
+      <outgoing>sf_5_6</outgoing>
+    </task>
+    <task id="task_6" name="Draw up EU declaration of conformity and affix CE marking">
+      <incoming>sf_5_6</incoming>
+      <outgoing>sf_6_7</outgoing>
+    </task>
+    <task id="task_7" name="Comply with UDI system and registration obligations">
+      <incoming>sf_6_7</incoming>
+      <outgoing>sf_7_8</outgoing>
+    </task>
+    <task id="task_8" name="Keep documentation available for competent authorities">
+      <incoming>sf_7_8</incoming>
+      <outgoing>sf_8_split</outgoing>
+    </task>
+    <parallelGateway id="gw_par_split" name="Split QMS aspects" gatewayDirection="Diverging">
+      <incoming>sf_8_split</incoming>
+      <outgoing>sf_split_task_9a</outgoing>
+      <outgoing>sf_split_task_9b</outgoing>
+      <outgoing>sf_split_task_9c</outgoing>
+      <outgoing>sf_split_task_9d</outgoing>
+      <outgoing>sf_split_task_9e</outgoing>
+      <outgoing>sf_split_task_9f</outgoing>
+      <outgoing>sf_split_task_9g</outgoing>
+      <outgoing>sf_split_task_9h</outgoing>
+      <outgoing>sf_split_task_9i</outgoing>
+      <outgoing>sf_split_task_9j</outgoing>
+      <outgoing>sf_split_task_9k</outgoing>
+      <outgoing>sf_split_task_9l</outgoing>
+      <outgoing>sf_split_task_9m</outgoing>
+    </parallelGateway>
+    <task id="task_9a" name="Address regulatory compliance strategy">
+      <incoming>sf_split_task_9a</incoming>
+      <outgoing>sf_task_9a_join</outgoing>
+    </task>
+    <task id="task_9b" name="Identify safety and performance requirements">
+      <incoming>sf_split_task_9b</incoming>
+      <outgoing>sf_task_9b_join</outgoing>
+    </task>
+    <task id="task_9c" name="Define management responsibility">
+      <incoming>sf_split_task_9c</incoming>
+      <outgoing>sf_task_9c_join</outgoing>
+    </task>
+    <task id="task_9d" name="Manage resources and suppliers">
+      <incoming>sf_split_task_9d</incoming>
+      <outgoing>sf_task_9d_join</outgoing>
+    </task>
+    <task id="task_9e" name="Manage risks (Annex I)">
+      <incoming>sf_split_task_9e</incoming>
+      <outgoing>sf_task_9e_join</outgoing>
+    </task>
+    <task id="task_9f" name="Conduct clinical evaluation (QMS)">
+      <incoming>sf_split_task_9f</incoming>
+      <outgoing>sf_task_9f_join</outgoing>
+    </task>
+    <task id="task_9g" name="Manage product realisation">
+      <incoming>sf_split_task_9g</incoming>
+      <outgoing>sf_task_9g_join</outgoing>
+    </task>
+    <task id="task_9h" name="Verify UDI assignments">
+      <incoming>sf_split_task_9h</incoming>
+      <outgoing>sf_task_9h_join</outgoing>
+    </task>
+    <task id="task_9i" name="Set up post-market surveillance system">
+      <incoming>sf_split_task_9i</incoming>
+      <outgoing>sf_task_9i_join</outgoing>
+    </task>
+    <task id="task_9j" name="Handle stakeholder communication">
+      <incoming>sf_split_task_9j</incoming>
+      <outgoing>sf_task_9j_join</outgoing>
+    </task>
+    <task id="task_9k" name="Report serious incidents and field safety corrective actions">
+      <incoming>sf_split_task_9k</incoming>
+      <outgoing>sf_task_9k_join</outgoing>
+    </task>
+    <task id="task_9l" name="Manage corrective and preventive actions">
+      <incoming>sf_split_task_9l</incoming>
+      <outgoing>sf_task_9l_join</outgoing>
+    </task>
+    <task id="task_9m" name="Monitor, measure output and improve">
+      <incoming>sf_split_task_9m</incoming>
+      <outgoing>sf_task_9m_join</outgoing>
+    </task>
+    <parallelGateway id="gw_par_join" name="Join QMS aspects" gatewayDirection="Converging">
+      <incoming>sf_task_9a_join</incoming>
+      <incoming>sf_task_9b_join</incoming>
+      <incoming>sf_task_9c_join</incoming>
+      <incoming>sf_task_9d_join</incoming>
+      <incoming>sf_task_9e_join</incoming>
+      <incoming>sf_task_9f_join</incoming>
+      <incoming>sf_task_9g_join</incoming>
+      <incoming>sf_task_9h_join</incoming>
+      <incoming>sf_task_9i_join</incoming>
+      <incoming>sf_task_9j_join</incoming>
+      <incoming>sf_task_9k_join</incoming>
+      <incoming>sf_task_9l_join</incoming>
+      <incoming>sf_task_9m_join</incoming>
+      <outgoing>sf_join_10</outgoing>
+    </parallelGateway>
+    <task id="task_10" name="Implement and maintain post-market surveillance system">
+      <incoming>sf_join_10</incoming>
+      <outgoing>sf_10_11</outgoing>
+    </task>
+    <task id="task_11" name="Ensure device accompanied by required information">
+      <incoming>sf_10_11</incoming>
+      <outgoing>sf_11_12</outgoing>
+    </task>
+    <task id="task_12" name="Take corrective action for non-conforming devices">
+      <incoming>sf_11_12</incoming>
+      <outgoing>sf_12_13</outgoing>
+    </task>
+    <task id="task_13" name="Have system for recording and reporting incidents">
+      <incoming>sf_12_13</incoming>
+      <outgoing>sf_13_14</outgoing>
+    </task>
+    <task id="task_14" name="Provide information and cooperate with competent authority">
+      <incoming>sf_13_14</incoming>
+      <outgoing>sf_14_15</outgoing>
+    </task>
+    <task id="task_15" name="Submit information on designer/manufacturer identity">
+      <incoming>sf_14_15</incoming>
+      <outgoing>sf_15_16</outgoing>
+    </task>
+    <task id="task_16" name="Have financial coverage measures for liability">
+      <incoming>sf_15_16</incoming>
+      <outgoing>sf_16_end</outgoing>
+    </task>
+    <endEvent id="end_evt" name="End">
+      <incoming>sf_16_end</incoming>
+    </endEvent>
+    <sequenceFlow id="sf_start_1" sourceRef="start_evt" targetRef="task_1"/>
+    <sequenceFlow id="sf_1_2" sourceRef="task_1" targetRef="task_2"/>
+    <sequenceFlow id="sf_2_3" sourceRef="task_2" targetRef="task_3"/>
+    <sequenceFlow id="sf_3_4" sourceRef="task_3" targetRef="task_4"/>
+    <sequenceFlow id="sf_4_5" sourceRef="task_4" targetRef="task_5"/>
+    <sequenceFlow id="sf_5_6" sourceRef="task_5" targetRef="task_6"/>
+    <sequenceFlow id="sf_6_7" sourceRef="task_6" targetRef="task_7"/>
+    <sequenceFlow id="sf_7_8" sourceRef="task_7" targetRef="task_8"/>
+    <sequenceFlow id="sf_8_split" sourceRef="task_8" targetRef="gw_par_split"/>
+    <sequenceFlow id="sf_split_task_9a" sourceRef="gw_par_split" targetRef="task_9a"/>
+    <sequenceFlow id="sf_split_task_9b" sourceRef="gw_par_split" targetRef="task_9b"/>
+    <sequenceFlow id="sf_split_task_9c" sourceRef="gw_par_split" targetRef="task_9c"/>
+    <sequenceFlow id="sf_split_task_9d" sourceRef="gw_par_split" targetRef="task_9d"/>
+    <sequenceFlow id="sf_split_task_9e" sourceRef="gw_par_split" targetRef="task_9e"/>
+    <sequenceFlow id="sf_split_task_9f" sourceRef="gw_par_split" targetRef="task_9f"/>
+    <sequenceFlow id="sf_split_task_9g" sourceRef="gw_par_split" targetRef="task_9g"/>
+    <sequenceFlow id="sf_split_task_9h" sourceRef="gw_par_split" targetRef="task_9h"/>
+    <sequenceFlow id="sf_split_task_9i" sourceRef="gw_par_split" targetRef="task_9i"/>
+    <sequenceFlow id="sf_split_task_9j" sourceRef="gw_par_split" targetRef="task_9j"/>
+    <sequenceFlow id="sf_split_task_9k" sourceRef="gw_par_split" targetRef="task_9k"/>
+    <sequenceFlow id="sf_split_task_9l" sourceRef="gw_par_split" targetRef="task_9l"/>
+    <sequenceFlow id="sf_split_task_9m" sourceRef="gw_par_split" targetRef="task_9m"/>
+    <sequenceFlow id="sf_task_9a_join" sourceRef="task_9a" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9b_join" sourceRef="task_9b" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9c_join" sourceRef="task_9c" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9d_join" sourceRef="task_9d" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9e_join" sourceRef="task_9e" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9f_join" sourceRef="task_9f" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9g_join" sourceRef="task_9g" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9h_join" sourceRef="task_9h" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9i_join" sourceRef="task_9i" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9j_join" sourceRef="task_9j" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9k_join" sourceRef="task_9k" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9l_join" sourceRef="task_9l" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_task_9m_join" sourceRef="task_9m" targetRef="gw_par_join"/>
+    <sequenceFlow id="sf_join_10" sourceRef="gw_par_join" targetRef="task_10"/>
+    <sequenceFlow id="sf_10_11" sourceRef="task_10" targetRef="task_11"/>
+    <sequenceFlow id="sf_11_12" sourceRef="task_11" targetRef="task_12"/>
+    <sequenceFlow id="sf_12_13" sourceRef="task_12" targetRef="task_13"/>
+    <sequenceFlow id="sf_13_14" sourceRef="task_13" targetRef="task_14"/>
+    <sequenceFlow id="sf_14_15" sourceRef="task_14" targetRef="task_15"/>
+    <sequenceFlow id="sf_15_16" sourceRef="task_15" targetRef="task_16"/>
+    <sequenceFlow id="sf_16_end" sourceRef="task_16" targetRef="end_evt"/>
+  </process>
+  <bpmndi:BPMNDiagram id="diagram_1">
+    <bpmndi:BPMNPlane id="plane_1" bpmnElement="collab_1">
+      <bpmndi:BPMNShape id="pool_manufacturers_di" bpmnElement="pool_manufacturers" isHorizontal="true">
+        <omgdc:Bounds x="60" y="50" width="2790" height="1360"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lane_manufacturers_di" bpmnElement="lane_manufacturers" isHorizontal="true">
+        <omgdc:Bounds x="90" y="50" width="2760" height="1360"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="start_evt_di" bpmnElement="start_evt">
+        <omgdc:Bounds x="110.0" y="715.0" width="30.0" height="30.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_1_di" bpmnElement="task_1">
+        <omgdc:Bounds x="170.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_2_di" bpmnElement="task_2">
+        <omgdc:Bounds x="320.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_3_di" bpmnElement="task_3">
+        <omgdc:Bounds x="470.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_4_di" bpmnElement="task_4">
+        <omgdc:Bounds x="620.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_5_di" bpmnElement="task_5">
+        <omgdc:Bounds x="770.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_6_di" bpmnElement="task_6">
+        <omgdc:Bounds x="920.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_7_di" bpmnElement="task_7">
+        <omgdc:Bounds x="1070.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_8_di" bpmnElement="task_8">
+        <omgdc:Bounds x="1220.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_par_split_di" bpmnElement="gw_par_split">
+        <omgdc:Bounds x="1370.0" y="705.0" width="50.0" height="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9a_di" bpmnElement="task_9a">
+        <omgdc:Bounds x="1450.0" y="90.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9b_di" bpmnElement="task_9b">
+        <omgdc:Bounds x="1450.0" y="190.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9c_di" bpmnElement="task_9c">
+        <omgdc:Bounds x="1450.0" y="290.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9d_di" bpmnElement="task_9d">
+        <omgdc:Bounds x="1450.0" y="390.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9e_di" bpmnElement="task_9e">
+        <omgdc:Bounds x="1450.0" y="490.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9f_di" bpmnElement="task_9f">
+        <omgdc:Bounds x="1450.0" y="590.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9g_di" bpmnElement="task_9g">
+        <omgdc:Bounds x="1450.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9h_di" bpmnElement="task_9h">
+        <omgdc:Bounds x="1450.0" y="790.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9i_di" bpmnElement="task_9i">
+        <omgdc:Bounds x="1450.0" y="890.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9j_di" bpmnElement="task_9j">
+        <omgdc:Bounds x="1450.0" y="990.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9k_di" bpmnElement="task_9k">
+        <omgdc:Bounds x="1450.0" y="1090.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9l_di" bpmnElement="task_9l">
+        <omgdc:Bounds x="1450.0" y="1190.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_9m_di" bpmnElement="task_9m">
+        <omgdc:Bounds x="1450.0" y="1290.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_par_join_di" bpmnElement="gw_par_join">
+        <omgdc:Bounds x="1600.0" y="705.0" width="50.0" height="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_10_di" bpmnElement="task_10">
+        <omgdc:Bounds x="1680.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_11_di" bpmnElement="task_11">
+        <omgdc:Bounds x="1830.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_12_di" bpmnElement="task_12">
+        <omgdc:Bounds x="1980.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_13_di" bpmnElement="task_13">
+        <omgdc:Bounds x="2130.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_14_di" bpmnElement="task_14">
+        <omgdc:Bounds x="2280.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_15_di" bpmnElement="task_15">
+        <omgdc:Bounds x="2430.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_16_di" bpmnElement="task_16">
+        <omgdc:Bounds x="2580.0" y="690.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end_evt_di" bpmnElement="end_evt">
+        <omgdc:Bounds x="2730.0" y="715.0" width="30.0" height="30.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="sf_start_1_di" bpmnElement="sf_start_1">
+        <omgdi:waypoint x="140.0" y="730.0"/>
+        <omgdi:waypoint x="170.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_1_2_di" bpmnElement="sf_1_2">
+        <omgdi:waypoint x="290.0" y="730.0"/>
+        <omgdi:waypoint x="320.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_2_3_di" bpmnElement="sf_2_3">
+        <omgdi:waypoint x="440.0" y="730.0"/>
+        <omgdi:waypoint x="470.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_3_4_di" bpmnElement="sf_3_4">
+        <omgdi:waypoint x="590.0" y="730.0"/>
+        <omgdi:waypoint x="620.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_4_5_di" bpmnElement="sf_4_5">
+        <omgdi:waypoint x="740.0" y="730.0"/>
+        <omgdi:waypoint x="770.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_5_6_di" bpmnElement="sf_5_6">
+        <omgdi:waypoint x="890.0" y="730.0"/>
+        <omgdi:waypoint x="920.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_6_7_di" bpmnElement="sf_6_7">
+        <omgdi:waypoint x="1040.0" y="730.0"/>
+        <omgdi:waypoint x="1070.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_7_8_di" bpmnElement="sf_7_8">
+        <omgdi:waypoint x="1190.0" y="730.0"/>
+        <omgdi:waypoint x="1220.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_8_split_di" bpmnElement="sf_8_split">
+        <omgdi:waypoint x="1340.0" y="730.0"/>
+        <omgdi:waypoint x="1370.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9a_di" bpmnElement="sf_split_task_9a">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="130.0"/>
+        <omgdi:waypoint x="1450.0" y="130.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9b_di" bpmnElement="sf_split_task_9b">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="230.0"/>
+        <omgdi:waypoint x="1450.0" y="230.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9c_di" bpmnElement="sf_split_task_9c">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="330.0"/>
+        <omgdi:waypoint x="1450.0" y="330.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9d_di" bpmnElement="sf_split_task_9d">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="430.0"/>
+        <omgdi:waypoint x="1450.0" y="430.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9e_di" bpmnElement="sf_split_task_9e">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="530.0"/>
+        <omgdi:waypoint x="1450.0" y="530.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9f_di" bpmnElement="sf_split_task_9f">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="630.0"/>
+        <omgdi:waypoint x="1450.0" y="630.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9g_di" bpmnElement="sf_split_task_9g">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1450.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9h_di" bpmnElement="sf_split_task_9h">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="830.0"/>
+        <omgdi:waypoint x="1450.0" y="830.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9i_di" bpmnElement="sf_split_task_9i">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="930.0"/>
+        <omgdi:waypoint x="1450.0" y="930.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9j_di" bpmnElement="sf_split_task_9j">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="1030.0"/>
+        <omgdi:waypoint x="1450.0" y="1030.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9k_di" bpmnElement="sf_split_task_9k">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="1130.0"/>
+        <omgdi:waypoint x="1450.0" y="1130.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9l_di" bpmnElement="sf_split_task_9l">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="1230.0"/>
+        <omgdi:waypoint x="1450.0" y="1230.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_split_task_9m_di" bpmnElement="sf_split_task_9m">
+        <omgdi:waypoint x="1420.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="730.0"/>
+        <omgdi:waypoint x="1435.0" y="1330.0"/>
+        <omgdi:waypoint x="1450.0" y="1330.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9a_join_di" bpmnElement="sf_task_9a_join">
+        <omgdi:waypoint x="1570.0" y="130.0"/>
+        <omgdi:waypoint x="1585.0" y="130.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9b_join_di" bpmnElement="sf_task_9b_join">
+        <omgdi:waypoint x="1570.0" y="230.0"/>
+        <omgdi:waypoint x="1585.0" y="230.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9c_join_di" bpmnElement="sf_task_9c_join">
+        <omgdi:waypoint x="1570.0" y="330.0"/>
+        <omgdi:waypoint x="1585.0" y="330.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9d_join_di" bpmnElement="sf_task_9d_join">
+        <omgdi:waypoint x="1570.0" y="430.0"/>
+        <omgdi:waypoint x="1585.0" y="430.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9e_join_di" bpmnElement="sf_task_9e_join">
+        <omgdi:waypoint x="1570.0" y="530.0"/>
+        <omgdi:waypoint x="1585.0" y="530.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9f_join_di" bpmnElement="sf_task_9f_join">
+        <omgdi:waypoint x="1570.0" y="630.0"/>
+        <omgdi:waypoint x="1585.0" y="630.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9g_join_di" bpmnElement="sf_task_9g_join">
+        <omgdi:waypoint x="1570.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9h_join_di" bpmnElement="sf_task_9h_join">
+        <omgdi:waypoint x="1570.0" y="830.0"/>
+        <omgdi:waypoint x="1585.0" y="830.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9i_join_di" bpmnElement="sf_task_9i_join">
+        <omgdi:waypoint x="1570.0" y="930.0"/>
+        <omgdi:waypoint x="1585.0" y="930.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9j_join_di" bpmnElement="sf_task_9j_join">
+        <omgdi:waypoint x="1570.0" y="1030.0"/>
+        <omgdi:waypoint x="1585.0" y="1030.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9k_join_di" bpmnElement="sf_task_9k_join">
+        <omgdi:waypoint x="1570.0" y="1130.0"/>
+        <omgdi:waypoint x="1585.0" y="1130.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9l_join_di" bpmnElement="sf_task_9l_join">
+        <omgdi:waypoint x="1570.0" y="1230.0"/>
+        <omgdi:waypoint x="1585.0" y="1230.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_task_9m_join_di" bpmnElement="sf_task_9m_join">
+        <omgdi:waypoint x="1570.0" y="1330.0"/>
+        <omgdi:waypoint x="1585.0" y="1330.0"/>
+        <omgdi:waypoint x="1585.0" y="730.0"/>
+        <omgdi:waypoint x="1600.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_join_10_di" bpmnElement="sf_join_10">
+        <omgdi:waypoint x="1650.0" y="730.0"/>
+        <omgdi:waypoint x="1680.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_10_11_di" bpmnElement="sf_10_11">
+        <omgdi:waypoint x="1800.0" y="730.0"/>
+        <omgdi:waypoint x="1830.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_11_12_di" bpmnElement="sf_11_12">
+        <omgdi:waypoint x="1950.0" y="730.0"/>
+        <omgdi:waypoint x="1980.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_12_13_di" bpmnElement="sf_12_13">
+        <omgdi:waypoint x="2100.0" y="730.0"/>
+        <omgdi:waypoint x="2130.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_13_14_di" bpmnElement="sf_13_14">
+        <omgdi:waypoint x="2250.0" y="730.0"/>
+        <omgdi:waypoint x="2280.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_14_15_di" bpmnElement="sf_14_15">
+        <omgdi:waypoint x="2400.0" y="730.0"/>
+        <omgdi:waypoint x="2430.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_15_16_di" bpmnElement="sf_15_16">
+        <omgdi:waypoint x="2550.0" y="730.0"/>
+        <omgdi:waypoint x="2580.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_16_end_di" bpmnElement="sf_16_end">
+        <omgdi:waypoint x="2700.0" y="730.0"/>
+        <omgdi:waypoint x="2730.0" y="730.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

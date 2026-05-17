@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             exporter="Claude"
+             exporterVersion="1.0"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+  <!-- ======================== COLLABORATION ======================== -->
+  <collaboration id="collab_1">
+    <participant id="pool_providers" name="Providers of Online Platforms" processRef="proc_providers"/>
+    <participant id="pool_tf" name="Trusted Flaggers" processRef="proc_tf"/>
+    <participant id="pool_dsc" name="Digital Services Coordinator" processRef="proc_dsc"/>
+    <participant id="pool_commission" name="Commission" processRef="proc_commission"/>
+
+    <!-- Message Flows -->
+    <messageFlow id="mf_notices" name="notices" sourceRef="task_tf1" targetRef="start_p_msg"/>
+    <messageFlow id="mf_reports" name="reports" sourceRef="task_tf4" targetRef="task_dsc4"/>
+    <messageFlow id="mf_names" name="names, addresses, emails" sourceRef="task_dsc4" targetRef="task_c1"/>
+    <messageFlow id="mf_info_to_dsc" name="information" sourceRef="task_c3" targetRef="task_dsc_react"/>
+    <messageFlow id="mf_provider_info" name="information about insufficiently precise notices" sourceRef="task_p2" targetRef="task_c3"/>
+  </collaboration>
+
+  <!-- ======================== PROCESS: PROVIDERS ======================== -->
+  <process id="proc_providers" name="Providers of Online Platforms" isExecutable="false">
+    <laneSet id="ls_providers">
+      <lane id="lane_providers">
+        <flowNodeRef>start_p_msg</flowNodeRef>
+        <flowNodeRef>task_p1</flowNodeRef>
+        <flowNodeRef>task_p2</flowNodeRef>
+        <flowNodeRef>end_p</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_p_msg" name="Receive notices from trusted flaggers">
+      <messageEventDefinition id="msgdef_start_p"/>
+      <outgoing>flow_p1</outgoing>
+    </startEvent>
+    <task id="task_p1" name="Give priority and process notices">
+      <incoming>flow_p1</incoming>
+      <outgoing>flow_p2</outgoing>
+    </task>
+    <task id="task_p2" name="Decide upon notices">
+      <incoming>flow_p2</incoming>
+      <outgoing>flow_p3</outgoing>
+    </task>
+    <endEvent id="end_p" name="End">
+      <incoming>flow_p3</incoming>
+    </endEvent>
+    <sequenceFlow id="flow_p1" sourceRef="start_p_msg" targetRef="task_p1"/>
+    <sequenceFlow id="flow_p2" sourceRef="task_p1" targetRef="task_p2"/>
+    <sequenceFlow id="flow_p3" sourceRef="task_p2" targetRef="end_p"/>
+  </process>
+
+  <!-- ======================== PROCESS: TRUSTED FLAGGERS ======================== -->
+  <process id="proc_tf" name="Trusted Flaggers" isExecutable="false">
+    <laneSet id="ls_tf">
+      <lane id="lane_tf">
+        <flowNodeRef>start_tf</flowNodeRef>
+        <flowNodeRef>task_tf1</flowNodeRef>
+        <flowNodeRef>pg_fork_tf</flowNodeRef>
+        <flowNodeRef>task_tf3a</flowNodeRef>
+        <flowNodeRef>task_tf3b</flowNodeRef>
+        <flowNodeRef>task_tf3c</flowNodeRef>
+        <flowNodeRef>pg_join_tf</flowNodeRef>
+        <flowNodeRef>task_tf4</flowNodeRef>
+        <flowNodeRef>end_tf</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_tf" name="Start">
+      <outgoing>flow_tf1</outgoing>
+    </startEvent>
+    <task id="task_tf1" name="Submit notices">
+      <incoming>flow_tf1</incoming>
+      <outgoing>flow_tf2</outgoing>
+    </task>
+    <parallelGateway id="pg_fork_tf" name="" gatewayDirection="Diverging">
+      <incoming>flow_tf2</incoming>
+      <outgoing>flow_tf_to3a</outgoing>
+      <outgoing>flow_tf_to3b</outgoing>
+      <outgoing>flow_tf_to3c</outgoing>
+    </parallelGateway>
+    <task id="task_tf3a" name="Publish report by provider identity">
+      <incoming>flow_tf_to3a</incoming>
+      <outgoing>flow_tf3a_join</outgoing>
+    </task>
+    <task id="task_tf3b" name="Publish report by content type">
+      <incoming>flow_tf_to3b</incoming>
+      <outgoing>flow_tf3b_join</outgoing>
+    </task>
+    <task id="task_tf3c" name="Publish report by action taken">
+      <incoming>flow_tf_to3c</incoming>
+      <outgoing>flow_tf3c_join</outgoing>
+    </task>
+    <parallelGateway id="pg_join_tf" name="" gatewayDirection="Converging">
+      <incoming>flow_tf3a_join</incoming>
+      <incoming>flow_tf3b_join</incoming>
+      <incoming>flow_tf3c_join</incoming>
+      <outgoing>flow_tf_to4</outgoing>
+    </parallelGateway>
+    <task id="task_tf4" name="Send reports to DSC and make publicly available">
+      <incoming>flow_tf_to4</incoming>
+      <outgoing>flow_tf_end</outgoing>
+    </task>
+    <endEvent id="end_tf" name="End">
+      <incoming>flow_tf_end</incoming>
+    </endEvent>
+    <sequenceFlow id="flow_tf1" sourceRef="start_tf" targetRef="task_tf1"/>
+    <sequenceFlow id="flow_tf2" sourceRef="task_tf1" targetRef="pg_fork_tf"/>
+    <sequenceFlow id="flow_tf_to3a" sourceRef="pg_fork_tf" targetRef="task_tf3a"/>
+    <sequenceFlow id="flow_tf_to3b" sourceRef="pg_fork_tf" targetRef="task_tf3b"/>
+    <sequenceFlow id="flow_tf_to3c" sourceRef="pg_fork_tf" targetRef="task_tf3c"/>
+    <sequenceFlow id="flow_tf3a_join" sourceRef="task_tf3a" targetRef="pg_join_tf"/>
+    <sequenceFlow id="flow_tf3b_join" sourceRef="task_tf3b" targetRef="pg_join_tf"/>
+    <sequenceFlow id="flow_tf3c_join" sourceRef="task_tf3c" targetRef="pg_join_tf"/>
+    <sequenceFlow id="flow_tf_to4" sourceRef="pg_join_tf" targetRef="task_tf4"/>
+    <sequenceFlow id="flow_tf_end" sourceRef="task_tf4" targetRef="end_tf"/>
+  </process>
+
+  <!-- ======================== PROCESS: DIGITAL SERVICES COORDINATOR ======================== -->
+  <process id="proc_dsc" name="Digital Services Coordinator" isExecutable="false">
+    <laneSet id="ls_dsc">
+      <lane id="lane_dsc">
+        <flowNodeRef>start_dsc</flowNodeRef>
+        <flowNodeRef>pg_fork_dsc</flowNodeRef>
+        <flowNodeRef>task_dsc2a</flowNodeRef>
+        <flowNodeRef>task_dsc2b</flowNodeRef>
+        <flowNodeRef>task_dsc2c</flowNodeRef>
+        <flowNodeRef>pg_join_dsc</flowNodeRef>
+        <flowNodeRef>task_dsc4</flowNodeRef>
+        <flowNodeRef>task_dsc_react</flowNodeRef>
+        <flowNodeRef>task_dsc_revoke</flowNodeRef>
+        <flowNodeRef>end_dsc</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_dsc" name="Start">
+      <outgoing>flow_dsc1</outgoing>
+    </startEvent>
+    <parallelGateway id="pg_fork_dsc" name="" gatewayDirection="Diverging">
+      <incoming>flow_dsc1</incoming>
+      <outgoing>flow_dsc_to2a</outgoing>
+      <outgoing>flow_dsc_to2b</outgoing>
+      <outgoing>flow_dsc_to2c</outgoing>
+    </parallelGateway>
+    <task id="task_dsc2a" name="Award trusted flagger status (condition a)">
+      <incoming>flow_dsc_to2a</incoming>
+      <outgoing>flow_dsc2a_join</outgoing>
+    </task>
+    <task id="task_dsc2b" name="Award trusted flagger status (condition b)">
+      <incoming>flow_dsc_to2b</incoming>
+      <outgoing>flow_dsc2b_join</outgoing>
+    </task>
+    <task id="task_dsc2c" name="Award trusted flagger status (condition c)">
+      <incoming>flow_dsc_to2c</incoming>
+      <outgoing>flow_dsc2c_join</outgoing>
+    </task>
+    <parallelGateway id="pg_join_dsc" name="" gatewayDirection="Converging">
+      <incoming>flow_dsc2a_join</incoming>
+      <incoming>flow_dsc2b_join</incoming>
+      <incoming>flow_dsc2c_join</incoming>
+      <outgoing>flow_dsc_to4</outgoing>
+    </parallelGateway>
+    <task id="task_dsc4" name="Communicate names, addresses and emails to Commission and Board">
+      <incoming>flow_dsc_to4</incoming>
+      <outgoing>flow_dsc_to_react</outgoing>
+    </task>
+    <task id="task_dsc_react" name="Afford entity opportunity to react">
+      <incoming>flow_dsc_to_react</incoming>
+      <outgoing>flow_dsc_to_revoke</outgoing>
+    </task>
+    <task id="task_dsc_revoke" name="Revoke trusted flagger status">
+      <incoming>flow_dsc_to_revoke</incoming>
+      <outgoing>flow_dsc_end</outgoing>
+    </task>
+    <endEvent id="end_dsc" name="End">
+      <incoming>flow_dsc_end</incoming>
+    </endEvent>
+    <sequenceFlow id="flow_dsc1" sourceRef="start_dsc" targetRef="pg_fork_dsc"/>
+    <sequenceFlow id="flow_dsc_to2a" sourceRef="pg_fork_dsc" targetRef="task_dsc2a"/>
+    <sequenceFlow id="flow_dsc_to2b" sourceRef="pg_fork_dsc" targetRef="task_dsc2b"/>
+    <sequenceFlow id="flow_dsc_to2c" sourceRef="pg_fork_dsc" targetRef="task_dsc2c"/>
+    <sequenceFlow id="flow_dsc2a_join" sourceRef="task_dsc2a" targetRef="pg_join_dsc"/>
+    <sequenceFlow id="flow_dsc2b_join" sourceRef="task_dsc2b" targetRef="pg_join_dsc"/>
+    <sequenceFlow id="flow_dsc2c_join" sourceRef="task_dsc2c" targetRef="pg_join_dsc"/>
+    <sequenceFlow id="flow_dsc_to4" sourceRef="pg_join_dsc" targetRef="task_dsc4"/>
+    <sequenceFlow id="flow_dsc_to_react" sourceRef="task_dsc4" targetRef="task_dsc_react"/>
+    <sequenceFlow id="flow_dsc_to_revoke" sourceRef="task_dsc_react" targetRef="task_dsc_revoke"/>
+    <sequenceFlow id="flow_dsc_end" sourceRef="task_dsc_revoke" targetRef="end_dsc"/>
+  </process>
+
+  <!-- ======================== PROCESS: COMMISSION ======================== -->
+  <process id="proc_commission" name="Commission" isExecutable="false">
+    <laneSet id="ls_commission">
+      <lane id="lane_commission">
+        <flowNodeRef>start_c</flowNodeRef>
+        <flowNodeRef>task_c1</flowNodeRef>
+        <flowNodeRef>task_c2</flowNodeRef>
+        <flowNodeRef>xg_if</flowNodeRef>
+        <flowNodeRef>task_c3</flowNodeRef>
+        <flowNodeRef>task_c4</flowNodeRef>
+        <flowNodeRef>task_c5</flowNodeRef>
+        <flowNodeRef>xg_join</flowNodeRef>
+        <flowNodeRef>task_c6</flowNodeRef>
+        <flowNodeRef>end_c</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start_c" name="Start">
+      <outgoing>flow_c1</outgoing>
+    </startEvent>
+    <task id="task_c1" name="Publish information in publicly available database">
+      <incoming>flow_c1</incoming>
+      <outgoing>flow_c2</outgoing>
+    </task>
+    <task id="task_c2" name="Keep database up to date">
+      <incoming>flow_c2</incoming>
+      <outgoing>flow_c3</outgoing>
+    </task>
+    <exclusiveGateway id="xg_if" name="Provider reports insufficiently precise notices?" gatewayDirection="Diverging">
+      <incoming>flow_c3</incoming>
+      <outgoing>flow_c_yes</outgoing>
+      <outgoing>flow_c_no</outgoing>
+    </exclusiveGateway>
+    <task id="task_c3" name="Communicate information to Digital Services Coordinator">
+      <incoming>flow_c_yes</incoming>
+      <outgoing>flow_c4</outgoing>
+    </task>
+    <task id="task_c4" name="Suspend trusted flagger status">
+      <incoming>flow_c4</incoming>
+      <outgoing>flow_c5</outgoing>
+    </task>
+    <task id="task_c5" name="Carry out investigation">
+      <incoming>flow_c5</incoming>
+      <outgoing>flow_c6</outgoing>
+    </task>
+    <exclusiveGateway id="xg_join" name="" gatewayDirection="Converging">
+      <incoming>flow_c6</incoming>
+      <incoming>flow_c_no</incoming>
+      <outgoing>flow_c7</outgoing>
+    </exclusiveGateway>
+    <task id="task_c6" name="Issue guidelines">
+      <incoming>flow_c7</incoming>
+      <outgoing>flow_c_end</outgoing>
+    </task>
+    <endEvent id="end_c" name="End">
+      <incoming>flow_c_end</incoming>
+    </endEvent>
+    <sequenceFlow id="flow_c1" sourceRef="start_c" targetRef="task_c1"/>
+    <sequenceFlow id="flow_c2" sourceRef="task_c1" targetRef="task_c2"/>
+    <sequenceFlow id="flow_c3" sourceRef="task_c2" targetRef="xg_if"/>
+    <sequenceFlow id="flow_c_yes" name="Yes" sourceRef="xg_if" targetRef="task_c3"/>
+    <sequenceFlow id="flow_c_no" name="No" sourceRef="xg_if" targetRef="xg_join"/>
+    <sequenceFlow id="flow_c4" sourceRef="task_c3" targetRef="task_c4"/>
+    <sequenceFlow id="flow_c5" sourceRef="task_c4" targetRef="task_c5"/>
+    <sequenceFlow id="flow_c6" sourceRef="task_c5" targetRef="xg_join"/>
+    <sequenceFlow id="flow_c7" sourceRef="xg_join" targetRef="task_c6"/>
+    <sequenceFlow id="flow_c_end" sourceRef="task_c6" targetRef="end_c"/>
+  </process>
+
+  <!-- ======================== DIAGRAM (DI) ======================== -->
+  <bpmndi:BPMNDiagram id="diagram_1">
+    <bpmndi:BPMNPlane id="plane_1" bpmnElement="collab_1">
+
+      <!-- ===== POOL: Providers ===== -->
+      <bpmndi:BPMNShape id="shape_pool_providers" bpmnElement="pool_providers" isHorizontal="true">
+        <omgdc:Bounds x="120" y="60" width="700" height="140"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_lane_providers" bpmnElement="lane_providers" isHorizontal="true">
+        <omgdc:Bounds x="150" y="60" width="670" height="140"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_start_p_msg" bpmnElement="start_p_msg">
+        <omgdc:Bounds x="200" y="115" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_p1" bpmnElement="task_p1">
+        <omgdc:Bounds x="290" y="90" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_p2" bpmnElement="task_p2">
+        <omgdc:Bounds x="490" y="90" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_end_p" bpmnElement="end_p">
+        <omgdc:Bounds x="690" y="116" width="28" height="28"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_flow_p1" bpmnElement="flow_p1">
+        <omgdi:waypoint x="230" y="130"/>
+        <omgdi:waypoint x="290" y="130"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_p2" bpmnElement="flow_p2">
+        <omgdi:waypoint x="430" y="130"/>
+        <omgdi:waypoint x="490" y="130"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_p3" bpmnElement="flow_p3">
+        <omgdi:waypoint x="630" y="130"/>
+        <omgdi:waypoint x="690" y="130"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ===== POOL: Trusted Flaggers ===== -->
+      <bpmndi:BPMNShape id="shape_pool_tf" bpmnElement="pool_tf" isHorizontal="true">
+        <omgdc:Bounds x="120" y="220" width="1000" height="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_lane_tf" bpmnElement="lane_tf" isHorizontal="true">
+        <omgdc:Bounds x="150" y="220" width="970" height="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_start_tf" bpmnElement="start_tf">
+        <omgdc:Bounds x="195" y="335" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tf1" bpmnElement="task_tf1">
+        <omgdc:Bounds x="270" y="310" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_pg_fork_tf" bpmnElement="pg_fork_tf">
+        <omgdc:Bounds x="430" y="330" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tf3a" bpmnElement="task_tf3a">
+        <omgdc:Bounds x="510" y="240" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tf3b" bpmnElement="task_tf3b">
+        <omgdc:Bounds x="510" y="320" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tf3c" bpmnElement="task_tf3c">
+        <omgdc:Bounds x="510" y="400" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_pg_join_tf" bpmnElement="pg_join_tf">
+        <omgdc:Bounds x="700" y="330" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_tf4" bpmnElement="task_tf4">
+        <omgdc:Bounds x="780" y="305" width="150" height="90"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_end_tf" bpmnElement="end_tf">
+        <omgdc:Bounds x="970" y="336" width="28" height="28"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_flow_tf1" bpmnElement="flow_tf1">
+        <omgdi:waypoint x="225" y="350"/>
+        <omgdi:waypoint x="270" y="350"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf2" bpmnElement="flow_tf2">
+        <omgdi:waypoint x="390" y="350"/>
+        <omgdi:waypoint x="430" y="350"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf_to3a" bpmnElement="flow_tf_to3a">
+        <omgdi:waypoint x="450" y="330"/>
+        <omgdi:waypoint x="450" y="270"/>
+        <omgdi:waypoint x="510" y="270"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf_to3b" bpmnElement="flow_tf_to3b">
+        <omgdi:waypoint x="470" y="350"/>
+        <omgdi:waypoint x="510" y="350"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf_to3c" bpmnElement="flow_tf_to3c">
+        <omgdi:waypoint x="450" y="370"/>
+        <omgdi:waypoint x="450" y="430"/>
+        <omgdi:waypoint x="510" y="430"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf3a_join" bpmnElement="flow_tf3a_join">
+        <omgdi:waypoint x="660" y="270"/>
+        <omgdi:waypoint x="720" y="270"/>
+        <omgdi:waypoint x="720" y="330"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf3b_join" bpmnElement="flow_tf3b_join">
+        <omgdi:waypoint x="660" y="350"/>
+        <omgdi:waypoint x="700" y="350"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf3c_join" bpmnElement="flow_tf3c_join">
+        <omgdi:waypoint x="660" y="430"/>
+        <omgdi:waypoint x="720" y="430"/>
+        <omgdi:waypoint x="720" y="370"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf_to4" bpmnElement="flow_tf_to4">
+        <omgdi:waypoint x="740" y="350"/>
+        <omgdi:waypoint x="780" y="350"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_tf_end" bpmnElement="flow_tf_end">
+        <omgdi:waypoint x="930" y="350"/>
+        <omgdi:waypoint x="970" y="350"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ===== POOL: DSC ===== -->
+      <bpmndi:BPMNShape id="shape_pool_dsc" bpmnElement="pool_dsc" isHorizontal="true">
+        <omgdc:Bounds x="120" y="500" width="1200" height="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_lane_dsc" bpmnElement="lane_dsc" isHorizontal="true">
+        <omgdc:Bounds x="150" y="500" width="1170" height="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_start_dsc" bpmnElement="start_dsc">
+        <omgdc:Bounds x="195" y="615" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_pg_fork_dsc" bpmnElement="pg_fork_dsc">
+        <omgdc:Bounds x="270" y="610" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc2a" bpmnElement="task_dsc2a">
+        <omgdc:Bounds x="350" y="520" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc2b" bpmnElement="task_dsc2b">
+        <omgdc:Bounds x="350" y="600" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc2c" bpmnElement="task_dsc2c">
+        <omgdc:Bounds x="350" y="680" width="150" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_pg_join_dsc" bpmnElement="pg_join_dsc">
+        <omgdc:Bounds x="540" y="610" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc4" bpmnElement="task_dsc4">
+        <omgdc:Bounds x="620" y="590" width="160" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc_react" bpmnElement="task_dsc_react">
+        <omgdc:Bounds x="830" y="590" width="160" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_dsc_revoke" bpmnElement="task_dsc_revoke">
+        <omgdc:Bounds x="1040" y="590" width="160" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_end_dsc" bpmnElement="end_dsc">
+        <omgdc:Bounds x="1250" y="616" width="28" height="28"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_flow_dsc1" bpmnElement="flow_dsc1">
+        <omgdi:waypoint x="225" y="630"/>
+        <omgdi:waypoint x="270" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to2a" bpmnElement="flow_dsc_to2a">
+        <omgdi:waypoint x="290" y="610"/>
+        <omgdi:waypoint x="290" y="550"/>
+        <omgdi:waypoint x="350" y="550"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to2b" bpmnElement="flow_dsc_to2b">
+        <omgdi:waypoint x="310" y="630"/>
+        <omgdi:waypoint x="350" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to2c" bpmnElement="flow_dsc_to2c">
+        <omgdi:waypoint x="290" y="650"/>
+        <omgdi:waypoint x="290" y="710"/>
+        <omgdi:waypoint x="350" y="710"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc2a_join" bpmnElement="flow_dsc2a_join">
+        <omgdi:waypoint x="500" y="550"/>
+        <omgdi:waypoint x="560" y="550"/>
+        <omgdi:waypoint x="560" y="610"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc2b_join" bpmnElement="flow_dsc2b_join">
+        <omgdi:waypoint x="500" y="630"/>
+        <omgdi:waypoint x="540" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc2c_join" bpmnElement="flow_dsc2c_join">
+        <omgdi:waypoint x="500" y="710"/>
+        <omgdi:waypoint x="560" y="710"/>
+        <omgdi:waypoint x="560" y="650"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to4" bpmnElement="flow_dsc_to4">
+        <omgdi:waypoint x="580" y="630"/>
+        <omgdi:waypoint x="620" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to_react" bpmnElement="flow_dsc_to_react">
+        <omgdi:waypoint x="780" y="630"/>
+        <omgdi:waypoint x="830" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_to_revoke" bpmnElement="flow_dsc_to_revoke">
+        <omgdi:waypoint x="990" y="630"/>
+        <omgdi:waypoint x="1040" y="630"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_dsc_end" bpmnElement="flow_dsc_end">
+        <omgdi:waypoint x="1200" y="630"/>
+        <omgdi:waypoint x="1250" y="630"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ===== POOL: Commission ===== -->
+      <bpmndi:BPMNShape id="shape_pool_commission" bpmnElement="pool_commission" isHorizontal="true">
+        <omgdc:Bounds x="120" y="780" width="1500" height="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_lane_commission" bpmnElement="lane_commission" isHorizontal="true">
+        <omgdc:Bounds x="150" y="780" width="1470" height="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_start_c" bpmnElement="start_c">
+        <omgdc:Bounds x="195" y="865" width="30" height="30"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c1" bpmnElement="task_c1">
+        <omgdc:Bounds x="270" y="840" width="150" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c2" bpmnElement="task_c2">
+        <omgdc:Bounds x="460" y="840" width="150" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_xg_if" bpmnElement="xg_if" isMarkerVisible="true">
+        <omgdc:Bounds x="650" y="860" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c3" bpmnElement="task_c3">
+        <omgdc:Bounds x="730" y="840" width="160" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c4" bpmnElement="task_c4">
+        <omgdc:Bounds x="930" y="840" width="150" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c5" bpmnElement="task_c5">
+        <omgdc:Bounds x="1120" y="840" width="150" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_xg_join" bpmnElement="xg_join" isMarkerVisible="true">
+        <omgdc:Bounds x="1310" y="860" width="40" height="40"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_task_c6" bpmnElement="task_c6">
+        <omgdc:Bounds x="1390" y="840" width="130" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_end_c" bpmnElement="end_c">
+        <omgdc:Bounds x="1560" y="866" width="28" height="28"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_flow_c1" bpmnElement="flow_c1">
+        <omgdi:waypoint x="225" y="880"/>
+        <omgdi:waypoint x="270" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c2" bpmnElement="flow_c2">
+        <omgdi:waypoint x="420" y="880"/>
+        <omgdi:waypoint x="460" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c3" bpmnElement="flow_c3">
+        <omgdi:waypoint x="610" y="880"/>
+        <omgdi:waypoint x="650" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c_yes" bpmnElement="flow_c_yes">
+        <omgdi:waypoint x="690" y="880"/>
+        <omgdi:waypoint x="730" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c_no" bpmnElement="flow_c_no">
+        <omgdi:waypoint x="670" y="900"/>
+        <omgdi:waypoint x="670" y="950"/>
+        <omgdi:waypoint x="1330" y="950"/>
+        <omgdi:waypoint x="1330" y="900"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c4" bpmnElement="flow_c4">
+        <omgdi:waypoint x="890" y="880"/>
+        <omgdi:waypoint x="930" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c5" bpmnElement="flow_c5">
+        <omgdi:waypoint x="1080" y="880"/>
+        <omgdi:waypoint x="1120" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c6" bpmnElement="flow_c6">
+        <omgdi:waypoint x="1270" y="880"/>
+        <omgdi:waypoint x="1310" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c7" bpmnElement="flow_c7">
+        <omgdi:waypoint x="1350" y="880"/>
+        <omgdi:waypoint x="1390" y="880"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_flow_c_end" bpmnElement="flow_c_end">
+        <omgdi:waypoint x="1520" y="880"/>
+        <omgdi:waypoint x="1560" y="880"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ===== MESSAGE FLOWS ===== -->
+      <bpmndi:BPMNEdge id="edge_mf_notices" bpmnElement="mf_notices">
+        <omgdi:waypoint x="330" y="310"/>
+        <omgdi:waypoint x="330" y="230"/>
+        <omgdi:waypoint x="215" y="230"/>
+        <omgdi:waypoint x="215" y="145"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_mf_reports" bpmnElement="mf_reports">
+        <omgdi:waypoint x="855" y="395"/>
+        <omgdi:waypoint x="855" y="490"/>
+        <omgdi:waypoint x="700" y="490"/>
+        <omgdi:waypoint x="700" y="590"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_mf_names" bpmnElement="mf_names">
+        <omgdi:waypoint x="700" y="670"/>
+        <omgdi:waypoint x="700" y="770"/>
+        <omgdi:waypoint x="345" y="770"/>
+        <omgdi:waypoint x="345" y="840"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_mf_info_to_dsc" bpmnElement="mf_info_to_dsc">
+        <omgdi:waypoint x="810" y="840"/>
+        <omgdi:waypoint x="810" y="770"/>
+        <omgdi:waypoint x="910" y="770"/>
+        <omgdi:waypoint x="910" y="670"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_mf_provider_info" bpmnElement="mf_provider_info">
+        <omgdi:waypoint x="560" y="170"/>
+        <omgdi:waypoint x="560" y="210"/>
+        <omgdi:waypoint x="160" y="210"/>
+        <omgdi:waypoint x="160" y="880"/>
+        <omgdi:waypoint x="195" y="880"/>
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>

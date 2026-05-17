@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_1"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             exporter="Claude"
+             exporterVersion="1.0"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/TR/XPath"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+
+   <!-- ===================== COLLABORATION ===================== -->
+   <collaboration id="collab_1">
+      <participant id="pool_providers" name="Providers of Online Platforms" processRef="proc_providers"/>
+      <participant id="pool_tf" name="Trusted Flaggers" processRef="proc_tf"/>
+      <participant id="pool_dsc" name="Digital Services Coordinator" processRef="proc_dsc"/>
+      <participant id="pool_commission" name="Commission" processRef="proc_commission"/>
+
+      <!-- Message Flows -->
+      <messageFlow id="mf_tf_to_prov" name="notices" sourceRef="pool_tf" targetRef="start_prov"/>
+      <messageFlow id="mf_send_reports_to_dsc" name="reports" sourceRef="task_send_reports" targetRef="pool_dsc"/>
+      <messageFlow id="mf_dsc_to_commission" name="names, addresses, emails" sourceRef="task_communicate_dsc" targetRef="pool_commission"/>
+      <messageFlow id="mf_comm_to_dsc" name="information about inadequate notices" sourceRef="task_comm_to_dsc" targetRef="pool_dsc"/>
+   </collaboration>
+
+   <!-- ===================== PROCESS: PROVIDERS ===================== -->
+   <process id="proc_providers" name="Providers of Online Platforms" isExecutable="false">
+      <laneSet id="ls_prov">
+         <lane id="lane_prov" name="">
+            <flowNodeRef>start_prov</flowNodeRef>
+            <flowNodeRef>task_give_priority</flowNodeRef>
+            <flowNodeRef>task_process_notices</flowNodeRef>
+            <flowNodeRef>task_decide</flowNodeRef>
+            <flowNodeRef>end_prov</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_prov" name="Receive notices from trusted flaggers">
+         <outgoing>sf_prov_1</outgoing>
+         <messageEventDefinition id="med_start_prov"/>
+      </startEvent>
+      <task id="task_give_priority" name="Give priority to notices">
+         <incoming>sf_prov_1</incoming>
+         <outgoing>sf_prov_2</outgoing>
+      </task>
+      <task id="task_process_notices" name="Process notices">
+         <incoming>sf_prov_2</incoming>
+         <outgoing>sf_prov_3</outgoing>
+      </task>
+      <task id="task_decide" name="Decide upon notices">
+         <incoming>sf_prov_3</incoming>
+         <outgoing>sf_prov_4</outgoing>
+      </task>
+      <endEvent id="end_prov" name="">
+         <incoming>sf_prov_4</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_prov_1" sourceRef="start_prov" targetRef="task_give_priority"/>
+      <sequenceFlow id="sf_prov_2" sourceRef="task_give_priority" targetRef="task_process_notices"/>
+      <sequenceFlow id="sf_prov_3" sourceRef="task_process_notices" targetRef="task_decide"/>
+      <sequenceFlow id="sf_prov_4" sourceRef="task_decide" targetRef="end_prov"/>
+   </process>
+
+   <!-- ===================== PROCESS: TRUSTED FLAGGERS ===================== -->
+   <process id="proc_tf" name="Trusted Flaggers" isExecutable="false">
+      <laneSet id="ls_tf">
+         <lane id="lane_tf" name="">
+            <flowNodeRef>start_tf</flowNodeRef>
+            <flowNodeRef>pg_split_tf</flowNodeRef>
+            <flowNodeRef>task_pub_identity</flowNodeRef>
+            <flowNodeRef>task_pub_type</flowNodeRef>
+            <flowNodeRef>task_pub_action</flowNodeRef>
+            <flowNodeRef>pg_join_tf</flowNodeRef>
+            <flowNodeRef>task_send_reports</flowNodeRef>
+            <flowNodeRef>task_make_public</flowNodeRef>
+            <flowNodeRef>end_tf</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_tf" name="">
+         <outgoing>sf_tf_1</outgoing>
+      </startEvent>
+      <parallelGateway id="pg_split_tf" name="" gatewayDirection="Diverging">
+         <incoming>sf_tf_1</incoming>
+         <outgoing>sf_tf_2a</outgoing>
+         <outgoing>sf_tf_2b</outgoing>
+         <outgoing>sf_tf_2c</outgoing>
+      </parallelGateway>
+      <task id="task_pub_identity" name="Publish report categorised by identity of provider">
+         <incoming>sf_tf_2a</incoming>
+         <outgoing>sf_tf_3a</outgoing>
+      </task>
+      <task id="task_pub_type" name="Publish report categorised by type of illegal content">
+         <incoming>sf_tf_2b</incoming>
+         <outgoing>sf_tf_3b</outgoing>
+      </task>
+      <task id="task_pub_action" name="Publish report categorised by action taken by provider">
+         <incoming>sf_tf_2c</incoming>
+         <outgoing>sf_tf_3c</outgoing>
+      </task>
+      <parallelGateway id="pg_join_tf" name="" gatewayDirection="Converging">
+         <incoming>sf_tf_3a</incoming>
+         <incoming>sf_tf_3b</incoming>
+         <incoming>sf_tf_3c</incoming>
+         <outgoing>sf_tf_4</outgoing>
+      </parallelGateway>
+      <task id="task_send_reports" name="Send reports to awarding Digital Services Coordinator">
+         <incoming>sf_tf_4</incoming>
+         <outgoing>sf_tf_5</outgoing>
+      </task>
+      <task id="task_make_public" name="Make reports publicly available">
+         <incoming>sf_tf_5</incoming>
+         <outgoing>sf_tf_6</outgoing>
+      </task>
+      <endEvent id="end_tf" name="">
+         <incoming>sf_tf_6</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_tf_1" sourceRef="start_tf" targetRef="pg_split_tf"/>
+      <sequenceFlow id="sf_tf_2a" sourceRef="pg_split_tf" targetRef="task_pub_identity"/>
+      <sequenceFlow id="sf_tf_2b" sourceRef="pg_split_tf" targetRef="task_pub_type"/>
+      <sequenceFlow id="sf_tf_2c" sourceRef="pg_split_tf" targetRef="task_pub_action"/>
+      <sequenceFlow id="sf_tf_3a" sourceRef="task_pub_identity" targetRef="pg_join_tf"/>
+      <sequenceFlow id="sf_tf_3b" sourceRef="task_pub_type" targetRef="pg_join_tf"/>
+      <sequenceFlow id="sf_tf_3c" sourceRef="task_pub_action" targetRef="pg_join_tf"/>
+      <sequenceFlow id="sf_tf_4" sourceRef="pg_join_tf" targetRef="task_send_reports"/>
+      <sequenceFlow id="sf_tf_5" sourceRef="task_send_reports" targetRef="task_make_public"/>
+      <sequenceFlow id="sf_tf_6" sourceRef="task_make_public" targetRef="end_tf"/>
+   </process>
+
+   <!-- ===================== PROCESS: DIGITAL SERVICES COORDINATOR ===================== -->
+   <process id="proc_dsc" name="Digital Services Coordinator" isExecutable="false">
+      <laneSet id="ls_dsc">
+         <lane id="lane_dsc" name="">
+            <flowNodeRef>start_dsc</flowNodeRef>
+            <flowNodeRef>pg_split_dsc</flowNodeRef>
+            <flowNodeRef>task_award_a</flowNodeRef>
+            <flowNodeRef>task_award_b</flowNodeRef>
+            <flowNodeRef>task_award_c</flowNodeRef>
+            <flowNodeRef>pg_join_dsc</flowNodeRef>
+            <flowNodeRef>task_communicate_dsc</flowNodeRef>
+            <flowNodeRef>task_afford</flowNodeRef>
+            <flowNodeRef>task_revoke</flowNodeRef>
+            <flowNodeRef>end_dsc</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_dsc" name="">
+         <outgoing>sf_dsc_1</outgoing>
+      </startEvent>
+      <parallelGateway id="pg_split_dsc" name="" gatewayDirection="Diverging">
+         <incoming>sf_dsc_1</incoming>
+         <outgoing>sf_dsc_2a</outgoing>
+         <outgoing>sf_dsc_2b</outgoing>
+         <outgoing>sf_dsc_2c</outgoing>
+      </parallelGateway>
+      <task id="task_award_a" name="Award trusted flagger status (condition a)">
+         <incoming>sf_dsc_2a</incoming>
+         <outgoing>sf_dsc_3a</outgoing>
+      </task>
+      <task id="task_award_b" name="Award trusted flagger status (condition b)">
+         <incoming>sf_dsc_2b</incoming>
+         <outgoing>sf_dsc_3b</outgoing>
+      </task>
+      <task id="task_award_c" name="Award trusted flagger status (condition c)">
+         <incoming>sf_dsc_2c</incoming>
+         <outgoing>sf_dsc_3c</outgoing>
+      </task>
+      <parallelGateway id="pg_join_dsc" name="" gatewayDirection="Converging">
+         <incoming>sf_dsc_3a</incoming>
+         <incoming>sf_dsc_3b</incoming>
+         <incoming>sf_dsc_3c</incoming>
+         <outgoing>sf_dsc_4</outgoing>
+      </parallelGateway>
+      <task id="task_communicate_dsc" name="Communicate names, addresses and emails to Commission and Board">
+         <incoming>sf_dsc_4</incoming>
+         <outgoing>sf_dsc_5</outgoing>
+      </task>
+      <task id="task_afford" name="Afford entity opportunity to react">
+         <incoming>sf_dsc_5</incoming>
+         <outgoing>sf_dsc_6</outgoing>
+      </task>
+      <task id="task_revoke" name="Revoke trusted flagger status">
+         <incoming>sf_dsc_6</incoming>
+         <outgoing>sf_dsc_7</outgoing>
+      </task>
+      <endEvent id="end_dsc" name="">
+         <incoming>sf_dsc_7</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_dsc_1" sourceRef="start_dsc" targetRef="pg_split_dsc"/>
+      <sequenceFlow id="sf_dsc_2a" sourceRef="pg_split_dsc" targetRef="task_award_a"/>
+      <sequenceFlow id="sf_dsc_2b" sourceRef="pg_split_dsc" targetRef="task_award_b"/>
+      <sequenceFlow id="sf_dsc_2c" sourceRef="pg_split_dsc" targetRef="task_award_c"/>
+      <sequenceFlow id="sf_dsc_3a" sourceRef="task_award_a" targetRef="pg_join_dsc"/>
+      <sequenceFlow id="sf_dsc_3b" sourceRef="task_award_b" targetRef="pg_join_dsc"/>
+      <sequenceFlow id="sf_dsc_3c" sourceRef="task_award_c" targetRef="pg_join_dsc"/>
+      <sequenceFlow id="sf_dsc_4" sourceRef="pg_join_dsc" targetRef="task_communicate_dsc"/>
+      <sequenceFlow id="sf_dsc_5" sourceRef="task_communicate_dsc" targetRef="task_afford"/>
+      <sequenceFlow id="sf_dsc_6" sourceRef="task_afford" targetRef="task_revoke"/>
+      <sequenceFlow id="sf_dsc_7" sourceRef="task_revoke" targetRef="end_dsc"/>
+   </process>
+
+   <!-- ===================== PROCESS: COMMISSION ===================== -->
+   <process id="proc_commission" name="Commission" isExecutable="false">
+      <laneSet id="ls_comm">
+         <lane id="lane_comm" name="">
+            <flowNodeRef>start_comm</flowNodeRef>
+            <flowNodeRef>pg_split_comm</flowNodeRef>
+            <flowNodeRef>task_publish_db</flowNodeRef>
+            <flowNodeRef>task_keep_db</flowNodeRef>
+            <flowNodeRef>pg_join_comm</flowNodeRef>
+            <flowNodeRef>xor_split_comm</flowNodeRef>
+            <flowNodeRef>task_comm_to_dsc</flowNodeRef>
+            <flowNodeRef>task_suspend</flowNodeRef>
+            <flowNodeRef>task_investigate</flowNodeRef>
+            <flowNodeRef>xor_join_comm</flowNodeRef>
+            <flowNodeRef>task_issue_guidelines</flowNodeRef>
+            <flowNodeRef>end_comm</flowNodeRef>
+         </lane>
+      </laneSet>
+      <startEvent id="start_comm" name="">
+         <outgoing>sf_comm_1</outgoing>
+      </startEvent>
+      <parallelGateway id="pg_split_comm" name="" gatewayDirection="Diverging">
+         <incoming>sf_comm_1</incoming>
+         <outgoing>sf_comm_2a</outgoing>
+         <outgoing>sf_comm_2b</outgoing>
+      </parallelGateway>
+      <task id="task_publish_db" name="Publish information in publicly available database">
+         <incoming>sf_comm_2a</incoming>
+         <outgoing>sf_comm_3a</outgoing>
+      </task>
+      <task id="task_keep_db" name="Keep database up to date">
+         <incoming>sf_comm_2b</incoming>
+         <outgoing>sf_comm_3b</outgoing>
+      </task>
+      <parallelGateway id="pg_join_comm" name="" gatewayDirection="Converging">
+         <incoming>sf_comm_3a</incoming>
+         <incoming>sf_comm_3b</incoming>
+         <outgoing>sf_comm_4</outgoing>
+      </parallelGateway>
+      <exclusiveGateway id="xor_split_comm" name="Information about inadequate notices?" gatewayDirection="Diverging">
+         <incoming>sf_comm_4</incoming>
+         <outgoing>sf_comm_5_yes</outgoing>
+         <outgoing>sf_comm_5_no</outgoing>
+      </exclusiveGateway>
+      <task id="task_comm_to_dsc" name="Communicate information to Digital Services Coordinator">
+         <incoming>sf_comm_5_yes</incoming>
+         <outgoing>sf_comm_6</outgoing>
+      </task>
+      <task id="task_suspend" name="Suspend trusted flagger status during investigation">
+         <incoming>sf_comm_6</incoming>
+         <outgoing>sf_comm_7</outgoing>
+      </task>
+      <task id="task_investigate" name="Carry out investigation">
+         <incoming>sf_comm_7</incoming>
+         <outgoing>sf_comm_8</outgoing>
+      </task>
+      <exclusiveGateway id="xor_join_comm" name="" gatewayDirection="Converging">
+         <incoming>sf_comm_8</incoming>
+         <incoming>sf_comm_5_no</incoming>
+         <outgoing>sf_comm_9</outgoing>
+      </exclusiveGateway>
+      <task id="task_issue_guidelines" name="Issue guidelines to assist providers and Digital Services Coordinators">
+         <incoming>sf_comm_9</incoming>
+         <outgoing>sf_comm_10</outgoing>
+      </task>
+      <endEvent id="end_comm" name="">
+         <incoming>sf_comm_10</incoming>
+      </endEvent>
+      <sequenceFlow id="sf_comm_1" sourceRef="start_comm" targetRef="pg_split_comm"/>
+      <sequenceFlow id="sf_comm_2a" sourceRef="pg_split_comm" targetRef="task_publish_db"/>
+      <sequenceFlow id="sf_comm_2b" sourceRef="pg_split_comm" targetRef="task_keep_db"/>
+      <sequenceFlow id="sf_comm_3a" sourceRef="task_publish_db" targetRef="pg_join_comm"/>
+      <sequenceFlow id="sf_comm_3b" sourceRef="task_keep_db" targetRef="pg_join_comm"/>
+      <sequenceFlow id="sf_comm_4" sourceRef="pg_join_comm" targetRef="xor_split_comm"/>
+      <sequenceFlow id="sf_comm_5_yes" name="Yes" sourceRef="xor_split_comm" targetRef="task_comm_to_dsc"/>
+      <sequenceFlow id="sf_comm_5_no" name="No" sourceRef="xor_split_comm" targetRef="xor_join_comm"/>
+      <sequenceFlow id="sf_comm_6" sourceRef="task_comm_to_dsc" targetRef="task_suspend"/>
+      <sequenceFlow id="sf_comm_7" sourceRef="task_suspend" targetRef="task_investigate"/>
+      <sequenceFlow id="sf_comm_8" sourceRef="task_investigate" targetRef="xor_join_comm"/>
+      <sequenceFlow id="sf_comm_9" sourceRef="xor_join_comm" targetRef="task_issue_guidelines"/>
+      <sequenceFlow id="sf_comm_10" sourceRef="task_issue_guidelines" targetRef="end_comm"/>
+   </process>
+
+   <!-- ===================== DIAGRAM ===================== -->
+   <bpmndi:BPMNDiagram id="diagram_1">
+      <bpmndi:BPMNPlane bpmnElement="collab_1" id="plane_1">
+
+         <!-- === POOL: Providers === -->
+         <bpmndi:BPMNShape bpmnElement="pool_providers" id="shape_pool_providers" isHorizontal="true">
+            <omgdc:Bounds x="60" y="60" width="1400" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_prov" id="shape_lane_prov" isHorizontal="true">
+            <omgdc:Bounds x="90" y="60" width="1370" height="150"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_prov" id="shape_start_prov">
+            <omgdc:Bounds x="140" y="120" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_give_priority" id="shape_task_give_priority">
+            <omgdc:Bounds x="220" y="95" width="120" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_process_notices" id="shape_task_process_notices">
+            <omgdc:Bounds x="390" y="95" width="120" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_decide" id="shape_task_decide">
+            <omgdc:Bounds x="560" y="95" width="120" height="80"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_prov" id="shape_end_prov">
+            <omgdc:Bounds x="730" y="121" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Providers sequence flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_prov_1" id="edge_sf_prov_1">
+            <omgdi:waypoint x="170" y="135"/>
+            <omgdi:waypoint x="220" y="135"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_prov_2" id="edge_sf_prov_2">
+            <omgdi:waypoint x="340" y="135"/>
+            <omgdi:waypoint x="390" y="135"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_prov_3" id="edge_sf_prov_3">
+            <omgdi:waypoint x="510" y="135"/>
+            <omgdi:waypoint x="560" y="135"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_prov_4" id="edge_sf_prov_4">
+            <omgdi:waypoint x="680" y="135"/>
+            <omgdi:waypoint x="730" y="135"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: Trusted Flaggers === -->
+         <bpmndi:BPMNShape bpmnElement="pool_tf" id="shape_pool_tf" isHorizontal="true">
+            <omgdc:Bounds x="60" y="240" width="1400" height="240"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_tf" id="shape_lane_tf" isHorizontal="true">
+            <omgdc:Bounds x="90" y="240" width="1370" height="240"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_tf" id="shape_start_tf">
+            <omgdc:Bounds x="140" y="345" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_split_tf" id="shape_pg_split_tf">
+            <omgdc:Bounds x="210" y="340" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_pub_identity" id="shape_task_pub_identity">
+            <omgdc:Bounds x="295" y="260" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_pub_type" id="shape_task_pub_type">
+            <omgdc:Bounds x="295" y="333" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_pub_action" id="shape_task_pub_action">
+            <omgdc:Bounds x="295" y="405" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_join_tf" id="shape_pg_join_tf">
+            <omgdc:Bounds x="490" y="340" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_send_reports" id="shape_task_send_reports">
+            <omgdc:Bounds x="575" y="325" width="150" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_make_public" id="shape_task_make_public">
+            <omgdc:Bounds x="770" y="325" width="150" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_tf" id="shape_end_tf">
+            <omgdc:Bounds x="965" y="346" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Trusted Flaggers sequence flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_1" id="edge_sf_tf_1">
+            <omgdi:waypoint x="170" y="360"/>
+            <omgdi:waypoint x="210" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_2a" id="edge_sf_tf_2a">
+            <omgdi:waypoint x="230" y="340"/>
+            <omgdi:waypoint x="230" y="288"/>
+            <omgdi:waypoint x="295" y="288"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_2b" id="edge_sf_tf_2b">
+            <omgdi:waypoint x="250" y="360"/>
+            <omgdi:waypoint x="295" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_2c" id="edge_sf_tf_2c">
+            <omgdi:waypoint x="230" y="380"/>
+            <omgdi:waypoint x="230" y="433"/>
+            <omgdi:waypoint x="295" y="433"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_3a" id="edge_sf_tf_3a">
+            <omgdi:waypoint x="445" y="288"/>
+            <omgdi:waypoint x="510" y="288"/>
+            <omgdi:waypoint x="510" y="340"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_3b" id="edge_sf_tf_3b">
+            <omgdi:waypoint x="445" y="360"/>
+            <omgdi:waypoint x="490" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_3c" id="edge_sf_tf_3c">
+            <omgdi:waypoint x="445" y="433"/>
+            <omgdi:waypoint x="510" y="433"/>
+            <omgdi:waypoint x="510" y="380"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_4" id="edge_sf_tf_4">
+            <omgdi:waypoint x="530" y="360"/>
+            <omgdi:waypoint x="575" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_5" id="edge_sf_tf_5">
+            <omgdi:waypoint x="725" y="360"/>
+            <omgdi:waypoint x="770" y="360"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_tf_6" id="edge_sf_tf_6">
+            <omgdi:waypoint x="920" y="360"/>
+            <omgdi:waypoint x="965" y="360"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: Digital Services Coordinator === -->
+         <bpmndi:BPMNShape bpmnElement="pool_dsc" id="shape_pool_dsc" isHorizontal="true">
+            <omgdc:Bounds x="60" y="510" width="1400" height="260"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_dsc" id="shape_lane_dsc" isHorizontal="true">
+            <omgdc:Bounds x="90" y="510" width="1370" height="260"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_dsc" id="shape_start_dsc">
+            <omgdc:Bounds x="140" y="625" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_split_dsc" id="shape_pg_split_dsc">
+            <omgdc:Bounds x="210" y="620" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_award_a" id="shape_task_award_a">
+            <omgdc:Bounds x="295" y="535" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_award_b" id="shape_task_award_b">
+            <omgdc:Bounds x="295" y="613" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_award_c" id="shape_task_award_c">
+            <omgdc:Bounds x="295" y="690" width="150" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_join_dsc" id="shape_pg_join_dsc">
+            <omgdc:Bounds x="490" y="620" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_communicate_dsc" id="shape_task_communicate_dsc">
+            <omgdc:Bounds x="575" y="605" width="160" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_afford" id="shape_task_afford">
+            <omgdc:Bounds x="785" y="605" width="150" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_revoke" id="shape_task_revoke">
+            <omgdc:Bounds x="985" y="605" width="150" height="70"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_dsc" id="shape_end_dsc">
+            <omgdc:Bounds x="1185" y="626" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- DSC sequence flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_1" id="edge_sf_dsc_1">
+            <omgdi:waypoint x="170" y="640"/>
+            <omgdi:waypoint x="210" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_2a" id="edge_sf_dsc_2a">
+            <omgdi:waypoint x="230" y="620"/>
+            <omgdi:waypoint x="230" y="563"/>
+            <omgdi:waypoint x="295" y="563"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_2b" id="edge_sf_dsc_2b">
+            <omgdi:waypoint x="250" y="640"/>
+            <omgdi:waypoint x="295" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_2c" id="edge_sf_dsc_2c">
+            <omgdi:waypoint x="230" y="660"/>
+            <omgdi:waypoint x="230" y="718"/>
+            <omgdi:waypoint x="295" y="718"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_3a" id="edge_sf_dsc_3a">
+            <omgdi:waypoint x="445" y="563"/>
+            <omgdi:waypoint x="510" y="563"/>
+            <omgdi:waypoint x="510" y="620"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_3b" id="edge_sf_dsc_3b">
+            <omgdi:waypoint x="445" y="640"/>
+            <omgdi:waypoint x="490" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_3c" id="edge_sf_dsc_3c">
+            <omgdi:waypoint x="445" y="718"/>
+            <omgdi:waypoint x="510" y="718"/>
+            <omgdi:waypoint x="510" y="660"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_4" id="edge_sf_dsc_4">
+            <omgdi:waypoint x="530" y="640"/>
+            <omgdi:waypoint x="575" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_5" id="edge_sf_dsc_5">
+            <omgdi:waypoint x="735" y="640"/>
+            <omgdi:waypoint x="785" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_6" id="edge_sf_dsc_6">
+            <omgdi:waypoint x="935" y="640"/>
+            <omgdi:waypoint x="985" y="640"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_dsc_7" id="edge_sf_dsc_7">
+            <omgdi:waypoint x="1135" y="640"/>
+            <omgdi:waypoint x="1185" y="640"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === POOL: Commission === -->
+         <bpmndi:BPMNShape bpmnElement="pool_commission" id="shape_pool_commission" isHorizontal="true">
+            <omgdc:Bounds x="60" y="800" width="1400" height="240"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="lane_comm" id="shape_lane_comm" isHorizontal="true">
+            <omgdc:Bounds x="90" y="800" width="1370" height="240"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="start_comm" id="shape_start_comm">
+            <omgdc:Bounds x="120" y="905" width="30" height="30"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_split_comm" id="shape_pg_split_comm">
+            <omgdc:Bounds x="185" y="900" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_publish_db" id="shape_task_publish_db">
+            <omgdc:Bounds x="260" y="840" width="130" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_keep_db" id="shape_task_keep_db">
+            <omgdc:Bounds x="260" y="920" width="130" height="55"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="pg_join_comm" id="shape_pg_join_comm">
+            <omgdc:Bounds x="425" y="900" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_split_comm" id="shape_xor_split_comm" isMarkerVisible="true">
+            <omgdc:Bounds x="500" y="900" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_comm_to_dsc" id="shape_task_comm_to_dsc">
+            <omgdc:Bounds x="580" y="840" width="140" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_suspend" id="shape_task_suspend">
+            <omgdc:Bounds x="760" y="840" width="130" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_investigate" id="shape_task_investigate">
+            <omgdc:Bounds x="930" y="840" width="130" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="xor_join_comm" id="shape_xor_join_comm" isMarkerVisible="true">
+            <omgdc:Bounds x="1095" y="900" width="40" height="40"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="task_issue_guidelines" id="shape_task_issue_guidelines">
+            <omgdc:Bounds x="1170" y="890" width="140" height="60"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape bpmnElement="end_comm" id="shape_end_comm">
+            <omgdc:Bounds x="1350" y="906" width="28" height="28"/>
+         </bpmndi:BPMNShape>
+
+         <!-- Commission sequence flows -->
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_1" id="edge_sf_comm_1">
+            <omgdi:waypoint x="150" y="920"/>
+            <omgdi:waypoint x="185" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_2a" id="edge_sf_comm_2a">
+            <omgdi:waypoint x="205" y="900"/>
+            <omgdi:waypoint x="205" y="868"/>
+            <omgdi:waypoint x="260" y="868"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_2b" id="edge_sf_comm_2b">
+            <omgdi:waypoint x="205" y="940"/>
+            <omgdi:waypoint x="205" y="948"/>
+            <omgdi:waypoint x="260" y="948"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_3a" id="edge_sf_comm_3a">
+            <omgdi:waypoint x="390" y="868"/>
+            <omgdi:waypoint x="445" y="868"/>
+            <omgdi:waypoint x="445" y="900"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_3b" id="edge_sf_comm_3b">
+            <omgdi:waypoint x="390" y="948"/>
+            <omgdi:waypoint x="445" y="948"/>
+            <omgdi:waypoint x="445" y="940"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_4" id="edge_sf_comm_4">
+            <omgdi:waypoint x="465" y="920"/>
+            <omgdi:waypoint x="500" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_5_yes" id="edge_sf_comm_5_yes">
+            <omgdi:waypoint x="520" y="900"/>
+            <omgdi:waypoint x="520" y="870"/>
+            <omgdi:waypoint x="580" y="870"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_5_no" id="edge_sf_comm_5_no">
+            <omgdi:waypoint x="520" y="940"/>
+            <omgdi:waypoint x="520" y="980"/>
+            <omgdi:waypoint x="1115" y="980"/>
+            <omgdi:waypoint x="1115" y="940"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_6" id="edge_sf_comm_6">
+            <omgdi:waypoint x="720" y="870"/>
+            <omgdi:waypoint x="760" y="870"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_7" id="edge_sf_comm_7">
+            <omgdi:waypoint x="890" y="870"/>
+            <omgdi:waypoint x="930" y="870"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_8" id="edge_sf_comm_8">
+            <omgdi:waypoint x="1060" y="870"/>
+            <omgdi:waypoint x="1115" y="870"/>
+            <omgdi:waypoint x="1115" y="900"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_9" id="edge_sf_comm_9">
+            <omgdi:waypoint x="1135" y="920"/>
+            <omgdi:waypoint x="1170" y="920"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="sf_comm_10" id="edge_sf_comm_10">
+            <omgdi:waypoint x="1310" y="920"/>
+            <omgdi:waypoint x="1350" y="920"/>
+         </bpmndi:BPMNEdge>
+
+         <!-- === MESSAGE FLOWS === -->
+         <bpmndi:BPMNEdge bpmnElement="mf_tf_to_prov" id="edge_mf_tf_to_prov">
+            <omgdi:waypoint x="155" y="240"/>
+            <omgdi:waypoint x="155" y="210"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_send_reports_to_dsc" id="edge_mf_send_reports_to_dsc">
+            <omgdi:waypoint x="650" y="395"/>
+            <omgdi:waypoint x="650" y="510"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_dsc_to_commission" id="edge_mf_dsc_to_commission">
+            <omgdi:waypoint x="655" y="675"/>
+            <omgdi:waypoint x="655" y="800"/>
+         </bpmndi:BPMNEdge>
+         <bpmndi:BPMNEdge bpmnElement="mf_comm_to_dsc" id="edge_mf_comm_to_dsc">
+            <omgdi:waypoint x="650" y="840"/>
+            <omgdi:waypoint x="650" y="770"/>
+         </bpmndi:BPMNEdge>
+
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+
+</definitions>
