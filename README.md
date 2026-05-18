@@ -12,8 +12,6 @@ This repository implements a pipeline for extracting organizational information 
 
 ## Installation
 
-Folgende Schritte installieren und konfigurieren das Projekt auf macOS.
-
 1. Clone git repository and navigate to project folder
 ```bash
 git clone .../preprocessing_framework_for_legal_text.git
