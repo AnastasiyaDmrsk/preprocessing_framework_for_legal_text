@@ -61,8 +61,8 @@ The evaluation dataset is located in `eval/dataset`. The dataset includes follow
 
 All gold standards can be found as follows:
 - **BPMN gold standards**: `eval/1_description_and_bpmn/gold_standard`
-- **Organigram gold standards**: `eval/2_3_organigram_eval/gold_standard`
-- **Role-task mapping gold standards**: `eval/2_3_organigram_eval/gold_standard_mapping`
+- **Organigram gold standards**: `eval/2_organigram/gold_standard`
+- **Role-task mapping gold standards**: `eval/3_role_task_mapping/gold_standard_mapping`
 - **Process description gold standard**: `eval/1_description_and_bpmn/gold_standard_description`
 
 All **prompts** can be found in `eval/1_description_and_bpmn/prompt`.
@@ -116,3 +116,5 @@ process description (plain text).
 ```bash
 python evaluate_process_description.py --gold gold_standard_description/ --pred results/Claude_Opus4_6/approach_results_descriptions/preprocessed_text
 ```
+
+Additionally, we reuse CARB evaluation metrics to assess generated BPMNs using raw regulatory text vs. approach's process description, see `eval/1_description_and_bpmn/Statistics_and_Eval_CARB_inspired.ipynb`. 
