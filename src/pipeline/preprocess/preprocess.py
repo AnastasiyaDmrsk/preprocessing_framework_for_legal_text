@@ -10,7 +10,7 @@ from .const import (
     SUBORDINATE_LABELS, REFERENCE_MARKERS, LEGAL_ENTITY_KEYWORDS,
     PARALLEL_GATEWAY_START, PARALLEL_GATEWAY_END, GATEWAY_MARKER_PREFIX,
     _BENEPAR_MAX_TOKENS, _P1, _P2, _CONDITIONAL_FIRST, _SECTION_HEADING_MAX_WORDS, _PARAGRAPH_STARTERS,
-    _SECTION_MIN_MATCHES, _REF_CONTEXT_WINDOW, _REF_CONTEXT_MARKERS, _REF_TYPES, _ROMAN,
+    _SECTION_MIN_MATCHES, _REF_CONTEXT_WINDOW, _REF_CONTEXT_MARKERS, _REF_TYPES, _ROMAN, PARA_BODY_RE,
 )
 from .nlp_utils import (
     plan_filler_removal,
@@ -28,19 +28,10 @@ from .text_utils import (
 
 @staticmethod
 def _normalize_ref(text: str) -> str:
-    """Collapse internal whitespace and strip; prevents near-duplicate rows."""
     return re.sub(r'\s+', ' ', text).strip()
 
 
 class RegulatoryTextPreprocessor:
-    """
-    Preprocessing pipeline for EU regulatory text targeting BPMN extraction.
-    Install
-    -------
-        pip install spacy benepar
-        python -m spacy download en_core_web_md
-        python -c "import benepar; benepar.download('benepar_en3')"
-    """
 
     def __init__(self):
         try:
@@ -144,10 +135,12 @@ class RegulatoryTextPreprocessor:
         refs: set[str] = set()
         ext_spans: List[Tuple[int, int]] = []
 
-        # EU legislative act citations
+        def _add_ref(reference_text: str) -> None:
+            refs.add(f"{location},{reference_text}" if location else reference_text)
+
         for _match_id, start, end in self._eu_ref_matcher(doc):
             ref_text = _normalize_ref(doc[start:end].text)
-            refs.add(f"{location},{ref_text}")
+            _add_ref(ref_text)
             ext_spans.append((start, end))
 
         # Internal refs with discourse marker guard
@@ -160,7 +153,7 @@ class RegulatoryTextPreprocessor:
             ref_text = _normalize_ref(doc[a_start:a_end].text)
             refs.add(f"{location},{ref_text}")
 
-            num_match = re.search(r"\d+|[IVXLCDM]{1,10}", ref_text) # TODO: handle paragraphs which are currently considered as ignored + check articles existing
+            num_match = re.search(r"\d+|[IVXLCDM]{1,10}", ref_text)
             if num_match:
                 num = num_match.group(0)
                 is_external = (not existing_articles) or (num not in existing_articles)
@@ -197,8 +190,8 @@ class RegulatoryTextPreprocessor:
 
     def _plan_subordinate_removal(self, doc, plan: TokenTransformPlan) -> None:
         """
-        Write subordinate-span removals to the plan using BenePar constituency trees.
-        Silent no-op if BenePar is unavailable or sentence exceeds token limit;
+        Write subordinate-span removals to the plan using benepar constituency trees.
+        Silent no-op if benepar is unavailable or sentence exceeds token limit;
         the regex fallback runs pre-parse in _process_sentence.
         """
         if not self._benepar_available or len(doc) > _BENEPAR_MAX_TOKENS:
@@ -211,25 +204,8 @@ class RegulatoryTextPreprocessor:
 
     def _collect_subordinate_spans(self, sent_span, plan: TokenTransformPlan) -> None:
         """
-        Recursive BenePar constituency-tree walk. Marks SBAR / WHNP / WHADVP /
+        Recursive benepar constituency-tree walk. Marks SBAR / WHNP / WHADVP /
         WHPP spans for removal unless a guard fires.
-
-        Guards (evaluated cheapest-first; first match → KEEP entire span):
-          G1  Deontic modal present        — obligation / condition carrier
-          G2  Conditional opener           — temporal, logical, or concessive
-                                             subordinating conjunction (SCONJ)
-          G3  Internal reference present   — paragraph / article N
-          G6  Complement clause            — ccomp / xcomp of main verb;
-                                             this span IS the obligation content
-          G5  Process actor + activity     — NOUN/PROPN/NER nsubj with a verb
-
-        Guard order rationale:
-          G1 / G2 / G3 need no NLP parse → checked first (pure token iteration).
-          G6 is a single-pass dep-label check → faster than G5's noun-chunk scan.
-          G5 (noun-chunk + NER iteration) is last.
-
-        G4 (external citation) is NOT a guard: citations are already captured in
-        the reference CSV before this walk runs.
         """
 
         def _walk(constituent) -> None:
@@ -249,8 +225,7 @@ class RegulatoryTextPreprocessor:
 
     def _remove_subordinate_clauses_regex(self, sentence: str) -> str:
         """
-        Regex fallback (BenePar unavailable). Same guards as _collect_subordinate_spans.
-        G4 is not a guard here either — external refs are extracted before this runs.
+        Regex fallback (benepar unavailable). Same guards as _collect_subordinate_spans.
         """
         raw: list[tuple[int, int, str]] = []
         for pattern in (_P1, _P2):
@@ -268,31 +243,25 @@ class RegulatoryTextPreprocessor:
                 candidates.append((start, end, text))
                 last_end = end
 
-        # G1 / G2 / G3 pre-filter
         needs_g5: list[int] = []
         keep_mask = [False] * len(candidates)
 
         for idx, (start, end, clause_text) in enumerate(candidates):
-            # G1
             if _has_deontic_in_span_text(clause_text):
                 keep_mask[idx] = True
                 continue
 
-            # G2
             stripped = clause_text.lstrip(", \t")
             first_word = stripped.split()[0].lower() if stripped.split() else ""
             if first_word in _CONDITIONAL_FIRST:
                 keep_mask[idx] = True
                 continue
 
-            # G3
             if INTERNAL_REF_RE.search(clause_text):
                 keep_mask[idx] = True
                 continue
-
             needs_g5.append(idx)
 
-        # G5
         if needs_g5:
             clause_texts = [candidates[i][2] for i in needs_g5]
 
@@ -332,11 +301,10 @@ class RegulatoryTextPreprocessor:
             "standard_article": self._preprocess_standard_articles,
             "alt_article": self._preprocess_alt_articles,
             "section_numbering": self._preprocess_section_numbering,
+            "paragraph_body": self._preprocess_paragraph_body,
         }
         structure = self._detect_document_structure(input_text)
-        handler: Callable[[str], Tuple[str, List[str]]] = dispatch.get(
-            structure, self._preprocess_raw_text
-        )
+        handler = dispatch.get(structure, self._preprocess_raw_text)
         return handler(input_text)
 
     def _detect_document_structure(self, text: str) -> str:
@@ -349,7 +317,6 @@ class RegulatoryTextPreprocessor:
         for m in SECTION_NUMBERING_RE.finditer(text):
             heading = m.group(2).strip()
             words = heading.split()
-
             if not words:
                 continue
             if len(words) > _SECTION_HEADING_MAX_WORDS:
@@ -360,11 +327,14 @@ class RegulatoryTextPreprocessor:
                 continue
             if not heading[0].isupper():
                 continue
-
             qualifying_sections.append(m)
 
         if len(qualifying_sections) >= _SECTION_MIN_MATCHES:
             return "section_numbering"
+
+        para_body_matches = PARA_BODY_RE.findall(text)
+        if len(para_body_matches) >= _SECTION_MIN_MATCHES:
+            return "paragraph_body"
         return "raw_text"
 
     def _collect_existing_articles(self, text: str, pattern) -> Set[str]:
@@ -496,6 +466,56 @@ class RegulatoryTextPreprocessor:
                     if sent.strip():
                         result.append((para_loc, sent.strip(), False, False, None))
         return result
+
+    def _preprocess_paragraph_body(self, text: str) -> Tuple[str, List[str]]:
+        """
+        Handle a standalone article body: an optional plain-text title followed
+        by numbered paragraphs (1., 2., …) — no 'Article N' header present.
+
+        Uses a synthetic article ID so reference extraction and location strings
+        work identically to _process_articles.
+        """
+        SYNTHETIC_ID = "Article UNKNOWN"
+
+        first = SECTION_NUMBERING_RE.search(text)
+        title_text = text[: first.start()].strip() if first else ""
+        body_text = text[first.start():].strip() if first else text.strip()
+
+        # Re-use the standard paragraph/list parser
+        # _parse_paragraphs_with_lists expects the body text of ONE article.
+        paragraphs = self._parse_paragraphs_with_lists(body_text, SYNTHETIC_ID)
+
+        clauses: list[str] = []
+        refs: set[str] = set()
+        last_actor: Optional[str] = None
+
+        if title_text:
+            clauses.append(title_text)
+
+        current_para = None
+        for para_loc, para_content, _is_list_item, _is_last, list_letter in paragraphs:
+            if para_content.startswith(GATEWAY_MARKER_PREFIX):
+                clauses.append(para_content)
+                continue
+
+            para_num = para_loc.split(".")[-1].split("(")[0].strip()
+
+            result = self._process_sentence(
+                para_content, para_loc, set(), last_actor, refs
+            )
+            if result:
+                sent, actor = result
+                if list_letter:
+                    clauses.append(f"{list_letter} {sent}")
+                elif para_num != current_para:
+                    clauses.append(f"{para_num} {sent}")
+                    current_para = para_num
+                else:
+                    clauses.append(sent)
+                if actor:
+                    last_actor = actor
+
+        return "\n".join(clauses), sorted(refs)
 
     def _process_sentence(
             self,

@@ -1,9 +1,10 @@
 import re
-from typing import Tuple, Dict, Set
+from typing import Dict, Set
 from spacy.tokens import Doc
-from .const import (
-    STATIC_FILLER_PATTERNS, IAW_RE, ACT_TYPES,
+from src.pipeline.preprocess.const import (
+    STATIC_FILLER_PATTERNS, IAW_RE, ACT_TYPES, _DANGLING,
 )
+from spacy.matcher import Matcher
 
 
 def normalize_whitespace(text: str) -> str:
@@ -17,18 +18,13 @@ def normalize_whitespace(text: str) -> str:
 
 
 def apply_iaw(text: str) -> str:
-    """Replace 'in accordance with' (case-insensitive) with IAW."""
     return IAW_RE.sub("IAW", text)
 
 
-def apply_static_fillers(text: str) -> Tuple[str, bool]:
-    """Remove static adverbial filler phrases. Returns (result, mutated)."""
-    mutated = False
+def apply_static_fillers(text: str) -> str:
     for pattern in STATIC_FILLER_PATTERNS:
-        new = pattern.sub(" ", text)
-        if new != text:
-            text, mutated = new, True
-    return text, mutated
+        text = pattern.sub(" ", text)
+    return text
 
 
 def normalize_if(sentence: str) -> str:
@@ -38,18 +34,6 @@ def normalize_if(sentence: str) -> str:
 
 
 class TokenTransformPlan:
-    """
-    Accumulates all token-level edits on a single spaCy Doc and applies them
-    in one reconstruction pass, producing a mutated string without any re-parse.
-
-    Operations (keyed by token.i):
-      remove_span(start, end)    — drop tokens [start, end)
-      replace_token(i, text)     — substitute a token's surface form
-      insert_after(i, text)      — insert text immediately after token i
-
-    Conflict rule: removal beats replacement at apply() time, regardless of
-    registration order.
-    """
 
     def __init__(self, doc:Doc):
         self._doc:          Doc = doc
@@ -84,36 +68,17 @@ class TokenTransformPlan:
 
         result = "".join(parts)
 
-        # Remove function words left dangling before a period by span removal
-        result = re.sub(
-            r"\s+\b(?:and|or|with|to|of|for|by|in|on|at|from|pursuant|under|as|via|per)\b\s*\.",
-            ".",
-            result,
-            flags=re.IGNORECASE,
-        )
-        result = re.sub(r",\s*\.", ".", result)  # ", ." → "."
-        result = re.sub(r"\s+\.", ".", result)  # " ."  → "."
+        prev = None
+        while prev != result:
+            prev = result
+            result = _DANGLING.sub(".", result)
+            result = re.sub(r",\s*\.", ".", result)
+            result = re.sub(r"\s+\.", ".", result)
 
         return normalize_whitespace(result)
 
 
 def build_eu_ref_matcher(nlp):
-    """
-    Build a spaCy rule-based Matcher that detects EU legislative act citations
-    on the token stream — no character-level regex on the raw string.
-
-    Covered surface forms (EUR-Lex conventions):
-      Directive (EU) 2016/1148
-      Regulation (EU) No 2016/679
-      Implementing Regulation (EU) 2022/2554
-      Delegated Regulation (EU) 2023/1234
-      Decision (EU) 2022/100
-      Directive (EC) 2009/136/EC
-
-    Returns a compiled spaCy Matcher ready for use on any Doc produced by nlp.
-    """
-    from spacy.matcher import Matcher
-
     matcher   = Matcher(nlp.vocab)
 
     for act in ACT_TYPES:
