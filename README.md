@@ -1,69 +1,50 @@
-# Master Thesis: Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
+# Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
 
-## Approach
+## Short Overview
+This repository implements a pipeline for extracting organizational information and process descriptions from regulatory/legal documents. The pipeline consists of three main steps:
+1. **Preprocessing**: prepares legal text for downstream extraction by structuring it into articles/paragraphs, handling enumerations, removing boilerplate, and extracting references, see [Preprocessing](src/pipeline/preprocess/doc/README.md).
+2. **Organizational Information Extraction & Organigram Generation**: extracts actors (units/roles) and their hierarchies from the preprocessed text to create a structured `organigram.xml` compatible with BPMN/CPEE tools, see [Organizational Information Extraction & Organigram Generation documentation](src/pipeline/organigram/doc/README.md).
+3. **Role-Task Mapping**: maps tasks to actors by extracting a structured task list from the preprocessed text and assigning performers based on the generated organigram, resulting in `role_task_mapping.xml`, see [Role-Task Mapping](src/pipeline/role_task_mapping/doc/README.md).
+4. **Process Description Generation**: converts the preprocessed text and role-task mapping into a structured natural-language process description that mirrors a BPMN collaboration narrative, see [Process Description Generation](src/pipeline/process_description/doc/README.md).
 
-### Preprocessing
-
-This step prepares regulatory/legal text for downstream extraction. The current implementation is tailored to EU-style regulatory documents and focuses on producing a clean, structure-aware representation of *obligation clauses*.
-
-In short, the pipeline:
-- detects document structure (e.g., `Article` / `Art.` / numbered sections) and splits text into article/paragraph units,
-- handles common legal enumerations (e.g., `(a) ... (b) ...`) and emits gateway markers for parallel list items,
-- removes boilerplate/filler phrases and optionally reduces removable subordinate clauses (Benepar if available; regex fallback),
-- extracts internal/external references into a separate `references.csv` for traceability,
-- applies lightweight linguistic normalization (actor/pronoun/passive heuristics) and filters to sentences containing deontic modals (e.g., *shall*, *must*).
-
-For implementation details and outputs, see the preprocessing documentation: [Preprocessing](src/pipeline/preprocess/doc/README.md).
-
+![UI Image](src/images/UI2.png)
 ---
 
-### Organizational Information Extraction and Organigram Generation
+## Installation
 
-This step implements an **organizational actor extraction** task that turns **preprocessed legal text** into a **CPEE-compatible `organigram.xml`**. The design supports two modes:
+Folgende Schritte installieren und konfigurieren das Projekt auf macOS.
 
-- **Pure LLM extraction**: the LLM extracts actors and their hierarchies directly.
-- **Hybrid extraction (default & recommended)**: NLP heuristics extract candidate actors first, then the LLM validates/corrects them and infers hierarchies.
+1. Clone git repository and navigate to project folder
+```bash
+git clone .../preprocessing_framework_for_legal_text.git
+cd preprocessing_framework_for_legal_text
+```
 
-The goal is to extract:
+2. Create a virtual environment and activate it
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
 
-- **Actors** as either **UNIT** (institutions/bodies) and/or **ROLE** (functions/positions)
-- **Hierarchies**: UNIT-UNIT, ROLE-ROLE, and ROLE-UNIT relations
+3. Download dependencies
+```bash
+pip install -r requirements.txt
+```
 
-**Input**: `preprocessed_text` created in the previous step.
+4. Download spacy model and benepar models
+```bash
+python -m spacy download en_core_web_md
+python -c "import benepar; benepar.download('benepar_en3')"
+```
 
-**Output**: a structured XML output (`organigram.xml`) suitable for downstream BPMN/CPEE tooling.
-
-For more details on the design and implementation, see the [Organizational Information Extraction & Organigram Generation documentation](src/pipeline/organigram/doc/README.md).
-
+5. To run the pipeline, you need to set up API keys for the LLMs you want to use. For example, for Gemini 2.5 Flash, set the `GEMINI_API_KEY` environment variable and `MODEL`:
+```bash
+export GEMINI_API_KEY='your_gemini_api_key_here'
+export MODEL=gemini-2.5-flash
+```
+6. Now, run the `app.py` to deploy the framework locally.
 ---
-
-
-### Role-Task Mapping
-
-This step maps **who does what** by extracting a structured task list from the **preprocessed legal text** and assigning **performers** based on the generated **organigram**.
-
-The implementation supports two modes:
-- **Pure LLM extraction**: the LLM extracts tasks directly from the text and assigns performers using the list of allowed unit/role pairs from the organigram.
-- **Hybrid extraction (default)**: an NLP pipeline first proposes task candidates (deontic detection, verb-phrase extraction, conditions), then the LLM validates/corrects candidates and adds missing tasks (with fallback to pure LLM if too few candidates are found).
-
-**Inputs**: `preprocessed_text` (from preprocessing) + `organigram.xml` (from the organigram step)
-
-**Output**: `role_task_mapping.xml` (tasks with performers, deontic type/modality, conditions/exceptions, and article/paragraph source references)
-
-For implementation details, configuration options, and the XML schema, see: [Role-Task Mapping](src/pipeline/role_task_mapping/doc/README.md).
-
----
-
-### Process Description Generation
-
-This step converts **(1) preprocessed regulatory text** and **(2) the generated `role_task_mapping.xml`** into a **structured natural-language process description** that mirrors a BPMN collaboration narrative.
-
-- **Input**: `preprocessed_text` + `role_task_mapping.xml`
-- **Core idea**: the role-task mapping defines **who does what** (actors, modalities, conditions/exceptions), while the preprocessed text is used as the authoritative source for **ordering** and **gateway cues** (e.g., enumerations → parallel duties; “if/unless/provided that” → XOR branches).
-- **Output**: `process_description.txt` (plain text, actor-structured, one task per sentence, with implicit BPMN constructs such as start/end events, XOR/AND gateways, and message flows).
-
-Implementation details: [Process Description Generation](src/pipeline/process_description/doc/README.md).
-
 ## Evaluation
 
 The evaluation dataset is located in `eval/dataset`. The dataset includes following regulatory documents:
@@ -79,13 +60,23 @@ The evaluation dataset is located in `eval/dataset`. The dataset includes follow
 10. [Cybersecurity Act Regulation](http://data.europa.eu/eli/reg/2019/881/oj)
 
 All gold standards can be found as follows:
-- **BPMN gold standards**: `eval/1_preprocessing_eval/gold_standard`
+- **BPMN gold standards**: `eval/1_description_and_bpmn/gold_standard`
 - **Organigram gold standards**: `eval/2_3_organigram_eval/gold_standard`
 - **Role-task mapping gold standards**: `eval/2_3_organigram_eval/gold_standard_mapping`
+- **Process description gold standard**: `eval/1_description_and_bpmn/gold_standard_description`
+
+All **prompts** can be found in `eval/1_description_and_bpmn/prompt`.
+
+All **results** are stored in corresponding subfolders, e.g., in `eval/1_description_and_bpmn/results/Gemini3_1_Pro/process_model_raw/bpmn_completeness_report.xlsx` or `eval/2_organigram/results/Gemini3_1_Pro/evaluation_results_Gemini3_1_Pro.csv`.
 
 ### Preprocessed Text Evaluation
+Evaluated using raw vs. preprocessed text for BPMN generation for both Gemini 3.1 Pro and Claude Opus 4.6, e.g., see `eval/1_description_and_bpmn/results/Claude_Opus4_6/process_model_raw/bpmn_completeness_report_claude.xlsx`.
+Example: 
 
-
+| Run Type              | Actors Recall | Activities Recall | Events Recall | Data Objects Recall | Conditions Recall | AND Recall | XOR Recall | Actors Absolute | Activities Absolute | Events Absolute | Data Object Absolute | Conditions Absolute | AND Absolute | XOR Absolute |
+|-----------------------|---------------|-------------------|---------------|---------------------|-------------------|------------|------------|-----------------|---------------------|-----------------|----------------------|---------------------|--------------|--------------|
+| raw (Claude)          | 0,623443      | 0,487992          | 0,251121      | 0,8                 | 0,096508          | 0,5        | 0,203285   | 3.07/5.70       | 10.53/24.4          | 4.07/16.70      | 0/0.50               | 0.57/8.30           | 0.60/2.00    | 2.10/10.14   |
+| preprocessed (Claude) | 0,645116      | 0,586329          | 0,197941      | 0,8                 | 0,125278          | 0,9        | 0,199681   | 3.4/7.5.70      | 13.13/24.4          | 3.07/16.70      | 0/5.00               | 0.67/8.30           | 1.80/2.00    | 1.63/14.00   |
 
 ### Organigram Evaluation
 Make sure to install: 
@@ -96,21 +87,32 @@ python -m spacy download en_core_web_md
 Single file vs single file evaluation:
 ```bash
 python evaluate_organigrams.py \
-    --gold gold_standard/5_CDD.xml \
-    --pred results/5_CDD.xml \
-    --out evaluation_results_5_CDD.csv \
-    --threshold 0.82
+    --gold gold_standard/1_AI_Act.xml \
+    --pred results/Claude_Opus4_6/raw_text/run_1/1_AI_Act.xml \
+    --out evaluation_results_1_AI_Act.csv 
 ```
 Folder vs folder evaluation:
 ```bash
 python evaluate_organigrams.py \
     --gold gold_standard \
-    --pred results \
-    --out evaluation_results.csv \
-    --threshold 0.82
+    --pred results/Gemini3_1_Pro \
+    --out evaluation_results_Gemini3_1_Pro.csv 
 ```
 
 ### Role-Task Mapping Evaluation
 
-### Process Description Evaluation
+Folder vs folder evaluation:
+```bash
+python evaluate_task_mapping.py \
+    --gold gold_standard_mapping \
+    --pred results/Claude_Opus4_6 \
+    --out evaluation_results_Claude_Opus4_6.csv 
+```
 
+### Process Description Evaluation
+Evaluates a generated process description (plain text) against a gold-standard
+process description (plain text).
+
+```bash
+python evaluate_process_description.py --gold gold_standard_description/ --pred results/Claude_Opus4_6/approach_results_descriptions/preprocessed_text
+```
