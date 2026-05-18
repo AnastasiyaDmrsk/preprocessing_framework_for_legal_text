@@ -12,9 +12,7 @@ GATEWAY_RE = re.compile(
 )
 PARA_RE = re.compile(r'(?m)^[ \t]*(\d{1,2}(?:\([a-z]\))?)\s*[.\s]')
 
-_PROMPT_BASE = """You are an expert in business process modeling and legal text analysis specializing in EU regulatory documents.
-Your task is to transform a given set of legal articles into a structured natural-language process description that mirrors the structure of a BPMN collaboration diagram.
-
+_PROMPT_BASE = """
 ---
 
 ## OBJECTIVE
@@ -53,6 +51,7 @@ Apply the following BPMN-equivalent constructs when describing the process:
 ### Exclusive Gateway (XOR)
 Model conditional branching as:
 "[Actor] shall assess whether [condition]. If [condition is true], [Actor] shall [activity A], except where [condition is false / exception]. If [condition is false], [Actor] shall [activity B]."
+For "may" deontic, use: "[Actor] may [activity A] if [condition]." If no condition is given, use: "[Actor] may [activity A] if required."
 
 ### Parallel Gateway (AND)
 Model concurrent activities as:
@@ -60,7 +59,7 @@ Model concurrent activities as:
 
 ### Message Flow (inter-actor communication)
 Model handoffs between actors as:
-"[Actor A] shall [send/transmit/notify] [information] to [Actor B]." and correspondingly in the receiving actor's section: "Upon receiving [information], [Actor B] shall [activity]."
+"[Actor A] shall [send/transmit/notify] [information] to [Actor B]." and in the receiving actor's section: "Upon receiving [information], [Actor B] shall [activity]."
 
 ### Intermediate Events / Time Triggers
 Model timed obligations as:
@@ -77,14 +76,13 @@ When reading the inputs, apply the following extraction rules:
 
 1. **Identify actors**: Every named entity with an active task/obligation/activity or request is an actor (a pool in BPMN). Sub-bodies or internal decision-makers within an actor are lanes. Derive the definitive actor list from the ROLE TASK MAPPING.
 2. **Identify start events**: Look for the triggering condition in the REGULATORY TEXT: a request, detection, application, deadline, or need.
-3. **Identify tasks**: Every task in the ROLE TASK MAPPING is a task. Preserve the original legal terminology.
-4. **Identify gateways**: Conditional phrases ("if", "in case", "where", "unless", "provided that", "whether") in the REGULATORY TEXT indicate exclusive gateways. Lists like (a), (b), ... often indicate simultaneous duties — parallel gateways.
+3. **Identify tasks**: Every task in the ROLE TASK MAPPING is a task. Preserve the original legal terminology but if it can be shortened without losing meaning, do so to fit the activity naming convention in BPMN. Always include the responsible actor and modality.
+4. **Identify gateways**: Conditional phrases ("if", "in case", "where", "unless", "provided that", "whether") in the REGULATORY TEXT indicate exclusive gateways. Lists like (a), (b) indicate parallel gateways, while "may" deontic modality indicate optional paths aka XOR gateway. Also see conditions in the ROLE TASK MAPPING for XORs.
 5. **Identify end events**: Look for the final outcome or terminal state for each actor in the REGULATORY TEXT.
 6. **Identify message flows**: When one actor sends, notifies, transmits, or communicates to another, model this as a message flow and reflect it in both the sending and receiving actor's description.
 7. **Preserve legal exceptions**: Any "unless", "except", "without prejudice to", or "shall not" must be captured using the "except where" construction.
-8. **Focus on one task per sentence**: Always use one task per sentence. If multiple tasks are described in one sentence, split them.
-9. **Maintain actor responsibility**: Always name the responsible actor for each task, never use passive voice or omit the actor.
-10. **Include all tasks**: Every task from the ROLE TASK MAPPING must appear in the description. Do not omit permission ("may") paths — represent them as conditional branches.
+8. **Ensure one task per sentence**: Always use one task per sentence. If multiple tasks are described in one sentence, split them. See how it is handled in in the ROLE TASK MAPPING.
+9. **Include all tasks**: Every task from the ROLE TASK MAPPING must appear in the description.
 
 ---
 
@@ -112,10 +110,13 @@ When reading the inputs, apply the following extraction rules:
 
 Output only the process description in plain text. Do not include any explanation, commentary, or metadata."""
 
-PROCESS_DESCRIPTION_PROMPT = _PROMPT_BASE
+PROCESS_DESCRIPTION_PROMPT = ("""You are an expert in business process modeling and legal text analysis specializing in EU regulatory documents.
+Your task is to transform a given set of legal articles into a structured natural-language process description that mirrors the structure of a BPMN collaboration diagram."""
+                              + _PROMPT_BASE)
 
-PROCESS_DESCRIPTION_VALIDATION_PROMPT = (
-        _PROMPT_BASE
+PROCESS_DESCRIPTION_VALIDATION_PROMPT = ( """You are a strict auditor of process descriptions for EU regulatory text, 
+focusing on transforming input text into a structured natural-language process description for the BPMN modeling."""
+        + _PROMPT_BASE
         + """
 
 ---
@@ -125,12 +126,12 @@ PROCESS_DESCRIPTION_VALIDATION_PROMPT = (
 You have received a PROPOSED DESCRIPTION below that was generated by another model using the same inputs above.
 Before producing your output, reason step by step through the following checks:
 
-1. **COMPLETENESS**: Is every task from the ROLE TASK MAPPING present? If missing → insert it in the correct position.
-2. **ORDER**: Does the description follow the order of activities as defined in the REGULATORY TEXT? If out of order → reorder.
-3. **PARALLEL GATEWAYS**: Are all concurrent activity groups introduced with "in parallel" phrasing? If not → fix.
-4. **ACTOR ACCURACY**: Is the correct actor used for each task? If wrong → correct it.
-5. **DEONTIC ACCURACY**: Is the modality (shall / may / should / shall not) preserved for every task? If wrong → correct it.
-6. **EXCEPTIONS**: Are all exceptions from the ROLE TASK MAPPING reflected using "except where" constructions?
+1. **COMPLETENESS**: Is every task from the ROLE TASK MAPPING with the correct performers and conditions present? If missing: insert it in the correct position.
+2. **ORDER**: Does the description follow the order of activities as defined in the REGULATORY TEXT? If out of order: reorder.
+3. **PARALLEL GATEWAYS**: Are all parallel activities introduced with "in parallel" phrasing? If not, fix it.
+4. **ACTOR ACCURACY**: Is the correct actor used for each task? If wrong, correct it. Also check if the sentence is written in active voice and the actor is explicitly named.
+5. **DEONTIC ACCURACY**: Is the modality (shall / may / should / shall not) preserved for every task? If wrong, correct it.
+6. **EXCEPTIONS**: Are all exceptions from the ROLE TASK MAPPING reflected using "except" constructions?
 
 After reasoning, output the corrected description inside <FINAL_DESCRIPTION>...</FINAL_DESCRIPTION>.
 Plain text only inside the tags. No XML, no markdown, no reasoning inside the tags.
