@@ -1,25 +1,428 @@
 <!doctype html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Legal Text UI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" rel="stylesheet">
+
     <style>
-      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 24px; }
-      textarea { width: 100%; height: 220px; }
-      .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; max-width: 980px; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        :root {
+            --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            --color-bg: #f4f6fb;
+            --color-surface: #fff;
+            --color-border: #dde6f0;
+            --color-primary: #0065BD;
+            --color-primary-hover: #004f9a;
+            --color-text: #222;
+            --color-text-muted: #555;
+            --color-warning-bg: #fff8e1;
+            --color-warning-border: #f9a825;
+            --color-warning-text: #7a5800;
+            --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 4px 20px rgba(0, 101, 189, 0.14);
+            --radius-md: 10px;
+            --radius-sm: 7px;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100dvh;
+            padding: 40px 28px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 980px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-8);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--color-primary);
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0;
+        }
+
+        .card {
+            width: 100%;
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: var(--space-8);
+            transition: box-shadow var(--transition);
+        }
+
+        .card:focus-within {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .disclaimer {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            background: var(--color-warning-bg);
+            border: 1px solid var(--color-warning-border);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            margin-bottom: var(--space-6);
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            color: var(--color-warning-border);
+            margin-top: 1px;
+        }
+
+        .disclaimer p {
+            font-size: clamp(13px, 1.4vw, 15px);
+            color: var(--color-warning-text);
+            line-height: 1.55;
+            max-width: none;
+        }
+
+        .disclaimer strong {
+            font-weight: 700;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label.field-label {
+            font-size: clamp(14px, 1.5vw, 16px);
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-size: clamp(14px, 1.5vw, 16px);
+            color: var(--color-text);
+            background: var(--color-bg);
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            resize: vertical;
+            line-height: 1.6;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(0, 101, 189, 0.12);
+        }
+
+        textarea::placeholder {
+            color: #aab4c0;
+        }
+
+        .or-divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #aab4c0;
+            font-size: clamp(13px, 1.3vw, 15px);
+            font-weight: 500;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--color-border);
+        }
+
+        .file-upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 28px 20px;
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-sm);
+            background: var(--color-bg);
+            cursor: pointer;
+            transition: border-color var(--transition), background var(--transition);
+            text-align: center;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area:focus-within {
+            border-color: var(--color-primary);
+            background: #f0f7ff;
+        }
+
+        .file-upload-area svg {
+            color: var(--color-primary);
+            opacity: 0.7;
+        }
+
+        .file-upload-label {
+            font-size: clamp(14px, 1.5vw, 16px);
+            color: var(--color-text-muted);
+        }
+
+        .file-upload-label span {
+            color: var(--color-primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .file-hint {
+            font-size: clamp(12px, 1.2vw, 13px);
+            color: #aab4c0;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+        }
+
+        #file-name-display {
+            font-size: clamp(13px, 1.3vw, 14px);
+            color: var(--color-primary);
+            font-weight: 500;
+            min-height: 20px;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: var(--space-4);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 36px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: clamp(15px, 1.6vw, 17px);
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            border: 2px solid transparent;
+            line-height: 1;
+            white-space: nowrap;
+            transition: background var(--transition), color var(--transition),
+            border-color var(--transition), box-shadow var(--transition),
+            transform var(--transition);
+            outline: none;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 3px;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: #fff;
+            border-color: var(--color-primary);
+            box-shadow: 0 2px 8px rgba(0, 101, 189, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+            border-color: var(--color-primary-hover);
+            box-shadow: 0 4px 16px rgba(0, 101, 189, 0.26);
+        }
+
+        .tum-footer {
+            margin-top: var(--space-10);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.85;
+        }
+
+        .tum-footer img {
+            width: clamp(160px, 25vw, 260px);
+            height: auto;
+        }
+
+        .tum-footer span {
+            font-size: clamp(11px, 1.1vw, 13px);
+            color: #aab4c0;
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 24px 14px 48px;
+            }
+
+            .card {
+                padding: var(--space-6);
+            }
+
+            .btn-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <h1>From Regulatory Text into Organigram and Process Description</h1>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <h1>Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents</h1>
+
     <div class="card">
-      <form action="/submit" method="post" enctype="multipart/form-data">
-        <p>Enter regulatory text directly</p>
-        <label>Text:</label><br />
-        <textarea name="text" placeholder="Regulatory text"></textarea>
-        <p>or attach a .txt file instead:<input type="file" name="file" accept=".txt,text/plain" /></p>
-        <button type="submit">Submit</button>
-      </form>
+        <form action="/submit" method="post" enctype="multipart/form-data">
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <svg class="disclaimer-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <p>
+                    <strong>AI Disclaimer:</strong> This application uses generative AI to process regulatory text.
+                    All outputs — including organigrams, process descriptions, and role-task mappings —
+                    are automatically generated and <strong>must be manually reviewed for accuracy and
+                    completeness</strong>
+                    before use in any official or legal context.
+                </p>
+            </div>
+
+            <!-- Text input -->
+            <div class="form-group">
+                <label class="field-label" for="reg-text">Regulatory Text</label>
+                <textarea
+                        id="reg-text"
+                        name="text"
+                        placeholder="Paste your regulatory text here…"
+                        aria-describedby="text-hint"
+                ></textarea>
+                <span id="text-hint" style="font-size:13px;color:#aab4c0;">Enter the full regulatory or legal text you want to analyze.</span>
+            </div>
+
+            <div class="or-divider">or attach a file instead</div>
+            <!-- File upload -->
+            <div class="form-group">
+                <label class="field-label">Upload .txt File</label>
+                <label class="file-upload-area" for="file-input" role="button" tabindex="0"
+                       onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('file-input').click()">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <span class="file-upload-label">
+            <span>Choose file</span> or drag and drop
+          </span>
+                    <span class="file-hint">Accepts .txt / plain text files</span>
+                    <span id="file-name-display" aria-live="polite"></span>
+                    <input
+                            type="file"
+                            id="file-input"
+                            name="file"
+                            accept=".txt,text/plain"
+                            aria-label="Upload a .txt regulatory text file"
+                            onchange="
+              var name = this.files && this.files[0] ? this.files[0].name : '';
+              document.getElementById('file-name-display').textContent = name ? '✓ ' + name : '';
+            "
+                    />
+                </label>
+            </div>
+
+            <!-- Submit button -->
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    Submit
+                </button>
+            </div>
+
+        </form>
     </div>
-  </body>
+
+    <footer class="tum-footer">
+        <img
+                src="https://www.dwih-newdelhi.org/files/2019/04/TUM-logo-1-e1646633307305-954x406.png"
+                alt="Technical University of Munich (TUM) logo"
+                width="260"
+                height="111"
+                loading="lazy"
+        />
+        <span>Technical University of Munich</span>
+    </footer>
+
+</div>
+
+</body>
 </html>

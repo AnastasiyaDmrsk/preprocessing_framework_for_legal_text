@@ -188,13 +188,11 @@
     .rtm-table tbody tr:nth-child(even) { background: #f5f9ff; }
     .rtm-table tbody tr:hover           { background: #e4f0fc; }
 
-    /* ── Deontic label formatting ─────────────────── */
     .deontic-obligation     { font-weight: bold; }
     .deontic-permission     { font-style: italic; }
     .deontic-prohibition    { text-decoration: line-through; }
     .deontic-recommendation { /* normal — intentionally unstyled */ }
 
-    /* ── Deontic badge pill ───────────────────────── */
     .deontic-badge {
       display: inline-block;
       font-size: 11px;
@@ -275,12 +273,11 @@
 
 <body>
 
-<h1>Organizational Information and Process Description Generation</h1>
-<h2>Results</h2>
+<h1>Extraction Results</h1>
 
 <div class="tabs-container">
 
-  <!-- 1. STATISTICS-->
+  <!-- Text statistics-->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">Statistics</span>
@@ -315,7 +312,7 @@
     </div>
   </div>
 
-  <!-- 2. PREPROCESSED TEXT-->
+  <!-- preprocessed text-->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">Preprocessed Text</span>
@@ -332,7 +329,7 @@
     </div>
   </div>
 
-  <!--3. ORGANIGRAM -->
+  <!--organigram-->
   <div class="tab" data-tab-id="organigram">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">Organigram</span>
@@ -353,7 +350,7 @@
     </div>
   </div>
 
-  <!-- 4. ROLE TASK MAPPING-->
+  <!-- role-task mapping-->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">Role Task Mapping</span>
@@ -419,7 +416,7 @@
     </div>
   </div>
 
-  <!--5. PROCESS DESCRIPTION-->
+  <!-- Process description-->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">Process Description</span>
@@ -436,7 +433,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ 6. REFERENCES ══════════════ -->
+  <!--References-->
   <div class="tab">
     <div class="tab-header" onclick="toggleTab(this)">
       <span class="tab-title">References</span>
@@ -467,6 +464,22 @@
         <p class="ref-empty">No references file available.</p>
         {% endif %}
         <div id="references-copy" style="display:none;">{{ references_raw }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AutoBPMN.AI integration -->
+  <div class="tab">
+    <div class="tab-header" onclick="toggleTab(this)">
+      <span class="tab-title">AutoBPMN.ai Integration</span>
+      <span class="tab-arrow">&#9660;</span>
+    </div>
+    <div class="tab-body">
+      <div class="tab-body-inner">
+        <div class="tab-actions">
+          <a class="btn btn-download" href="/jobs/{{ job_id }}/download/testset.xml">&#11015; Download testset</a>
+          <a class="btn btn-graph" href="https://autobpmn.ai/" target="_blank" rel="noopener">Navigate to AutoBPMN.ai</a>
+        </div>
       </div>
     </div>
   </div>

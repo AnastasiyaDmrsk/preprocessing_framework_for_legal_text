@@ -6,10 +6,11 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from .organigram.api import build_organigram_xml
+from src.pipeline.AutoBPMN_testset.api import build_testset
+from src.pipeline.organigram.api import build_organigram_xml
 from src.pipeline.preprocess.api import preprocess_legal_text
-from .process_description.api import build_process_description
-from .role_task_mapping.api import build_role_task_mapping
+from src.pipeline.process_description.api import build_process_description
+from src.pipeline.role_task_mapping.api import build_role_task_mapping
 
 logger = logging.getLogger("pipeline")
 logger.setLevel(logging.DEBUG)
@@ -50,12 +51,24 @@ def run_pipeline(text: str, out_dir: Path) -> None:
             model=model,
         )
 
-        build_process_description(
+        process_description = build_process_description(
             preprocessed_text=preprocessed_text,
             role_task_mapping=role_task_mapping,
             api_key=api_key,
             output_dir=out_dir,
             model=model,
+        )
+
+        build_testset(
+            process_description=process_description,
+            role_task_mapping=role_task_mapping,
+            api_key=api_key,
+            output_dir=out_dir,
+            base_url=os.getenv("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/"),
+            job_id=out_dir.name,
+            model=model,
+            use_validator=True,
+            form_url=f"{os.getenv("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/")}/forms/generic.html",
         )
 
     except Exception as e:

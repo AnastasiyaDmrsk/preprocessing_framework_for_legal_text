@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Task form</title>
+  <style>
+    body { font: 14px/1.4 system-ui, sans-serif; margin: 1rem; color: #1a1a1a; }
+    h1 { font-size: 1.05rem; margin: 0 0 .75rem; }
+    pre { background: #f4f4f5; padding: .6rem; border-radius: 6px; overflow:auto; }
+    .row { display:flex; gap:.5rem; margin-top:1rem; }
+    button { padding:.5rem .9rem; border:1px solid #999; border-radius:6px;
+             background:#fff; cursor:pointer; }
+    button.primary { background:#2563eb; color:#fff; border-color:#2563eb; }
+  </style>
+</head>
+<body>
+  <h1 id="label">Task</h1>
+  <div>Data:</div>
+  <pre id="data">{}</pre>
+
+  <div class="row">
+    <button class="primary" onclick="finish('Yes')">Yes</button>
+    <button onclick="finish('No')">No</button>
+  </div>
+
+  <script>
+    let current = {};
+ 
+    window.addEventListener("message", (e) => {
+      const msg = e.data || {};
+      if (msg.type === "data" && msg.value) {
+        current = msg.value;
+        document.getElementById("data").textContent =
+          JSON.stringify(current, null, 2);
+        if (current.label) document.getElementById("label").textContent = current.label;
+      }
+    });
+
+    function post(obj) {
+      (window.parent || window.opener || window).postMessage(obj, "*");
+    }
+
+    function finish(decision) {
+      post({ type: "data",  value: { ...current, result: decision } });
+      post({ type: "event", value: "done" });
+    }
+
+    post({ type: "event", value: "ready" });
+  </script>
+</body>
+</html>
+

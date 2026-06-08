@@ -23,6 +23,8 @@ ALLOWED_ARTIFACTS = {
     "role_task_mapping.xml",
     "process_description.txt",
     "references.csv",
+    "testset.xml",
+    "worklist.xml",
 }
 
 app = Flask(__name__)
@@ -95,6 +97,7 @@ def job(job_id: str):
     preprocessed_text = read_optional("preprocess.txt")
     organigram_xml    = read_optional("organigram.xml")
     role_task_xml     = read_optional("role_task_mapping.xml")
+    process_description_text = read_optional("process_description.txt")
     references_raw    = read_optional("references.csv")
 
     num_articles = sum(
@@ -137,7 +140,7 @@ def job(job_id: str):
         organigram_graph=organigram_graph,
         role_task_content=role_task_xml,
         role_task_rows=role_task_rows,
-        process_description=read_optional("process_description.txt"),
+        process_description=process_description_text,
         references_raw=references_raw,
         ref_headers=ref_headers,
         ref_rows=ref_rows,
@@ -156,6 +159,35 @@ def download(job_id: str, name: str):
         abort(400)
     return send_file(file_path, as_attachment=True, download_name=name)
 
+@app.get("/organigram/<job_id>")
+def organigram(job_id: str):
+    job_dir   = safe_job_dir(job_id)
+    file_path = (job_dir / "organigram.xml").resolve()
+    if not file_path.exists():
+        abort(404)
+    if not str(file_path).startswith(str(job_dir)):
+        abort(400)
+    return send_file(file_path, mimetype="application/xml")
+
+@app.get("/worklist/<job_id>/")
+def worklist(job_id: str):
+    job_dir   = safe_job_dir(job_id)
+    file_path = (job_dir / "worklist.xml").resolve()
+    if not file_path.exists():
+        abort(404)
+    if not str(file_path).startswith(str(job_dir)):
+        abort(400)
+    return send_file(file_path, mimetype="text/xml")
+
+
+@app.post("/worklist/<job_id>/")
+def worklist_register(job_id: str):
+    return "", 200
+
+
+@app.get("/forms/generic.html")
+def generic_form():
+    return render_template("generic_form.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
