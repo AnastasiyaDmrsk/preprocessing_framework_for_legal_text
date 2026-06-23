@@ -15,22 +15,16 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ET
 
-    warnings.warn(
-        "defusedxml not installed — falling back to stdlib ET (XXE risk). "
-        "Fix: pip install defusedxml",
-        RuntimeWarning,
-        stacklevel=1,
-    )
+    warnings.warn("defusedxml not installed — falling back to stdlib ET (XXE risk). "
+                  "Fix: pip install defusedxml", RuntimeWarning, stacklevel=1, )
 
 _DEFAULT_THRESHOLD = 0.80
 
 try:
     NLP = spacy.load("en_core_web_md")
 except OSError:
-    raise RuntimeError(
-        "spaCy model 'en_core_web_md' not found.\n"
-        "Install with: python -m spacy download en_core_web_md"
-    )
+    raise RuntimeError("spaCy model 'en_core_web_md' not found.\n"
+                       "Install with: python -m spacy download en_core_web_md")
 
 
 @dataclass
@@ -104,10 +98,8 @@ def parse_task_mapping(path: Path) -> TaskModel:
         # --- Deontic ---
         deontic_el = task_el.find(_t("deontic"))
         if deontic_el is not None:
-            task.deontic = Deontic(
-                type=deontic_el.get("type", "").strip().lower(),
-                modality=deontic_el.get("modality", "").strip().lower(),
-            )
+            task.deontic = Deontic(type=deontic_el.get("type", "").strip().lower(),
+                modality=deontic_el.get("modality", "").strip().lower(), )
 
         # --- Conditions ---
         conditions_el = task_el.find(_t("conditions"))
@@ -130,10 +122,8 @@ def parse_task_mapping(path: Path) -> TaskModel:
         # --- Source reference ---
         src_el = task_el.find(_t("source-ref"))
         if src_el is not None:
-            task.source_ref = SourceRef(
-                article=src_el.get("article", "").strip(),
-                paragraph=src_el.get("paragraph", "").strip(),
-            )
+            task.source_ref = SourceRef(article=src_el.get("article", "").strip(),
+                paragraph=src_el.get("paragraph", "").strip(), )
 
         model.tasks.append(task)
 
@@ -161,14 +151,11 @@ def _prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
         return 1.0, 1.0, 1.0
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-    f1 = (2 * precision * recall / (precision + recall)
-          if (precision + recall) > 0 else 0.0)
+    f1 = (2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0)
     return round(precision, 4), round(recall, 4), round(f1, 4)
 
 
-def _match_tasks(
-        pred_tasks: List[Task], gold_tasks: List[Task], threshold: float,
-) -> List[Tuple[int, int, float]]:
+def _match_tasks(pred_tasks: List[Task], gold_tasks: List[Task], threshold: float, ) -> List[Tuple[int, int, float]]:
     scored: List[Tuple[float, int, int]] = []
     for i, pt in enumerate(pred_tasks):
         for j, gt in enumerate(gold_tasks):
@@ -190,9 +177,8 @@ def _match_tasks(
     return matched
 
 
-def _evaluate_performers(
-        pred_perfs: List[Performer], gold_perfs: List[Performer], threshold: float,
-) -> Tuple[int, int, int, float]:
+def _evaluate_performers(pred_perfs: List[Performer], gold_perfs: List[Performer], threshold: float, ) -> Tuple[
+    int, int, int, float]:
     scored: List[Tuple[float, int, int]] = []
     for i, pp in enumerate(pred_perfs):
         for j, gp in enumerate(gold_perfs):
@@ -222,25 +208,20 @@ def _evaluate_performers(
     return tp, fp, fn, round(correctness, 4)
 
 
-def _evaluate_deontic(
-        pred_deontic: Optional[Deontic], gold_deontic: Optional[Deontic],
-) -> Tuple[int, int, int]:
+def _evaluate_deontic(pred_deontic: Optional[Deontic], gold_deontic: Optional[Deontic], ) -> Tuple[int, int, int]:
     if gold_deontic is None and pred_deontic is None:
         return 1, 0, 0
     if gold_deontic is None and pred_deontic is not None:
         return 0, 1, 0
     if gold_deontic is not None and pred_deontic is None:
         return 0, 0, 1
-    if (pred_deontic.type == gold_deontic.type
-            and pred_deontic.modality == gold_deontic.modality):
+    if (pred_deontic.type == gold_deontic.type and pred_deontic.modality == gold_deontic.modality):
         return 1, 0, 0
     else:
         return 0, 1, 1
 
 
-def _evaluate_text_list(
-        pred_texts: List[str], gold_texts: List[str], threshold: float,
-) -> Tuple[int, int, int]:
+def _evaluate_text_list(pred_texts: List[str], gold_texts: List[str], threshold: float, ) -> Tuple[int, int, int]:
     scored: List[Tuple[float, int, int]] = []
     for i, pt in enumerate(pred_texts):
         for j, gt in enumerate(gold_texts):
@@ -263,25 +244,20 @@ def _evaluate_text_list(
     return tp, fp, fn
 
 
-def _evaluate_source_ref(
-        pred_ref: Optional[SourceRef], gold_ref: Optional[SourceRef],
-) -> Tuple[int, int, int]:
+def _evaluate_source_ref(pred_ref: Optional[SourceRef], gold_ref: Optional[SourceRef], ) -> Tuple[int, int, int]:
     if gold_ref is None and pred_ref is None:
         return 1, 0, 0
     if gold_ref is None and pred_ref is not None:
         return 0, 1, 0
     if gold_ref is not None and pred_ref is None:
         return 0, 0, 1
-    if (pred_ref.article == gold_ref.article
-            and pred_ref.paragraph == gold_ref.paragraph):
+    if (pred_ref.article == gold_ref.article and pred_ref.paragraph == gold_ref.paragraph):
         return 1, 0, 0
     else:
         return 0, 1, 1
 
 
-def evaluate_pair(
-        gold: TaskModel, pred: TaskModel, threshold: float = _DEFAULT_THRESHOLD,
-) -> Dict[str, Any]:
+def evaluate_pair(gold: TaskModel, pred: TaskModel, threshold: float = _DEFAULT_THRESHOLD, ) -> Dict[str, Any]:
     matches = _match_tasks(pred.tasks, gold.tasks, threshold)
 
     task_tp = len(matches)
@@ -289,13 +265,8 @@ def evaluate_pair(
     task_fn = len(gold.tasks) - task_tp
     task_p, task_r, task_f1 = _prf(task_tp, task_fp, task_fn)
 
-    micro = {
-        "performer": [0, 0, 0],
-        "deontic": [0, 0, 0],
-        "condition": [0, 0, 0],
-        "exception": [0, 0, 0],
-        "source_ref": [0, 0, 0],
-    }
+    micro = {"performer": [0, 0, 0], "deontic": [0, 0, 0], "condition": [0, 0, 0], "exception": [0, 0, 0],
+        "source_ref": [0, 0, 0], }
 
     per_pair: List[Dict[str, Tuple[float, float, float]]] = []
     performer_correctness_scores = []
@@ -357,19 +328,11 @@ def evaluate_pair(
         micro["exception"][1] += len(pt.exceptions)
         micro["source_ref"][1] += 1 if pt.source_ref is not None else 0
 
-    result: Dict[str, Any] = {
-        "gold_tasks": len(gold.tasks),
-        "pred_tasks": len(pred.tasks),
-        "matched_tasks": task_tp,
-        "task_precision": task_p,
-        "task_recall": task_r,
-        "task_f1": task_f1,
-    }
+    result: Dict[str, Any] = {"gold_tasks": len(gold.tasks), "pred_tasks": len(pred.tasks), "matched_tasks": task_tp,
+        "task_precision": task_p, "task_recall": task_r, "task_f1": task_f1, }
 
     avg_performer_correctness = (
-        sum(performer_correctness_scores) / len(performer_correctness_scores)
-        if performer_correctness_scores else 0.0
-    )
+        sum(performer_correctness_scores) / len(performer_correctness_scores) if performer_correctness_scores else 0.0)
     result["performer_correctness"] = round(avg_performer_correctness, 4)
 
     for key in ("performer", "deontic", "condition", "exception", "source_ref"):
@@ -406,13 +369,8 @@ def _macro_avg(results: List[Dict]) -> Dict:
     return avg_dict
 
 
-_CONSOLE_COLS = (
-    ("Task-F1", "task_f1"),
-    ("Perf-Corr", "performer_correctness"),
-    ("Deont-F1", "deontic_micro_f1"),
-    ("Cond-F1", "condition_micro_f1"),
-    ("Excep-F1", "exception_micro_f1"),
-)
+_CONSOLE_COLS = (("Task-F1", "task_f1"), ("Perf-Corr", "performer_correctness"), ("Deont-F1", "deontic_micro_f1"),
+                 ("Cond-F1", "condition_micro_f1"), ("Excep-F1", "exception_micro_f1"),)
 
 
 def _print_header() -> str:
@@ -504,12 +462,7 @@ def main() -> None:
 
         if len(sec_results) > 1:
             sec_avg = _macro_avg(sec_results)
-            avg_row = {
-                "section": sec,
-                "run_label": "SECTION_AVG",
-                "file": "SECTION_MACRO_AVG",
-                **sec_avg
-            }
+            avg_row = {"section": sec, "run_label": "SECTION_AVG", "file": "SECTION_MACRO_AVG", **sec_avg}
             final_results.append(avg_row)
 
     if len(all_results) > 1:
@@ -530,13 +483,8 @@ def main() -> None:
     print(f"\nResults saved to: {out_path}")
     summary_path = out_path.with_suffix(".json")
     with open(summary_path, "w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "per_file": final_results,
-                **({"overall_macro_avg": _macro_avg(all_results)} if len(all_results) > 1 else {}),
-            },
-            f, indent=2,
-        )
+        json.dump({"per_file": final_results,
+            **({"overall_macro_avg": _macro_avg(all_results)} if len(all_results) > 1 else {}), }, f, indent=2, )
     print(f"JSON summary saved to: {summary_path}")
 
 

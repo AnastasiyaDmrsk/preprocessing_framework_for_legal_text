@@ -87,7 +87,6 @@ def parse_organigram(path: Path) -> OrgModel:
     return model
 
 
-
 @functools.lru_cache(maxsize=8192)
 def _spacy_similarity(a: str, b: str) -> float:
     al, bl = a.lower(), b.lower()
@@ -154,8 +153,7 @@ def _prf_from_mapping(mapping: Dict[str, str], pred: List[str], gold: List[str],
 
 
 def _evaluate_relations(pred_rels: List[Tuple[str, str]], gold_rels: List[Tuple[str, str]],
-        mapping: Dict[str, str], ) -> Tuple[int, int, int]:
-    """Evaluate parent-child edges using a pre-built node mapping."""
+                        mapping: Dict[str, str], ) -> Tuple[int, int, int]:
     gold_remaining = list(gold_rels)
     tp = fp = 0
     for child, parent in pred_rels:
@@ -170,8 +168,8 @@ def _evaluate_relations(pred_rels: List[Tuple[str, str]], gold_rels: List[Tuple[
 
 
 def _evaluate_subject_bindings_dependent(pred_bindings: List[Tuple[str, str, str]],
-        gold_bindings: List[Tuple[str, str, str]], unit_map: Dict[str, str], role_map: Dict[str, str], ) -> Tuple[
-    int, int, int]:
+                                         gold_bindings: List[Tuple[str, str, str]], unit_map: Dict[str, str],
+                                         role_map: Dict[str, str], ) -> Tuple[int, int, int]:
     gold_pairs = [(u, r) for (_, u, r) in gold_bindings]
     gold_remaining = list(gold_pairs)
     tp = fp = 0
@@ -189,7 +187,8 @@ def _evaluate_subject_bindings_dependent(pred_bindings: List[Tuple[str, str, str
 
 # Subject binding independent
 def _evaluate_subject_bindings_independent(pred_bindings: List[Tuple[str, str, str]],
-        gold_bindings: List[Tuple[str, str, str]], threshold: float = _BINDING_THRESHOLD, ) -> Tuple[int, int, int]:
+                                           gold_bindings: List[Tuple[str, str, str]],
+                                           threshold: float = _BINDING_THRESHOLD, ) -> Tuple[int, int, int]:
     pred_pairs = [(u, r) for (_, u, r) in pred_bindings]
     gold_pairs = [(u, r) for (_, u, r) in gold_bindings]
 
@@ -218,7 +217,7 @@ def _evaluate_subject_bindings_independent(pred_bindings: List[Tuple[str, str, s
 
 
 def _evaluate_role_only_binding(pred_bindings: List[Tuple[str, str, str]], gold_bindings: List[Tuple[str, str, str]],
-        threshold: float = _BINDING_THRESHOLD, ) -> Tuple[int, int, int]:
+                                threshold: float = _BINDING_THRESHOLD, ) -> Tuple[int, int, int]:
     pred_roles = [r for (_, _u, r) in pred_bindings]
     gold_roles = [r for (_, _u, r) in gold_bindings]
 
@@ -282,23 +281,22 @@ def evaluate_pair(gold: OrgModel, pred: OrgModel, threshold: float = _DEFAULT_TH
     rh_p, rh_r, rh_f1 = _prf(rh_tp, rh_fp, rh_fn)
 
     sb_tp, sb_fp, sb_fn = _evaluate_subject_bindings_dependent(pred.subject_bindings, gold.subject_bindings, unit_map,
-        role_map, )
+                                                               role_map, )
     sb_p, sb_r, sb_f1 = _prf(sb_tp, sb_fp, sb_fn)
 
     sbi_tp, sbi_fp, sbi_fn = _evaluate_subject_bindings_independent(pred.subject_bindings, gold.subject_bindings,
-        _BINDING_THRESHOLD, )
+                                                                    _BINDING_THRESHOLD, )
     sbi_p, sbi_r, sbi_f1 = _prf(sbi_tp, sbi_fp, sbi_fn)
 
     rb_tp, rb_fp, rb_fn = _evaluate_role_only_binding(pred.subject_bindings, gold.subject_bindings,
-        _BINDING_THRESHOLD, )
+                                                      _BINDING_THRESHOLD, )
     rb_p, rb_r, rb_f1 = _prf(rb_tp, rb_fp, rb_fn)
 
     role_coverage = _evaluate_role_coverage(gold, pred, _BINDING_THRESHOLD)
 
     ac_p, ac_r, ac_f1 = _evaluate_actor_identification(gold, pred, threshold)
 
-    return {# Counts
-        "gold_units": len(gold.units), "pred_units": len(pred.units), "gold_roles": len(gold.roles),
+    return {"gold_units": len(gold.units), "pred_units": len(pred.units), "gold_roles": len(gold.roles),
         "pred_roles": len(pred.roles), "gold_unit_parents": len(gold.unit_parents),
         "pred_unit_parents": len(pred.unit_parents), "gold_role_parents": len(gold.role_parents),
         "pred_role_parents": len(pred.role_parents), "gold_subject_bindings": len(gold.subject_bindings),
@@ -501,8 +499,8 @@ def main() -> None:
                                                        "(text types: preprocessed_text, raw_text; runs: run_1–run_3)."), )
     parser.add_argument("--out", default="evaluation_results.csv", help="Output CSV file path.", )
     parser.add_argument("--threshold", type=float, default=_DEFAULT_THRESHOLD,
-        help=f"Flat entity spaCy similarity threshold (default: {_DEFAULT_THRESHOLD}). "
-             f"Independent binding / role-only / coverage use a fixed {_BINDING_THRESHOLD} threshold.", )
+                        help=f"Flat entity spaCy similarity threshold (default: {_DEFAULT_THRESHOLD}). "
+                             f"Independent binding / role-only / coverage use a fixed {_BINDING_THRESHOLD} threshold.", )
     args = parser.parse_args()
 
     gold_path = Path(args.gold)

@@ -28,7 +28,6 @@ _DEFAULT_THRESHOLD = 0.80
 
 
 def _prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
-    """Return (precision, recall, F1) from confusion counts."""
     if tp == 0 and fp == 0 and fn == 0:
         return 1.0, 1.0, 1.0
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
@@ -38,7 +37,6 @@ def _prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
 
 
 def _similarity(a: str, b: str) -> float:
-    """Semantic similarity via spaCy word vectors with fast-path shortcuts."""
     if not a and not b:
         return 1.0
     if not a or not b:
@@ -55,10 +53,6 @@ def _similarity(a: str, b: str) -> float:
 
 
 def _hungarian_match(pred_list: List[str], gold_list: List[str], threshold: float) -> List[Tuple[int, int, float]]:
-    """
-    Globally optimal 1-to-1 bipartite matching via the Hungarian algorithm.
-    Returns [(pred_idx, gold_idx, similarity), …] for pairs above *threshold*.
-    """
     if not pred_list or not gold_list:
         return []
 
@@ -85,10 +79,6 @@ _ACTORS_RE = re.compile(r"actors?\s*:\s*(.+?)\.?\s*$", re.IGNORECASE)
 
 
 def extract_actors(text: str) -> List[str]:
-    """
-    Parse the first sentence to extract actor names from
-    "The process contains the following actors: A, B, C, and D."
-    """
     first = nltk.sent_tokenize(text)[0] if text.strip() else ""
     m = _ACTORS_RE.search(first)
     if not m:
@@ -137,10 +127,6 @@ _TASK_RE = re.compile(r"\b(?P<actor>[A-Z][A-Za-z\s\-/()]+?)\s+"
 
 
 def _split_clauses(text: str) -> List[str]:
-    """
-    Flatten text into candidate task strings by splitting on
-    sentences → semicolons → bullet / dash markers.
-    """
     candidates: List[str] = []
     for sent in nltk.sent_tokenize(text):
         for part in re.split(r";\s*", sent):
@@ -151,10 +137,6 @@ def _split_clauses(text: str) -> List[str]:
 
 
 def extract_tasks(text: str) -> List[Dict[str, str]]:
-    """
-    Return one dict per task clause: actor / deontic / activity / full.
-    Deduplication is applied on (actor, deontic, first-60-chars-of-activity).
-    """
     tasks: List[Dict[str, str]] = []
     seen: Set[tuple] = set()
 
@@ -221,7 +203,6 @@ def evaluate_tasks(gold: List[Dict], pred: List[Dict], threshold: float) -> Dict
 def evaluate_pair(gold_text: str, pred_text: str, threshold: float = _DEFAULT_THRESHOLD) -> Dict[str, Any]:
     res: Dict[str, Any] = {}
 
-    # Surface stats reported separately for gold and pred
     for prefix, text in (("gold", gold_text), ("pred", pred_text)):
         for k, v in compute_token_stats(text).items():
             res[f"{prefix}_{k}"] = v
