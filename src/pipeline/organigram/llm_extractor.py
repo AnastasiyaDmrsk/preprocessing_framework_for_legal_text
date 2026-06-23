@@ -60,12 +60,6 @@ def _generate_dummy_subjects(
 
 
 class LLMOrganizationalExtractor:
-    """
-    Pure-LLM organigram extraction via Gemini.
-    Produces a CPEE-compatible organigram.xml.
-    Optionally runs actor and hierarchy validators after each extraction step.
-    """
-
     def __init__(
             self,
             api_key: str,
@@ -122,7 +116,6 @@ class LLMOrganizationalExtractor:
             p.text for p in response.candidates[0].content.parts if p.text
         )
 
-    # Stage 1: actor extraction and validation
     def _extract_actors(self, text: str) -> List[Tuple[str, str]]:
         prompt = _build_actor_extraction_prompt(text)
         response_text = self.generate_content(prompt, 4096)
@@ -160,8 +153,6 @@ class LLMOrganizationalExtractor:
             RuntimeWarning,
         )
         return self._parse_actor_response(response_text)
-
-    # Stage 2: hierarchy structuring and validation
 
     def _classify_and_structure_entities(
             self,

@@ -4,22 +4,12 @@ from pathlib import Path
 from typing import List
 from xml.dom import minidom
 
-from src.pipeline.organigram.const import (
-    BLACKLIST_RE,
-    ROLE_SUFFIXES,
-    UNIT_SUFFIXES,
-    ACTOR_EXTRACTION_PROMPT,
-    HIERARCHY_EXTRACTION_PROMPT,
-    PRE_EXTRACTED_ACTORS_IDENTIFIED,
-)
+from src.pipeline.organigram.const import (BLACKLIST_RE, ROLE_SUFFIXES, UNIT_SUFFIXES, ACTOR_EXTRACTION_PROMPT,
+                                           HIERARCHY_EXTRACTION_PROMPT, PRE_EXTRACTED_ACTORS_IDENTIFIED, )
 from src.pipeline.organigram.models import OrganizationalEntity, Subject
 
 
-def _generate_organigram_xml(
-        entities: List[OrganizationalEntity],
-        subjects: List[Subject],
-        output_path: Path,
-) -> str:
+def _generate_organigram_xml(entities: List[OrganizationalEntity], subjects: List[Subject], output_path: Path, ) -> str:
     root = ET.Element("organisation")
     root.set("xmlns", "http://cpee.org/ns/organisation/1.0")
 
@@ -55,16 +45,12 @@ def create_xml(root: ET.Element, output_path: Path) -> str:
     xml_str = ET.tostring(root, encoding="unicode")
     dom = minidom.parseString(xml_str)
     pretty = dom.toprettyxml(indent="  ")
-    pretty = "\n".join(
-        line for line in pretty.splitlines() if line.strip()
-    )
+    pretty = "\n".join(line for line in pretty.splitlines() if line.strip())
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(pretty)
     return pretty
 
-
-# Prompt builders
 
 def _build_actor_extraction_prompt(text: str) -> str:
     prompt = ACTOR_EXTRACTION_PROMPT
@@ -94,13 +80,9 @@ def _build_pre_extracted_actors_hierarchy_prompt(candidate_lines: str, text: str
     return prompt
 
 
-# Text helpers
-
 def normalize_name(text: str) -> str:
-    text = re.compile(
-        r"^\s*(the|a|an|any|each|every|all|such|those|these|this|that|their|its)\s+",
-        re.IGNORECASE,
-    ).sub("", text.strip())
+    text = re.compile(r"^\s*(the|a|an|any|each|every|all|such|those|these|this|that|their|its)\s+",
+        re.IGNORECASE, ).sub("", text.strip())
     return " ".join(text.split())
 
 
