@@ -5,18 +5,6 @@ from src.pipeline.preprocess.preprocess import RegulatoryTextPreprocessor
 
 
 def preprocess_legal_text(reg_text: str, path: Path) -> Tuple[str, List[str]]:
-    """
-    Preprocess regulatory text and write outputs to *path*.
-
-    Outputs
-    -------
-    preprocess.txt  — one obligation clause per line, with gateway markers
-    references.csv  — Location,Reference rows for all detected cross-references
-
-    Returns
-    -------
-    (preprocessed_text, references_list)
-    """
     reg_preprocessor       = RegulatoryTextPreprocessor()
     preprocessed_text, references = reg_preprocessor.preprocess(reg_text)
 

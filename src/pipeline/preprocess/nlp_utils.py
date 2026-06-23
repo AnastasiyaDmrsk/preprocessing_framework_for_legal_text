@@ -1,24 +1,20 @@
 import re
 from typing import Optional, Set
 
-from .const import (
-    DEONTIC_MODALS, ACTOR_IGNORE, ACTOR_NER_LABELS,
-    LEGAL_ENTITY_KEYWORDS, _DEMONSTRATIVE_STARTS, _RE_DISC_ART, _RE_BARE_ART, _RE_ACT_CITE,
-    _RE_ORPH_NUM, _RE_ORPH_DISC, DEONTIC_MODAL_PHRASES, OBLIGATION_RE, CONDITIONAL_SUBORDINATORS, _STRUCTURAL,
-)
+from .const import (DEONTIC_MODALS, ACTOR_IGNORE, ACTOR_NER_LABELS, LEGAL_ENTITY_KEYWORDS, _DEMONSTRATIVE_STARTS,
+                    _RE_DISC_ART, _RE_BARE_ART, _RE_ACT_CITE, _RE_ORPH_NUM, _RE_ORPH_DISC, DEONTIC_MODAL_PHRASES,
+                    OBLIGATION_RE, CONDITIONAL_SUBORDINATORS, _STRUCTURAL, )
 from .text_utils import TokenTransformPlan, normalize_whitespace
 
 
 def plan_filler_removal(doc, plan: TokenTransformPlan) -> None:
-    """Dependency-based dynamic filler detection for 'where' and 'including'."""
+    """Dependency-based dynamic filler"""
     for token in doc:
         if token.lower_ != "including":
             continue
         if token.dep_ not in {"prep", "mark"}:
             continue
-        s_idx = (token.i - 1
-                 if token.i > 0 and doc[token.i - 1].text == ","
-                 else token.i)
+        s_idx = (token.i - 1 if token.i > 0 and doc[token.i - 1].text == "," else token.i)
         e_idx = token.i + 1
         for j in range(token.i + 1, len(doc)):
             if doc[j].text in {",", ".", ";"}:
@@ -30,9 +26,7 @@ def plan_filler_removal(doc, plan: TokenTransformPlan) -> None:
         plan.remove_span(s_idx, e_idx)
 
 
-def remove_external_reference_phrases(
-        sentence: str, existing_articles: Set[str]
-) -> str:
+def remove_external_reference_phrases(sentence: str, existing_articles: Set[str]) -> str:
     if not existing_articles:
         return sentence
 
@@ -65,10 +59,6 @@ def remove_external_reference_phrases(
 
 # Actor extraction
 def extract_explicit_actor(doc) -> Optional[str]:
-    """
-    Extract the BPMN actor(s): all coordinated nsubj tokens that appear
-    before the first deontic modal, returned as a single joined string.
-    """
     first_modal_idx = _find_first_modal_idx(doc)
     if first_modal_idx is None:
         return None
@@ -83,12 +73,10 @@ def extract_explicit_actor(doc) -> Optional[str]:
             return None
 
         head_parts = sorted(
-            [c for c in token.lefts if c.dep_ in {"compound", "amod"}
-             and c.pos_ != "DET"]
-            + [token]
-            + [c for c in token.rights if c.dep_ == "compound"],
-            key=lambda t: t.i,
-        )
+            [c for c in token.lefts if c.dep_ in {"compound", "amod"} and c.pos_ != "DET"] + [token] + [c for c in
+                                                                                                        token.rights if
+                                                                                                        c.dep_ == "compound"],
+            key=lambda t: t.i, )
         head_actor = " ".join(t.text for t in head_parts)
 
         if not head_actor:
@@ -102,19 +90,14 @@ def extract_explicit_actor(doc) -> Optional[str]:
 
         actor_parts: list[str] = [head_actor]
 
-        for conj in sorted(
-                (c for c in token.rights if c.dep_ == "conj"),
-                key=lambda t: t.i,
-        ):
+        for conj in sorted((c for c in token.rights if c.dep_ == "conj"), key=lambda t: t.i, ):
             cc = next((c for c in conj.lefts if c.dep_ == "cc"), None)
 
             conj_parts = sorted(
-                [c for c in conj.lefts if c.dep_ in {"compound", "amod"}
-                 and c.pos_ != "DET"]
-                + [conj]
-                + [c for c in conj.rights if c.dep_ == "compound"],
-                key=lambda t: t.i,
-            )
+                [c for c in conj.lefts if c.dep_ in {"compound", "amod"} and c.pos_ != "DET"] + [conj] + [c for c in
+                                                                                                          conj.rights if
+                                                                                                          c.dep_ == "compound"],
+                key=lambda t: t.i, )
             conj_text = " ".join(t.text for t in conj_parts)
 
             if not conj_text:
@@ -134,11 +117,6 @@ def extract_explicit_actor(doc) -> Optional[str]:
 
 
 def has_actor_and_activity(constituent) -> bool:
-    """
-    True if the constituent contains BOTH:
-      (a) a VERB  aka the 'activity', and
-      (b) an nsubj / nsubjpass that resolves to a legal entity or role noun.
-    """
     if not any(t.pos_ == "VERB" for t in constituent):
         return False
 
@@ -184,22 +162,16 @@ def find_intrasentence_antecedent(pronoun_token) -> Optional[str]:
         if token.i >= first_modal_idx or token.i == pronoun_token.i:
             continue
         parts = sorted(
-            [c for c in token.lefts if c.dep_ in {"compound", "amod", "det"}]
-            + [token]
-            + [c for c in token.rights if c.dep_ == "compound"],
-            key=lambda x: x.i,
-        )
+            [c for c in token.lefts if c.dep_ in {"compound", "amod", "det"}] + [token] + [c for c in token.rights if
+                                                                                           c.dep_ == "compound"],
+            key=lambda x: x.i, )
         antecedent = " ".join(t.text for t in parts).strip()
         return re.sub(r"^[Aa]n?\s+|^The\s+", "the ", antecedent) if antecedent else None
     return None
 
 
-def plan_pronoun_resolution(
-        doc,
-        plan: TokenTransformPlan,
-        explicit_actor: Optional[str],
-        last_actor: Optional[str],
-) -> None:
+def plan_pronoun_resolution(doc, plan: TokenTransformPlan, explicit_actor: Optional[str],
+        last_actor: Optional[str], ) -> None:
     """Resolve 'it' and 'they' in nsubj/nsubjpass: intrasentence > explicit > last."""
     for token in doc:
         if token.lower_ not in {"it", "they"} or token.dep_ not in {"nsubj", "nsubjpass"}:
@@ -215,25 +187,19 @@ def plan_pronoun_resolution(
             plan.replace_token(token.i, last_actor)
 
 
-def plan_passive_resolution(
-        doc, plan: TokenTransformPlan, actor_candidate: Optional[str]
-) -> None:
-    """Append 'by <actor>' after agentless passive participles."""
+def plan_passive_resolution(doc, plan: TokenTransformPlan, actor_candidate: Optional[str]) -> None:
+    """Append by <actor>"""
     for token in doc:
         if token.dep_ == "auxpass" and token.lemma_ == "be":
             if not any(c.dep_ == "agent" for c in token.head.children):
-                agent = (
-                    actor_candidate
-                    if actor_candidate and not any(
-                        w.lower() in actor_candidate.lower() for w in ACTOR_IGNORE)
-                    else "corresponding authority"
-                )
+                agent = (actor_candidate if actor_candidate and not any(
+                    w.lower() in actor_candidate.lower() for w in ACTOR_IGNORE) else "corresponding authority")
                 plan.insert_after(token.head.i, f" by {agent}")
 
 
 def highlight_gateway_coordinators(sentence: str, doc) -> str:
     """
-    Capitalize OR / AND that mark BPMN gateways.
+    Capitalize OR / AND
     """
     first_modal_idx = _find_first_modal_idx(doc)
     if first_modal_idx is None:
@@ -255,17 +221,14 @@ def highlight_gateway_coordinators(sentence: str, doc) -> str:
             is_modal_head = head.i == modal_head.i
             is_conj_of_root = (head.dep_ == "conj" and head.head.i == modal_head.i)
             if is_modal_head or is_conj_of_root:
-                replacements.append((token.idx, token.idx + len(token.text),
-                                     token.text.upper()))
+                replacements.append((token.idx, token.idx + len(token.text), token.text.upper()))
             continue
 
         if token.i < first_modal_idx:
             if head.dep_ in {"nsubj", "nsubjpass"}:
-                replacements.append((token.idx, token.idx + len(token.text),
-                                     token.text.upper()))
+                replacements.append((token.idx, token.idx + len(token.text), token.text.upper()))
             elif head.dep_ == "conj" and head.head.dep_ in {"nsubj", "nsubjpass"}:
-                replacements.append((token.idx, token.idx + len(token.text),
-                                     token.text.upper()))
+                replacements.append((token.idx, token.idx + len(token.text), token.text.upper()))
 
     for char_s, char_e, repl in reversed(sorted(replacements, key=lambda x: x[0])):
         sentence = sentence[:char_s] + repl + sentence[char_e:]
@@ -299,21 +262,13 @@ def _find_first_modal_idx(doc) -> Optional[int]:
 
 
 def _has_deontic_in_span_text(text: str) -> bool:
-    return bool(OBLIGATION_RE.search(text)) or any(
-        ph in text.lower() for ph in DEONTIC_MODAL_PHRASES
-    )
+    return bool(OBLIGATION_RE.search(text)) or any(ph in text.lower() for ph in DEONTIC_MODAL_PHRASES)
 
 
 def _is_conditional_opener(constituent) -> bool:
     """
     True if the constituent opens with a conditional, temporal, concessive,
-    or causal subordinating conjunction.
-
-    Two-tier check:
-      1. Explicit CONDITIONAL_SUBORDINATORS membership  (fast path, certain)
-      2. POS == SCONJ, excluding pure complementizers "that" / "whether"
-         spaCy correctly tags "before", "after", "until", "while", "since",
-         "although" etc. as SCONJ in adverbial-clause position.
+    or causal subordinating conjunction
     """
     if not constituent:
         return False
@@ -329,10 +284,6 @@ def _is_conditional_opener(constituent) -> bool:
 
 
 def _is_complement_clause(constituent) -> bool:
-    """
-    True if this constituent is the direct clausal complement (ccomp /
-    xcomp) of the main clause verb.
-    """
     for token in constituent:
         if token.head.i < constituent.start or token.head.i >= constituent.end:
             if token.dep_ in {"ccomp", "xcomp"}:
@@ -340,13 +291,7 @@ def _is_complement_clause(constituent) -> bool:
     return False
 
 
-def _including_span_has_meaningful_content(
-        doc, incl_token_i: int, e_idx: int
-) -> bool:
-    """
-    Return True if the content of an 'including ...' phrase contains relevant information
-    """
-
+def _including_span_has_meaningful_content(doc, incl_token_i: int, e_idx: int) -> bool:
     for i in range(incl_token_i + 1, min(e_idx, len(doc))):
         t = doc[i]
         if t.is_punct or t.is_space:

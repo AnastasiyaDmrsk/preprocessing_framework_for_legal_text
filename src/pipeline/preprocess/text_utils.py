@@ -28,7 +28,6 @@ def apply_static_fillers(text: str) -> str:
 
 
 def normalize_if(sentence: str) -> str:
-    """Normalise sentence-initial Where/If to the canonical token IF."""
     s = re.sub(r"^\s*Where\b", "IF", sentence, flags=re.IGNORECASE)
     return re.sub(r"^\s*If\b",  "IF", s, flags=re.IGNORECASE)
 
@@ -106,7 +105,7 @@ def build_eu_ref_matcher(nlp):
                 {"TEXT": "/"},
                 {"LIKE_NUM": True},
             ],
-            # Pattern C: Directive (EC) 2009/136/EC  (trailing jurisdiction suffix)
+            # Pattern C: Directive (EC) 2009/136/EC
             base + [
                 {"TEXT": "("},
                 {"TEXT": {"IN": ["EU", "EC", "Euratom"]}},
