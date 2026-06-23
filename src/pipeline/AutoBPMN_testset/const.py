@@ -81,8 +81,9 @@ Output:
 
 Return the valid XML now."""
 
-TESTSET_DESCRIPTION_VALIDATION_PROMPT = """Validate and, if needed, correct a CPEE description \
-block generated from a textual process description.
+TESTSET_DESCRIPTION_VALIDATION_PROMPT = """You are a strict auditor of CPEE process modelling.
+Validate and, if needed, correct a CPEE description \
+block generated from a textual process description. Check the validity of the XML structure.
 
 PROCESS DESCRIPTION (free text — ground truth for structure):
 [PROCESS_DESCRIPTION]
@@ -93,16 +94,37 @@ ROLE/TASK MAPPING (ground truth for roles):
 PROPOSED BLOCK:
 [PROPOSED_DESCRIPTION]
 
-Check: (1) every activity in the text appears as exactly one <call>, with nothing invented or
-dropped, and start/end events are not modelled as calls; (2) every "in parallel" block is a
-<parallel> with one <parallel_branch> per concurrent strand, and every decision is a <choose>
+CHECKS TO PERFORM (reason through each explicitly before outputting):
+1. Every activity in the text appears as exactly one <call>, with nothing invented or
+dropped, and start/end events are not modelled as calls; 
+2. Every "in parallel" block is a <parallel> with one <parallel_branch> per concurrent strand, and every decision is a <choose>
 with <alternative condition="..."> paths (and <otherwise> only for an explicit default);
-(3) ordering and branch rejoining match the text; (4) each call has a unique id (a1, a2, ...),
-endpoint="worklist", a concise <label>, and a <role> drawn only from the mapping that best fits
-the task; (5) the XML is well formed. Fix any problems, then return the final block as:
+3. Ordering and branch rejoining match the text; 
+4. Each call has a unique id (a1, a2, ...), endpoint="worklist", a concise <label>, and a <role> drawn only from the mapping that best fits
+the task; 
+5. The XML is well formed and valid. 
+
+Fix any issues identified, then return the final block as:
 <FINAL_DESCRIPTION>
 <description xmlns="http://cpee.org/ns/description/1.0"> ... </description>
-</FINAL_DESCRIPTION>"""
+</FINAL_DESCRIPTION>
+
+EXAMPLE (shows the gateway mapping — not related to the input above)
+Text: "A does X. Then, if risk is high B does Y, otherwise B does Z. Finally A and B work in
+parallel on P and Q respectively."
+Output:
+<description xmlns="http://cpee.org/ns/description/1.0">
+  <call id="a1" endpoint="worklist"><parameters><label>X</label><arguments><role>A</role></arguments></parameters></call>
+  <choose mode="exclusive">
+    <alternative condition="Risk is high"><call id="a2" endpoint="worklist"><parameters><label>Y</label><arguments><role>B</role></arguments></parameters></call></alternative>
+    <otherwise><call id="a3" endpoint="worklist"><parameters><label>Z</label><arguments><role>B</role></arguments></parameters></call></otherwise>
+  </choose>
+  <parallel wait="-1" cancel="last">
+    <parallel_branch><call id="a4" endpoint="worklist"><parameters><label>P</label><arguments><role>A</role></arguments></parameters></call></parallel_branch>
+    <parallel_branch><call id="a5" endpoint="worklist"><parameters><label>Q</label><arguments><role>B</role></arguments></parameters></call></parallel_branch>
+  </parallel>
+</description>
+"""
 
 _TESTSET_TMPL = """<?xml version="1.0" encoding="UTF-8"?>
 <testset xmlns="{prop}">
