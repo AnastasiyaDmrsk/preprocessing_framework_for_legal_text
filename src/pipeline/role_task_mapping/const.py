@@ -14,6 +14,13 @@ DEONTIC_PATTERNS: List[Tuple[str, str]] = [
     ("may", "permission"),
 ]
 
+DEONTIC_STYLE: dict[str, tuple[str, str]] = {
+    "obligation":     ("deontic-obligation",     "shall"),
+    "permission":     ("deontic-permission",      "may"),
+    "prohibition":    ("deontic-prohibition",     "shall not"),
+    "recommendation": ("deontic-recommendation", "should"),
+}
+
 DEONTIC_MODAL_LEMMAS: Set[str] = {"shall", "may", "should", "must"}
 
 DELEGATED_OBLIGATION_VERBS: Set[str] = {

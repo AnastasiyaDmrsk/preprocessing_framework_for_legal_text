@@ -63,11 +63,6 @@ def _parse_xml(xml_content: str) -> List[ExtractedTask]:
 
 
 class ProcessDescriptionNLPExtractor:
-    """
-    Parses role_task_mapping XML into a sorted list of ExtractedTask.
-    Ordering uses (article, paragraph, task_id) as a tiebreaker only —
-    the LLM determines final process order from the preprocessed text.
-    """
 
     def extract_tasks(self, xml_content: str) -> List[ExtractedTask]:
         tasks = _parse_xml(xml_content)

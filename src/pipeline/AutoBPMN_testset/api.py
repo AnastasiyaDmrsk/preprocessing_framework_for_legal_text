@@ -13,9 +13,6 @@ def build_testset(process_description: Union[str, Path], role_task_mapping: Unio
                   output_dir: Path, *, base_url: str, job_id: str, model: str, use_validator: bool = True,
                   validator_model: str = None, form_url: str = DEFAULT_FORM_URL, cpee_base: str = DEFAULT_CPEE_BASE,
                   process_name: str = "Worklist", trust_llm_structure: bool = True, ) -> str:
-    """
-    Write testset.xml and worklist.xml for one job; return the testset XML string.
-    """
     output_dir.mkdir(parents=True, exist_ok=True)
 
     proc_text = _read(process_description)
