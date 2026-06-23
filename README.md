@@ -1,7 +1,5 @@
 # Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
 
-# Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
-
 ![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
@@ -26,7 +24,7 @@ Make sure that you have the following installed:
 
 1. Clone git repository and navigate to project folder
 ```bash
-git clone .../preprocessing_framework_for_legal_text.git
+git clone https://github.com/AnastasiyaDmrsk/preprocessing_framework_for_legal_text.git
 cd preprocessing_framework_for_legal_text
 ```
 
