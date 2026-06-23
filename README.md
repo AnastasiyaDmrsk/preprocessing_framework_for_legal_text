@@ -1,5 +1,11 @@
 # Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
 
+# Automated Extraction of Organizational Information and Process Descriptions from Regulatory Documents
+
+![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
+
 ## Short Overview
 This repository implements a pipeline for extracting organizational information and process descriptions from regulatory/legal documents. The pipeline consists of three main steps:
 1. **Preprocessing**: prepares legal text for downstream extraction by structuring it into articles/paragraphs, handling enumerations, removing boilerplate, and extracting references, see [Preprocessing](src/pipeline/preprocess/doc/README.md).
@@ -9,6 +15,12 @@ This repository implements a pipeline for extracting organizational information 
 
 ![UI Image](src/images/UI2.png)
 ---
+
+## Prerequisites
+Make sure that you have the following installed:
+- Python 3.12+
+- pip for required Python packages
+- Gemini API key set in `.env`
 
 ## Installation
 
@@ -43,6 +55,30 @@ export MODEL=gemini-2.5-flash
 ```
 6. Now, run the `app.py` to deploy the framework locally.
 ---
+
+## Project Structure
+
+The repository is organized as follows to separate the core extraction pipeline from evaluation and deployment:
+
+```text
+.
+├── app.py                  # Main application entry point for deploying the framework locally
+├── requirements.txt        # Required Python dependencies
+├── src/                    # Source code for the extraction pipeline
+│   ├── images/             # UI screenshots and assets
+│   └── pipeline/           # Core processing modules
+│       ├── preprocess/          # Text structuring, cleaning, and reference extraction
+│       ├── organigram/          # Actors extraction and hierarchy generation
+│       ├── role_task_mapping/   # Mapping extracted tasks to corresponding performers
+│       ├── process_description/ # Natural language execution narrative generation
+│       └── run_pipeline.py      # Pipeline execution
+└── eval/                   # Evaluation datasets, gold standards, results, and scripts
+    ├── dataset/                  # Source regulatory documents
+    ├── 1_description_and_bpmn/   # Process model and description evaluation setups
+    ├── 2_organigram/             # Organigram component evaluation setups
+    └── 3_role_task_mapping/      # Role-task mapping component evaluation setups
+```
+
 ## Evaluation
 
 The evaluation dataset is located in `eval/dataset`. The dataset includes following regulatory documents:
